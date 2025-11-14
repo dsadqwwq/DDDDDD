@@ -2514,19 +2514,19 @@
       drawChart(ctx, false);
     }
     
-    function drawChart(ctx, isRed = false) {
+    function drawChart(ctx, chartData = null) {
       const canvas = ctx.canvas;
       const w = canvas.width;
       const h = canvas.height;
-      
+
       // Clear canvas
       ctx.clearRect(0, 0, w, h);
-      
+
       // Draw grid
       ctx.strokeStyle = 'rgba(255,214,77,0.1)';
       ctx.lineWidth = 1;
       ctx.setLineDash([2, 4]);
-      
+
       // Horizontal lines
       for (let i = 0; i < 5; i++) {
         ctx.beginPath();
@@ -2534,7 +2534,7 @@
         ctx.lineTo(w, (h / 5) * i);
         ctx.stroke();
       }
-      
+
       // Vertical lines
       for (let i = 0; i < 10; i++) {
         ctx.beginPath();
@@ -2542,23 +2542,39 @@
         ctx.lineTo((w / 10) * i, h);
         ctx.stroke();
       }
-      
+
       ctx.setLineDash([]);
-      
-      // Generate random chart data
-      const points = [];
-      const numPoints = 50;
-      let currentPrice = 42156;
-      
-      for (let i = 0; i < numPoints; i++) {
-        const change = (Math.random() - 0.48) * 500;
-        currentPrice += change;
-        points.push({
-          x: (w / numPoints) * i,
-          y: h - (currentPrice - 40000) / 50
+
+      // If no chartData provided, draw empty/static chart
+      if (!chartData) {
+        const points = [];
+        let currentPrice = 40000;
+        const numPoints = 50;
+
+        for (let i = 0; i < numPoints; i++) {
+          const change = (Math.random() - 0.48) * 300;
+          currentPrice += change;
+          points.push({
+            x: (w / numPoints) * i,
+            y: h - (currentPrice - 38000) / 50
+          });
+        }
+
+        ctx.strokeStyle = '#4CAF50';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        points.forEach((point, i) => {
+          if (i === 0) ctx.moveTo(point.x, point.y);
+          else ctx.lineTo(point.x, point.y);
         });
+        ctx.stroke();
+        return;
       }
-      
+
+      // Draw animated chart
+      const isRed = chartData.hasCrashed;
+      const points = chartData.points;
+
       // Draw line
       ctx.strokeStyle = isRed ? '#F44336' : '#4CAF50';
       ctx.lineWidth = 3;
@@ -2568,7 +2584,7 @@
         else ctx.lineTo(point.x, point.y);
       });
       ctx.stroke();
-      
+
       // Draw fill
       ctx.fillStyle = isRed ? 'rgba(244,67,54,0.1)' : 'rgba(76,175,80,0.1)';
       ctx.beginPath();
@@ -2578,35 +2594,6 @@
       ctx.lineTo(points[0].x, h);
       ctx.closePath();
       ctx.fill();
-      
-      // Animate if red
-      if (isRed && gameState.chartAnimation) {
-        cancelAnimationFrame(gameState.chartAnimation);
-      }
-      
-      if (isRed) {
-        let dropAmount = 0;
-        const animate = () => {
-          dropAmount += 2;
-          ctx.clearRect(0, 0, w, h);
-          
-          // Redraw with dropping effect
-          ctx.strokeStyle = '#F44336';
-          ctx.lineWidth = 3;
-          ctx.beginPath();
-          points.forEach((point, i) => {
-            const dropY = Math.min(point.y + dropAmount * (i / numPoints), h - 10);
-            if (i === 0) ctx.moveTo(point.x, dropY);
-            else ctx.lineTo(point.x, dropY);
-          });
-          ctx.stroke();
-          
-          if (dropAmount < 100) {
-            gameState.chartAnimation = requestAnimationFrame(animate);
-          }
-        };
-        animate();
-      }
     }
     
     function startGame() {
@@ -2614,116 +2601,239 @@
         alert('All attempts used! Click RESET to play again.');
         return;
       }
-      
+
       const chartContainer = document.getElementById('chartContainer');
       const sellButton = document.getElementById('sellButton');
       const gameStatus = document.getElementById('gameStatus');
       const canvas = document.getElementById('chartCanvas');
       const ctx = canvas.getContext('2d');
-      
+      const w = canvas.width;
+      const h = canvas.height;
+
       // Reset state
       chartContainer.className = 'chart-container green';
-      sellButton.disabled = true;
-      gameStatus.textContent = 'Get ready...';
+      sellButton.disabled = false; // Enable immediately
+      gameStatus.textContent = 'Watch the chart...';
       gameStatus.className = 'game-status status-ready';
-      drawChart(ctx, false);
-      
-      // Random delay between 2-6 seconds
-      const delay = 2000 + Math.random() * 4000;
-      
-      gameState.reactionTimer = setTimeout(() => {
-        // Turn red and enable sell
-        chartContainer.className = 'chart-container red';
-        sellButton.disabled = false;
-        gameStatus.textContent = 'SELL NOW!';
-        gameStatus.className = 'game-status status-go';
-        drawChart(ctx, true);
-        
-        // Start timing
-        gameState.startTime = performance.now();
-        gameState.isPlaying = true;
-      }, delay);
+      drawChart(ctx, null);
+
+      // Game parameters
+      const totalDuration = 3000 + Math.random() * 2000; // 3-5 seconds total
+      const peakTime = totalDuration * 0.7; // Peak at 70% of duration
+      const startPrice = 40000;
+      const peakPrice = startPrice + 8000 + Math.random() * 4000; // Rise 8000-12000
+      const crashPrice = startPrice - 2000; // Below start
+
+      gameState.isPlaying = true;
+      gameState.hasCrashed = false;
+      gameState.peakReached = false;
+      gameState.startTime = performance.now();
+      gameState.peakTime = gameState.startTime + peakTime;
+      gameState.endTime = gameState.startTime + totalDuration;
+
+      const numPoints = 80;
+
+      function animateChart() {
+        if (!gameState.isPlaying && !gameState.hasCrashed) return;
+
+        const now = performance.now();
+        const elapsed = now - gameState.startTime;
+        const progress = Math.min(elapsed / totalDuration, 1);
+
+        // Calculate current price based on phase
+        let currentPrice;
+        const pointsToShow = Math.floor(progress * numPoints);
+
+        if (elapsed < peakTime) {
+          // Rising phase - smooth curve up
+          const riseProgress = elapsed / peakTime;
+          currentPrice = startPrice + (peakPrice - startPrice) * Math.pow(riseProgress, 0.7);
+        } else {
+          // Crashing phase - steep fall
+          if (!gameState.peakReached) {
+            gameState.peakReached = true;
+            chartContainer.className = 'chart-container red';
+            gameStatus.textContent = 'CRASH!';
+            gameStatus.className = 'game-status status-go';
+          }
+          gameState.hasCrashed = true;
+          const crashProgress = (elapsed - peakTime) / (totalDuration - peakTime);
+          currentPrice = peakPrice - (peakPrice - crashPrice) * Math.pow(crashProgress, 2);
+        }
+
+        // Generate points
+        const points = [];
+        for (let i = 0; i <= pointsToShow; i++) {
+          const t = i / numPoints;
+          const pointElapsed = t * totalDuration;
+          let price;
+
+          if (pointElapsed < peakTime) {
+            const riseProgress = pointElapsed / peakTime;
+            price = startPrice + (peakPrice - startPrice) * Math.pow(riseProgress, 0.7);
+          } else {
+            const crashProgress = (pointElapsed - peakTime) / (totalDuration - peakTime);
+            price = peakPrice - (peakPrice - crashPrice) * Math.pow(crashProgress, 2);
+          }
+
+          points.push({
+            x: (w / numPoints) * i,
+            y: h - ((price - 36000) / 100)
+          });
+        }
+
+        // Draw chart
+        drawChart(ctx, {
+          points: points,
+          hasCrashed: gameState.hasCrashed
+        });
+
+        // Continue animation or end
+        if (progress < 1) {
+          gameState.chartAnimation = requestAnimationFrame(animateChart);
+        } else {
+          // Auto-sell if didn't click
+          if (gameState.isPlaying) {
+            handleSell();
+          }
+        }
+      }
+
+      animateChart();
     }
     
     function handleSell() {
-      if (!gameState.isPlaying || !gameState.startTime) return;
-      
-      const reactionTime = performance.now() - gameState.startTime;
-      gameState.attempts.push(reactionTime);
+      if (!gameState.isPlaying) return;
+
+      const now = performance.now();
+      const sellButton = document.getElementById('sellButton');
+      const gameStatus = document.getElementById('gameStatus');
+
+      // Check if clicked before peak - DISQUALIFIED
+      if (now < gameState.peakTime) {
+        gameState.isPlaying = false;
+        gameState.currentAttempt++;
+        gameState.attempts.push(-1); // -1 indicates early click
+
+        sellButton.disabled = true;
+        gameStatus.textContent = 'TOO EARLY! DISQUALIFIED';
+        gameStatus.className = 'game-status status-go';
+
+        // Cancel animation
+        if (gameState.chartAnimation) {
+          cancelAnimationFrame(gameState.chartAnimation);
+        }
+
+        // Update attempts counter
+        const remaining = gameState.maxAttempts - gameState.currentAttempt;
+        document.getElementById('attemptsLeft').textContent = `${remaining} / ${gameState.maxAttempts}`;
+
+        // Update results grid
+        updateResultsGrid();
+
+        // Check if game is over
+        if (gameState.currentAttempt >= gameState.maxAttempts) {
+          setTimeout(endGame, 1500);
+        }
+        return;
+      }
+
+      // Clicked after peak - calculate score
+      const timingScore = now - gameState.peakTime;
+      gameState.attempts.push(timingScore);
       gameState.currentAttempt++;
       gameState.isPlaying = false;
-      
+
       // Update UI
-      const sellButton = document.getElementById('sellButton');
       sellButton.disabled = true;
-      document.getElementById('gameStatus').textContent = `Time: ${reactionTime.toFixed(0)}ms`;
-      
+      gameStatus.textContent = `+${timingScore.toFixed(0)}ms after peak`;
+      gameStatus.className = 'game-status';
+
+      // Cancel animation
+      if (gameState.chartAnimation) {
+        cancelAnimationFrame(gameState.chartAnimation);
+      }
+
       // Update attempts counter
       const remaining = gameState.maxAttempts - gameState.currentAttempt;
       document.getElementById('attemptsLeft').textContent = `${remaining} / ${gameState.maxAttempts}`;
-      
+
       // Update results grid
       updateResultsGrid();
-      
-      // Clear timer
-      if (gameState.reactionTimer) {
-        clearTimeout(gameState.reactionTimer);
-      }
-      
+
       // Check if game is over
       if (gameState.currentAttempt >= gameState.maxAttempts) {
-        endGame();
+        setTimeout(endGame, 1500);
       }
     }
     
     function updateResultsGrid() {
       const grid = document.getElementById('resultsGrid');
       grid.innerHTML = '';
-      
-      const bestTime = Math.min(...gameState.attempts);
-      
+
+      const validAttempts = gameState.attempts.filter(t => t >= 0);
+      const bestTime = validAttempts.length > 0 ? Math.min(...validAttempts) : null;
+
       gameState.attempts.forEach((time, index) => {
         const card = document.createElement('div');
-        card.className = time === bestTime ? 'result-card best' : 'result-card';
-        card.innerHTML = `
-          <div class="result-attempt">TRY ${index + 1}</div>
-          <div class="result-time">${time.toFixed(0)}ms</div>
-        `;
+        const isBest = time >= 0 && time === bestTime;
+        card.className = isBest ? 'result-card best' : 'result-card';
+
+        if (time === -1) {
+          // Disqualified
+          card.innerHTML = `
+            <div class="result-attempt">TRY ${index + 1}</div>
+            <div class="result-time" style="color:#F44336">DISQ</div>
+          `;
+        } else {
+          card.innerHTML = `
+            <div class="result-attempt">TRY ${index + 1}</div>
+            <div class="result-time">+${time.toFixed(0)}ms</div>
+          `;
+        }
         grid.appendChild(card);
       });
     }
-    
+
     function endGame() {
-      const bestTime = Math.min(...gameState.attempts);
-      document.getElementById('gameStatus').textContent = `Game Over! Best: ${bestTime.toFixed(0)}ms`;
+      const validAttempts = gameState.attempts.filter(t => t >= 0);
+      const bestTime = validAttempts.length > 0 ? Math.min(...validAttempts) : null;
+
+      if (bestTime !== null) {
+        document.getElementById('gameStatus').textContent = `Game Over! Best: +${bestTime.toFixed(0)}ms`;
+      } else {
+        document.getElementById('gameStatus').textContent = `Game Over! All attempts disqualified`;
+      }
 
       // Save to "database" (localStorage for now)
-      try {
-        const email = localStorage.getItem('duelpvp_email') || 'anonymous';
-        const scores = JSON.parse(localStorage.getItem('duelpvp_scores') || '[]');
-        scores.push({
-          email,
-          time: bestTime,
-          date: new Date().toISOString()
-        });
-        localStorage.setItem('duelpvp_scores', JSON.stringify(scores));
+      if (bestTime !== null) {
+        try {
+          const email = localStorage.getItem('duelpvp_email') || 'anonymous';
+          const scores = JSON.parse(localStorage.getItem('duelpvp_scores') || '[]');
+          scores.push({
+            email,
+            time: bestTime,
+            date: new Date().toISOString()
+          });
+          localStorage.setItem('duelpvp_scores', JSON.stringify(scores));
 
-        // Update quest progress
-        updateQuestProgress('daily_play_3');
-        updateQuestProgress('weekly_play_20');
+          // Update quest progress
+          updateQuestProgress('daily_play_3');
+          updateQuestProgress('weekly_play_20');
 
-        // Check for fast time quests
-        if (bestTime < 300) {
-          updateQuestProgress('daily_fast_time');
-        }
-        if (bestTime < 250) {
-          updateQuestProgress('weekly_sub_250');
-        }
+          // Check for fast time quests (close to peak)
+          if (bestTime < 300) {
+            updateQuestProgress('daily_fast_time');
+          }
+          if (bestTime < 200) {
+            updateQuestProgress('weekly_sub_250');
+          }
 
-        // Auto-complete login quest on first game
-        updateQuestProgress('daily_login');
+          // Auto-complete login quest on first game
+          updateQuestProgress('daily_login');
 
-      } catch (e) {}
+        } catch (e) {}
+      }
     }
     
     function resetGame() {
