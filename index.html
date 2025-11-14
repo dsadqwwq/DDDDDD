@@ -276,7 +276,7 @@
     font-size:11px;
     font-weight:bold;
     cursor:pointer;
-    transition:all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    transition:all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     white-space:nowrap;
     position:relative;
     box-shadow:
@@ -761,7 +761,7 @@
     font-size:11px;
     border-radius:8px;
     cursor:pointer;
-    transition:all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    transition:all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     border:2px solid;
     position:relative;
   }
@@ -3085,8 +3085,8 @@
       <!-- Market Bar -->
       <div class="market-bar" id="viewShopBtn" style="
         width: 100%;
-        background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,165,0,0.15) 100%);
-        border: 2px solid rgba(255,215,0,0.3);
+        background: linear-gradient(135deg, rgba(255,214,77,0.1) 0%, rgba(255,165,0,0.15) 100%);
+        border: 2px solid rgba(255,214,77,0.3);
         border-radius: 12px;
         padding: 20px 32px;
         margin-bottom: 24px;
@@ -3095,16 +3095,16 @@
         align-items: center;
         justify-content: space-between;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 20px rgba(255,215,0,0.1);
-      " onmouseover="this.style.borderColor='rgba(255,215,0,0.5)'; this.style.boxShadow='0 6px 30px rgba(255,215,0,0.2)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='rgba(255,215,0,0.3)'; this.style.boxShadow='0 4px 20px rgba(255,215,0,0.1)'; this.style.transform='translateY(0)';">
+        box-shadow: 0 4px 20px rgba(255,214,77,0.1);
+      " onmouseover="this.style.borderColor='rgba(255,214,77,0.5)'; this.style.boxShadow='0 6px 30px rgba(255,214,77,0.2)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='rgba(255,214,77,0.3)'; this.style.boxShadow='0 4px 20px rgba(255,214,77,0.1)'; this.style.transform='translateY(0)';">
         <div style="display:flex; align-items:center; gap:16px;">
           <div style="font-size:32px;">🏪</div>
           <div>
-            <div style="font-family:Inter,system-ui,Arial; font-size:18px; font-weight:700; color:#FFD700; letter-spacing:1px; margin-bottom:4px;">MARKET</div>
-            <div style="font-family:Inter,system-ui,Arial; font-size:12px; color:rgba(255,215,0,0.7);">Buy & sell items and powerups</div>
+            <div style="font-family:Inter,system-ui,Arial; font-size:18px; font-weight:700; color:#FFD64D; letter-spacing:1px; margin-bottom:4px;">MARKET</div>
+            <div style="font-family:Inter,system-ui,Arial; font-size:12px; color:rgba(255,214,77,0.7);">Buy & sell items and powerups</div>
           </div>
         </div>
-        <div style="font-family:Inter,system-ui,Arial; font-size:14px; color:rgba(255,215,0,0.8); font-weight:600;">ENTER →</div>
+        <div style="font-family:Inter,system-ui,Arial; font-size:14px; color:rgba(255,214,77,0.8); font-weight:600;">ENTER →</div>
       </div>
 
       <!-- Two-column card layout -->
@@ -4755,7 +4755,10 @@
       }
     }
 
-    function handleLogout() {
+    async function handleLogout() {
+      const confirmed = await Modal.confirm('Are you sure you want to logout?', 'Confirm Logout');
+      if (!confirmed) return;
+
       dashboardContent.style.display = 'none';
       panelContent.style.display = 'block';
       swapContent('home');
@@ -6682,6 +6685,13 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
 
       const amount = Math.floor(ovenState.invested);
 
+      // Confirm withdrawal
+      const confirmed = await Modal.confirm(
+        `Withdraw ${amount.toLocaleString()} GP from the Oven?`,
+        'Confirm Withdrawal'
+      );
+      if (!confirmed) return;
+
       // Add to user balance
       await updateUserGP(amount);
 
@@ -6729,7 +6739,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       }
     }
 
-    function startMinesGame() {
+    async function startMinesGame() {
       const betAmount = parseInt(document.getElementById('minesBetAmount').value);
       const minesCount = parseInt(document.getElementById('minesCount').value);
       const userGP = getUserGP();
@@ -6748,6 +6758,15 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       if (betAmount > userGP) {
         Toast.error('Insufficient GP', 'INSUFFICIENT FUNDS');
         return;
+      }
+
+      // Confirm large bets
+      if (betAmount >= 500) {
+        const confirmed = await Modal.confirm(
+          `Place a bet of ${betAmount.toLocaleString()} GP with ${minesCount} mines?`,
+          'Confirm Bet'
+        );
+        if (!confirmed) return;
       }
 
       // Deduct bet
@@ -6975,7 +6994,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       return cardDiv;
     }
 
-    function dealBlackjack() {
+    async function dealBlackjack() {
       const betAmount = parseInt(document.getElementById('blackjackBetAmount').value);
       const userGP = getUserGP();
 
@@ -6993,6 +7012,15 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       if (betAmount > userGP) {
         Toast.error('Insufficient GP', 'INSUFFICIENT FUNDS');
         return;
+      }
+
+      // Confirm large bets
+      if (betAmount >= 500) {
+        const confirmed = await Modal.confirm(
+          `Place a bet of ${betAmount.toLocaleString()} GP?`,
+          'Confirm Bet'
+        );
+        if (!confirmed) return;
       }
 
       // Deduct bet
