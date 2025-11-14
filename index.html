@@ -512,9 +512,10 @@
 
   .coming-soon-text{
     font-family:'Press Start 2P', monospace;
-    font-size:16px;
+    font-size:24px;
     color:var(--gold);
-    text-shadow:0 0 10px rgba(255,214,77,0.5);
+    text-shadow:0 0 20px rgba(255,214,77,.8), 0 4px 8px rgba(0,0,0,.8);
+    animation:pulse 2s ease-in-out infinite;
   }
 
   .match-list{
@@ -1511,23 +1512,9 @@
     position:relative;
   }
 
-  .coming-soon-overlay{
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%, -50%);
-    font-family:'Press Start 2P', monospace;
-    font-size:24px;
-    color:var(--gold);
-    text-shadow:0 0 20px rgba(255,214,77,.8), 0 4px 8px rgba(0,0,0,.8);
-    z-index:10;
-    pointer-events:none;
-    animation:pulse 2s ease-in-out infinite;
-  }
-
   @keyframes pulse{
-    0%, 100%{ opacity:1; transform:translate(-50%, -50%) scale(1); }
-    50%{ opacity:0.7; transform:translate(-50%, -50%) scale(1.05); }
+    0%, 100%{ opacity:1; transform:scale(1); }
+    50%{ opacity:0.7; transform:scale(1.05); }
   }
 
   .quest-card{
