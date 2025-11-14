@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root{
     --gold:#FFD64D;
@@ -2383,6 +2384,12 @@
   </div>
 
   <script>
+    // ===== SUPABASE CLIENT =====
+    const SUPABASE_URL = 'https://smgqccnggmyreacjyyil.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNtZ3FjY25nZ215cmVhY2p5eWlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI5ODIwNDgsImV4cCI6MjA3ODU1ODA0OH0.y1AeyXkKCdVvE3JUIlCyDl6p12TFrgMkEiUocUB4YMI';
+
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     // ===== MODAL SYSTEM =====
     const Modal = {
       overlay: null,
@@ -2787,7 +2794,9 @@
     // Temporary registration data
     let tempRegistrationData = {
       email: '',
-      warriorName: ''
+      warriorName: '',
+      password: '',
+      inviteCode: ''
     };
 
     // Helper function to swap content with fade animation
@@ -3193,11 +3202,11 @@
       ['emailError', 'passError', 'passConfirmError', 'codeError', 'warriorNameError'].forEach(clearError);
     }
 
-    function handleRegister() {
+    async function handleRegister() {
       const email = document.getElementById('registerEmail').value.trim();
       const pass = document.getElementById('registerPass').value.trim();
       const passConfirm = document.getElementById('registerPassConfirm').value.trim();
-      const code = document.getElementById('registerCode').value.trim();
+      const code = document.getElementById('registerCode').value.trim().toUpperCase();
 
       // Clear all previous errors
       clearAllErrors();
@@ -3235,12 +3244,43 @@
 
       if (hasError) return;
 
-      // Store email temporarily and show warrior naming screen
+      // Check if invite code exists and is unused
+      Loading.show('Validating invite code...');
+
+      const { data: codeData, error: codeError } = await supabase
+        .from('codes')
+        .select('*')
+        .eq('code', code)
+        .is('used_by', null)
+        .single();
+
+      Loading.hide();
+
+      if (codeError || !codeData) {
+        showError('codeError', 'Invalid or already used invite code');
+        return;
+      }
+
+      // Check if email already registered
+      const { data: existingUser } = await supabase
+        .from('users')
+        .select('id')
+        .eq('email', email)
+        .single();
+
+      if (existingUser) {
+        showError('emailError', 'Email already registered');
+        return;
+      }
+
+      // Store data temporarily and show warrior naming screen
       tempRegistrationData.email = email;
+      tempRegistrationData.password = pass;
+      tempRegistrationData.inviteCode = code;
       swapContent('nameWarrior');
     }
 
-    function handleNameWarrior() {
+    async function handleNameWarrior() {
       const warriorName = document.getElementById('warriorName').value.trim();
 
       // Clear previous errors
@@ -3261,20 +3301,69 @@
         return;
       }
 
-      // Store warrior name and email
-      tempRegistrationData.warriorName = warriorName;
-      try {
-        localStorage.setItem('duelpvp_email', tempRegistrationData.email);
-        localStorage.setItem('duelpvp_warrior', warriorName);
-        document.getElementById('userName').textContent = warriorName.toUpperCase();
-        Toast.success(`Welcome to the arena, ${warriorName}!`, 'WARRIOR REGISTERED');
-      } catch (e) {
-        // Storage errors are serious - still use modal
-        Modal.alert('Failed to save registration. Check browser settings.', 'Storage Error');
-        return;
-      }
+      Loading.show('Creating your account...');
 
-      swapContent('dashboard');
+      try {
+        // 1. Create user in database
+        const { data: newUser, error: userError } = await supabase
+          .from('users')
+          .insert({
+            email: tempRegistrationData.email,
+            display_name: warriorName,
+            points: 0
+          })
+          .select()
+          .single();
+
+        if (userError) {
+          Loading.hide();
+          if (userError.code === '23505') { // Unique constraint violation
+            showError('warriorNameError', 'Display name already taken');
+          } else {
+            Modal.alert('Registration failed: ' + userError.message, 'Error');
+          }
+          return;
+        }
+
+        // 2. Mark invite code as used (atomic operation prevents race condition)
+        const { error: codeError } = await supabase
+          .from('codes')
+          .update({
+            used_by: newUser.id,
+            used_at: new Date().toISOString()
+          })
+          .eq('code', tempRegistrationData.inviteCode)
+          .is('used_by', null); // Only update if still unused!
+
+        if (codeError) {
+          // Code was used by someone else in the meantime - rollback
+          await supabase.from('users').delete().eq('id', newUser.id);
+          Loading.hide();
+          showError('codeError', 'Code was just used by someone else. Please try another code.');
+          swapContent('register', tempRegistrationData.inviteCode);
+          return;
+        }
+
+        // 3. Generate 3 invite codes for new user
+        await supabase.rpc('create_user_codes', { user_id: newUser.id });
+
+        // 4. Store session in localStorage
+        localStorage.setItem('duelpvp_user_id', newUser.id);
+        localStorage.setItem('duelpvp_email', newUser.email);
+        localStorage.setItem('duelpvp_display_name', warriorName);
+
+        // Update UI
+        document.getElementById('userName').textContent = warriorName.toUpperCase();
+
+        Loading.hide();
+        Toast.success(`Welcome to the arena, ${warriorName}!`, 'WARRIOR REGISTERED');
+
+        swapContent('dashboard');
+      } catch (e) {
+        Loading.hide();
+        console.error('Registration error:', e);
+        Modal.alert('An unexpected error occurred. Please try again.', 'Error');
+      }
     }
 
     function handleLogout() {
@@ -4288,10 +4377,28 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       {id: 'pet_dragon', name: 'Baby Dragon', desc: 'Rare and powerful', price: 50000, icon: '🐉', type: 'pet'}
     ];
 
-    function loadInventory() {
+    async function loadInventory() {
+      const userId = localStorage.getItem('duelpvp_user_id');
       const email = localStorage.getItem('duelpvp_email') || 'anonymous';
-      const gp = parseInt(localStorage.getItem(`duelpvp_gp_${email}`) || '0');
+
+      // Get user data from Supabase
+      const { data: userData } = await supabase
+        .from('users')
+        .select('points')
+        .eq('id', userId)
+        .single();
+
+      const gp = userData?.points || 0;
+
+      // Get inventory from localStorage (for now)
       const inventory = JSON.parse(localStorage.getItem(`duelpvp_inventory_${email}`) || '[]');
+
+      // Get invite codes from Supabase
+      const { data: inviteCodes } = await supabase
+        .from('codes')
+        .select('*')
+        .eq('owner_id', userId)
+        .order('used_at', { ascending: true, nullsFirst: false });
 
       // Update GP display
       document.getElementById('gpDisplay').textContent = `GP: ${gp.toLocaleString()}`;
@@ -4300,20 +4407,57 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       const inventoryGrid = document.getElementById('inventoryGrid');
       inventoryGrid.innerHTML = '';
 
+      // Combine invite codes + regular inventory
+      const allItems = [];
+
+      // Add invite codes first
+      if (inviteCodes) {
+        inviteCodes.forEach(code => {
+          allItems.push({
+            type: 'invite_code',
+            code: code.code,
+            used: code.used_by !== null,
+            used_at: code.used_at
+          });
+        });
+      }
+
+      // Add regular inventory items
+      inventory.forEach(item => {
+        allItems.push({
+          type: 'shop_item',
+          ...item
+        });
+      });
+
       // Show first 28 slots (like RuneScape)
       for (let i = 0; i < 28; i++) {
-        const item = inventory[i];
+        const item = allItems[i];
         const slot = document.createElement('div');
         slot.className = item ? 'inventory-slot' : 'inventory-slot empty';
 
-        if (item) {
+        if (item && item.type === 'invite_code') {
+          // Invite code item
+          slot.className = item.used ? 'inventory-slot used-code' : 'inventory-slot';
+          slot.innerHTML = `
+            <div class="item-icon">${item.used ? '📜' : '🎟️'}</div>
+            <div class="item-name">${item.code}</div>
+          `;
+          // Tooltip
+          slot.title = item.used
+            ? `Invite Code (USED)\nCode: ${item.code}\nUsed on: ${new Date(item.used_at).toLocaleDateString()}`
+            : `Invite Code (UNUSED)\nShare this code with friends!\nOne-time use only`;
+        } else if (item && item.type === 'shop_item') {
+          // Regular shop item
           const shopItem = SHOP_ITEMS.find(si => si.id === item.id);
           slot.innerHTML = `
             <div class="item-icon">${shopItem.icon}</div>
             <div class="item-name">${shopItem.name}</div>
             ${item.count > 1 ? `<div class="item-count">${item.count}</div>` : ''}
           `;
+          slot.title = shopItem.desc;
         } else {
+          // Empty slot
           slot.innerHTML = '<div style="opacity:0.3">━</div>';
         }
 
