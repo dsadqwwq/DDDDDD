@@ -496,6 +496,69 @@
     margin-bottom:20px;
   }
 
+  /* Split actions grid for investing/gambling */
+  .split-actions-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+
+  .action-section{
+    background:rgba(0,0,0,.2);
+    border:2px solid;
+    border-radius:8px;
+    padding:16px;
+  }
+
+  .action-section.invest{
+    border-color:rgba(76,175,80,.4);
+    background:rgba(16,24,16,.3);
+  }
+
+  .action-section.gamble{
+    border-color:rgba(244,67,54,.4);
+    background:rgba(24,16,16,.3);
+  }
+
+  .section-header{
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    text-align:center;
+    margin-bottom:12px;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+  }
+
+  .invest .section-header{
+    color:#4CAF50;
+    text-shadow:0 0 10px rgba(76,175,80,.5);
+  }
+
+  .gamble .section-header{
+    color:#F44336;
+    text-shadow:0 0 10px rgba(244,67,54,.5);
+  }
+
+  .btn-invest{
+    background:rgba(76,175,80,.15);
+    border-color:#4CAF50;
+    color:#4CAF50;
+  }
+  .btn-invest:hover{
+    background:rgba(76,175,80,.3);
+    box-shadow:0 4px 12px rgba(76,175,80,.4);
+  }
+
+  .btn-gamble{
+    background:rgba(244,67,54,.15);
+    border-color:#F44336;
+    color:#F44336;
+  }
+  .btn-gamble:hover{
+    background:rgba(244,67,54,.3);
+    box-shadow:0 4px 12px rgba(244,67,54,.4);
+  }
+
   .card-title{
     font-family:'Press Start 2P', monospace;
     font-size:12px;
@@ -795,6 +858,161 @@
   @keyframes fadeOut{
     from{opacity:1;transform:translateY(0);}
     to{opacity:0;transform:translateY(-10px);}
+  }
+
+  /* Oven Investment Styles */
+  .oven-container{
+    display:none;
+    width:min(680px,92vw);
+    background:rgba(12,16,20,.92);
+    border:2px solid rgba(76,175,80,.4);
+    border-radius:12px;
+    padding:24px;
+    backdrop-filter:blur(8px);
+  }
+
+  .oven-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:24px;
+    padding-bottom:16px;
+    border-bottom:1px solid rgba(76,175,80,.2);
+  }
+
+  .oven-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:18px;
+    color:#4CAF50;
+    text-shadow:0 0 20px rgba(76,175,80,.6);
+  }
+
+  .oven-main{
+    background:rgba(16,24,16,.5);
+    border:2px solid rgba(76,175,80,.3);
+    border-radius:12px;
+    padding:24px;
+    margin-bottom:20px;
+  }
+
+  .oven-stats{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:16px;
+    margin-bottom:20px;
+  }
+
+  .oven-stat-card{
+    background:rgba(76,175,80,.08);
+    border:1px solid rgba(76,175,80,.3);
+    border-radius:8px;
+    padding:16px;
+    text-align:center;
+  }
+
+  .oven-stat-label{
+    font-family:'Press Start 2P', monospace;
+    font-size:9px;
+    color:#a0a8b0;
+    margin-bottom:8px;
+    letter-spacing:0.05em;
+  }
+
+  .oven-stat-value{
+    font-family:'Press Start 2P', monospace;
+    font-size:20px;
+    color:#4CAF50;
+    text-shadow:0 0 12px rgba(76,175,80,.4);
+  }
+
+  .oven-timer{
+    text-align:center;
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    color:#4CAF50;
+    margin-bottom:20px;
+    padding:14px;
+    background:rgba(76,175,80,.12);
+    border:1px solid rgba(76,175,80,.3);
+    border-radius:8px;
+  }
+
+  .oven-input-row{
+    display:flex;
+    gap:10px;
+    margin-bottom:16px;
+  }
+
+  .oven-input{
+    flex:1;
+    padding:12px 14px;
+    background:rgba(0,0,0,.4);
+    border:1px solid rgba(76,175,80,.4);
+    border-radius:8px;
+    color:#e6ecf1;
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    transition:all 0.2s;
+    text-align:center;
+  }
+
+  .oven-input:focus{
+    outline:none;
+    border-color:#4CAF50;
+    background:rgba(0,0,0,.6);
+    box-shadow:0 0 0 2px rgba(76,175,80,.2);
+  }
+
+  .oven-controls{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:20px;
+  }
+
+  .oven-info-box{
+    background:rgba(76,175,80,.08);
+    border:1px solid rgba(76,175,80,.25);
+    border-radius:8px;
+    padding:16px;
+    margin-bottom:16px;
+  }
+
+  .oven-info-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    color:#4CAF50;
+    margin-bottom:10px;
+    text-transform:uppercase;
+  }
+
+  .oven-info-text{
+    font-family:Inter, system-ui, Arial;
+    font-size:13px;
+    color:#b0b8c0;
+    line-height:1.6;
+  }
+
+  .oven-info-text ul{
+    margin:8px 0;
+    padding-left:18px;
+  }
+
+  .oven-info-text li{
+    margin-bottom:6px;
+  }
+
+  .balance-display{
+    text-align:center;
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    color:#a0a8b0;
+    margin-bottom:20px;
+  }
+
+  .balance-amount{
+    color:var(--gold);
+    text-shadow:0 0 10px rgba(255,214,77,.4);
   }
 
   /* Reaction Game Styles */
@@ -2589,12 +2807,26 @@
         <div class="dashboard-card">
           <div class="card-title">QUICK ACTIONS</div>
           <div class="card-content">
-            <button class="action-btn btn-primary" id="playReactionBtn" aria-label="Play reaction game" style="width:100%;margin-bottom:12px;">PLAY REACTION</button>
-            <button class="action-btn btn-primary" id="playCrashBtn" aria-label="Play crash rocket game" style="width:100%;margin-bottom:12px;">PLAY ROCKET CRASH</button>
-            <button class="action-btn btn-secondary" id="viewLeaderboardBtn" aria-label="View global leaderboard" style="width:100%;margin-bottom:12px;">VIEW LEADERBOARD</button>
-            <button class="action-btn btn-secondary" id="viewQuestsBtn" aria-label="View quests" style="width:100%;margin-bottom:12px;">VIEW QUESTS</button>
-            <button class="action-btn btn-secondary" id="viewInventoryBtn" aria-label="View inventory" style="width:100%;margin-bottom:12px;">INVENTORY</button>
-            <button class="action-btn btn-secondary" id="viewShopBtn" aria-label="View shop" style="width:100%;">SHOP</button>
+            <!-- Split into Investing and Gambling -->
+            <div class="split-actions-grid">
+              <div class="action-section invest">
+                <div class="section-header">🔥 Investing</div>
+                <button class="action-btn btn-invest" id="openOvenBtn" aria-label="Open Oven investment" style="width:100%;margin-bottom:8px;">OVEN</button>
+                <button class="action-btn btn-invest" aria-label="Staking coming soon" style="width:100%;opacity:0.5;cursor:not-allowed;">STAKING</button>
+              </div>
+              <div class="action-section gamble">
+                <div class="section-header">🎲 Gambling</div>
+                <button class="action-btn btn-gamble" id="playReactionBtn" aria-label="Play reaction game" style="width:100%;margin-bottom:8px;">REACTION</button>
+                <button class="action-btn btn-gamble" id="playCrashBtn" aria-label="Play crash rocket game" style="width:100%;">CRASH</button>
+              </div>
+            </div>
+            <!-- Other actions below -->
+            <div style="margin-top:16px;">
+              <button class="action-btn btn-secondary" id="viewLeaderboardBtn" aria-label="View global leaderboard" style="width:100%;margin-bottom:8px;">LEADERBOARD</button>
+              <button class="action-btn btn-secondary" id="viewQuestsBtn" aria-label="View quests" style="width:100%;margin-bottom:8px;">QUESTS</button>
+              <button class="action-btn btn-secondary" id="viewInventoryBtn" aria-label="View inventory" style="width:100%;margin-bottom:8px;">INVENTORY</button>
+              <button class="action-btn btn-secondary" id="viewShopBtn" aria-label="View shop" style="width:100%;">SHOP</button>
+            </div>
           </div>
         </div>
 
@@ -2788,6 +3020,66 @@
         </div>
         <div class="coming-soon-overlay">
           <div class="coming-soon-text">COMING SOON</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Oven Investment content (hidden initially) -->
+    <div class="oven-container" id="ovenContent" role="region" aria-label="Oven investment">
+      <div class="oven-header">
+        <div class="oven-title">🔥 THE OVEN</div>
+        <button class="back-btn" id="backFromOvenBtn" aria-label="Back to dashboard">BACK</button>
+      </div>
+
+      <div class="oven-info-box">
+        <div class="oven-info-title">How It Works</div>
+        <div class="oven-info-text">
+          <ul>
+            <li><strong>10% Hourly Returns:</strong> Your tokens compound every hour automatically</li>
+            <li><strong>Withdraw Anytime:</strong> Pull out your investment + earnings whenever you want</li>
+            <li><strong>Auto-Compound:</strong> Interest is automatically reinvested for maximum gains</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="balance-display">
+        Your Balance: <span class="balance-amount" id="ovenUserBalance">0 GP</span>
+      </div>
+
+      <div class="oven-main">
+        <div class="oven-stats">
+          <div class="oven-stat-card">
+            <div class="oven-stat-label">INVESTED</div>
+            <div class="oven-stat-value" id="ovenInvested">0 GP</div>
+          </div>
+          <div class="oven-stat-card">
+            <div class="oven-stat-label">CURRENT VALUE</div>
+            <div class="oven-stat-value" id="ovenCurrentValue">0 GP</div>
+          </div>
+        </div>
+
+        <div class="oven-timer" id="ovenTimer">
+          No active investment
+        </div>
+
+        <div class="oven-input-row">
+          <input type="number" class="oven-input" id="ovenDepositAmount" placeholder="Amount to deposit" min="1" step="1">
+          <button class="action-btn btn-invest" id="ovenDepositBtn" style="padding:12px 20px;">DEPOSIT</button>
+        </div>
+
+        <div class="oven-controls">
+          <button class="action-btn btn-gamble" id="ovenWithdrawBtn" style="width:100%;">WITHDRAW ALL</button>
+          <button class="action-btn btn-secondary" id="ovenClaimBtn" style="width:100%;">CLAIM PROFIT</button>
+        </div>
+      </div>
+
+      <div class="oven-info-box">
+        <div class="oven-info-title">Earnings Calculator</div>
+        <div class="oven-info-text" id="ovenCalculator">
+          Deposit 100 GP and earn:<br>
+          • After 1 hour: 110 GP (+10 GP)<br>
+          • After 3 hours: 133.1 GP (+33.1 GP)<br>
+          • After 24 hours: 1,009.5 GP (+909.5 GP)
         </div>
       </div>
     </div>
@@ -3339,6 +3631,7 @@
     const panelContent = document.getElementById('panelContent');
     const dashboardContent = document.getElementById('dashboardContent');
     const gameContent = document.getElementById('gameContent');
+    const ovenContent = document.getElementById('ovenContent');
     const leaderboardContent = document.getElementById('leaderboardContent');
     const questContent = document.getElementById('questContent');
     const inventoryContent = document.getElementById('inventoryContent');
@@ -3379,7 +3672,7 @@
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
       // Find currently visible element
-      const allContainers = [panelContent, dashboardContent, gameContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent];
+      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent];
       const currentVisible = allContainers.find(el => el.style.display !== 'none' && el.style.display !== '');
 
       // Add fade-out to current visible element
@@ -3628,8 +3921,22 @@
         inventoryContent.style.display = 'none';
         shopContent.style.display = 'none';
         crashContent.style.display = 'none';
+        ovenContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initChart();
+
+      } else if (newContent === 'oven') {
+        panelContent.style.display = 'none';
+        dashboardContent.style.display = 'none';
+        gameContent.style.display = 'none';
+        leaderboardContent.style.display = 'none';
+        questContent.style.display = 'none';
+        inventoryContent.style.display = 'none';
+        shopContent.style.display = 'none';
+        crashContent.style.display = 'none';
+        ovenContent.style.display = 'block';
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        initOven();
 
       } else if (newContent === 'crash') {
         panelContent.style.display = 'none';
@@ -5708,6 +6015,219 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       Toast.success(`${item.icon} ${item.name} added to inventory!`, 'ITEM PURCHASED');
     }
 
+    // ===============================================
+    // OVEN INVESTMENT SYSTEM
+    // ===============================================
+
+    let ovenState = {
+      invested: 0,
+      lastCompoundTime: null,
+      timerInterval: null
+    };
+
+    function loadOvenState() {
+      try {
+        const saved = localStorage.getItem('duelpvp_oven');
+        if (saved) {
+          const data = JSON.parse(saved);
+          ovenState.invested = data.invested || 0;
+          ovenState.lastCompoundTime = data.lastCompoundTime ? new Date(data.lastCompoundTime) : null;
+
+          // Calculate missed compounds
+          if (ovenState.lastCompoundTime && ovenState.invested > 0) {
+            const now = new Date();
+            const hoursPassed = (now - new Date(ovenState.lastCompoundTime)) / (1000 * 60 * 60);
+            const fullHours = Math.floor(hoursPassed);
+
+            if (fullHours > 0) {
+              // Apply missed compounds (10% per hour)
+              for (let i = 0; i < fullHours; i++) {
+                ovenState.invested *= 1.10;
+              }
+              ovenState.lastCompoundTime = new Date(ovenState.lastCompoundTime.getTime() + fullHours * 60 * 60 * 1000);
+              saveOvenState();
+            }
+          }
+        }
+      } catch (e) {
+        console.error('Error loading oven state:', e);
+      }
+    }
+
+    function saveOvenState() {
+      try {
+        localStorage.setItem('duelpvp_oven', JSON.stringify({
+          invested: ovenState.invested,
+          lastCompoundTime: ovenState.lastCompoundTime
+        }));
+      } catch (e) {
+        console.error('Error saving oven state:', e);
+      }
+    }
+
+    function initOven() {
+      loadOvenState();
+      updateOvenDisplay();
+      startOvenTimer();
+    }
+
+    function updateOvenDisplay() {
+      const userGP = getUserGP();
+      document.getElementById('ovenUserBalance').textContent = Math.floor(userGP) + ' GP';
+      document.getElementById('ovenInvested').textContent = Math.floor(ovenState.invested) + ' GP';
+      document.getElementById('ovenCurrentValue').textContent = Math.floor(ovenState.invested) + ' GP';
+    }
+
+    function startOvenTimer() {
+      // Clear existing timer
+      if (ovenState.timerInterval) {
+        clearInterval(ovenState.timerInterval);
+      }
+
+      if (ovenState.invested <= 0) {
+        document.getElementById('ovenTimer').textContent = 'No active investment';
+        return;
+      }
+
+      // Set initial compound time if not set
+      if (!ovenState.lastCompoundTime) {
+        ovenState.lastCompoundTime = new Date();
+        saveOvenState();
+      }
+
+      // Update timer every second
+      ovenState.timerInterval = setInterval(() => {
+        const now = new Date();
+        const nextCompound = new Date(ovenState.lastCompoundTime.getTime() + 60 * 60 * 1000);
+        const timeLeft = nextCompound - now;
+
+        if (timeLeft <= 0) {
+          // Time to compound!
+          applyCompound();
+        } else {
+          const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+          const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+          document.getElementById('ovenTimer').textContent =
+            `Next compound in: ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+      }, 1000);
+    }
+
+    function applyCompound() {
+      if (ovenState.invested <= 0) return;
+
+      // Apply 10% compound
+      const oldValue = ovenState.invested;
+      ovenState.invested *= 1.10;
+      const profit = ovenState.invested - oldValue;
+      ovenState.lastCompoundTime = new Date();
+
+      saveOvenState();
+      updateOvenDisplay();
+
+      // Show notification
+      const timer = document.getElementById('ovenTimer');
+      timer.textContent = `🔥 COMPOUNDED! +${Math.floor(profit)} GP`;
+
+      Toast.success(`Oven compounded! +${Math.floor(profit)} GP`, 'COMPOUND');
+
+      setTimeout(() => {
+        startOvenTimer();
+      }, 2000);
+    }
+
+    async function depositToOven() {
+      const amount = parseInt(document.getElementById('ovenDepositAmount').value);
+
+      if (isNaN(amount) || amount <= 0) {
+        Toast.error('Please enter a valid amount', 'INVALID');
+        return;
+      }
+
+      const userGP = getUserGP();
+      if (amount > userGP) {
+        Toast.error('Insufficient balance', 'INSUFFICIENT FUNDS');
+        return;
+      }
+
+      // Deduct from user balance
+      await updateUserGP(-amount);
+
+      // Add to invested
+      ovenState.invested += amount;
+
+      // Set compound time if first deposit
+      if (!ovenState.lastCompoundTime) {
+        ovenState.lastCompoundTime = new Date();
+      }
+
+      saveOvenState();
+      updateOvenDisplay();
+      startOvenTimer();
+
+      document.getElementById('ovenDepositAmount').value = '';
+      Toast.success(`Deposited ${amount} GP to the Oven!`, 'DEPOSIT');
+    }
+
+    async function withdrawFromOven() {
+      if (ovenState.invested <= 0) {
+        Toast.error('No investment to withdraw', 'NO INVESTMENT');
+        return;
+      }
+
+      const amount = Math.floor(ovenState.invested);
+
+      // Add to user balance
+      await updateUserGP(amount);
+
+      // Reset oven
+      ovenState.invested = 0;
+      ovenState.lastCompoundTime = null;
+
+      // Clear timer
+      if (ovenState.timerInterval) clearInterval(ovenState.timerInterval);
+
+      saveOvenState();
+      updateOvenDisplay();
+
+      document.getElementById('ovenTimer').textContent = 'No active investment';
+      Toast.success(`Withdrawn ${amount} GP from the Oven!`, 'WITHDRAW');
+    }
+
+    async function claimOvenProfit() {
+      if (ovenState.invested <= 0) {
+        Toast.error('No investment to claim from', 'NO INVESTMENT');
+        return;
+      }
+
+      // Calculate current value based on time
+      loadOvenState(); // Refresh with any missed compounds
+
+      const profit = Math.floor(ovenState.invested);
+
+      if (profit <= 0) {
+        Toast.error('No profit to claim yet', 'NO PROFIT');
+        return;
+      }
+
+      // Add profit to balance, keep initial investment
+      await updateUserGP(profit);
+
+      // Reset to 0 (they claimed everything)
+      ovenState.invested = 0;
+      ovenState.lastCompoundTime = null;
+
+      if (ovenState.timerInterval) clearInterval(ovenState.timerInterval);
+
+      saveOvenState();
+      updateOvenDisplay();
+
+      document.getElementById('ovenTimer').textContent = 'No active investment';
+      Toast.success(`Claimed ${profit} GP profit!`, 'CLAIM');
+    }
+
     // Initial event listeners
     document.getElementById('joinBtn').addEventListener('click', handleJoin);
     document.getElementById('loginLink').addEventListener('click', () => swapContent('login'));
@@ -5721,6 +6241,14 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       console.log('Play Crash clicked');
       swapContent('crash');
     });
+    document.getElementById('openOvenBtn').addEventListener('click', () => {
+      console.log('Open Oven clicked');
+      swapContent('oven');
+    });
+    document.getElementById('backFromOvenBtn').addEventListener('click', () => swapContent('dashboard'));
+    document.getElementById('ovenDepositBtn').addEventListener('click', depositToOven);
+    document.getElementById('ovenWithdrawBtn').addEventListener('click', withdrawFromOven);
+    document.getElementById('ovenClaimBtn').addEventListener('click', claimOvenProfit);
     document.getElementById('viewLeaderboardBtn').addEventListener('click', () => {
       console.log('View Leaderboard clicked');
       swapContent('leaderboard');
