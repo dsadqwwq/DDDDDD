@@ -1604,7 +1604,9 @@
   /* Inventory System Styles */
   .inventory-container{
     display:none;
-    width:min(820px,92vw);
+    width:min(600px,92vw);
+    max-height:85vh;
+    overflow-y:auto;
     background:rgba(12,16,20,.10);
     border:2px solid rgba(255,214,77,.3);
     border-radius:12px;
@@ -1689,9 +1691,11 @@
   }
 
   .shop-section{
+    position:relative;
     margin-top:30px;
     padding-top:20px;
     border-top:1px solid rgba(255,214,77,.2);
+    min-height:200px;
   }
 
   .shop-title{
@@ -2372,14 +2376,7 @@
 
       <div class="action-buttons" style="margin-top:12px;">
         <button class="action-btn btn-secondary" id="viewQuestsBtn" aria-label="View quests">VIEW QUESTS</button>
-        <button class="action-btn btn-secondary" id="viewInventoryBtn" aria-label="View inventory">INVENTORY</button>
-      </div>
-
-      <div class="action-buttons" style="margin-top:12px;">
-        <button class="action-btn btn-secondary" id="viewMarketplaceBtn" aria-label="View marketplace" style="position:relative;opacity:0.5;cursor:not-allowed;">
-          MARKETPLACE
-          <span style="position:absolute;top:2px;right:4px;font-size:8px;color:var(--gold);">SOON</span>
-        </button>
+        <button class="action-btn btn-secondary" id="viewInventoryBtn" aria-label="View inventory">INVENTORY & SHOP</button>
       </div>
     </div>
 
@@ -2455,7 +2452,7 @@
         <!-- Inventory slots will be generated here -->
       </div>
 
-      <div class="shop-section" style="position:relative;">
+      <div class="shop-section">
         <div style="filter:blur(2px);opacity:0.4;pointer-events:none;">
           <div class="shop-title">GP SHOP</div>
           <div class="shop-grid" id="shopGrid">
