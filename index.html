@@ -2578,8 +2578,8 @@
           <div class="stat-value">#127</div>
         </div>
         <div class="stat-card">
-          <div class="stat-label">GP EARNED</div>
-          <div class="stat-value">2.3M</div>
+          <div class="stat-label">GP BALANCE</div>
+          <div class="stat-value" id="dashboardGPBalance">0</div>
         </div>
       </div>
 
@@ -3761,10 +3761,15 @@
         localStorage.setItem('duelpvp_display_name', testWarriorName);
         localStorage.setItem('duelpvp_warrior', testWarriorName);
 
+        // Initialize GP - 1000 for testing (normally 10 for new accounts)
+        if (!localStorage.getItem('duelpvp_gp')) {
+          localStorage.setItem('duelpvp_gp', '1000');
+        }
+
         // Set username in dashboard
         document.getElementById('userName').textContent = testWarriorName.toUpperCase();
 
-        Toast.success('Logged in as ' + testWarriorName, 'TEST MODE');
+        Toast.success('Logged in as ' + testWarriorName + ' • ' + localStorage.getItem('duelpvp_gp') + ' GP', 'TEST MODE');
       } catch (e) {
         console.error('Failed to save login:', e);
         showError('passError', 'Failed to save login. Check browser settings.');
@@ -4176,7 +4181,11 @@
         document.querySelector('.stat-card:nth-child(1) .stat-value').textContent = totalWins;
         document.querySelector('.stat-card:nth-child(2) .stat-value').textContent = streak;
         document.querySelector('.stat-card:nth-child(3) .stat-value').textContent = userRank > 0 ? `#${userRank}` : '--';
-        document.querySelector('.stat-card:nth-child(4) .stat-value').textContent = totalGP >= 1000000 ? `${(totalGP/1000000).toFixed(1)}M` : `${(totalGP/1000).toFixed(1)}K`;
+
+        // Update GP from localStorage (for test mode) or database
+        const localGP = parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+        const displayGP = localGP || totalGP;
+        document.getElementById('dashboardGPBalance').textContent = displayGP >= 1000000 ? `${(displayGP/1000000).toFixed(1)}M` : displayGP >= 1000 ? `${(displayGP/1000).toFixed(1)}K` : displayGP;
 
       } catch (e) {
         console.error('Failed to update dashboard stats:', e);
