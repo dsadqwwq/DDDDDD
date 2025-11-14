@@ -3305,6 +3305,7 @@
 
       try {
         // 1. Create user in database
+        console.log('Step 1: Creating user in database...');
         const { data: newUser, error: userError } = await supabase
           .from('users')
           .insert({
@@ -3317,15 +3318,21 @@
 
         if (userError) {
           Loading.hide();
+          console.error('User creation failed:', userError);
           if (userError.code === '23505') { // Unique constraint violation
             showError('warriorNameError', 'Display name already taken');
+          } else if (userError.code === '42P01') {
+            Modal.alert('Database not set up. Please run minimal_setup.sql in Supabase first.', 'Setup Required');
           } else {
             Modal.alert('Registration failed: ' + userError.message, 'Error');
           }
           return;
         }
 
+        console.log('Step 1 complete: User created', newUser.id);
+
         // 2. Mark invite code as used (atomic operation prevents race condition)
+        console.log('Step 2: Marking code as used...');
         const { error: codeError } = await supabase
           .from('codes')
           .update({
@@ -3337,15 +3344,27 @@
 
         if (codeError) {
           // Code was used by someone else in the meantime - rollback
+          console.error('Code update failed:', codeError);
           await supabase.from('users').delete().eq('id', newUser.id);
           Loading.hide();
-          showError('codeError', 'Code was just used by someone else. Please try another code.');
+          showError('codeError', 'Code update failed: ' + codeError.message);
           swapContent('register', tempRegistrationData.inviteCode);
           return;
         }
 
+        console.log('Step 2 complete: Code marked as used');
+
         // 3. Generate 3 invite codes for new user
-        await supabase.rpc('create_user_codes', { user_id: newUser.id });
+        console.log('Step 3: Generating 3 invite codes...');
+        const { error: rpcError } = await supabase.rpc('create_user_codes', { user_id: newUser.id });
+
+        if (rpcError) {
+          console.error('Code generation failed (non-critical):', rpcError);
+          // Don't fail registration if code generation fails
+          Toast.info('Registration successful, but invite code generation failed', 'PARTIAL SUCCESS');
+        } else {
+          console.log('Step 3 complete: 3 codes generated');
+        }
 
         // 4. Store session in localStorage
         localStorage.setItem('duelpvp_user_id', newUser.id);
@@ -3362,7 +3381,7 @@
       } catch (e) {
         Loading.hide();
         console.error('Registration error:', e);
-        Modal.alert('An unexpected error occurred. Please try again.', 'Error');
+        Modal.alert('Error: ' + e.message + '. Check browser console (F12) for details.', 'Registration Failed');
       }
     }
 
