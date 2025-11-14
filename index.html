@@ -177,7 +177,13 @@
 
   /* Page container */
   .page-container{position:fixed;inset:0;display:grid;place-items:center center;padding:20px;overflow-y:auto; z-index:4}
-  
+
+  /* Bottom-aligned for access code screen */
+  .page-container.bottom-aligned{
+    place-items:end center;
+    padding-bottom:40px;
+  }
+
   /* Modern panel styles matching dashboard */
   .panel{
     position:relative;
@@ -1454,7 +1460,7 @@
   </div>
 
   <!-- Single page container that swaps content -->
-  <main class="page-container" id="pageContainer" role="main" aria-label="Main content">
+  <main class="page-container bottom-aligned" id="pageContainer" role="main" aria-label="Main content">
     <!-- Initial page content -->
     <section class="panel panel-transparent fade-in-delayed" id="panelContent">
       <div class="panel-header">
@@ -1904,6 +1910,7 @@
           questContent.style.display = 'none';
           inventoryContent.style.display = 'none';
           panelContent.classList.remove('panel-transparent');
+          pageContainer.classList.remove('bottom-aligned');
 
           panelContent.innerHTML = `
           <div class="panel-header">
@@ -1953,7 +1960,7 @@
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
-        pageContainer.classList.remove('center-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         panelContent.classList.remove('panel-transparent');
 
         panelContent.innerHTML = `
@@ -2013,6 +2020,7 @@
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
         pageContainer.classList.add('center-aligned');
+        pageContainer.classList.remove('bottom-aligned');
         panelContent.classList.remove('panel-transparent');
 
         panelContent.innerHTML = `
@@ -2051,6 +2059,8 @@
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
+        pageContainer.classList.add('bottom-aligned');
+        pageContainer.classList.remove('center-aligned');
         panelContent.classList.add('panel-transparent');
 
         panelContent.innerHTML = `
@@ -2095,6 +2105,7 @@
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         updateDashboardStats();
 
       } else if (newContent === 'game') {
@@ -2104,6 +2115,7 @@
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initChart();
 
       } else if (newContent === 'leaderboard') {
@@ -2114,6 +2126,7 @@
         leaderboardContent.style.display = 'block';
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         console.log('Leaderboard display set to block');
         loadLeaderboard('all');
         console.log('loadLeaderboard called');
@@ -2125,6 +2138,7 @@
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'block';
         inventoryContent.style.display = 'none';
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadQuests('daily');
 
       } else if (newContent === 'inventory') {
@@ -2134,6 +2148,7 @@
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
         inventoryContent.style.display = 'block';
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadInventory();
       }
 
