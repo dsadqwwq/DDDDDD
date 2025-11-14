@@ -586,6 +586,15 @@
     to{opacity:1;transform:translateY(0);}
   }
 
+  .fade-in-delayed{
+    opacity: 0;
+    animation: fadeInDelayed 0.6s ease-out 2.5s forwards;
+  }
+  @keyframes fadeInDelayed{
+    from{opacity:0;transform:translateY(20px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+
   .fade-out{
     animation: fadeOut 0.2s ease-in forwards;
   }
@@ -1447,7 +1456,7 @@
   <!-- Single page container that swaps content -->
   <main class="page-container" id="pageContainer" role="main" aria-label="Main content">
     <!-- Initial page content -->
-    <section class="panel panel-transparent fade-in" id="panelContent">
+    <section class="panel panel-transparent fade-in-delayed" id="panelContent">
       <div class="panel-header">
         <div class="sys">Welcome to the arena<span class="blink">.</span></div>
         <div class="sub-text">Enter your exclusive access code to begin</div>
@@ -1882,7 +1891,7 @@
       // Add fade-out to current visible element
       if (currentVisible) {
         currentVisible.classList.add('fade-out');
-        currentVisible.classList.remove('fade-in');
+        currentVisible.classList.remove('fade-in', 'fade-in-delayed');
       }
 
       // Wait for fade-out animation, then swap content
@@ -2131,7 +2140,7 @@
         // Add fade-in animation to newly visible element
         const newVisible = allContainers.find(el => el.style.display === 'block');
         if (newVisible) {
-          newVisible.classList.remove('fade-out');
+          newVisible.classList.remove('fade-out', 'fade-in-delayed');
           void newVisible.offsetWidth; // Force reflow
           newVisible.classList.add('fade-in');
         }
