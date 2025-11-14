@@ -1656,8 +1656,8 @@
 
       <div class="quest-tabs">
         <button class="quest-tab active" data-quest-tab="daily">DAILY QUESTS</button>
-        <button class="quest-tab locked" data-quest-tab="weekly">WEEKLY QUESTS</button>
-        <button class="quest-tab locked" data-quest-tab="special">SPECIAL QUESTS</button>
+        <button class="quest-tab" data-quest-tab="weekly">WEEKLY QUESTS</button>
+        <button class="quest-tab" data-quest-tab="special">SPECIAL QUESTS</button>
         <button class="quest-tab" data-quest-tab="completed">COMPLETED</button>
       </div>
 
@@ -3519,11 +3519,6 @@ We'll verify manually and you can claim your reward!
     // Quest tab switching
     document.querySelectorAll('.quest-tab').forEach(tab => {
       tab.addEventListener('click', function() {
-        // Prevent clicking locked tabs
-        if (this.classList.contains('locked')) {
-          return;
-        }
-
         document.querySelectorAll('.quest-tab').forEach(t => t.classList.remove('active'));
         this.classList.add('active');
         const questType = this.getAttribute('data-quest-tab');
