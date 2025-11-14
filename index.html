@@ -4861,8 +4861,8 @@
       const hexValue = hash.substring(0, 8);
       const intValue = parseInt(hexValue, 16);
 
-      // Formula: ensures 1% house edge, most crashes between 1.5x-3x
-      const result = (0.99 * Math.pow(2, 32)) / (Math.pow(2, 32) - intValue);
+      // Formula: 10% PLAYER EDGE (110% RTP) - players win over time!
+      const result = (1.10 * Math.pow(2, 32)) / (Math.pow(2, 32) - intValue);
       const crashPoint = Math.max(1.00, Math.min(100, result));
 
       return { seed, hash, crashPoint };
