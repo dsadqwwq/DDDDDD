@@ -394,15 +394,61 @@
     margin-top:24px;
   }
 
+  .split-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+    margin-top:24px;
+  }
+
+  .action-column{
+    background:rgba(0,0,0,.2);
+    border:2px solid;
+    border-radius:12px;
+    padding:20px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .action-column.invest{
+    border-color:rgba(76,175,80,.3);
+    background:rgba(16,24,16,.3);
+  }
+
+  .action-column.gamble{
+    border-color:rgba(244,67,54,.3);
+    background:rgba(24,16,16,.3);
+  }
+
+  .column-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:12px;
+    text-align:center;
+    margin-bottom:8px;
+    text-transform:uppercase;
+  }
+
+  .invest .column-title{
+    color:#4CAF50;
+    text-shadow:0 0 10px rgba(76,175,80,.5);
+  }
+
+  .gamble .column-title{
+    color:#F44336;
+    text-shadow:0 0 10px rgba(244,67,54,.5);
+  }
+
   .action-btn{
     flex:1;
-    padding:12px;
+    padding:14px 12px;
     font-family:'Press Start 2P', monospace;
     font-size:11px;
     border-radius:8px;
     cursor:pointer;
     transition:all 0.2s;
     border:2px solid;
+    text-align:center;
   }
 
   .btn-primary{
@@ -424,6 +470,177 @@
   .btn-secondary:hover{
     background:rgba(255,214,77,.1);
     transform:translateY(-2px);
+  }
+
+  .btn-invest{
+    background:rgba(76,175,80,.2);
+    border-color:#4CAF50;
+    color:#4CAF50;
+  }
+  .btn-invest:hover{
+    background:rgba(76,175,80,.3);
+    transform:translateY(-2px);
+    box-shadow:0 4px 12px rgba(76,175,80,.4);
+  }
+
+  .btn-gamble{
+    background:rgba(244,67,54,.2);
+    border-color:#F44336;
+    color:#F44336;
+  }
+  .btn-gamble:hover{
+    background:rgba(244,67,54,.3);
+    transform:translateY(-2px);
+    box-shadow:0 4px 12px rgba(244,67,54,.4);
+  }
+
+  /* Oven Investment Styles */
+  .oven-container{
+    display:none;
+    width:min(680px,92vw);
+    background:rgba(12,16,20,.92);
+    border:2px solid rgba(76,175,80,.3);
+    border-radius:12px;
+    padding:24px;
+    backdrop-filter:blur(8px);
+  }
+
+  .oven-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:24px;
+    padding-bottom:16px;
+    border-bottom:1px solid rgba(76,175,80,.2);
+  }
+
+  .oven-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:18px;
+    color:#4CAF50;
+    text-shadow:0 0 20px rgba(76,175,80,.5);
+  }
+
+  .oven-display{
+    background:rgba(16,24,16,.5);
+    border:2px solid rgba(76,175,80,.3);
+    border-radius:12px;
+    padding:24px;
+    margin-bottom:20px;
+  }
+
+  .oven-stats{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:16px;
+    margin-bottom:20px;
+  }
+
+  .oven-stat-card{
+    background:rgba(76,175,80,.05);
+    border:1px solid rgba(76,175,80,.2);
+    border-radius:8px;
+    padding:16px;
+    text-align:center;
+  }
+
+  .oven-stat-label{
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    color:#a0a8b0;
+    margin-bottom:8px;
+  }
+
+  .oven-stat-value{
+    font-family:'Press Start 2P', monospace;
+    font-size:20px;
+    color:#4CAF50;
+    text-shadow:0 0 10px rgba(76,175,80,.3);
+  }
+
+  .oven-timer{
+    text-align:center;
+    font-family:'Press Start 2P', monospace;
+    font-size:12px;
+    color:#4CAF50;
+    margin-bottom:20px;
+    padding:12px;
+    background:rgba(76,175,80,.1);
+    border-radius:8px;
+  }
+
+  .oven-controls{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:20px;
+  }
+
+  .oven-input-group{
+    margin-bottom:16px;
+  }
+
+  .oven-input{
+    width:100%;
+    padding:12px 14px;
+    background:rgba(0,0,0,.4);
+    border:1px solid rgba(76,175,80,.3);
+    border-radius:8px;
+    color:#e6ecf1;
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    transition:all 0.2s;
+    text-align:center;
+  }
+
+  .oven-input:focus{
+    outline:none;
+    border-color:#4CAF50;
+    background:rgba(0,0,0,.6);
+    box-shadow:0 0 0 2px rgba(76,175,80,.2);
+  }
+
+  .balance-display{
+    text-align:center;
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    color:#a0a8b0;
+    margin-bottom:20px;
+  }
+
+  .balance-amount{
+    color:var(--gold);
+  }
+
+  .oven-info{
+    background:rgba(76,175,80,.05);
+    border:1px solid rgba(76,175,80,.2);
+    border-radius:8px;
+    padding:16px;
+    margin-bottom:20px;
+  }
+
+  .oven-info-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    color:#4CAF50;
+    margin-bottom:12px;
+  }
+
+  .oven-info-text{
+    font-family:Inter, system-ui, Arial;
+    font-size:13px;
+    color:#a0a8b0;
+    line-height:1.6;
+  }
+
+  .oven-info-text ul{
+    margin:8px 0;
+    padding-left:20px;
+  }
+
+  .oven-info-text li{
+    margin-bottom:6px;
   }
 
   /* Page transitions */
@@ -754,9 +971,76 @@
         </div>
       </div>
 
-      <div class="action-buttons">
-        <button class="action-btn btn-primary" id="playReactionBtn">PLAY REACTION</button>
-        <button class="action-btn btn-secondary">VIEW LEADERBOARD</button>
+      <div class="split-actions">
+        <div class="action-column invest">
+          <div class="column-title">🔥 Investing</div>
+          <button class="action-btn btn-invest" id="openOvenBtn">OVEN</button>
+          <button class="action-btn btn-invest">STAKING</button>
+        </div>
+        <div class="action-column gamble">
+          <div class="column-title">🎲 Gambling</div>
+          <button class="action-btn btn-gamble" id="playReactionBtn">REACTION</button>
+          <button class="action-btn btn-gamble">COIN FLIP</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Oven Investment content (hidden initially) -->
+    <div class="oven-container" id="ovenContent">
+      <div class="oven-header">
+        <div class="oven-title">🔥 THE OVEN</div>
+        <button class="back-btn" id="backFromOvenBtn">BACK</button>
+      </div>
+
+      <div class="oven-info">
+        <div class="oven-info-title">HOW IT WORKS</div>
+        <div class="oven-info-text">
+          <ul>
+            <li><strong>10% Hourly Returns:</strong> Your tokens compound every hour automatically</li>
+            <li><strong>Withdraw Anytime:</strong> Pull out your investment + earnings whenever you want</li>
+            <li><strong>Auto-Compound:</strong> Interest is automatically reinvested for maximum gains</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="balance-display">
+        Your Balance: <span class="balance-amount" id="userBalance">1000 GP</span>
+      </div>
+
+      <div class="oven-display">
+        <div class="oven-stats">
+          <div class="oven-stat-card">
+            <div class="oven-stat-label">INVESTED</div>
+            <div class="oven-stat-value" id="ovenInvested">0 GP</div>
+          </div>
+          <div class="oven-stat-card">
+            <div class="oven-stat-label">TOTAL VALUE</div>
+            <div class="oven-stat-value" id="ovenTotal">0 GP</div>
+          </div>
+        </div>
+
+        <div class="oven-timer" id="ovenTimer">
+          Next compound in: --:--:--
+        </div>
+
+        <div class="oven-input-group">
+          <input type="number" class="oven-input" id="ovenAmount" placeholder="Enter amount to deposit" min="0">
+        </div>
+
+        <div class="oven-controls">
+          <button class="action-btn btn-invest" id="depositBtn">DEPOSIT</button>
+          <button class="action-btn btn-gamble" id="withdrawBtn">WITHDRAW ALL</button>
+        </div>
+      </div>
+
+      <div class="oven-info">
+        <div class="oven-info-title">EARNINGS CALCULATOR</div>
+        <div class="oven-info-text" id="earningsPreview">
+          Deposit 100 GP and earn:<br>
+          • After 1 hour: 110 GP (+10 GP)<br>
+          • After 3 hours: 133.1 GP (+33.1 GP)<br>
+          • After 24 hours: 1,009.5 GP (+909.5 GP)
+        </div>
       </div>
     </div>
 
@@ -810,6 +1094,7 @@
     const panelContent = document.getElementById('panelContent');
     const dashboardContent = document.getElementById('dashboardContent');
     const gameContent = document.getElementById('gameContent');
+    const ovenContent = document.getElementById('ovenContent');
     
     // Game variables
     let gameState = {
@@ -820,6 +1105,15 @@
       startTime: null,
       reactionTimer: null,
       chartAnimation: null
+    };
+
+    // Oven state
+    let ovenState = {
+      balance: 1000,
+      invested: 0,
+      lastCompoundTime: null,
+      compoundInterval: null,
+      timerInterval: null
     };
     
     // Helper function to swap content with fade animation
@@ -897,12 +1191,22 @@
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'block';
         gameContent.style.display = 'none';
+        ovenContent.style.display = 'none';
         dashboardContent.classList.add('fade-in');
-        
+
+      } else if (newContent === 'oven') {
+        panelContent.style.display = 'none';
+        dashboardContent.style.display = 'none';
+        gameContent.style.display = 'none';
+        ovenContent.style.display = 'block';
+        ovenContent.classList.add('fade-in');
+        initOven();
+
       } else if (newContent === 'game') {
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'none';
         gameContent.style.display = 'block';
+        ovenContent.style.display = 'none';
         gameContent.classList.add('fade-in');
         initChart();
       }
@@ -1180,12 +1484,189 @@
       drawChart(ctx, false);
     }
     
+    // Oven functions
+    function loadOvenState() {
+      try {
+        const saved = localStorage.getItem('duelpvp_oven');
+        if (saved) {
+          const data = JSON.parse(saved);
+          ovenState.balance = data.balance || 1000;
+          ovenState.invested = data.invested || 0;
+          ovenState.lastCompoundTime = data.lastCompoundTime ? new Date(data.lastCompoundTime) : null;
+
+          // Calculate any missed compounds
+          if (ovenState.lastCompoundTime && ovenState.invested > 0) {
+            const now = new Date();
+            const hoursPassed = (now - new Date(ovenState.lastCompoundTime)) / (1000 * 60 * 60);
+            const fullHours = Math.floor(hoursPassed);
+
+            if (fullHours > 0) {
+              // Apply missed compounds
+              for (let i = 0; i < fullHours; i++) {
+                ovenState.invested *= 1.10;
+              }
+              ovenState.lastCompoundTime = new Date(ovenState.lastCompoundTime.getTime() + fullHours * 60 * 60 * 1000);
+              saveOvenState();
+            }
+          }
+        }
+      } catch (e) {}
+    }
+
+    function saveOvenState() {
+      try {
+        localStorage.setItem('duelpvp_oven', JSON.stringify({
+          balance: ovenState.balance,
+          invested: ovenState.invested,
+          lastCompoundTime: ovenState.lastCompoundTime
+        }));
+      } catch (e) {}
+    }
+
+    function initOven() {
+      loadOvenState();
+      updateOvenDisplay();
+      startOvenTimer();
+    }
+
+    function updateOvenDisplay() {
+      document.getElementById('userBalance').textContent = Math.floor(ovenState.balance) + ' GP';
+      document.getElementById('ovenInvested').textContent = Math.floor(ovenState.invested) + ' GP';
+      document.getElementById('ovenTotal').textContent = Math.floor(ovenState.invested) + ' GP';
+    }
+
+    function startOvenTimer() {
+      // Clear existing timer
+      if (ovenState.timerInterval) {
+        clearInterval(ovenState.timerInterval);
+      }
+      if (ovenState.compoundInterval) {
+        clearInterval(ovenState.compoundInterval);
+      }
+
+      if (ovenState.invested <= 0) {
+        document.getElementById('ovenTimer').textContent = 'No active investment';
+        return;
+      }
+
+      // Set initial compound time if not set
+      if (!ovenState.lastCompoundTime) {
+        ovenState.lastCompoundTime = new Date();
+        saveOvenState();
+      }
+
+      // Update timer display every second
+      ovenState.timerInterval = setInterval(() => {
+        const now = new Date();
+        const nextCompound = new Date(ovenState.lastCompoundTime.getTime() + 60 * 60 * 1000);
+        const timeLeft = nextCompound - now;
+
+        if (timeLeft <= 0) {
+          // Time to compound!
+          applyCompound();
+        } else {
+          const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+          const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+          document.getElementById('ovenTimer').textContent =
+            `Next compound in: ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+      }, 1000);
+    }
+
+    function applyCompound() {
+      if (ovenState.invested <= 0) return;
+
+      // Apply 10% compound
+      ovenState.invested *= 1.10;
+      ovenState.lastCompoundTime = new Date();
+
+      saveOvenState();
+      updateOvenDisplay();
+
+      // Show notification
+      const timer = document.getElementById('ovenTimer');
+      timer.textContent = '🔥 COMPOUNDED! +10%';
+      timer.style.animation = 'none';
+      setTimeout(() => {
+        timer.style.animation = '';
+      }, 10);
+
+      setTimeout(() => {
+        startOvenTimer();
+      }, 2000);
+    }
+
+    function depositToOven() {
+      const amount = parseFloat(document.getElementById('ovenAmount').value);
+
+      if (isNaN(amount) || amount <= 0) {
+        alert('Please enter a valid amount');
+        return;
+      }
+
+      if (amount > ovenState.balance) {
+        alert('Insufficient balance');
+        return;
+      }
+
+      ovenState.balance -= amount;
+      ovenState.invested += amount;
+
+      // Set compound time if first deposit
+      if (!ovenState.lastCompoundTime) {
+        ovenState.lastCompoundTime = new Date();
+      }
+
+      saveOvenState();
+      updateOvenDisplay();
+      startOvenTimer();
+
+      document.getElementById('ovenAmount').value = '';
+
+      // Show success message
+      const timer = document.getElementById('ovenTimer');
+      const originalText = timer.textContent;
+      timer.textContent = `✅ Deposited ${Math.floor(amount)} GP!`;
+      setTimeout(() => {
+        if (ovenState.invested > 0) startOvenTimer();
+      }, 2000);
+    }
+
+    function withdrawFromOven() {
+      if (ovenState.invested <= 0) {
+        alert('No investment to withdraw');
+        return;
+      }
+
+      const amount = ovenState.invested;
+      ovenState.balance += amount;
+      ovenState.invested = 0;
+      ovenState.lastCompoundTime = null;
+
+      // Clear timers
+      if (ovenState.timerInterval) clearInterval(ovenState.timerInterval);
+      if (ovenState.compoundInterval) clearInterval(ovenState.compoundInterval);
+
+      saveOvenState();
+      updateOvenDisplay();
+
+      document.getElementById('ovenTimer').textContent = 'No active investment';
+
+      alert(`Withdrawn ${Math.floor(amount)} GP to your balance!`);
+    }
+
     // Initial event listeners
     document.getElementById('joinBtn').addEventListener('click', handleJoin);
     document.getElementById('loginLink').addEventListener('click', () => swapContent('login'));
     document.getElementById('logoutBtn').addEventListener('click', handleLogout);
     document.getElementById('playReactionBtn').addEventListener('click', () => swapContent('game'));
+    document.getElementById('openOvenBtn').addEventListener('click', () => swapContent('oven'));
+    document.getElementById('backFromOvenBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('backToDashBtn').addEventListener('click', () => swapContent('dashboard'));
+    document.getElementById('depositBtn').addEventListener('click', depositToOven);
+    document.getElementById('withdrawBtn').addEventListener('click', withdrawFromOven);
     document.getElementById('startGameBtn').addEventListener('click', startGame);
     document.getElementById('sellButton').addEventListener('click', handleSell);
     document.getElementById('resetGameBtn').addEventListener('click', resetGame);
