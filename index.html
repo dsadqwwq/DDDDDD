@@ -4490,7 +4490,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       const { data: inviteCodes } = await supabase
         .from('codes')
         .select('*')
-        .eq('owner_id', userId)
+        .eq('created_by', userId)
         .order('used_at', { ascending: true, nullsFirst: false });
 
       // Update GP display
