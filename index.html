@@ -665,6 +665,303 @@
     height:100%;
     image-rendering:crisp-edges;
   }
+
+  /* Leaderboard Screen Styles */
+  .leaderboard-container{
+    display:none;
+    width:min(780px,92vw);
+    background:rgba(12,16,20,.92);
+    border:2px solid rgba(255,214,77,.3);
+    border-radius:12px;
+    padding:24px;
+    backdrop-filter:blur(8px);
+  }
+
+  .leaderboard-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:24px;
+    padding-bottom:16px;
+    border-bottom:1px solid rgba(255,214,77,.2);
+  }
+
+  .leaderboard-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:18px;
+    color:var(--gold);
+  }
+
+  .podium{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:16px;
+    margin-bottom:32px;
+    align-items:flex-end;
+  }
+
+  .podium-item{
+    background:rgba(255,214,77,.05);
+    border:2px solid rgba(255,214,77,.2);
+    border-radius:8px;
+    padding:20px 16px;
+    text-align:center;
+    transition:all 0.3s;
+    position:relative;
+  }
+
+  .podium-item.rank-1{
+    order:2;
+    border-color:var(--gold);
+    background:rgba(255,214,77,.15);
+    transform:scale(1.1);
+  }
+
+  .podium-item.rank-2{
+    order:1;
+    border-color:rgba(192,192,192,.5);
+    background:rgba(192,192,192,.08);
+  }
+
+  .podium-item.rank-3{
+    order:3;
+    border-color:rgba(205,127,50,.5);
+    background:rgba(205,127,50,.08);
+  }
+
+  .podium-rank{
+    position:absolute;
+    top:-12px;
+    left:50%;
+    transform:translateX(-50%);
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    font-weight:bold;
+    border:2px solid;
+  }
+
+  .rank-1 .podium-rank{
+    background:var(--gold);
+    border-color:var(--gold-hi);
+    color:#000;
+    box-shadow:0 0 20px rgba(255,214,77,.6);
+  }
+
+  .rank-2 .podium-rank{
+    background:#C0C0C0;
+    border-color:#E8E8E8;
+    color:#000;
+  }
+
+  .rank-3 .podium-rank{
+    background:#CD7F32;
+    border-color:#E4A853;
+    color:#000;
+  }
+
+  .podium-player{
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    color:var(--gold);
+    margin:8px 0 4px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .podium-time{
+    font-family:'Press Start 2P', monospace;
+    font-size:16px;
+    color:#4CAF50;
+    margin:4px 0;
+  }
+
+  .podium-date{
+    font-size:9px;
+    color:#a0a8b0;
+    font-family:Inter, system-ui, Arial;
+  }
+
+  .leaderboard-filters{
+    display:flex;
+    gap:12px;
+    margin-bottom:20px;
+    flex-wrap:wrap;
+  }
+
+  .filter-btn{
+    padding:8px 16px;
+    background:rgba(255,214,77,.1);
+    border:1px solid rgba(255,214,77,.3);
+    color:var(--gold);
+    font-family:'Press Start 2P', monospace;
+    font-size:9px;
+    cursor:pointer;
+    border-radius:6px;
+    transition:all 0.2s;
+  }
+
+  .filter-btn.active{
+    background:var(--gold);
+    color:#000;
+    border-color:var(--gold);
+  }
+
+  .filter-btn:hover{
+    background:rgba(255,214,77,.2);
+    transform:translateY(-1px);
+  }
+
+  .leaderboard-table{
+    background:rgba(0,0,0,.3);
+    border:1px solid rgba(255,214,77,.2);
+    border-radius:8px;
+    overflow:hidden;
+  }
+
+  .table-header{
+    display:grid;
+    grid-template-columns:60px 1fr 120px 140px;
+    gap:12px;
+    padding:12px 16px;
+    background:rgba(255,214,77,.1);
+    border-bottom:1px solid rgba(255,214,77,.2);
+    font-family:'Press Start 2P', monospace;
+    font-size:9px;
+    color:var(--gold);
+  }
+
+  .table-row{
+    display:grid;
+    grid-template-columns:60px 1fr 120px 140px;
+    gap:12px;
+    padding:12px 16px;
+    border-bottom:1px solid rgba(255,214,77,.1);
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    transition:all 0.2s;
+  }
+
+  .table-row:hover{
+    background:rgba(255,214,77,.05);
+  }
+
+  .table-row:last-child{
+    border-bottom:none;
+  }
+
+  .table-row.user-row{
+    background:rgba(76,175,80,.1);
+    border:1px solid rgba(76,175,80,.3);
+  }
+
+  .rank-badge{
+    color:#a0a8b0;
+    text-align:center;
+  }
+
+  .player-name{
+    color:#e6ecf1;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .reaction-time{
+    color:#4CAF50;
+    text-align:center;
+  }
+
+  .entry-date{
+    color:#a0a8b0;
+    font-size:9px;
+    text-align:right;
+  }
+
+  .no-data{
+    text-align:center;
+    padding:40px 20px;
+    color:#a0a8b0;
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+  }
+
+  .your-best{
+    background:rgba(255,214,77,.05);
+    border:1px solid rgba(255,214,77,.2);
+    border-radius:8px;
+    padding:16px;
+    margin-bottom:20px;
+    text-align:center;
+  }
+
+  .your-best-label{
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    color:#a0a8b0;
+    margin-bottom:8px;
+  }
+
+  .your-best-time{
+    font-family:'Press Start 2P', monospace;
+    font-size:20px;
+    color:var(--gold);
+  }
+
+  /* Loading state */
+  .loading-spinner{
+    display:inline-block;
+    width:20px;
+    height:20px;
+    border:3px solid rgba(255,214,77,.2);
+    border-top-color:var(--gold);
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+  }
+
+  @keyframes spin{
+    to{transform:rotate(360deg);}
+  }
+
+  /* Error message */
+  .error-msg{
+    color:#F44336;
+    font-size:11px;
+    font-family:Inter, system-ui, Arial;
+    margin-top:4px;
+    display:none;
+  }
+
+  .error-msg.show{
+    display:block;
+  }
+
+  /* Responsive improvements */
+  @media(max-width:600px){
+    .table-header, .table-row{
+      grid-template-columns:50px 1fr 90px;
+      font-size:8px;
+    }
+    .entry-date{
+      display:none;
+    }
+    .podium{
+      grid-template-columns:1fr;
+    }
+    .podium-item.rank-1{
+      order:1;
+    }
+    .podium-item.rank-2{
+      order:2;
+    }
+    .podium-item.rank-3{
+      order:3;
+    }
+  }
 </style>
 </head>
 <body>
@@ -682,35 +979,35 @@
   </div>
 
   <!-- Single page container that swaps content -->
-  <main class="page-container" id="pageContainer">
+  <main class="page-container" id="pageContainer" role="main" aria-label="Main content">
     <!-- Initial page content -->
     <section class="panel fade-in" id="panelContent">
       <div class="panel-header">
         <div class="sys">Welcome to the arena<span class="blink">.</span></div>
         <div class="sub-text">Enter your exclusive access code to begin</div>
       </div>
-      
+
       <div class="input-group">
-        <label class="input-label">Access Code</label>
+        <label class="input-label" for="code">Access Code</label>
         <div class="bar">
-          <input id="code" class="input-field" type="text" placeholder="XXXX-XXXX-XXXX" autocomplete="off">
-          <button class="btn-submit" id="joinBtn">JOIN</button>
+          <input id="code" class="input-field" type="text" placeholder="XXXX-XXXX-XXXX" autocomplete="off" aria-label="Enter access code" aria-required="true">
+          <button class="btn-submit" id="joinBtn" aria-label="Join with access code">JOIN</button>
         </div>
       </div>
-      
+
       <div class="helper">
-        Already have an account? <a id="loginLink">Sign in</a>
+        Already have an account? <a id="loginLink" role="button" tabindex="0" aria-label="Sign in to existing account">Sign in</a>
       </div>
     </section>
 
     <!-- Dashboard content (hidden initially) -->
-    <div class="dashboard-content" id="dashboardContent">
+    <div class="dashboard-content" id="dashboardContent" role="region" aria-label="User dashboard">
       <div class="dashboard-header">
         <div class="user-info">
-          <div class="user-name" id="userName">Champion</div>
-          <div class="user-stats">Level 87 • Wilderness Elite</div>
+          <div class="user-name" id="userName" aria-label="User name">Champion</div>
+          <div class="user-stats" aria-label="User level and rank">Level 87 • Wilderness Elite</div>
         </div>
-        <button class="logout-btn" id="logoutBtn">LOGOUT</button>
+        <button class="logout-btn" id="logoutBtn" aria-label="Logout from account">LOGOUT</button>
       </div>
 
       <div class="stats-grid">
@@ -755,16 +1052,52 @@
       </div>
 
       <div class="action-buttons">
-        <button class="action-btn btn-primary" id="playReactionBtn">PLAY REACTION</button>
-        <button class="action-btn btn-secondary">VIEW LEADERBOARD</button>
+        <button class="action-btn btn-primary" id="playReactionBtn" aria-label="Play reaction game">PLAY REACTION</button>
+        <button class="action-btn btn-secondary" id="viewLeaderboardBtn" aria-label="View global leaderboard">VIEW LEADERBOARD</button>
+      </div>
+    </div>
+
+    <!-- Leaderboard content (hidden initially) -->
+    <div class="leaderboard-container" id="leaderboardContent" role="region" aria-label="Global leaderboard">
+      <div class="leaderboard-header">
+        <div class="leaderboard-title">GLOBAL LEADERBOARD</div>
+        <button class="back-btn" id="backFromLeaderboardBtn" aria-label="Back to dashboard">BACK</button>
+      </div>
+
+      <div class="your-best" id="yourBestSection" style="display:none;">
+        <div class="your-best-label">YOUR BEST TIME</div>
+        <div class="your-best-time" id="yourBestTime">-- ms</div>
+      </div>
+
+      <div class="leaderboard-filters" id="leaderboardFilters" role="group" aria-label="Filter leaderboard by time period">
+        <button class="filter-btn active" data-filter="all" aria-label="Show all time scores" aria-pressed="true">ALL TIME</button>
+        <button class="filter-btn" data-filter="today" aria-label="Show today's scores" aria-pressed="false">TODAY</button>
+        <button class="filter-btn" data-filter="week" aria-label="Show this week's scores" aria-pressed="false">THIS WEEK</button>
+        <button class="filter-btn" data-filter="month" aria-label="Show this month's scores" aria-pressed="false">THIS MONTH</button>
+      </div>
+
+      <div class="podium" id="podium">
+        <!-- Top 3 will be generated here -->
+      </div>
+
+      <div class="leaderboard-table">
+        <div class="table-header">
+          <div>RANK</div>
+          <div>PLAYER</div>
+          <div>TIME</div>
+          <div class="entry-date">DATE</div>
+        </div>
+        <div id="leaderboardTableBody">
+          <!-- Table rows will be generated here -->
+        </div>
       </div>
     </div>
 
     <!-- Reaction Game content (hidden initially) -->
-    <div class="game-container" id="gameContent">
+    <div class="game-container" id="gameContent" role="region" aria-label="Reaction game">
       <div class="game-header">
         <div class="game-title">REACTION TRADER</div>
-        <button class="back-btn" id="backToDashBtn">BACK</button>
+        <button class="back-btn" id="backToDashBtn" aria-label="Back to dashboard">BACK</button>
       </div>
 
       <div class="instructions">
@@ -810,6 +1143,7 @@
     const panelContent = document.getElementById('panelContent');
     const dashboardContent = document.getElementById('dashboardContent');
     const gameContent = document.getElementById('gameContent');
+    const leaderboardContent = document.getElementById('leaderboardContent');
     
     // Game variables
     let gameState = {
@@ -828,85 +1162,115 @@
         panelContent.style.display = 'block';
         dashboardContent.style.display = 'none';
         gameContent.style.display = 'none';
-        
+        leaderboardContent.style.display = 'none';
+
         panelContent.innerHTML = `
           <div class="panel-header">
             <div class="sys">Welcome back, champion<span class="blink">.</span></div>
             <div class="sub-text">Enter your credentials to access the arena</div>
           </div>
-          
+
           <div class="input-group">
             <label class="input-label">Email Address</label>
             <input id="loginEmail" class="input-field" type="email" placeholder="name@example.com" autocomplete="email">
+            <div class="error-msg" id="emailError"></div>
           </div>
-          
+
           <div class="input-group">
             <label class="input-label">Password</label>
             <div class="bar">
               <input id="loginPass" class="input-field" type="password" placeholder="Enter your password" autocomplete="current-password">
               <button class="btn-submit" id="loginBtn">LOG IN</button>
             </div>
+            <div class="error-msg" id="passError"></div>
           </div>
-          
+
           <div class="helper">
             Don't have access? <a id="backLink">Get access code</a>
           </div>
         `;
-        
+
         // Re-attach event listeners
         document.getElementById('loginBtn').addEventListener('click', handleLogin);
-        document.getElementById('backLink').addEventListener('click', () => swapContent('home'));
+        const backLink = document.getElementById('backLink');
+        backLink.addEventListener('click', () => swapContent('home'));
+        backLink.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            swapContent('home');
+          }
+        });
         // Allow enter key to submit
         document.getElementById('loginPass').addEventListener('keypress', (e) => {
           if (e.key === 'Enter') handleLogin();
         });
-        
+
       } else if (newContent === 'home') {
         panelContent.style.display = 'block';
         dashboardContent.style.display = 'none';
         gameContent.style.display = 'none';
-        
+        leaderboardContent.style.display = 'none';
+
         panelContent.innerHTML = `
           <div class="panel-header">
             <div class="sys">Welcome to the arena<span class="blink">.</span></div>
             <div class="sub-text">Enter your exclusive access code to begin</div>
           </div>
-          
+
           <div class="input-group">
             <label class="input-label">Access Code</label>
             <div class="bar">
               <input id="code" class="input-field" type="text" placeholder="XXXX-XXXX-XXXX" autocomplete="off">
               <button class="btn-submit" id="joinBtn">JOIN</button>
             </div>
+            <div class="error-msg" id="codeError"></div>
           </div>
-          
+
           <div class="helper">
             Already have an account? <a id="loginLink">Sign in</a>
           </div>
         `;
-        
+
         // Re-attach event listeners
         document.getElementById('joinBtn').addEventListener('click', handleJoin);
-        document.getElementById('loginLink').addEventListener('click', () => swapContent('login'));
+        const loginLink = document.getElementById('loginLink');
+        loginLink.addEventListener('click', () => swapContent('login'));
+        loginLink.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            swapContent('login');
+          }
+        });
         // Allow enter key to submit
         document.getElementById('code').addEventListener('keypress', (e) => {
           if (e.key === 'Enter') handleJoin();
         });
-        
+
       } else if (newContent === 'dashboard') {
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'block';
         gameContent.style.display = 'none';
+        leaderboardContent.style.display = 'none';
         dashboardContent.classList.add('fade-in');
-        
+        updateDashboardStats();
+
       } else if (newContent === 'game') {
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'none';
         gameContent.style.display = 'block';
+        leaderboardContent.style.display = 'none';
         gameContent.classList.add('fade-in');
         initChart();
+
+      } else if (newContent === 'leaderboard') {
+        panelContent.style.display = 'none';
+        dashboardContent.style.display = 'none';
+        gameContent.style.display = 'none';
+        leaderboardContent.style.display = 'block';
+        leaderboardContent.classList.add('fade-in');
+        loadLeaderboard('all');
       }
-      
+
       // Add fade-in animation
       if (newContent === 'login' || newContent === 'home') {
         panelContent.classList.remove('fade-in');
@@ -915,30 +1279,91 @@
       }
     }
     
+    // Validation functions
+    function validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    }
+
+    function validateAccessCode(code) {
+      // Format: XXXX-XXXX-XXXX (alphanumeric)
+      const re = /^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/i;
+      return re.test(code);
+    }
+
+    function showError(elementId, message) {
+      const errorEl = document.getElementById(elementId);
+      if (errorEl) {
+        errorEl.textContent = message;
+        errorEl.classList.add('show');
+      }
+    }
+
+    function clearError(elementId) {
+      const errorEl = document.getElementById(elementId);
+      if (errorEl) {
+        errorEl.classList.remove('show');
+      }
+    }
+
     // Event handlers
     function handleJoin() {
-      const code = document.getElementById('code').value.trim();
+      const codeInput = document.getElementById('code');
+      const code = codeInput.value.trim();
+
+      clearError('codeError');
+
       if (!code) {
-        alert('Enter an access code first');
+        showError('codeError', 'Please enter an access code');
         return;
       }
+
+      if (!validateAccessCode(code)) {
+        showError('codeError', 'Invalid format. Use: XXXX-XXXX-XXXX');
+        return;
+      }
+
       swapContent('login');
     }
-    
+
     function handleLogin() {
-      const email = document.getElementById('loginEmail').value.trim();
-      const pass = document.getElementById('loginPass').value.trim();
-      if (!email || !pass) {
-        alert('Please fill in all fields');
-        return;
+      const emailInput = document.getElementById('loginEmail');
+      const passInput = document.getElementById('loginPass');
+      const email = emailInput.value.trim();
+      const pass = passInput.value.trim();
+
+      clearError('emailError');
+      clearError('passError');
+
+      let hasError = false;
+
+      if (!email) {
+        showError('emailError', 'Email is required');
+        hasError = true;
+      } else if (!validateEmail(email)) {
+        showError('emailError', 'Invalid email format');
+        hasError = true;
       }
-      
+
+      if (!pass) {
+        showError('passError', 'Password is required');
+        hasError = true;
+      } else if (pass.length < 6) {
+        showError('passError', 'Password must be at least 6 characters');
+        hasError = true;
+      }
+
+      if (hasError) return;
+
       // Store email and show dashboard
       try {
         localStorage.setItem('duelpvp_email', email);
         document.getElementById('userName').textContent = email.split('@')[0].toUpperCase();
-      } catch (e) {}
-      
+      } catch (e) {
+        showError('passError', 'Failed to save login. Check browser settings.');
+        return;
+      }
+
       swapContent('dashboard');
     }
     
@@ -946,6 +1371,192 @@
       dashboardContent.style.display = 'none';
       panelContent.style.display = 'block';
       swapContent('home');
+    }
+
+    // Dashboard stats update
+    function updateDashboardStats() {
+      try {
+        const email = localStorage.getItem('duelpvp_email') || 'anonymous';
+        const scores = JSON.parse(localStorage.getItem('duelpvp_scores') || '[]');
+
+        // Filter user's scores
+        const userScores = scores.filter(s => s.email === email);
+
+        // Calculate stats
+        const totalWins = userScores.length;
+        const bestTime = userScores.length > 0 ? Math.min(...userScores.map(s => s.time)) : 0;
+
+        // Get user rank
+        const allBestTimes = {};
+        scores.forEach(s => {
+          if (!allBestTimes[s.email] || s.time < allBestTimes[s.email]) {
+            allBestTimes[s.email] = s.time;
+          }
+        });
+        const rankedUsers = Object.entries(allBestTimes).sort((a, b) => a[1] - b[1]);
+        const userRank = rankedUsers.findIndex(u => u[0] === email) + 1;
+
+        // Calculate win streak (last consecutive wins)
+        let streak = 0;
+        for (let i = userScores.length - 1; i >= 0; i--) {
+          if (userScores[i].time < 500) { // Consider <500ms as good
+            streak++;
+          } else {
+            break;
+          }
+        }
+
+        // Calculate total GP earned (100 GP per win, bonus for fast times)
+        let totalGP = 0;
+        userScores.forEach(s => {
+          totalGP += 100; // Base GP
+          if (s.time < 300) totalGP += 50; // Speed bonus
+          if (s.time < 200) totalGP += 100; // Elite bonus
+        });
+
+        // Update UI
+        document.querySelector('.stat-card:nth-child(1) .stat-value').textContent = totalWins;
+        document.querySelector('.stat-card:nth-child(2) .stat-value').textContent = streak;
+        document.querySelector('.stat-card:nth-child(3) .stat-value').textContent = userRank > 0 ? `#${userRank}` : '--';
+        document.querySelector('.stat-card:nth-child(4) .stat-value').textContent = totalGP >= 1000000 ? `${(totalGP/1000000).toFixed(1)}M` : `${(totalGP/1000).toFixed(1)}K`;
+
+      } catch (e) {
+        console.error('Failed to update dashboard stats:', e);
+      }
+    }
+
+    // Leaderboard functions
+    function loadLeaderboard(filter) {
+      try {
+        const email = localStorage.getItem('duelpvp_email') || 'anonymous';
+        let scores = JSON.parse(localStorage.getItem('duelpvp_scores') || '[]');
+
+        // Filter by time period
+        const now = new Date();
+        if (filter === 'today') {
+          const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+          scores = scores.filter(s => new Date(s.date) >= todayStart);
+        } else if (filter === 'week') {
+          const weekStart = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+          scores = scores.filter(s => new Date(s.date) >= weekStart);
+        } else if (filter === 'month') {
+          const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+          scores = scores.filter(s => new Date(s.date) >= monthStart);
+        }
+
+        // Get best time per player
+        const bestTimes = {};
+        scores.forEach(s => {
+          if (!bestTimes[s.email] || s.time < bestTimes[s.email].time) {
+            bestTimes[s.email] = s;
+          }
+        });
+
+        // Convert to array and sort
+        const leaderboard = Object.values(bestTimes).sort((a, b) => a.time - b.time);
+
+        // Show user's best time
+        const userBest = leaderboard.find(s => s.email === email);
+        if (userBest) {
+          document.getElementById('yourBestSection').style.display = 'block';
+          document.getElementById('yourBestTime').textContent = `${userBest.time.toFixed(0)}ms`;
+        } else {
+          document.getElementById('yourBestSection').style.display = 'none';
+        }
+
+        // Render podium (top 3)
+        renderPodium(leaderboard.slice(0, 3));
+
+        // Render table
+        renderLeaderboardTable(leaderboard, email);
+
+      } catch (e) {
+        console.error('Failed to load leaderboard:', e);
+        document.getElementById('leaderboardTableBody').innerHTML = '<div class="no-data">Error loading leaderboard</div>';
+      }
+    }
+
+    function renderPodium(topThree) {
+      const podium = document.getElementById('podium');
+      podium.innerHTML = '';
+
+      if (topThree.length === 0) {
+        podium.innerHTML = '<div class="no-data" style="grid-column: 1/-1;">No scores yet. Be the first!</div>';
+        return;
+      }
+
+      topThree.forEach((score, index) => {
+        const rank = index + 1;
+        const playerName = score.email.split('@')[0];
+        const date = new Date(score.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+        const podiumItem = document.createElement('div');
+        podiumItem.className = `podium-item rank-${rank}`;
+        podiumItem.innerHTML = `
+          <div class="podium-rank">${rank}</div>
+          <div class="podium-player">${playerName.toUpperCase()}</div>
+          <div class="podium-time">${score.time.toFixed(0)}ms</div>
+          <div class="podium-date">${date}</div>
+        `;
+        podium.appendChild(podiumItem);
+      });
+
+      // Add empty slots if less than 3
+      for (let i = topThree.length; i < 3; i++) {
+        const podiumItem = document.createElement('div');
+        podiumItem.className = `podium-item rank-${i + 1}`;
+        podiumItem.innerHTML = `
+          <div class="podium-rank">${i + 1}</div>
+          <div class="podium-player">---</div>
+          <div class="podium-time">--ms</div>
+          <div class="podium-date">No entry</div>
+        `;
+        podium.appendChild(podiumItem);
+      }
+    }
+
+    function renderLeaderboardTable(leaderboard, currentEmail) {
+      const tbody = document.getElementById('leaderboardTableBody');
+      tbody.innerHTML = '';
+
+      if (leaderboard.length === 0) {
+        tbody.innerHTML = '<div class="no-data">No scores recorded yet</div>';
+        return;
+      }
+
+      leaderboard.forEach((score, index) => {
+        const rank = index + 1;
+        const playerName = score.email.split('@')[0];
+        const date = new Date(score.date).toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric'
+        });
+        const isCurrentUser = score.email === currentEmail;
+
+        const row = document.createElement('div');
+        row.className = isCurrentUser ? 'table-row user-row' : 'table-row';
+        row.innerHTML = `
+          <div class="rank-badge">#${rank}</div>
+          <div class="player-name">${playerName.toUpperCase()}${isCurrentUser ? ' (YOU)' : ''}</div>
+          <div class="reaction-time">${score.time.toFixed(0)}ms</div>
+          <div class="entry-date">${date}</div>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function handleFilterChange(filter) {
+      // Update active button
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-pressed', 'false');
+      });
+      event.target.classList.add('active');
+      event.target.setAttribute('aria-pressed', 'true');
+
+      // Reload leaderboard
+      loadLeaderboard(filter);
     }
     
     // Game functions
@@ -1185,11 +1796,33 @@
     document.getElementById('loginLink').addEventListener('click', () => swapContent('login'));
     document.getElementById('logoutBtn').addEventListener('click', handleLogout);
     document.getElementById('playReactionBtn').addEventListener('click', () => swapContent('game'));
+    document.getElementById('viewLeaderboardBtn').addEventListener('click', () => swapContent('leaderboard'));
     document.getElementById('backToDashBtn').addEventListener('click', () => swapContent('dashboard'));
+    document.getElementById('backFromLeaderboardBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('startGameBtn').addEventListener('click', startGame);
     document.getElementById('sellButton').addEventListener('click', handleSell);
     document.getElementById('resetGameBtn').addEventListener('click', resetGame);
-    
+
+    // Leaderboard filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const filter = this.getAttribute('data-filter');
+        handleFilterChange(filter);
+      });
+    });
+
+    // Add keyboard navigation support
+    document.addEventListener('keydown', (e) => {
+      // ESC key to go back
+      if (e.key === 'Escape') {
+        if (gameContent.style.display === 'block') {
+          swapContent('dashboard');
+        } else if (leaderboardContent.style.display === 'block') {
+          swapContent('dashboard');
+        }
+      }
+    });
+
     // Check if user is already logged in
     try {
       const savedEmail = localStorage.getItem('duelpvp_email');
