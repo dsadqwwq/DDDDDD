@@ -1548,7 +1548,8 @@
   }
 
   .quest-grid.locked{
-    filter:blur(3px);
+    filter:blur(2px);
+    opacity:0.4;
     pointer-events:none;
     user-select:none;
   }
@@ -2391,8 +2392,8 @@
         <!-- Right column: Recent Activity -->
         <div class="dashboard-card">
           <div class="card-title">RECENT BATTLES</div>
-          <div class="card-content" style="position:relative;">
-            <div class="recent-matches-content">
+          <div class="card-content" style="position:relative;min-height:200px;">
+            <div class="recent-matches-content" style="filter:blur(2px);opacity:0.4;pointer-events:none;">
               <div class="match-list">
                 <div class="match-item">
                   <span>vs. DragonSlayer99</span>
@@ -2409,6 +2410,14 @@
                 <div class="match-item">
                   <span>vs. RuneKnight</span>
                   <span class="match-result win">WIN</span>
+                </div>
+                <div class="match-item">
+                  <span>vs. ShadowWarrior</span>
+                  <span class="match-result win">WIN</span>
+                </div>
+                <div class="match-item">
+                  <span>vs. BladeRunner</span>
+                  <span class="match-result loss">LOSS</span>
                 </div>
               </div>
             </div>
@@ -4533,20 +4542,84 @@
       // Check if test mode user
       const isTestMode = userId.startsWith('test-');
 
-      if (isTestMode) {
-        // Test mode - skip database and show coming soon
+      // Show coming soon overlay for weekly and special quests
+      if (type === 'weekly' || type === 'special') {
         questGrid.classList.add('locked');
-        comingSoonOverlay.style.display = 'block';
+        comingSoonOverlay.style.display = 'flex';
+
+        // Show blurred placeholder quests
         questGrid.innerHTML = '';
-        for (let i = 0; i < 4; i++) {
+        const placeholderQuests = type === 'weekly' ? QUESTS.weekly : [
+          {name: 'Mystery Quest 1', desc: 'Complete special challenges for massive rewards', reward: '???', icon: '🌟'},
+          {name: 'Mystery Quest 2', desc: 'Limited time event quest', reward: '???', icon: '✨'},
+          {name: 'Mystery Quest 3', desc: 'Exclusive seasonal challenge', reward: '???', icon: '🎁'},
+          {name: 'Mystery Quest 4', desc: 'Epic endgame content', reward: '???', icon: '💫'}
+        ];
+
+        placeholderQuests.forEach(quest => {
           const card = document.createElement('div');
           card.className = 'quest-card';
           card.innerHTML = `
-            <div class="quest-name">QUEST ${i + 1}</div>
-            <div class="quest-desc">Complete challenges to earn rewards</div>
+            <div class="quest-name"><span class="quest-icon">${quest.icon}</span> ${quest.name}</div>
+            <div class="quest-desc">${quest.desc}</div>
+            <div class="quest-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:0%"></div>
+              </div>
+              <div class="progress-text">0 / ${quest.target || 1}</div>
+            </div>
+            <div class="quest-reward">💰 ${quest.reward} GP</div>
           `;
           questGrid.appendChild(card);
+        });
+        return;
+      } else {
+        questGrid.classList.remove('locked');
+        comingSoonOverlay.style.display = 'none';
+      }
+
+      // For daily quests or completed - show actual quests
+      if (isTestMode) {
+        // Test mode - show daily quests without database
+        questGrid.innerHTML = '';
+        const quests = type === 'completed' ? [] : QUESTS.daily;
+
+        if (quests.length === 0) {
+          questGrid.innerHTML = '<div class="no-data">No quests available</div>';
+          return;
         }
+
+        quests.forEach(quest => {
+          const card = document.createElement('div');
+          card.className = 'quest-card';
+          const isSocialQuest = quest.type === 'twitter' || quest.type === 'discord';
+
+          if (isSocialQuest) {
+            card.innerHTML = `
+              <div class="quest-name"><span class="quest-icon">${quest.icon}</span> ${quest.name}</div>
+              <div class="quest-desc">${quest.desc}${quest.tweetUrl ? ` <a href="${quest.tweetUrl}" target="_blank" style="color:var(--gold);text-decoration:underline;">View Tweet</a>` : ''}</div>
+              <div class="quest-progress">
+                <button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" disabled>
+                  VERIFY
+                </button>
+              </div>
+              <div class="quest-reward">💰 ${quest.reward} GP</div>
+            `;
+          } else {
+            card.innerHTML = `
+              <div class="quest-name"><span class="quest-icon">${quest.icon}</span> ${quest.name}</div>
+              <div class="quest-desc">${quest.desc}</div>
+              <div class="quest-progress">
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width:0%"></div>
+                </div>
+                <div class="progress-text">0 / ${quest.target}</div>
+              </div>
+              <div class="quest-reward">💰 ${quest.reward} GP</div>
+            `;
+          }
+          questGrid.appendChild(card);
+        });
         return;
       }
 
@@ -4581,35 +4654,6 @@
 
       // Get server time to prevent clock manipulation
       const serverTime = await getServerTime();
-
-      // Show coming soon overlay for weekly and special quests
-      if (type === 'weekly' || type === 'special') {
-        questGrid.classList.add('locked');
-        comingSoonOverlay.style.display = 'block';
-
-        // Still show the 4 placeholder boxes
-        questGrid.innerHTML = '';
-        for (let i = 0; i < 4; i++) {
-          const card = document.createElement('div');
-          card.className = 'quest-card';
-          card.innerHTML = `
-            <div class="quest-name"><span class="quest-icon">🔒</span> Quest ${i + 1}</div>
-            <div class="quest-desc">Complete daily quests to unlock</div>
-            <div class="quest-progress">
-              <div class="progress-bar">
-                <div class="progress-fill" style="width:0%"></div>
-              </div>
-              <div class="progress-text">0 / 1</div>
-            </div>
-            <div class="quest-reward">💰 ??? GP</div>
-          `;
-          questGrid.appendChild(card);
-        }
-        return;
-      } else {
-        questGrid.classList.remove('locked');
-        comingSoonOverlay.style.display = 'none';
-      }
 
       questGrid.innerHTML = '';
       const quests = type === 'completed'
