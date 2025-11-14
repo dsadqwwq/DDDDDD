@@ -517,6 +517,30 @@
   .win{background:rgba(76,175,80,.3);color:#4CAF50;}
   .loss{background:rgba(244,67,54,.3);color:#F44336;}
 
+  .wallet-section{
+    background:rgba(0,0,0,.3);
+    border:1px solid rgba(255,214,77,.2);
+    border-radius:8px;
+    padding:16px;
+    margin-bottom:24px;
+  }
+
+  .wallet-info{
+    text-align:center;
+  }
+
+  .wallet-status{
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    color:#a0a8b0;
+    margin-bottom:8px;
+    word-break:break-all;
+  }
+
+  .wallet-status.connected{
+    color:#4CAF50;
+  }
+
   .action-buttons{
     display:flex;
     gap:12px;
@@ -1532,6 +1556,14 @@
         </div>
       </div>
 
+      <div class="wallet-section" id="walletSection">
+        <div class="section-title">WALLET CONNECTION</div>
+        <div class="wallet-info" id="walletInfo">
+          <div class="wallet-status" id="walletStatus">No wallet connected</div>
+          <button class="action-btn btn-secondary" id="connectWalletBtn" style="width:100%;margin-top:12px;">CONNECT WALLET</button>
+        </div>
+      </div>
+
       <div class="action-buttons">
         <button class="action-btn btn-primary" id="playReactionBtn" aria-label="Play reaction game">PLAY REACTION</button>
         <button class="action-btn btn-secondary" id="viewLeaderboardBtn" aria-label="View global leaderboard">VIEW LEADERBOARD</button>
@@ -1936,10 +1968,16 @@
           <div class="helper">
             Don't have access? <a id="backLink">Get access code</a>
           </div>
+
+          <div style="text-align:center;margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,214,77,.15);">
+            <div style="font-family:Inter,system-ui,Arial;font-size:11px;color:#a0a8b0;margin-bottom:12px;">OR</div>
+            <button class="action-btn btn-secondary" id="walletLoginBtn" style="width:100%;">SIGN IN WITH WALLET</button>
+          </div>
         `;
 
         // Re-attach event listeners
         document.getElementById('loginBtn').addEventListener('click', handleLogin);
+        document.getElementById('walletLoginBtn').addEventListener('click', handleWalletLogin);
         const backLink = document.getElementById('backLink');
         backLink.addEventListener('click', () => swapContent('home'));
         backLink.addEventListener('keypress', (e) => {
@@ -2317,6 +2355,135 @@
       swapContent('home');
     }
 
+    // Wallet connection functions
+    async function handleConnectWallet() {
+      try {
+        // Check if MetaMask/wallet is installed
+        if (typeof window.ethereum === 'undefined') {
+          alert('No Web3 wallet detected! Please install MetaMask or another Ethereum wallet.');
+          return;
+        }
+
+        // Request account access
+        const accounts = await window.ethereum.request({
+          method: 'eth_requestAccounts'
+        });
+
+        const walletAddress = accounts[0];
+
+        // Request signature to verify ownership (doesn't touch assets)
+        const message = `Verify wallet ownership for Duel PVP\nWallet: ${walletAddress}\nTimestamp: ${Date.now()}`;
+
+        const signature = await window.ethereum.request({
+          method: 'personal_sign',
+          params: [message, walletAddress]
+        });
+
+        // Store wallet address linked to current email
+        const email = localStorage.getItem('duelpvp_email');
+        if (email) {
+          localStorage.setItem(`duelpvp_wallet_${email}`, walletAddress);
+          localStorage.setItem(`duelpvp_wallet_verified_${email}`, signature);
+
+          // Also store reverse mapping (wallet -> email) for login
+          localStorage.setItem(`duelpvp_email_${walletAddress.toLowerCase()}`, email);
+
+          updateWalletDisplay(walletAddress);
+          alert('Wallet connected successfully!');
+        } else {
+          alert('No email found. Please login first.');
+        }
+      } catch (error) {
+        console.error('Wallet connection error:', error);
+        if (error.code === 4001) {
+          alert('Wallet connection cancelled');
+        } else {
+          alert('Failed to connect wallet: ' + error.message);
+        }
+      }
+    }
+
+    function updateWalletDisplay(address = null) {
+      const walletStatus = document.getElementById('walletStatus');
+      const connectBtn = document.getElementById('connectWalletBtn');
+
+      if (!address) {
+        // Check if wallet is already connected
+        const email = localStorage.getItem('duelpvp_email');
+        if (email) {
+          address = localStorage.getItem(`duelpvp_wallet_${email}`);
+        }
+      }
+
+      if (address) {
+        const shortAddress = `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
+        walletStatus.textContent = `Connected: ${shortAddress}`;
+        walletStatus.classList.add('connected');
+        connectBtn.textContent = 'DISCONNECT WALLET';
+        connectBtn.onclick = handleDisconnectWallet;
+      } else {
+        walletStatus.textContent = 'No wallet connected';
+        walletStatus.classList.remove('connected');
+        connectBtn.textContent = 'CONNECT WALLET';
+        connectBtn.onclick = handleConnectWallet;
+      }
+    }
+
+    function handleDisconnectWallet() {
+      const email = localStorage.getItem('duelpvp_email');
+      if (email) {
+        const wallet = localStorage.getItem(`duelpvp_wallet_${email}`);
+        if (wallet) {
+          localStorage.removeItem(`duelpvp_wallet_${email}`);
+          localStorage.removeItem(`duelpvp_wallet_verified_${email}`);
+          localStorage.removeItem(`duelpvp_email_${wallet.toLowerCase()}`);
+        }
+        updateWalletDisplay();
+        alert('Wallet disconnected');
+      }
+    }
+
+    async function handleWalletLogin() {
+      try {
+        if (typeof window.ethereum === 'undefined') {
+          alert('No Web3 wallet detected! Please install MetaMask.');
+          return;
+        }
+
+        const accounts = await window.ethereum.request({
+          method: 'eth_requestAccounts'
+        });
+
+        const walletAddress = accounts[0].toLowerCase();
+
+        // Check if this wallet is linked to an account
+        const email = localStorage.getItem(`duelpvp_email_${walletAddress}`);
+
+        if (email) {
+          // Verify ownership with signature
+          const message = `Sign in to Duel PVP\nWallet: ${walletAddress}\nTimestamp: ${Date.now()}`;
+
+          await window.ethereum.request({
+            method: 'personal_sign',
+            params: [message, accounts[0]]
+          });
+
+          // Login successful
+          localStorage.setItem('duelpvp_email', email);
+          const warriorName = localStorage.getItem('duelpvp_warrior');
+          if (warriorName) {
+            document.getElementById('userName').textContent = warriorName.toUpperCase();
+          }
+          swapContent('dashboard');
+        } else {
+          alert('This wallet is not linked to any account. Please login with email and connect your wallet first.');
+        }
+      } catch (error) {
+        console.error('Wallet login error:', error);
+        alert('Failed to login with wallet: ' + error.message);
+      }
+    }
+
     // Dashboard stats update
     function updateDashboardStats() {
       try {
@@ -2367,6 +2534,9 @@
       } catch (e) {
         console.error('Failed to update dashboard stats:', e);
       }
+
+      // Update wallet display
+      updateWalletDisplay();
     }
 
     // Leaderboard functions
@@ -3080,6 +3250,7 @@
     document.getElementById('joinBtn').addEventListener('click', handleJoin);
     document.getElementById('loginLink').addEventListener('click', () => swapContent('login'));
     document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+    document.getElementById('connectWalletBtn').addEventListener('click', handleConnectWallet);
     document.getElementById('playReactionBtn').addEventListener('click', () => {
       console.log('Play Reaction clicked');
       swapContent('game');
