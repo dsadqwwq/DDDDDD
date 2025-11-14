@@ -153,6 +153,12 @@
     padding-bottom:40px;
     overflow-y:auto;
     z-index:4;
+  }
+
+  /* Center aligned for warrior naming screen */
+  .page-container.center-aligned{
+    align-items:center;
+    padding-bottom:20px;
   }  
   /* Modern panel styles matching dashboard - Enhanced transparency */
   .panel{
@@ -505,6 +511,80 @@
   @keyframes fadeIn{
     from{opacity:0;transform:translateY(10px);}
     to{opacity:1;transform:translateY(0);}
+  }
+
+  /* Warrior naming screen */
+  .warrior-naming{
+    animation: warriorEntrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes warriorEntrance{
+    0%{
+      opacity:0;
+      transform:scale(0.8) translateY(-30px);
+      filter:blur(10px);
+    }
+    50%{
+      opacity:0.5;
+      transform:scale(1.05) translateY(5px);
+      filter:blur(2px);
+    }
+    100%{
+      opacity:1;
+      transform:scale(1) translateY(0);
+      filter:blur(0);
+    }
+  }
+
+  .warrior-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:16px;
+    color:var(--gold);
+    text-align:center;
+    margin-bottom:24px;
+    animation:titleGlow 2s ease-in-out infinite;
+    text-shadow:0 0 20px rgba(255,214,77,.6);
+  }
+
+  @keyframes titleGlow{
+    0%,100%{
+      text-shadow:0 0 20px rgba(255,214,77,.6), 0 0 30px rgba(255,214,77,.3);
+      filter:brightness(1);
+    }
+    50%{
+      text-shadow:0 0 30px rgba(255,214,77,.8), 0 0 50px rgba(255,214,77,.5);
+      filter:brightness(1.2);
+    }
+  }
+
+  .warrior-input{
+    width:100%;
+    padding:16px;
+    background:rgba(0,0,0,.5);
+    border:2px solid rgba(255,214,77,.3);
+    border-radius:8px;
+    color:#e6ecf1;
+    font-family:'Press Start 2P', monospace;
+    font-size:14px;
+    text-align:center;
+    transition:all 0.3s;
+    margin-bottom:24px;
+    letter-spacing:0.1em;
+  }
+
+  .warrior-input:focus{
+    outline:none;
+    border-color:var(--gold);
+    background:rgba(0,0,0,.7);
+    box-shadow:0 0 0 3px rgba(255,214,77,.2), 0 0 30px rgba(255,214,77,.3);
+    transform:scale(1.02);
+  }
+
+  .warrior-input::placeholder{
+    color:#6b7280;
+    font-family:Inter, system-ui, Segoe UI, Roboto, Arial;
+    font-size:13px;
+    letter-spacing:0.05em;
   }
 
   /* Reaction Game Styles - Enhanced transparency with animated border, reduced size */
@@ -1158,13 +1238,20 @@
       reactionTimer: null,
       chartAnimation: null
     };
-    
+
+    // Temporary registration data
+    let tempRegistrationData = {
+      email: '',
+      warriorName: ''
+    };
+
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
       if (newContent === 'register') {
         panelContent.style.display = 'block';
         dashboardContent.style.display = 'none';
         gameContent.style.display = 'none';
+        pageContainer.classList.remove('center-aligned');
 
         panelContent.innerHTML = `
           <div class="panel-header">
@@ -1208,10 +1295,46 @@
           if (e.key === 'Enter') handleRegister();
         });
 
+      } else if (newContent === 'nameWarrior') {
+        panelContent.style.display = 'block';
+        dashboardContent.style.display = 'none';
+        gameContent.style.display = 'none';
+        pageContainer.classList.add('center-aligned');
+
+        panelContent.innerHTML = `
+          <div class="panel-header">
+            <div class="warrior-title">NAME YOUR WARRIOR</div>
+            <div class="sub-text">Choose a name that strikes fear into your enemies</div>
+          </div>
+
+          <div class="input-group">
+            <input id="warriorName" class="warrior-input" type="text" placeholder="Enter warrior name" maxlength="16" autocomplete="off">
+          </div>
+
+          <div class="input-group">
+            <button class="btn-submit" id="confirmNameBtn" style="width:100%;">ENTER THE ARENA</button>
+          </div>
+        `;
+
+        panelContent.classList.remove('fade-in', 'warrior-naming');
+        void panelContent.offsetWidth;
+        panelContent.classList.add('warrior-naming');
+
+        // Re-attach event listeners
+        document.getElementById('confirmNameBtn').addEventListener('click', handleNameWarrior);
+        document.getElementById('warriorName').addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') handleNameWarrior();
+        });
+        // Auto-focus the input
+        setTimeout(() => {
+          document.getElementById('warriorName').focus();
+        }, 500);
+
       } else if (newContent === 'login') {
         panelContent.style.display = 'block';
         dashboardContent.style.display = 'none';
         gameContent.style.display = 'none';
+        pageContainer.classList.remove('center-aligned');
         
         panelContent.innerHTML = `
           <div class="panel-header">
@@ -1249,6 +1372,7 @@
         panelContent.style.display = 'block';
         dashboardContent.style.display = 'none';
         gameContent.style.display = 'none';
+        pageContainer.classList.remove('center-aligned');
         
         panelContent.innerHTML = `
           <div class="panel-header">
@@ -1281,18 +1405,20 @@
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'block';
         gameContent.style.display = 'none';
+        pageContainer.classList.remove('center-aligned');
         dashboardContent.classList.add('fade-in');
-        
+
       } else if (newContent === 'game') {
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'none';
         gameContent.style.display = 'block';
+        pageContainer.classList.remove('center-aligned');
         gameContent.classList.add('fade-in');
         initChart();
       }
       
       // Add fade-in animation
-      if (newContent === 'login' || newContent === 'home') {
+      if (newContent === 'login' || newContent === 'home' || newContent === 'register') {
         panelContent.classList.remove('fade-in');
         void panelContent.offsetWidth; // Force reflow
         panelContent.classList.add('fade-in');
@@ -1330,10 +1456,30 @@
         return;
       }
 
-      // Store email and show dashboard
+      // Store email temporarily and show warrior naming screen
+      tempRegistrationData.email = email;
+      swapContent('nameWarrior');
+    }
+
+    function handleNameWarrior() {
+      const warriorName = document.getElementById('warriorName').value.trim();
+
+      if (!warriorName) {
+        alert('Please enter a warrior name');
+        return;
+      }
+
+      if (warriorName.length < 3) {
+        alert('Warrior name must be at least 3 characters');
+        return;
+      }
+
+      // Store warrior name and email
+      tempRegistrationData.warriorName = warriorName;
       try {
-        localStorage.setItem('duelpvp_email', email);
-        document.getElementById('userName').textContent = email.split('@')[0].toUpperCase();
+        localStorage.setItem('duelpvp_email', tempRegistrationData.email);
+        localStorage.setItem('duelpvp_warrior', warriorName);
+        document.getElementById('userName').textContent = warriorName.toUpperCase();
       } catch (e) {}
 
       swapContent('dashboard');
