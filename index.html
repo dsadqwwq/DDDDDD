@@ -496,66 +496,46 @@
     margin-bottom:20px;
   }
 
-  /* Split actions grid for investing/gambling */
-  .split-actions-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
+  /* Themed cards */
+  .dashboard-card.invest{
+    border:2px solid rgba(76,175,80,.4);
+    background:rgba(16,24,16,.25);
   }
 
-  .action-section{
-    background:rgba(0,0,0,.2);
-    border:2px solid;
-    border-radius:8px;
-    padding:16px;
+  .dashboard-card.gamble{
+    border:2px solid rgba(244,67,54,.4);
+    background:rgba(24,16,16,.25);
   }
 
-  .action-section.invest{
-    border-color:rgba(76,175,80,.4);
-    background:rgba(16,24,16,.3);
-  }
-
-  .action-section.gamble{
-    border-color:rgba(244,67,54,.4);
-    background:rgba(24,16,16,.3);
-  }
-
-  .section-header{
-    font-family:'Press Start 2P', monospace;
-    font-size:10px;
-    text-align:center;
-    margin-bottom:12px;
-    text-transform:uppercase;
-    letter-spacing:0.05em;
-  }
-
-  .invest .section-header{
+  .dashboard-card.invest .card-title{
     color:#4CAF50;
     text-shadow:0 0 10px rgba(76,175,80,.5);
   }
 
-  .gamble .section-header{
+  .dashboard-card.gamble .card-title{
     color:#F44336;
     text-shadow:0 0 10px rgba(244,67,54,.5);
   }
 
   .btn-invest{
-    background:rgba(76,175,80,.15);
+    background:rgba(76,175,80,.2);
     border-color:#4CAF50;
     color:#4CAF50;
   }
-  .btn-invest:hover{
-    background:rgba(76,175,80,.3);
+  .btn-invest:hover:not(:disabled){
+    background:rgba(76,175,80,.35);
+    transform:translateY(-2px);
     box-shadow:0 4px 12px rgba(76,175,80,.4);
   }
 
   .btn-gamble{
-    background:rgba(244,67,54,.15);
+    background:rgba(244,67,54,.2);
     border-color:#F44336;
     color:#F44336;
   }
-  .btn-gamble:hover{
-    background:rgba(244,67,54,.3);
+  .btn-gamble:hover:not(:disabled){
+    background:rgba(244,67,54,.35);
+    transform:translateY(-2px);
     box-shadow:0 4px 12px rgba(244,67,54,.4);
   }
 
@@ -863,7 +843,7 @@
   /* Oven Investment Styles */
   .oven-container{
     display:none;
-    width:min(680px,92vw);
+    width:min(600px,92vw);
     background:rgba(12,16,20,.92);
     border:2px solid rgba(76,175,80,.4);
     border-radius:12px;
@@ -877,7 +857,7 @@
     align-items:center;
     margin-bottom:24px;
     padding-bottom:16px;
-    border-bottom:1px solid rgba(76,175,80,.2);
+    border-bottom:1px solid rgba(76,175,80,.3);
   }
 
   .oven-title{
@@ -887,32 +867,24 @@
     text-shadow:0 0 20px rgba(76,175,80,.6);
   }
 
-  .oven-main{
-    background:rgba(16,24,16,.5);
-    border:2px solid rgba(76,175,80,.3);
-    border-radius:12px;
-    padding:24px;
-    margin-bottom:20px;
-  }
-
-  .oven-stats{
+  .oven-stats-row{
     display:grid;
-    grid-template-columns:repeat(2, 1fr);
-    gap:16px;
+    grid-template-columns:repeat(3, 1fr);
+    gap:12px;
     margin-bottom:20px;
   }
 
-  .oven-stat-card{
+  .oven-stat-box{
     background:rgba(76,175,80,.08);
-    border:1px solid rgba(76,175,80,.3);
+    border:1px solid rgba(76,175,80,.25);
     border-radius:8px;
-    padding:16px;
+    padding:14px;
     text-align:center;
   }
 
   .oven-stat-label{
     font-family:'Press Start 2P', monospace;
-    font-size:9px;
+    font-size:8px;
     color:#a0a8b0;
     margin-bottom:8px;
     letter-spacing:0.05em;
@@ -920,99 +892,82 @@
 
   .oven-stat-value{
     font-family:'Press Start 2P', monospace;
-    font-size:20px;
-    color:#4CAF50;
-    text-shadow:0 0 12px rgba(76,175,80,.4);
+    font-size:16px;
+    color:#e6ecf1;
   }
 
-  .oven-timer{
+  .oven-stat-value.highlight{
+    color:#4CAF50;
+    text-shadow:0 0 10px rgba(76,175,80,.4);
+  }
+
+  .oven-timer-box{
     text-align:center;
     font-family:'Press Start 2P', monospace;
-    font-size:11px;
+    font-size:12px;
     color:#4CAF50;
-    margin-bottom:20px;
-    padding:14px;
-    background:rgba(76,175,80,.12);
+    padding:16px;
+    background:rgba(76,175,80,.1);
     border:1px solid rgba(76,175,80,.3);
     border-radius:8px;
+    margin-bottom:24px;
+  }
+
+  .oven-action-section{
+    margin-bottom:20px;
+  }
+
+  .oven-section-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    color:#a0a8b0;
+    margin-bottom:10px;
+    letter-spacing:0.05em;
   }
 
   .oven-input-row{
     display:flex;
     gap:10px;
-    margin-bottom:16px;
+  }
+
+  .oven-button-row{
+    display:flex;
+    gap:10px;
   }
 
   .oven-input{
     flex:1;
     padding:12px 14px;
     background:rgba(0,0,0,.4);
-    border:1px solid rgba(76,175,80,.4);
+    border:1px solid rgba(76,175,80,.3);
     border-radius:8px;
     color:#e6ecf1;
     font-family:'Press Start 2P', monospace;
     font-size:11px;
     transition:all 0.2s;
-    text-align:center;
   }
 
   .oven-input:focus{
     outline:none;
     border-color:#4CAF50;
     background:rgba(0,0,0,.6);
-    box-shadow:0 0 0 2px rgba(76,175,80,.2);
+    box-shadow:0 0 0 2px rgba(76,175,80,.15);
   }
 
-  .oven-controls{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
-    margin-bottom:20px;
-  }
-
-  .oven-info-box{
+  .oven-info{
     background:rgba(76,175,80,.08);
-    border:1px solid rgba(76,175,80,.25);
+    border:1px solid rgba(76,175,80,.2);
     border-radius:8px;
-    padding:16px;
-    margin-bottom:16px;
-  }
-
-  .oven-info-title{
-    font-family:'Press Start 2P', monospace;
-    font-size:10px;
-    color:#4CAF50;
-    margin-bottom:10px;
-    text-transform:uppercase;
-  }
-
-  .oven-info-text{
+    padding:14px;
     font-family:Inter, system-ui, Arial;
-    font-size:13px;
+    font-size:12px;
     color:#b0b8c0;
+    text-align:center;
     line-height:1.6;
   }
 
-  .oven-info-text ul{
-    margin:8px 0;
-    padding-left:18px;
-  }
-
-  .oven-info-text li{
-    margin-bottom:6px;
-  }
-
-  .balance-display{
-    text-align:center;
-    font-family:'Press Start 2P', monospace;
-    font-size:11px;
-    color:#a0a8b0;
-    margin-bottom:20px;
-  }
-
-  .balance-amount{
-    color:var(--gold);
-    text-shadow:0 0 10px rgba(255,214,77,.4);
+  .oven-info strong{
+    color:#4CAF50;
   }
 
   /* Reaction Game Styles */
@@ -2803,30 +2758,34 @@
 
       <!-- Two-column card layout -->
       <div class="dashboard-cards-row">
-        <!-- Left column: Quick Actions -->
-        <div class="dashboard-card">
-          <div class="card-title">QUICK ACTIONS</div>
+        <!-- Left: Investing -->
+        <div class="dashboard-card invest">
+          <div class="card-title">🔥 INVESTING</div>
           <div class="card-content">
-            <!-- Split into Investing and Gambling -->
-            <div class="split-actions-grid">
-              <div class="action-section invest">
-                <div class="section-header">🔥 Investing</div>
-                <button class="action-btn btn-invest" id="openOvenBtn" aria-label="Open Oven investment" style="width:100%;margin-bottom:8px;">OVEN</button>
-                <button class="action-btn btn-invest" aria-label="Staking coming soon" style="width:100%;opacity:0.5;cursor:not-allowed;">STAKING</button>
-              </div>
-              <div class="action-section gamble">
-                <div class="section-header">🎲 Gambling</div>
-                <button class="action-btn btn-gamble" id="playReactionBtn" aria-label="Play reaction game" style="width:100%;margin-bottom:8px;">REACTION</button>
-                <button class="action-btn btn-gamble" id="playCrashBtn" aria-label="Play crash rocket game" style="width:100%;">CRASH</button>
-              </div>
-            </div>
-            <!-- Other actions below -->
-            <div style="margin-top:16px;">
-              <button class="action-btn btn-secondary" id="viewLeaderboardBtn" aria-label="View global leaderboard" style="width:100%;margin-bottom:8px;">LEADERBOARD</button>
-              <button class="action-btn btn-secondary" id="viewQuestsBtn" aria-label="View quests" style="width:100%;margin-bottom:8px;">QUESTS</button>
-              <button class="action-btn btn-secondary" id="viewInventoryBtn" aria-label="View inventory" style="width:100%;margin-bottom:8px;">INVENTORY</button>
-              <button class="action-btn btn-secondary" id="viewShopBtn" aria-label="View shop" style="width:100%;">SHOP</button>
-            </div>
+            <button class="action-btn btn-invest" id="openOvenBtn" aria-label="Open Oven investment" style="width:100%;margin-bottom:12px;">OVEN</button>
+            <button class="action-btn btn-invest" aria-label="Staking coming soon" style="width:100%;opacity:0.5;cursor:not-allowed;">STAKING</button>
+          </div>
+        </div>
+
+        <!-- Right: Gambling -->
+        <div class="dashboard-card gamble">
+          <div class="card-title">🎲 GAMBLING</div>
+          <div class="card-content">
+            <button class="action-btn btn-gamble" id="playReactionBtn" aria-label="Play reaction game" style="width:100%;margin-bottom:12px;">REACTION</button>
+            <button class="action-btn btn-gamble" id="playCrashBtn" aria-label="Play crash rocket game" style="width:100%;">CRASH</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Secondary actions row -->
+      <div class="dashboard-cards-row">
+        <div class="dashboard-card">
+          <div class="card-title">OTHER ACTIONS</div>
+          <div class="card-content">
+            <button class="action-btn btn-secondary" id="viewLeaderboardBtn" aria-label="View global leaderboard" style="width:100%;margin-bottom:8px;">LEADERBOARD</button>
+            <button class="action-btn btn-secondary" id="viewQuestsBtn" aria-label="View quests" style="width:100%;margin-bottom:8px;">QUESTS</button>
+            <button class="action-btn btn-secondary" id="viewInventoryBtn" aria-label="View inventory" style="width:100%;margin-bottom:8px;">INVENTORY</button>
+            <button class="action-btn btn-secondary" id="viewShopBtn" aria-label="View shop" style="width:100%;">SHOP</button>
           </div>
         </div>
 
@@ -3031,56 +2990,48 @@
         <button class="back-btn" id="backFromOvenBtn" aria-label="Back to dashboard">BACK</button>
       </div>
 
-      <div class="oven-info-box">
-        <div class="oven-info-title">How It Works</div>
-        <div class="oven-info-text">
-          <ul>
-            <li><strong>10% Hourly Returns:</strong> Your tokens compound every hour automatically</li>
-            <li><strong>Withdraw Anytime:</strong> Pull out your investment + earnings whenever you want</li>
-            <li><strong>Auto-Compound:</strong> Interest is automatically reinvested for maximum gains</li>
-          </ul>
+      <!-- Main stats display -->
+      <div class="oven-stats-row">
+        <div class="oven-stat-box">
+          <div class="oven-stat-label">YOUR BALANCE</div>
+          <div class="oven-stat-value" id="ovenUserBalance">0 GP</div>
+        </div>
+        <div class="oven-stat-box">
+          <div class="oven-stat-label">INVESTED</div>
+          <div class="oven-stat-value" id="ovenInvested">0 GP</div>
+        </div>
+        <div class="oven-stat-box">
+          <div class="oven-stat-label">CURRENT VALUE</div>
+          <div class="oven-stat-value highlight" id="ovenCurrentValue">0 GP</div>
         </div>
       </div>
 
-      <div class="balance-display">
-        Your Balance: <span class="balance-amount" id="ovenUserBalance">0 GP</span>
+      <!-- Timer -->
+      <div class="oven-timer-box" id="ovenTimer">
+        No active investment
       </div>
 
-      <div class="oven-main">
-        <div class="oven-stats">
-          <div class="oven-stat-card">
-            <div class="oven-stat-label">INVESTED</div>
-            <div class="oven-stat-value" id="ovenInvested">0 GP</div>
-          </div>
-          <div class="oven-stat-card">
-            <div class="oven-stat-label">CURRENT VALUE</div>
-            <div class="oven-stat-value" id="ovenCurrentValue">0 GP</div>
-          </div>
-        </div>
-
-        <div class="oven-timer" id="ovenTimer">
-          No active investment
-        </div>
-
+      <!-- Deposit section -->
+      <div class="oven-action-section">
+        <div class="oven-section-title">DEPOSIT</div>
         <div class="oven-input-row">
-          <input type="number" class="oven-input" id="ovenDepositAmount" placeholder="Amount to deposit" min="1" step="1">
-          <button class="action-btn btn-invest" id="ovenDepositBtn" style="padding:12px 20px;">DEPOSIT</button>
-        </div>
-
-        <div class="oven-controls">
-          <button class="action-btn btn-gamble" id="ovenWithdrawBtn" style="width:100%;">WITHDRAW ALL</button>
-          <button class="action-btn btn-secondary" id="ovenClaimBtn" style="width:100%;">CLAIM PROFIT</button>
+          <input type="number" class="oven-input" id="ovenDepositAmount" placeholder="Amount" min="1" step="1">
+          <button class="action-btn btn-invest" id="ovenDepositBtn">DEPOSIT</button>
         </div>
       </div>
 
-      <div class="oven-info-box">
-        <div class="oven-info-title">Earnings Calculator</div>
-        <div class="oven-info-text" id="ovenCalculator">
-          Deposit 100 GP and earn:<br>
-          • After 1 hour: 110 GP (+10 GP)<br>
-          • After 3 hours: 133.1 GP (+33.1 GP)<br>
-          • After 24 hours: 1,009.5 GP (+909.5 GP)
+      <!-- Withdraw section -->
+      <div class="oven-action-section">
+        <div class="oven-section-title">WITHDRAW</div>
+        <div class="oven-button-row">
+          <button class="action-btn btn-gamble" id="ovenWithdrawBtn">WITHDRAW ALL</button>
         </div>
+      </div>
+
+      <!-- Info box -->
+      <div class="oven-info">
+        <strong>10% Hourly Compound Interest</strong><br>
+        Your investment grows automatically every hour. Withdraw anytime.
       </div>
     </div>
 
@@ -6196,38 +6147,6 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       Toast.success(`Withdrawn ${amount} GP from the Oven!`, 'WITHDRAW');
     }
 
-    async function claimOvenProfit() {
-      if (ovenState.invested <= 0) {
-        Toast.error('No investment to claim from', 'NO INVESTMENT');
-        return;
-      }
-
-      // Calculate current value based on time
-      loadOvenState(); // Refresh with any missed compounds
-
-      const profit = Math.floor(ovenState.invested);
-
-      if (profit <= 0) {
-        Toast.error('No profit to claim yet', 'NO PROFIT');
-        return;
-      }
-
-      // Add profit to balance, keep initial investment
-      await updateUserGP(profit);
-
-      // Reset to 0 (they claimed everything)
-      ovenState.invested = 0;
-      ovenState.lastCompoundTime = null;
-
-      if (ovenState.timerInterval) clearInterval(ovenState.timerInterval);
-
-      saveOvenState();
-      updateOvenDisplay();
-
-      document.getElementById('ovenTimer').textContent = 'No active investment';
-      Toast.success(`Claimed ${profit} GP profit!`, 'CLAIM');
-    }
-
     // Initial event listeners
     document.getElementById('joinBtn').addEventListener('click', handleJoin);
     document.getElementById('loginLink').addEventListener('click', () => swapContent('login'));
@@ -6248,7 +6167,6 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     document.getElementById('backFromOvenBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('ovenDepositBtn').addEventListener('click', depositToOven);
     document.getElementById('ovenWithdrawBtn').addEventListener('click', withdrawFromOven);
-    document.getElementById('ovenClaimBtn').addEventListener('click', claimOvenProfit);
     document.getElementById('viewLeaderboardBtn').addEventListener('click', () => {
       console.log('View Leaderboard clicked');
       swapContent('leaderboard');
