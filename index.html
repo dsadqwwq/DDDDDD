@@ -3513,45 +3513,52 @@
     }
 
     // Dashboard stats update
-    function updateDashboardStats() {
+    async function updateDashboardStats() {
       try {
-        const email = localStorage.getItem('duelpvp_email') || 'anonymous';
-        const scores = JSON.parse(localStorage.getItem('duelpvp_scores') || '[]');
+        const userId = localStorage.getItem('duelpvp_user_id');
 
-        // Filter user's scores
-        const userScores = scores.filter(s => s.email === email);
+        if (!userId) return;
 
-        // Calculate stats
-        const totalWins = userScores.length;
-        const bestTime = userScores.length > 0 ? Math.min(...userScores.map(s => s.time)) : 0;
+        // Get user's total games played
+        const { data: userScores, error: scoresError } = await supabase
+          .from('scores')
+          .select('time_ms, created_at')
+          .eq('user_id', userId)
+          .order('created_at', { ascending: false });
 
-        // Get user rank
-        const allBestTimes = {};
-        scores.forEach(s => {
-          if (!allBestTimes[s.email] || s.time < allBestTimes[s.email]) {
-            allBestTimes[s.email] = s.time;
-          }
-        });
-        const rankedUsers = Object.entries(allBestTimes).sort((a, b) => a[1] - b[1]);
-        const userRank = rankedUsers.findIndex(u => u[0] === email) + 1;
-
-        // Calculate win streak (last consecutive wins)
-        let streak = 0;
-        for (let i = userScores.length - 1; i >= 0; i--) {
-          if (userScores[i].time < 500) { // Consider <500ms as good
-            streak++;
-          } else {
-            break;
-          }
+        if (scoresError) {
+          console.error('Failed to load user scores:', scoresError);
+          return;
         }
 
-        // Calculate total GP earned (100 GP per win, bonus for fast times)
-        let totalGP = 0;
-        userScores.forEach(s => {
-          totalGP += 100; // Base GP
-          if (s.time < 300) totalGP += 50; // Speed bonus
-          if (s.time < 200) totalGP += 100; // Elite bonus
-        });
+        // Get user's rank
+        const { data: rankData, error: rankError } = await supabase
+          .rpc('get_user_best_time', {
+            p_user_id: userId,
+            time_filter: 'all'
+          })
+          .single();
+
+        if (rankError) {
+          console.error('Failed to get user rank:', rankError);
+        }
+
+        // Get user's GP from users table
+        const { data: userData, error: userError } = await supabase
+          .from('users')
+          .select('points, win_streak, total_wins')
+          .eq('id', userId)
+          .single();
+
+        if (userError) {
+          console.error('Failed to load user data:', userError);
+        }
+
+        // Calculate stats
+        const totalWins = userData?.total_wins || userScores?.length || 0;
+        const streak = userData?.win_streak || 0;
+        const userRank = rankData?.rank || 0;
+        const totalGP = userData?.points || 0;
 
         // Update UI
         document.querySelector('.stat-card:nth-child(1) .stat-value').textContent = totalWins;
@@ -3568,53 +3575,51 @@
     }
 
     // Leaderboard functions
-    function loadLeaderboard(filter) {
+    async function loadLeaderboard(filter) {
       console.log('loadLeaderboard called with filter:', filter);
       try {
         const email = localStorage.getItem('duelpvp_email') || 'anonymous';
-        let scores = JSON.parse(localStorage.getItem('duelpvp_scores') || '[]');
-        console.log('Loaded scores:', scores.length, 'entries');
+        const userId = localStorage.getItem('duelpvp_user_id');
 
-        // Filter by time period
-        const now = new Date();
-        if (filter === 'today') {
-          const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-          scores = scores.filter(s => new Date(s.date) >= todayStart);
-        } else if (filter === 'week') {
-          const weekStart = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-          scores = scores.filter(s => new Date(s.date) >= weekStart);
-        } else if (filter === 'month') {
-          const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-          scores = scores.filter(s => new Date(s.date) >= monthStart);
+        Loading.show('Loading leaderboard...');
+
+        // Call Supabase RPC function to get leaderboard
+        const { data: leaderboard, error } = await supabase
+          .rpc('get_leaderboard', {
+            time_filter: filter,
+            limit_count: 100
+          });
+
+        Loading.hide();
+
+        if (error) {
+          console.error('Leaderboard error:', error);
+          throw error;
         }
 
-        // Get best time per player
-        const bestTimes = {};
-        scores.forEach(s => {
-          if (!bestTimes[s.email] || s.time < bestTimes[s.email].time) {
-            bestTimes[s.email] = s;
-          }
-        });
-
-        // Convert to array and sort
-        const leaderboard = Object.values(bestTimes).sort((a, b) => a.time - b.time);
+        console.log('Loaded leaderboard:', leaderboard?.length || 0, 'entries');
 
         // Show user's best time
-        const userBest = leaderboard.find(s => s.email === email);
-        if (userBest) {
-          document.getElementById('yourBestSection').style.display = 'block';
-          document.getElementById('yourBestTime').textContent = `${userBest.time.toFixed(0)}ms`;
+        if (userId) {
+          const userEntry = leaderboard?.find(entry => entry.user_id === userId);
+          if (userEntry) {
+            document.getElementById('yourBestSection').style.display = 'block';
+            document.getElementById('yourBestTime').textContent = `${userEntry.time_ms}ms`;
+          } else {
+            document.getElementById('yourBestSection').style.display = 'none';
+          }
         } else {
           document.getElementById('yourBestSection').style.display = 'none';
         }
 
         // Render podium (top 3)
-        renderPodium(leaderboard.slice(0, 3));
+        renderPodium(leaderboard?.slice(0, 3) || []);
 
         // Render table
-        renderLeaderboardTable(leaderboard, email);
+        renderLeaderboardTable(leaderboard || [], userId);
 
       } catch (e) {
+        Loading.hide();
         console.error('Failed to load leaderboard:', e);
         document.getElementById('leaderboardTableBody').innerHTML = '<div class="no-data">Error loading leaderboard</div>';
       }
@@ -3629,17 +3634,17 @@
         return;
       }
 
-      topThree.forEach((score, index) => {
+      topThree.forEach((entry, index) => {
         const rank = index + 1;
-        const playerName = score.email.split('@')[0];
-        const date = new Date(score.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        const playerName = entry.display_name || entry.email?.split('@')[0] || 'Unknown';
+        const date = new Date(entry.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
         const podiumItem = document.createElement('div');
         podiumItem.className = `podium-item rank-${rank}`;
         podiumItem.innerHTML = `
           <div class="podium-rank">${rank}</div>
           <div class="podium-player">${playerName.toUpperCase()}</div>
-          <div class="podium-time">${score.time.toFixed(0)}ms</div>
+          <div class="podium-time">${entry.time_ms}ms</div>
           <div class="podium-date">${date}</div>
         `;
         podium.appendChild(podiumItem);
@@ -3659,7 +3664,7 @@
       }
     }
 
-    function renderLeaderboardTable(leaderboard, currentEmail) {
+    function renderLeaderboardTable(leaderboard, currentUserId) {
       const tbody = document.getElementById('leaderboardTableBody');
       tbody.innerHTML = '';
 
@@ -3668,22 +3673,22 @@
         return;
       }
 
-      leaderboard.forEach((score, index) => {
-        const rank = index + 1;
-        const playerName = score.email.split('@')[0];
-        const date = new Date(score.date).toLocaleDateString('en-US', {
+      leaderboard.forEach((entry) => {
+        const rank = entry.rank || '?';
+        const playerName = entry.display_name || entry.email?.split('@')[0] || 'Unknown';
+        const date = new Date(entry.created_at).toLocaleDateString('en-US', {
           month: 'short',
           day: 'numeric',
           year: 'numeric'
         });
-        const isCurrentUser = score.email === currentEmail;
+        const isCurrentUser = entry.user_id === currentUserId;
 
         const row = document.createElement('div');
         row.className = isCurrentUser ? 'table-row user-row' : 'table-row';
         row.innerHTML = `
           <div class="rank-badge">#${rank}</div>
           <div class="player-name">${playerName.toUpperCase()}${isCurrentUser ? ' (YOU)' : ''}</div>
-          <div class="reaction-time">${score.time.toFixed(0)}ms</div>
+          <div class="reaction-time">${entry.time_ms}ms</div>
           <div class="entry-date">${date}</div>
         `;
         tbody.appendChild(row);
@@ -3995,6 +4000,45 @@
       });
     }
 
+    async function saveScoreToSupabase(userId, timeMs) {
+      try {
+        // Save score to database
+        const { error: scoreError } = await supabase
+          .from('scores')
+          .insert({
+            user_id: userId,
+            time_ms: Math.round(timeMs),
+            game_type: 'reaction'
+          });
+
+        if (scoreError) {
+          console.error('Failed to save score:', scoreError);
+          Toast.error('Failed to save score', 'ERROR');
+          return;
+        }
+
+        // Update quest progress
+        await updateQuestProgress('daily_play_3');
+        await updateQuestProgress('weekly_play_20');
+
+        // Check for fast time quests (close to peak)
+        if (timeMs < 300) {
+          await updateQuestProgress('daily_fast_time');
+        }
+        if (timeMs < 200) {
+          await updateQuestProgress('weekly_sub_250');
+        }
+
+        // Auto-complete login quest on first game
+        await updateQuestProgress('daily_login');
+
+        Toast.success('Score saved!', 'SUCCESS');
+
+      } catch (e) {
+        console.error('Error saving score:', e);
+      }
+    }
+
     function endGame() {
       const validAttempts = gameState.attempts.filter(t => t >= 0);
       const bestTime = validAttempts.length > 0 ? Math.min(...validAttempts) : null;
@@ -4005,34 +4049,13 @@
         document.getElementById('gameStatus').textContent = `Game Over! All attempts disqualified`;
       }
 
-      // Save to "database" (localStorage for now)
+      // Save score to Supabase
       if (bestTime !== null) {
-        try {
-          const email = localStorage.getItem('duelpvp_email') || 'anonymous';
-          const scores = JSON.parse(localStorage.getItem('duelpvp_scores') || '[]');
-          scores.push({
-            email,
-            time: bestTime,
-            date: new Date().toISOString()
-          });
-          localStorage.setItem('duelpvp_scores', JSON.stringify(scores));
+        const userId = localStorage.getItem('duelpvp_user_id');
 
-          // Update quest progress
-          updateQuestProgress('daily_play_3');
-          updateQuestProgress('weekly_play_20');
-
-          // Check for fast time quests (close to peak)
-          if (bestTime < 300) {
-            updateQuestProgress('daily_fast_time');
-          }
-          if (bestTime < 200) {
-            updateQuestProgress('weekly_sub_250');
-          }
-
-          // Auto-complete login quest on first game
-          updateQuestProgress('daily_login');
-
-        } catch (e) {}
+        if (userId) {
+          saveScoreToSupabase(userId, bestTime);
+        }
       }
     }
     
@@ -4106,24 +4129,44 @@
     async function loadQuests(type) {
       const questGrid = document.getElementById('questGrid');
       const comingSoonOverlay = document.getElementById('comingSoonOverlay');
-      const email = localStorage.getItem('duelpvp_email') || 'anonymous';
-      let questProgress = JSON.parse(localStorage.getItem(`duelpvp_quests_${email}`) || '{}');
+      const userId = localStorage.getItem('duelpvp_user_id');
+
+      if (!userId) {
+        questGrid.innerHTML = '<div class="no-data">Please log in to view quests</div>';
+        return;
+      }
+
+      Loading.show('Loading quests...');
+
+      // Fetch quest progress from Supabase
+      const { data: questData, error: questError } = await supabase
+        .from('quests')
+        .select('*')
+        .eq('user_id', userId)
+        .eq('reset_date', new Date().toISOString().split('T')[0]); // Today's date
+
+      Loading.hide();
+
+      if (questError) {
+        console.error('Failed to load quests:', questError);
+        questGrid.innerHTML = '<div class="no-data">Error loading quests</div>';
+        return;
+      }
+
+      // Convert array to object for easier lookup
+      const questProgress = {};
+      questData?.forEach(q => {
+        questProgress[q.quest_id] = q.progress;
+        if (q.claimed_at) {
+          questProgress[`${q.quest_id}_claimed`] = true;
+        }
+        if (q.start_time) {
+          questProgress[`${q.quest_id}_start_time`] = new Date(q.start_time).getTime();
+        }
+      });
 
       // Get server time to prevent clock manipulation
       const serverTime = await getServerTime();
-
-      // Reset daily quests if needed (using server time)
-      const lastDaily = localStorage.getItem(`duelpvp_last_daily_${email}`);
-      const today = serverTime.toDateString();
-      if (lastDaily !== today) {
-        Object.keys(questProgress).forEach(key => {
-          if (key.startsWith('daily_') || key.startsWith('twitter_') || key.startsWith('discord_')) {
-            delete questProgress[key];
-          }
-        });
-        localStorage.setItem(`duelpvp_last_daily_${email}`, today);
-        localStorage.setItem(`duelpvp_quests_${email}`, JSON.stringify(questProgress));
-      }
 
       // Show coming soon overlay for weekly and special quests
       if (type === 'weekly' || type === 'special') {
@@ -4332,33 +4375,64 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       }
     }
 
-    function claimQuestReward(questId, reward) {
-      const email = localStorage.getItem('duelpvp_email') || 'anonymous';
-      let questProgress = JSON.parse(localStorage.getItem(`duelpvp_quests_${email}`) || '{}');
+    async function claimQuestReward(questId, reward) {
+      const userId = localStorage.getItem('duelpvp_user_id');
 
-      if (questProgress[`${questId}_claimed`]) return;
+      if (!userId) return;
 
-      questProgress[`${questId}_claimed`] = true;
-      localStorage.setItem(`duelpvp_quests_${email}`, JSON.stringify(questProgress));
+      Loading.show('Claiming reward...');
 
-      // Add GP
-      let gp = parseInt(localStorage.getItem(`duelpvp_gp_${email}`) || '0');
-      gp += reward;
-      localStorage.setItem(`duelpvp_gp_${email}`, gp.toString());
+      try {
+        // Use Supabase RPC function to claim quest reward
+        const { data: success, error } = await supabase
+          .rpc('claim_quest_reward', {
+            p_user_id: userId,
+            p_quest_id: questId,
+            p_reward_points: reward
+          });
 
-      // Reload quests
-      const activeTab = document.querySelector('.quest-tab.active').getAttribute('data-quest-tab');
-      loadQuests(activeTab);
+        Loading.hide();
 
-      // Show notification
-      Toast.success(`+${reward} GP earned!`, 'QUEST COMPLETED');
+        if (error || !success) {
+          console.error('Failed to claim quest reward:', error);
+          Toast.error('Failed to claim reward', 'ERROR');
+          return;
+        }
+
+        // Reload quests
+        const activeTab = document.querySelector('.quest-tab.active').getAttribute('data-quest-tab');
+        loadQuests(activeTab);
+
+        // Show notification
+        Toast.success(`+${reward} GP earned!`, 'QUEST COMPLETED');
+
+      } catch (e) {
+        Loading.hide();
+        console.error('Error claiming quest reward:', e);
+        Toast.error('An error occurred', 'ERROR');
+      }
     }
 
-    function updateQuestProgress(questId, amount = 1) {
-      const email = localStorage.getItem('duelpvp_email') || 'anonymous';
-      let questProgress = JSON.parse(localStorage.getItem(`duelpvp_quests_${email}`) || '{}');
-      questProgress[questId] = (questProgress[questId] || 0) + amount;
-      localStorage.setItem(`duelpvp_quests_${email}`, JSON.stringify(questProgress));
+    async function updateQuestProgress(questId, amount = 1) {
+      const userId = localStorage.getItem('duelpvp_user_id');
+
+      if (!userId) return;
+
+      try {
+        // Use Supabase RPC function to update quest progress
+        const { error } = await supabase
+          .rpc('update_quest_progress', {
+            p_user_id: userId,
+            p_quest_id: questId,
+            p_increment: amount
+          });
+
+        if (error) {
+          console.error('Failed to update quest progress:', error);
+        }
+      } catch (e) {
+        console.error('Error updating quest progress:', e);
+      }
     }
 
     // Inventory and Shop System
