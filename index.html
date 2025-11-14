@@ -2623,7 +2623,6 @@
       const startPrice = 38000 + Math.random() * 4000; // Random start 38k-42k
       const peakPrice = startPrice + 6000 + Math.random() * 8000; // Rise 6000-14000
       const crashPrice = startPrice - (2000 + Math.random() * 3000); // Random crash depth
-      const volatility = 200 + Math.random() * 400; // Random noise amount
       const riseShape = 0.5 + Math.random() * 0.8; // Random rise curve (0.5-1.3)
       const crashShape = 1.5 + Math.random() * 1.5; // Random crash steepness (1.5-3.0)
 
@@ -2664,7 +2663,7 @@
           currentPrice = peakPrice - (peakPrice - crashPrice) * Math.pow(crashProgress, crashShape);
         }
 
-        // Generate points with random volatility
+        // Generate smooth points
         const points = [];
         for (let i = 0; i <= pointsToShow; i++) {
           const t = i / numPoints;
@@ -2679,12 +2678,9 @@
             price = peakPrice - (peakPrice - crashPrice) * Math.pow(crashProgress, crashShape);
           }
 
-          // Add random noise/volatility
-          const noise = (Math.random() - 0.5) * volatility * (1 - Math.abs(i/numPoints - peakTime/totalDuration));
-
           points.push({
             x: (w / numPoints) * i,
-            y: h - ((price + noise - 34000) / 110)
+            y: h - ((price - 34000) / 110)
           });
         }
 
