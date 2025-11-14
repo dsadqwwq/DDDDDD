@@ -152,6 +152,12 @@
     }
   }
 
+  /* Center aligned for warrior naming screen */
+  .page-container.center-aligned{
+    align-items:center;
+    padding-bottom:20px;
+  }
+
   /* Page container */
   .page-container{position:fixed;inset:0;display:grid;place-items:center center;padding:20px;overflow-y:auto; z-index:4}
   
@@ -292,6 +298,80 @@
   }
 
   .footer{position:fixed;right:20px;bottom:16px;font-size:12px;opacity:.85; z-index:3}
+
+  /* Warrior naming screen */
+  .warrior-naming{
+    animation: warriorEntrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes warriorEntrance{
+    0%{
+      opacity:0;
+      transform:scale(0.8) translateY(-30px);
+      filter:blur(10px);
+    }
+    50%{
+      opacity:0.5;
+      transform:scale(1.05) translateY(5px);
+      filter:blur(2px);
+    }
+    100%{
+      opacity:1;
+      transform:scale(1) translateY(0);
+      filter:blur(0);
+    }
+  }
+
+  .warrior-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:16px;
+    color:var(--gold);
+    text-align:center;
+    margin-bottom:24px;
+    animation:titleGlow 2s ease-in-out infinite;
+    text-shadow:0 0 20px rgba(255,214,77,.6);
+  }
+
+  @keyframes titleGlow{
+    0%,100%{
+      text-shadow:0 0 20px rgba(255,214,77,.6), 0 0 30px rgba(255,214,77,.3);
+      filter:brightness(1);
+    }
+    50%{
+      text-shadow:0 0 30px rgba(255,214,77,.8), 0 0 50px rgba(255,214,77,.5);
+      filter:brightness(1.2);
+    }
+  }
+
+  .warrior-input{
+    width:100%;
+    padding:16px;
+    background:rgba(0,0,0,.5);
+    border:2px solid rgba(255,214,77,.3);
+    border-radius:8px;
+    color:#e6ecf1;
+    font-family:'Press Start 2P', monospace;
+    font-size:14px;
+    text-align:center;
+    transition:all 0.3s;
+    margin-bottom:24px;
+    letter-spacing:0.1em;
+  }
+
+  .warrior-input:focus{
+    outline:none;
+    border-color:var(--gold);
+    background:rgba(0,0,0,.7);
+    box-shadow:0 0 0 3px rgba(255,214,77,.2), 0 0 30px rgba(255,214,77,.3);
+    transform:scale(1.02);
+  }
+
+  .warrior-input::placeholder{
+    color:#6b7280;
+    font-family:Inter, system-ui, Segoe UI, Roboto, Arial;
+    font-size:13px;
+    letter-spacing:0.05em;
+  }
 
   /* Dashboard specific styles */
   .dashboard-content{
@@ -1637,9 +1717,15 @@
       reactionTimer: null,
       chartAnimation: null
     };
-    
+
+    // Temporary registration data
+    let tempRegistrationData = {
+      email: '',
+      warriorName: ''
+    };
+
     // Helper function to swap content with fade animation
-    function swapContent(newContent) {
+    function swapContent(newContent, data) {
       if (newContent === 'login') {
         panelContent.style.display = 'block';
         dashboardContent.style.display = 'none';
@@ -1688,6 +1774,102 @@
         document.getElementById('loginPass').addEventListener('keypress', (e) => {
           if (e.key === 'Enter') handleLogin();
         });
+
+      } else if (newContent === 'register') {
+        panelContent.style.display = 'block';
+        dashboardContent.style.display = 'none';
+        gameContent.style.display = 'none';
+        leaderboardContent.style.display = 'none';
+        questContent.style.display = 'none';
+        inventoryContent.style.display = 'none';
+        pageContainer.classList.remove('center-aligned');
+
+        panelContent.innerHTML = `
+          <div class="panel-header">
+            <div class="sys">Create your account<span class="blink">.</span></div>
+            <div class="sub-text">Join the arena and prove your worth</div>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">Email Address</label>
+            <input id="registerEmail" class="input-field" type="email" placeholder="name@example.com" autocomplete="email">
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">Password</label>
+            <input id="registerPass" class="input-field" type="password" placeholder="Enter your password" autocomplete="new-password">
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">Confirm Password</label>
+            <input id="registerPassConfirm" class="input-field" type="password" placeholder="Confirm your password" autocomplete="new-password">
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">Access Code</label>
+            <div class="bar">
+              <input id="registerCode" class="input-field" type="text" placeholder="XXXX-XXXX-XXXX" autocomplete="off" value="${data || ''}">
+              <button class="btn-submit" id="registerBtn">CREATE ACCOUNT</button>
+            </div>
+          </div>
+
+          <div class="helper">
+            Already have an account? <a id="loginLinkFromReg" role="button" tabindex="0">Sign in</a>
+          </div>
+        `;
+
+        // Re-attach event listeners
+        document.getElementById('registerBtn').addEventListener('click', handleRegister);
+        const loginLinkFromReg = document.getElementById('loginLinkFromReg');
+        loginLinkFromReg.addEventListener('click', () => swapContent('login'));
+        loginLinkFromReg.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            swapContent('login');
+          }
+        });
+        // Allow enter key to submit
+        document.getElementById('registerPassConfirm').addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') handleRegister();
+        });
+
+      } else if (newContent === 'nameWarrior') {
+        panelContent.style.display = 'block';
+        dashboardContent.style.display = 'none';
+        gameContent.style.display = 'none';
+        leaderboardContent.style.display = 'none';
+        questContent.style.display = 'none';
+        inventoryContent.style.display = 'none';
+        pageContainer.classList.add('center-aligned');
+
+        panelContent.innerHTML = `
+          <div class="panel-header">
+            <div class="warrior-title">NAME YOUR WARRIOR</div>
+            <div class="sub-text">Choose a name that strikes fear into your enemies</div>
+          </div>
+
+          <div class="input-group">
+            <input id="warriorName" class="warrior-input" type="text" placeholder="Enter warrior name" maxlength="16" autocomplete="off">
+          </div>
+
+          <div class="input-group">
+            <button class="btn-submit" id="confirmNameBtn" style="width:100%;">ENTER THE ARENA</button>
+          </div>
+        `;
+
+        panelContent.classList.remove('fade-in', 'warrior-naming');
+        void panelContent.offsetWidth;
+        panelContent.classList.add('warrior-naming');
+
+        // Re-attach event listeners
+        document.getElementById('confirmNameBtn').addEventListener('click', handleNameWarrior);
+        document.getElementById('warriorName').addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') handleNameWarrior();
+        });
+        // Auto-focus the input
+        setTimeout(() => {
+          document.getElementById('warriorName').focus();
+        }, 500);
 
       } else if (newContent === 'home') {
         panelContent.style.display = 'block';
@@ -1838,7 +2020,7 @@
         return;
       }
 
-      swapContent('login');
+      swapContent('register', code);
     }
 
     function handleLogin() {
@@ -1873,7 +2055,9 @@
       // Store email and show dashboard
       try {
         localStorage.setItem('duelpvp_email', email);
-        document.getElementById('userName').textContent = email.split('@')[0].toUpperCase();
+        // Try to load warrior name, fall back to email
+        const warriorName = localStorage.getItem('duelpvp_warrior');
+        document.getElementById('userName').textContent = (warriorName || email.split('@')[0]).toUpperCase();
       } catch (e) {
         showError('passError', 'Failed to save login. Check browser settings.');
         return;
@@ -1881,7 +2065,70 @@
 
       swapContent('dashboard');
     }
-    
+
+    function handleRegister() {
+      const email = document.getElementById('registerEmail').value.trim();
+      const pass = document.getElementById('registerPass').value.trim();
+      const passConfirm = document.getElementById('registerPassConfirm').value.trim();
+      const code = document.getElementById('registerCode').value.trim();
+
+      if (!email || !pass || !passConfirm || !code) {
+        alert('Please fill in all fields');
+        return;
+      }
+
+      if (!validateEmail(email)) {
+        alert('Please enter a valid email address');
+        return;
+      }
+
+      if (pass !== passConfirm) {
+        alert('Passwords do not match');
+        return;
+      }
+
+      if (pass.length < 8) {
+        alert('Password must be at least 8 characters');
+        return;
+      }
+
+      // Store email temporarily and show warrior naming screen
+      tempRegistrationData.email = email;
+      swapContent('nameWarrior');
+    }
+
+    function handleNameWarrior() {
+      const warriorName = document.getElementById('warriorName').value.trim();
+
+      if (!warriorName) {
+        alert('Please enter a warrior name');
+        return;
+      }
+
+      if (warriorName.length < 3) {
+        alert('Warrior name must be at least 3 characters');
+        return;
+      }
+
+      if (warriorName.length > 16) {
+        alert('Warrior name must be 16 characters or less');
+        return;
+      }
+
+      // Store warrior name and email
+      tempRegistrationData.warriorName = warriorName;
+      try {
+        localStorage.setItem('duelpvp_email', tempRegistrationData.email);
+        localStorage.setItem('duelpvp_warrior', warriorName);
+        document.getElementById('userName').textContent = warriorName.toUpperCase();
+      } catch (e) {
+        alert('Failed to save registration. Check browser settings.');
+        return;
+      }
+
+      swapContent('dashboard');
+    }
+
     function handleLogout() {
       dashboardContent.style.display = 'none';
       panelContent.style.display = 'block';
