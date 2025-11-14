@@ -4530,6 +4530,26 @@
         return;
       }
 
+      // Check if test mode user
+      const isTestMode = userId.startsWith('test-');
+
+      if (isTestMode) {
+        // Test mode - skip database and show coming soon
+        questGrid.classList.add('locked');
+        comingSoonOverlay.style.display = 'block';
+        questGrid.innerHTML = '';
+        for (let i = 0; i < 4; i++) {
+          const card = document.createElement('div');
+          card.className = 'quest-card';
+          card.innerHTML = `
+            <div class="quest-name">QUEST ${i + 1}</div>
+            <div class="quest-desc">Complete challenges to earn rewards</div>
+          `;
+          questGrid.appendChild(card);
+        }
+        return;
+      }
+
       Loading.show('Loading quests...');
 
       // Fetch quest progress from Supabase
@@ -4543,7 +4563,7 @@
 
       if (questError) {
         console.error('Failed to load quests:', questError);
-        questGrid.innerHTML = '<div class="no-data">Error loading quests</div>';
+        questGrid.innerHTML = '<div class="no-data">Error loading quests. Please try again later.</div>';
         return;
       }
 
