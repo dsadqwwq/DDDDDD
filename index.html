@@ -1144,6 +1144,16 @@
     const dashboardContent = document.getElementById('dashboardContent');
     const gameContent = document.getElementById('gameContent');
     const leaderboardContent = document.getElementById('leaderboardContent');
+
+    // Debug: Check if all elements exist
+    console.log('Elements loaded:', {
+      pageContainer: !!pageContainer,
+      panelContent: !!panelContent,
+      dashboardContent: !!dashboardContent,
+      gameContent: !!gameContent,
+      leaderboardContent: !!leaderboardContent,
+      viewLeaderboardBtn: !!document.getElementById('viewLeaderboardBtn')
+    });
     
     // Game variables
     let gameState = {
@@ -1263,12 +1273,15 @@
         initChart();
 
       } else if (newContent === 'leaderboard') {
+        console.log('Switching to leaderboard...');
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'none';
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'block';
         leaderboardContent.classList.add('fade-in');
+        console.log('Leaderboard display set to block');
         loadLeaderboard('all');
+        console.log('loadLeaderboard called');
       }
 
       // Add fade-in animation
@@ -1427,9 +1440,11 @@
 
     // Leaderboard functions
     function loadLeaderboard(filter) {
+      console.log('loadLeaderboard called with filter:', filter);
       try {
         const email = localStorage.getItem('duelpvp_email') || 'anonymous';
         let scores = JSON.parse(localStorage.getItem('duelpvp_scores') || '[]');
+        console.log('Loaded scores:', scores.length, 'entries');
 
         // Filter by time period
         const now = new Date();
@@ -1795,8 +1810,14 @@
     document.getElementById('joinBtn').addEventListener('click', handleJoin);
     document.getElementById('loginLink').addEventListener('click', () => swapContent('login'));
     document.getElementById('logoutBtn').addEventListener('click', handleLogout);
-    document.getElementById('playReactionBtn').addEventListener('click', () => swapContent('game'));
-    document.getElementById('viewLeaderboardBtn').addEventListener('click', () => swapContent('leaderboard'));
+    document.getElementById('playReactionBtn').addEventListener('click', () => {
+      console.log('Play Reaction clicked');
+      swapContent('game');
+    });
+    document.getElementById('viewLeaderboardBtn').addEventListener('click', () => {
+      console.log('View Leaderboard clicked');
+      swapContent('leaderboard');
+    });
     document.getElementById('backToDashBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('backFromLeaderboardBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('startGameBtn').addEventListener('click', startGame);
