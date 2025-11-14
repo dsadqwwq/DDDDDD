@@ -2458,7 +2458,7 @@
     </div>
 
     <!-- Shop content (hidden initially) -->
-    <div class="inventory-container" id="shopContent" role="region" aria-label="Shop" style="position:relative;">
+    <div class="inventory-container" id="shopContent" role="region" aria-label="Shop">
       <div class="inventory-header">
         <div class="inventory-title">SHOP</div>
         <div>
@@ -2467,14 +2467,15 @@
         </div>
       </div>
 
-      <div style="filter:blur(2px);opacity:0.4;pointer-events:none;min-height:300px;">
-        <div class="shop-grid" id="shopGrid">
-          <!-- Shop items will be generated here -->
+      <div style="position:relative;min-height:300px;">
+        <div style="filter:blur(2px);opacity:0.4;pointer-events:none;">
+          <div class="shop-grid" id="shopGrid">
+            <!-- Shop items will be generated here -->
+          </div>
         </div>
-      </div>
-
-      <div class="coming-soon-overlay" style="top:80px;">
-        <div class="coming-soon-text">COMING SOON</div>
+        <div class="coming-soon-overlay">
+          <div class="coming-soon-text">COMING SOON</div>
+        </div>
       </div>
     </div>
 
