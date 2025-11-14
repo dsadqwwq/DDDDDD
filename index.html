@@ -3052,27 +3052,37 @@
       <div class="dashboard-header">
         <div class="user-info">
           <div class="user-name" id="userName" aria-label="User name">Champion</div>
-          <div class="user-stats" aria-label="User level and rank">Level 87 • Wilderness Elite</div>
+          <div class="user-stats" aria-label="User level and rank">Level 87 • Falafel Enjoyer</div>
         </div>
-        <button class="logout-btn" id="logoutBtn" aria-label="Logout from account">LOGOUT</button>
+        <div style="display:flex;align-items:center;gap:20px;">
+          <div class="stat-card" style="margin:0;padding:8px 16px;">
+            <div class="stat-label" style="font-size:10px;">RANK</div>
+            <div class="stat-value" style="font-size:16px;">#127</div>
+          </div>
+          <div class="stat-card" style="margin:0;padding:8px 16px;">
+            <div class="stat-label" style="font-size:10px;">GP BALANCE</div>
+            <div class="stat-value" style="font-size:16px;" id="dashboardGPBalance">0</div>
+          </div>
+          <button class="logout-btn" id="logoutBtn" aria-label="Logout from account">LOGOUT</button>
+        </div>
       </div>
 
       <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-label">TOTAL WINS</div>
-          <div class="stat-value">342</div>
+        <div class="stat-card" style="cursor:pointer;" id="viewLeaderboardBtn">
+          <div class="stat-label">LEADERBOARD</div>
+          <div class="stat-value" style="font-size:20px;">🏆</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">WIN STREAK</div>
-          <div class="stat-value">7</div>
+        <div class="stat-card" style="cursor:pointer;" id="viewQuestsBtn">
+          <div class="stat-label">QUESTS</div>
+          <div class="stat-value" style="font-size:20px;">📋</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">RANK</div>
-          <div class="stat-value">#127</div>
+        <div class="stat-card" style="cursor:pointer;" id="viewInventoryBtn">
+          <div class="stat-label">INVENTORY</div>
+          <div class="stat-value" style="font-size:20px;">🎒</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">GP BALANCE</div>
-          <div class="stat-value" id="dashboardGPBalance">0</div>
+        <div class="stat-card" style="cursor:pointer;" id="viewShopBtn">
+          <div class="stat-label">SHOP</div>
+          <div class="stat-value" style="font-size:20px;">🛒</div>
         </div>
       </div>
 
@@ -3099,53 +3109,40 @@
         </div>
       </div>
 
-      <!-- Secondary actions row -->
-      <div class="dashboard-cards-row">
-        <div class="dashboard-card">
-          <div class="card-title">OTHER ACTIONS</div>
-          <div class="card-content">
-            <button class="action-btn btn-secondary" id="viewLeaderboardBtn" aria-label="View global leaderboard" style="width:100%;margin-bottom:8px;">LEADERBOARD</button>
-            <button class="action-btn btn-secondary" id="viewQuestsBtn" aria-label="View quests" style="width:100%;margin-bottom:8px;">QUESTS</button>
-            <button class="action-btn btn-secondary" id="viewInventoryBtn" aria-label="View inventory" style="width:100%;margin-bottom:8px;">INVENTORY</button>
-            <button class="action-btn btn-secondary" id="viewShopBtn" aria-label="View shop" style="width:100%;">SHOP</button>
-          </div>
-        </div>
-
-        <!-- Right column: Recent Activity -->
-        <div class="dashboard-card">
-          <div class="card-title">RECENT BATTLES</div>
-          <div class="card-content" style="position:relative;min-height:200px;">
-            <div class="recent-matches-content" style="filter:blur(2px);opacity:0.4;pointer-events:none;">
-              <div class="match-list">
-                <div class="match-item">
-                  <span>vs. DragonSlayer99</span>
-                  <span class="match-result win">WIN</span>
-                </div>
-                <div class="match-item">
-                  <span>vs. PkMaster420</span>
-                  <span class="match-result win">WIN</span>
-                </div>
-                <div class="match-item">
-                  <span>vs. IronDefender</span>
-                  <span class="match-result loss">LOSS</span>
-                </div>
-                <div class="match-item">
-                  <span>vs. RuneKnight</span>
-                  <span class="match-result win">WIN</span>
-                </div>
-                <div class="match-item">
-                  <span>vs. ShadowWarrior</span>
-                  <span class="match-result win">WIN</span>
-                </div>
-                <div class="match-item">
-                  <span>vs. BladeRunner</span>
-                  <span class="match-result loss">LOSS</span>
-                </div>
+      <!-- Recent Activity -->
+      <div class="dashboard-card">
+        <div class="card-title">RECENT BATTLES</div>
+        <div class="card-content" style="position:relative;min-height:200px;">
+          <div class="recent-matches-content" style="filter:blur(2px);opacity:0.4;pointer-events:none;">
+            <div class="match-list">
+              <div class="match-item">
+                <span>vs. DragonSlayer99</span>
+                <span class="match-result win">WIN</span>
+              </div>
+              <div class="match-item">
+                <span>vs. PkMaster420</span>
+                <span class="match-result win">WIN</span>
+              </div>
+              <div class="match-item">
+                <span>vs. IronDefender</span>
+                <span class="match-result loss">LOSS</span>
+              </div>
+              <div class="match-item">
+                <span>vs. RuneKnight</span>
+                <span class="match-result win">WIN</span>
+              </div>
+              <div class="match-item">
+                <span>vs. ShadowWarrior</span>
+                <span class="match-result win">WIN</span>
+              </div>
+              <div class="match-item">
+                <span>vs. BladeRunner</span>
+                <span class="match-result loss">LOSS</span>
               </div>
             </div>
-            <div class="coming-soon-overlay">
-              <div class="coming-soon-text">COMING SOON</div>
-            </div>
+          </div>
+          <div class="coming-soon-overlay">
+            <div class="coming-soon-text">COMING SOON</div>
           </div>
         </div>
       </div>
