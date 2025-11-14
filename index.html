@@ -481,17 +481,40 @@
   }
 
   .recent-matches{
+    position:relative;
     background:rgba(0,0,0,.3);
     border:1px solid rgba(255,214,77,.2);
     border-radius:8px;
     padding:16px;
+    margin-bottom:24px;
   }
 
-  .section-title{
+  .recent-matches-content{
+    filter:blur(2px);
+    opacity:0.4;
+    pointer-events:none;
+  }
+
+  .coming-soon-overlay{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,0,0,0.6);
+    border-radius:8px;
+    z-index:1;
+    pointer-events:none;
+  }
+
+  .coming-soon-text{
     font-family:'Press Start 2P', monospace;
-    font-size:12px;
+    font-size:16px;
     color:var(--gold);
-    margin-bottom:12px;
+    text-shadow:0 0 10px rgba(255,214,77,0.5);
   }
 
   .match-list{
@@ -519,6 +542,125 @@
   }
   .win{background:rgba(76,175,80,.3);color:#4CAF50;}
   .loss{background:rgba(244,67,54,.3);color:#F44336;}
+
+  .dashboard-inventory{
+    background:rgba(0,0,0,.3);
+    border:1px solid rgba(255,214,77,.2);
+    border-radius:8px;
+    padding:16px;
+  }
+
+  .section-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:12px;
+    color:var(--gold);
+    margin-bottom:12px;
+  }
+
+  .dashboard-items-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:8px;
+  }
+
+  .dashboard-item-slot{
+    position:relative;
+    aspect-ratio:1;
+    background:rgba(255,214,77,.05);
+    border:2px solid rgba(255,214,77,.2);
+    border-radius:8px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:all 0.2s;
+  }
+
+  .dashboard-item-slot:hover{
+    background:rgba(255,214,77,.15);
+    border-color:var(--gold);
+    transform:translateY(-2px);
+  }
+
+  .dashboard-item-slot.empty{
+    opacity:0.3;
+    cursor:default;
+  }
+
+  .dashboard-item-slot.empty:hover{
+    background:rgba(255,214,77,.05);
+    border-color:rgba(255,214,77,.2);
+    transform:none;
+  }
+
+  .dashboard-item-icon{
+    font-size:24px;
+    margin-bottom:4px;
+  }
+
+  .dashboard-item-name{
+    font-family:'Press Start 2P', monospace;
+    font-size:7px;
+    color:#e6ecf1;
+    text-align:center;
+    line-height:1.3;
+  }
+
+  .dashboard-item-count{
+    position:absolute;
+    top:4px;
+    right:4px;
+    background:rgba(255,214,77,.9);
+    color:#000;
+    font-family:'Press Start 2P', monospace;
+    font-size:8px;
+    padding:2px 4px;
+    border-radius:3px;
+  }
+
+  /* Tooltip for hover */
+  .dashboard-item-tooltip{
+    position:absolute;
+    bottom:calc(100% + 8px);
+    left:50%;
+    transform:translateX(-50%);
+    background:rgba(0,0,0,.95);
+    border:2px solid var(--gold);
+    border-radius:6px;
+    padding:8px 12px;
+    min-width:150px;
+    z-index:1000;
+    pointer-events:none;
+    opacity:0;
+    transition:opacity 0.2s;
+  }
+
+  .dashboard-item-slot:hover .dashboard-item-tooltip{
+    opacity:1;
+  }
+
+  .tooltip-name{
+    font-family:'Press Start 2P', monospace;
+    font-size:9px;
+    color:var(--gold);
+    margin-bottom:4px;
+  }
+
+  .tooltip-desc{
+    font-family:Inter, system-ui, Arial;
+    font-size:11px;
+    color:#e6ecf1;
+    line-height:1.4;
+  }
+
+  .tooltip-type{
+    font-family:'Press Start 2P', monospace;
+    font-size:8px;
+    color:#a0a8b0;
+    margin-top:4px;
+    text-transform:uppercase;
+  }
 
   .wallet-section{
     background:rgba(0,0,0,.3);
@@ -2182,24 +2324,36 @@
       </div>
 
       <div class="recent-matches">
-        <div class="section-title">RECENT BATTLES</div>
-        <div class="match-list">
-          <div class="match-item">
-            <span>vs. DragonSlayer99</span>
-            <span class="match-result win">WIN</span>
+        <div class="recent-matches-content">
+          <div class="section-title">RECENT BATTLES</div>
+          <div class="match-list">
+            <div class="match-item">
+              <span>vs. DragonSlayer99</span>
+              <span class="match-result win">WIN</span>
+            </div>
+            <div class="match-item">
+              <span>vs. PkMaster420</span>
+              <span class="match-result win">WIN</span>
+            </div>
+            <div class="match-item">
+              <span>vs. IronDefender</span>
+              <span class="match-result loss">LOSS</span>
+            </div>
+            <div class="match-item">
+              <span>vs. RuneKnight</span>
+              <span class="match-result win">WIN</span>
+            </div>
           </div>
-          <div class="match-item">
-            <span>vs. PkMaster420</span>
-            <span class="match-result win">WIN</span>
-          </div>
-          <div class="match-item">
-            <span>vs. IronDefender</span>
-            <span class="match-result loss">LOSS</span>
-          </div>
-          <div class="match-item">
-            <span>vs. RuneKnight</span>
-            <span class="match-result win">WIN</span>
-          </div>
+        </div>
+        <div class="coming-soon-overlay">
+          <div class="coming-soon-text">COMING SOON</div>
+        </div>
+      </div>
+
+      <div class="dashboard-inventory">
+        <div class="section-title">INVENTORY</div>
+        <div class="dashboard-items-grid" id="dashboardItemsGrid">
+          <!-- Items will be loaded dynamically -->
         </div>
       </div>
 
@@ -2218,7 +2372,14 @@
 
       <div class="action-buttons" style="margin-top:12px;">
         <button class="action-btn btn-secondary" id="viewQuestsBtn" aria-label="View quests">VIEW QUESTS</button>
-        <button class="action-btn btn-secondary" id="viewInventoryBtn" aria-label="View inventory and shop">INVENTORY & SHOP</button>
+        <button class="action-btn btn-secondary" id="viewInventoryBtn" aria-label="View inventory">INVENTORY</button>
+      </div>
+
+      <div class="action-buttons" style="margin-top:12px;">
+        <button class="action-btn btn-secondary" id="viewMarketplaceBtn" aria-label="View marketplace" style="position:relative;opacity:0.5;cursor:not-allowed;">
+          MARKETPLACE
+          <span style="position:absolute;top:2px;right:4px;font-size:8px;color:var(--gold);">SOON</span>
+        </button>
       </div>
     </div>
 
@@ -2294,10 +2455,15 @@
         <!-- Inventory slots will be generated here -->
       </div>
 
-      <div class="shop-section">
-        <div class="shop-title">GP SHOP</div>
-        <div class="shop-grid" id="shopGrid">
-          <!-- Shop items will be generated here -->
+      <div class="shop-section" style="position:relative;">
+        <div style="filter:blur(2px);opacity:0.4;pointer-events:none;">
+          <div class="shop-title">GP SHOP</div>
+          <div class="shop-grid" id="shopGrid">
+            <!-- Shop items will be generated here -->
+          </div>
+        </div>
+        <div class="coming-soon-overlay">
+          <div class="coming-soon-text">COMING SOON</div>
         </div>
       </div>
     </div>
@@ -3139,41 +3305,28 @@
     }
 
     function handleLogin() {
-      const emailInput = document.getElementById('loginEmail');
-      const passInput = document.getElementById('loginPass');
-      const email = emailInput.value.trim();
-      const pass = passInput.value.trim();
-
+      // Skip all validation - instant login for testing
       clearError('emailError');
       clearError('passError');
 
-      let hasError = false;
+      // Generate random user ID
+      const testUserId = 'test-' + Math.random().toString(36).substring(7);
+      const testEmail = 'test@demo.com';
+      const testWarriorName = '1337';
 
-      if (!email) {
-        showError('emailError', 'Email is required');
-        hasError = true;
-      } else if (!validateEmail(email)) {
-        showError('emailError', 'Invalid email format');
-        hasError = true;
-      }
-
-      if (!pass) {
-        showError('passError', 'Password is required');
-        hasError = true;
-      } else if (pass.length < 6) {
-        showError('passError', 'Password must be at least 6 characters');
-        hasError = true;
-      }
-
-      if (hasError) return;
-
-      // Store email and show dashboard
+      // Store test user info
       try {
-        localStorage.setItem('duelpvp_email', email);
-        // Try to load warrior name, fall back to email
-        const warriorName = localStorage.getItem('duelpvp_warrior');
-        document.getElementById('userName').textContent = (warriorName || email.split('@')[0]).toUpperCase();
+        localStorage.setItem('duelpvp_user_id', testUserId);
+        localStorage.setItem('duelpvp_email', testEmail);
+        localStorage.setItem('duelpvp_display_name', testWarriorName);
+        localStorage.setItem('duelpvp_warrior', testWarriorName);
+
+        // Set username in dashboard
+        document.getElementById('userName').textContent = testWarriorName.toUpperCase();
+
+        Toast.success('Logged in as ' + testWarriorName, 'TEST MODE');
       } catch (e) {
+        console.error('Failed to save login:', e);
         showError('passError', 'Failed to save login. Check browser settings.');
         return;
       }
@@ -3591,6 +3744,99 @@
 
       // Update wallet display
       updateWalletDisplay();
+
+      // Load dashboard inventory
+      loadDashboardInventory();
+    }
+
+    async function loadDashboardInventory() {
+      const userId = localStorage.getItem('duelpvp_user_id');
+      const email = localStorage.getItem('duelpvp_email');
+      const dashboardItemsGrid = document.getElementById('dashboardItemsGrid');
+
+      if (!dashboardItemsGrid) return;
+
+      // Get inventory from localStorage (for now - can be migrated to Supabase later)
+      const inventory = JSON.parse(localStorage.getItem(`duelpvp_inventory_${email}`) || '[]');
+
+      // Get user's invite codes from Supabase
+      let inviteCodes = [];
+      if (userId) {
+        const { data } = await supabase
+          .from('codes')
+          .select('*')
+          .eq('created_by', userId)
+          .order('created_at', { ascending: false })
+          .limit(4);
+
+        inviteCodes = data || [];
+      }
+
+      // Combine inventory items and codes
+      const allItems = [];
+
+      // Add invite codes first (show up to 4)
+      inviteCodes.slice(0, 4).forEach(code => {
+        allItems.push({
+          type: 'invite_code',
+          icon: '🎟️',
+          name: code.used_by ? 'USED CODE' : 'INVITE CODE',
+          desc: code.used_by
+            ? `This code was used on ${new Date(code.used_at).toLocaleDateString()}`
+            : 'Share this code with friends to invite them to the arena!',
+          code: code.code,
+          itemType: 'Invite Code',
+          used: !!code.used_by
+        });
+      });
+
+      // Add shop items from inventory
+      inventory.forEach(item => {
+        const shopItem = SHOP_ITEMS.find(si => si.id === item.id);
+        if (shopItem) {
+          allItems.push({
+            type: 'shop_item',
+            icon: shopItem.icon,
+            name: shopItem.name,
+            desc: shopItem.desc,
+            itemType: shopItem.type,
+            count: item.count || 1
+          });
+        }
+      });
+
+      // Fill remaining slots with empty slots (show 8 slots total)
+      const slotsToShow = 8;
+      while (allItems.length < slotsToShow) {
+        allItems.push({ type: 'empty' });
+      }
+
+      // Render items
+      dashboardItemsGrid.innerHTML = '';
+      allItems.slice(0, slotsToShow).forEach(item => {
+        const slot = document.createElement('div');
+        slot.className = item.type === 'empty' ? 'dashboard-item-slot empty' : 'dashboard-item-slot';
+
+        if (item.type === 'empty') {
+          slot.innerHTML = `
+            <div class="dashboard-item-icon">—</div>
+          `;
+        } else {
+          slot.innerHTML = `
+            <div class="dashboard-item-icon">${item.icon}</div>
+            <div class="dashboard-item-name">${item.name}</div>
+            ${item.count > 1 ? `<div class="dashboard-item-count">${item.count}</div>` : ''}
+            <div class="dashboard-item-tooltip">
+              <div class="tooltip-name">${item.name}</div>
+              <div class="tooltip-desc">${item.desc}</div>
+              <div class="tooltip-type">${item.itemType || 'Item'}</div>
+              ${item.code ? `<div class="tooltip-desc" style="margin-top:4px;color:var(--gold);font-family:'Press Start 2P';font-size:9px;">${item.code}</div>` : ''}
+            </div>
+          `;
+        }
+
+        dashboardItemsGrid.appendChild(slot);
+      });
     }
 
     // Leaderboard functions
