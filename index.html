@@ -1160,8 +1160,55 @@
     };
     
     // Helper function to swap content with fade animation
-    function swapContent(newContent) {
-      if (newContent === 'login') {
+    function swapContent(newContent, data) {
+      if (newContent === 'register') {
+        panelContent.style.display = 'block';
+        dashboardContent.style.display = 'none';
+        gameContent.style.display = 'none';
+
+        panelContent.innerHTML = `
+          <div class="panel-header">
+            <div class="sys">Create your account<span class="blink">.</span></div>
+            <div class="sub-text">Join the arena and start battling</div>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">Email Address</label>
+            <input id="registerEmail" class="input-field" type="email" placeholder="name@example.com" autocomplete="email">
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">Password</label>
+            <input id="registerPass" class="input-field" type="password" placeholder="Enter your password" autocomplete="new-password">
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">Confirm Password</label>
+            <input id="registerPassConfirm" class="input-field" type="password" placeholder="Confirm your password" autocomplete="new-password">
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">Access Code</label>
+            <div class="bar">
+              <input id="registerCode" class="input-field" type="text" placeholder="XXXX-XXXX-XXXX" autocomplete="off" value="${data || ''}">
+              <button class="btn-submit" id="registerBtn">CREATE ACCOUNT</button>
+            </div>
+          </div>
+
+          <div class="helper">
+            Already have an account? <a id="loginLinkFromReg">Sign in</a>
+          </div>
+        `;
+
+        // Re-attach event listeners
+        document.getElementById('registerBtn').addEventListener('click', handleRegister);
+        document.getElementById('loginLinkFromReg').addEventListener('click', () => swapContent('login'));
+        // Allow enter key to submit
+        document.getElementById('registerPassConfirm').addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') handleRegister();
+        });
+
+      } else if (newContent === 'login') {
         panelContent.style.display = 'block';
         dashboardContent.style.display = 'none';
         gameContent.style.display = 'none';
@@ -1259,9 +1306,39 @@
         alert('Enter an access code first');
         return;
       }
-      swapContent('login');
+      swapContent('register', code);
     }
     
+    function handleRegister() {
+      const email = document.getElementById('registerEmail').value.trim();
+      const pass = document.getElementById('registerPass').value.trim();
+      const passConfirm = document.getElementById('registerPassConfirm').value.trim();
+      const code = document.getElementById('registerCode').value.trim();
+
+      if (!email || !pass || !passConfirm || !code) {
+        alert('Please fill in all fields');
+        return;
+      }
+
+      if (pass !== passConfirm) {
+        alert('Passwords do not match');
+        return;
+      }
+
+      if (pass.length < 8) {
+        alert('Password must be at least 8 characters');
+        return;
+      }
+
+      // Store email and show dashboard
+      try {
+        localStorage.setItem('duelpvp_email', email);
+        document.getElementById('userName').textContent = email.split('@')[0].toUpperCase();
+      } catch (e) {}
+
+      swapContent('dashboard');
+    }
+
     function handleLogin() {
       const email = document.getElementById('loginEmail').value.trim();
       const pass = document.getElementById('loginPass').value.trim();
@@ -1269,13 +1346,13 @@
         alert('Please fill in all fields');
         return;
       }
-      
+
       // Store email and show dashboard
       try {
         localStorage.setItem('duelpvp_email', email);
         document.getElementById('userName').textContent = email.split('@')[0].toUpperCase();
       } catch (e) {}
-      
+
       swapContent('dashboard');
     }
     
