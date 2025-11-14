@@ -195,6 +195,7 @@
     mask-composite:exclude;
     pointer-events:none;
     z-index:-1;
+    will-change:background-position;
   }
 
   @keyframes borderGradient{
@@ -516,23 +517,21 @@
   /* Warrior naming screen */
   .warrior-naming{
     animation: warriorEntrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change:transform, opacity;
   }
 
   @keyframes warriorEntrance{
     0%{
       opacity:0;
       transform:scale(0.8) translateY(-30px);
-      filter:blur(10px);
     }
     50%{
       opacity:0.5;
       transform:scale(1.05) translateY(5px);
-      filter:blur(2px);
     }
     100%{
       opacity:1;
       transform:scale(1) translateY(0);
-      filter:blur(0);
     }
   }
 
@@ -624,6 +623,7 @@
     mask-composite:exclude;
     pointer-events:none;
     z-index:-1;
+    will-change:background-position;
   }
 
   .game-header{
@@ -1042,14 +1042,31 @@
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.particles = [];
+        this.isActive = false;
+        this.resizeTimeout = null;
         this.resize();
-        window.addEventListener('resize', () => this.resize());
-        this.animate();
+
+        // Debounced resize handler
+        window.addEventListener('resize', () => {
+          clearTimeout(this.resizeTimeout);
+          this.resizeTimeout = setTimeout(() => this.resize(), 150);
+        });
       }
 
       resize() {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
+      }
+
+      start() {
+        if (!this.isActive) {
+          this.isActive = true;
+          this.animate();
+        }
+      }
+
+      pause() {
+        this.isActive = false;
       }
 
       createLavaEmber() {
@@ -1122,7 +1139,10 @@
       }
 
       animate() {
-        requestAnimationFrame(() => this.animate());
+        // Only continue if active
+        if (this.isActive) {
+          requestAnimationFrame(() => this.animate());
+        }
 
         // Clear canvas
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -1137,7 +1157,16 @@
           this.particles.push(this.createShootingStar());
         }
 
-        // Update and draw particles
+        // Particle count cap - limit total particles to 120
+        if (this.particles.length > 120) {
+          this.particles = this.particles.slice(-120);
+        }
+
+        // Update particles and separate by type for batched rendering
+        const stars = [];
+        const shooting = [];
+        const embers = [];
+
         this.particles = this.particles.filter(p => {
           // Update position
           p.x += p.vx;
@@ -1151,20 +1180,41 @@
             p.twinkle += p.twinkleSpeed;
           }
 
-          // Calculate opacity and draw based on type
-          let opacity;
-
+          // Check if particle should be kept
+          let keep = false;
           if (p.type === 'star') {
-            opacity = (Math.sin(p.twinkle) * 0.3 + 0.7) * 0.6 * p.glowIntensity;
+            keep = true; // Stars stay forever
+            stars.push(p);
+          } else if (p.type === 'shooting') {
+            keep = p.life > 0 && p.x > -100 && p.x < this.canvas.width + 100;
+            if (keep) shooting.push(p);
+          } else { // ember
+            keep = p.life > 0 && p.y > -50;
+            if (keep) embers.push(p);
+          }
+
+          return keep;
+        });
+
+        // Batch render stars (set shadow once)
+        if (stars.length > 0) {
+          stars.forEach(p => {
+            const opacity = (Math.sin(p.twinkle) * 0.3 + 0.7) * 0.6 * p.glowIntensity;
             this.ctx.shadowBlur = p.size * 8 * p.glowIntensity;
             this.ctx.shadowColor = `rgba(255,255,255,${0.8 * p.glowIntensity})`;
             this.ctx.fillStyle = p.color + opacity + ')';
             this.ctx.beginPath();
             this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
             this.ctx.fill();
+          });
+        }
 
-          } else if (p.type === 'shooting') {
-            opacity = p.life;
+        // Batch render shooting stars
+        if (shooting.length > 0) {
+          this.ctx.shadowBlur = 15;
+          this.ctx.lineCap = 'round';
+          shooting.forEach(p => {
+            const opacity = p.life;
             // Draw shooting star trail
             const gradient = this.ctx.createLinearGradient(
               p.x, p.y,
@@ -1174,11 +1224,9 @@
             gradient.addColorStop(0.5, `rgba(255,255,255,${opacity * 0.4})`);
             gradient.addColorStop(1, 'rgba(255,255,255,0)');
 
-            this.ctx.shadowBlur = 15;
             this.ctx.shadowColor = `rgba(255,255,220,${opacity})`;
             this.ctx.strokeStyle = gradient;
             this.ctx.lineWidth = p.size * 2;
-            this.ctx.lineCap = 'round';
             this.ctx.beginPath();
             this.ctx.moveTo(p.x, p.y);
             this.ctx.lineTo(p.x - p.vx * 10, p.y - p.vy * 10);
@@ -1189,30 +1237,24 @@
             this.ctx.beginPath();
             this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
             this.ctx.fill();
+          });
+        }
 
-          } else { // ember
-            opacity = p.life * (Math.sin(p.twinkle) * 0.2 + 0.8);
-            this.ctx.shadowBlur = p.size * 8;
-            this.ctx.shadowColor = 'rgba(255,140,60,0.6)';
+        // Batch render embers (set shadow once)
+        if (embers.length > 0) {
+          this.ctx.shadowBlur = 8;
+          this.ctx.shadowColor = 'rgba(255,140,60,0.6)';
+          embers.forEach(p => {
+            const opacity = p.life * (Math.sin(p.twinkle) * 0.2 + 0.8);
             this.ctx.fillStyle = p.color + opacity + ')';
             this.ctx.beginPath();
             this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
             this.ctx.fill();
-          }
-
-          // Keep particle if alive and on screen
-          if (p.type === 'star') {
-            return true; // Stars stay forever
-          } else if (p.type === 'shooting') {
-            return p.life > 0 && p.x > -100 && p.x < this.canvas.width + 100; // Shooting stars fade or leave screen
-          } else {
-            return p.life > 0 && p.y > -50; // Embers fade or go off screen
-          }
-        });
+          });
+        }
 
         // Maintain star count
-        const starCount = this.particles.filter(p => p.type === 'star').length;
-        if (starCount < 40) { // Keep ~40 stars with variations
+        if (stars.length < 40) { // Keep ~40 stars with variations
           this.particles.push(this.createTwinklingStar());
         }
       }
@@ -1221,6 +1263,20 @@
     // Initialize particle system
     const particlesCanvas = document.getElementById('particlesCanvas');
     const particleSystem = new ParticleSystem(particlesCanvas);
+
+    // Pause/resume particles when tab visibility changes
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        particleSystem.pause();
+      } else {
+        particleSystem.start();
+      }
+    });
+
+    // Lazy load particles - start after 2 seconds for faster initial page load
+    setTimeout(() => {
+      particleSystem.start();
+    }, 2000);
 
     // Single page app logic
     const pageContainer = document.getElementById('pageContainer');
@@ -1245,8 +1301,29 @@
       warriorName: ''
     };
 
+    // Event listener cleanup tracking
+    let currentListeners = [];
+
+    function cleanupListeners() {
+      currentListeners.forEach(({el, event, fn}) => {
+        if (el) el.removeEventListener(event, fn);
+      });
+      currentListeners = [];
+    }
+
+    function addListener(id, event, handler) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener(event, handler);
+        currentListeners.push({el, event, fn: handler});
+      }
+    }
+
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
+      // Clean up old event listeners to prevent memory leaks
+      cleanupListeners();
+
       if (newContent === 'register') {
         panelContent.style.display = 'block';
         dashboardContent.style.display = 'none';
@@ -1288,10 +1365,9 @@
         `;
 
         // Re-attach event listeners
-        document.getElementById('registerBtn').addEventListener('click', handleRegister);
-        document.getElementById('loginLinkFromReg').addEventListener('click', () => swapContent('login'));
-        // Allow enter key to submit
-        document.getElementById('registerPassConfirm').addEventListener('keypress', (e) => {
+        addListener('registerBtn', 'click', handleRegister);
+        addListener('loginLinkFromReg', 'click', () => swapContent('login'));
+        addListener('registerPassConfirm', 'keypress', (e) => {
           if (e.key === 'Enter') handleRegister();
         });
 
@@ -1321,13 +1397,14 @@
         panelContent.classList.add('warrior-naming');
 
         // Re-attach event listeners
-        document.getElementById('confirmNameBtn').addEventListener('click', handleNameWarrior);
-        document.getElementById('warriorName').addEventListener('keypress', (e) => {
+        addListener('confirmNameBtn', 'click', handleNameWarrior);
+        addListener('warriorName', 'keypress', (e) => {
           if (e.key === 'Enter') handleNameWarrior();
         });
         // Auto-focus the input
         setTimeout(() => {
-          document.getElementById('warriorName').focus();
+          const el = document.getElementById('warriorName');
+          if (el) el.focus();
         }, 500);
 
       } else if (newContent === 'login') {
@@ -1361,10 +1438,10 @@
         `;
         
         // Re-attach event listeners
-        document.getElementById('loginBtn').addEventListener('click', handleLogin);
-        document.getElementById('backLink').addEventListener('click', () => swapContent('home'));
+        addListener('loginBtn', 'click', handleLogin);
+        addListener('backLink', 'click', () => swapContent('home'));
         // Allow enter key to submit
-        document.getElementById('loginPass').addEventListener('keypress', (e) => {
+        addListener('loginPass', 'keypress', (e) => {
           if (e.key === 'Enter') handleLogin();
         });
         
@@ -1394,10 +1471,10 @@
         `;
         
         // Re-attach event listeners
-        document.getElementById('joinBtn').addEventListener('click', handleJoin);
-        document.getElementById('loginLink').addEventListener('click', () => swapContent('login'));
+        addListener('joinBtn', 'click', handleJoin);
+        addListener('loginLink', 'click', () => swapContent('login'));
         // Allow enter key to submit
-        document.getElementById('code').addEventListener('keypress', (e) => {
+        addListener('code', 'keypress', (e) => {
           if (e.key === 'Enter') handleJoin();
         });
         
