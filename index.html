@@ -190,6 +190,11 @@
     box-shadow:0 8px 32px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.05);
   }
 
+  /* Extra transparent for access code screen */
+  .panel-transparent{
+    background:rgba(12,16,20,.10);
+  }
+
   .panel-header{
     text-align:center;
     margin-bottom:28px;
@@ -1442,7 +1447,7 @@
   <!-- Single page container that swaps content -->
   <main class="page-container" id="pageContainer" role="main" aria-label="Main content">
     <!-- Initial page content -->
-    <section class="panel fade-in" id="panelContent">
+    <section class="panel panel-transparent fade-in" id="panelContent">
       <div class="panel-header">
         <div class="sys">Welcome to the arena<span class="blink">.</span></div>
         <div class="sub-text">Enter your exclusive access code to begin</div>
@@ -1889,6 +1894,7 @@
           leaderboardContent.style.display = 'none';
           questContent.style.display = 'none';
           inventoryContent.style.display = 'none';
+          panelContent.classList.remove('panel-transparent');
 
           panelContent.innerHTML = `
           <div class="panel-header">
@@ -1939,6 +1945,7 @@
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned');
+        panelContent.classList.remove('panel-transparent');
 
         panelContent.innerHTML = `
           <div class="panel-header">
@@ -1997,6 +2004,7 @@
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
         pageContainer.classList.add('center-aligned');
+        panelContent.classList.remove('panel-transparent');
 
         panelContent.innerHTML = `
           <div class="panel-header">
@@ -2034,6 +2042,7 @@
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
+        panelContent.classList.add('panel-transparent');
 
         panelContent.innerHTML = `
           <div class="panel-header">
