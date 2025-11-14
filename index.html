@@ -1621,6 +1621,7 @@
       <div class="quest-tabs">
         <button class="quest-tab active" data-quest-tab="daily">DAILY QUESTS</button>
         <button class="quest-tab" data-quest-tab="weekly">WEEKLY QUESTS</button>
+        <button class="quest-tab" data-quest-tab="social">SOCIAL QUESTS</button>
         <button class="quest-tab" data-quest-tab="completed">COMPLETED</button>
       </div>
 
@@ -3048,6 +3049,13 @@
         {id: 'weekly_top_10', name: 'Elite Fighter', desc: 'Reach top 10 on leaderboard', target: 1, reward: 5000, icon: '🏆'},
         {id: 'weekly_sub_250', name: 'Reflex Master', desc: 'Get 5 times under 250ms', target: 5, reward: 3000, icon: '⚡'},
         {id: 'weekly_shop', name: 'Merchant', desc: 'Buy 3 items from shop', target: 3, reward: 1500, icon: '🛒'}
+      ],
+      social: [
+        {id: 'twitter_follow', name: 'Follow on Twitter', desc: 'Follow @YourProject on Twitter/X', target: 1, reward: 500, icon: '🐦', type: 'twitter'},
+        {id: 'twitter_like', name: 'Like Launch Tweet', desc: 'Like our official launch announcement', target: 1, reward: 300, icon: '❤️', type: 'twitter', tweetUrl: 'https://twitter.com/YourProject/status/123456789'},
+        {id: 'twitter_retweet', name: 'Retweet Launch', desc: 'Retweet our launch announcement', target: 1, reward: 300, icon: '🔄', type: 'twitter', tweetUrl: 'https://twitter.com/YourProject/status/123456789'},
+        {id: 'twitter_quote', name: 'Quote Tweet', desc: 'Quote tweet with your thoughts', target: 1, reward: 500, icon: '💬', type: 'twitter'},
+        {id: 'discord_join', name: 'Join Discord', desc: 'Join our Discord community', target: 1, reward: 400, icon: '💬', type: 'discord'}
       ]
     };
 
@@ -3068,29 +3076,48 @@
 
       questGrid.innerHTML = '';
       const quests = type === 'completed'
-        ? [...QUESTS.daily, ...QUESTS.weekly].filter(q => (questProgress[q.id] || 0) >= q.target)
+        ? [...QUESTS.daily, ...QUESTS.weekly, ...(QUESTS.social || [])].filter(q => (questProgress[q.id] || 0) >= q.target)
         : QUESTS[type] || QUESTS.daily;
 
       quests.forEach(quest => {
         const progress = questProgress[quest.id] || 0;
         const completed = progress >= quest.target;
         const claimed = questProgress[`${quest.id}_claimed`] || false;
+        const isSocialQuest = quest.type === 'twitter' || quest.type === 'discord';
 
         const card = document.createElement('div');
         card.className = `quest-card ${completed ? 'completed' : ''}`;
-        card.innerHTML = `
-          <div class="quest-name"><span class="quest-icon">${quest.icon}</span> ${quest.name}</div>
-          <div class="quest-desc">${quest.desc}</div>
-          <div class="quest-progress">
-            <div class="progress-bar">
-              <div class="progress-fill" style="width:${Math.min(100, (progress/quest.target)*100)}%"></div>
+
+        if (isSocialQuest) {
+          // Social quest with verify button
+          card.innerHTML = `
+            <div class="quest-name"><span class="quest-icon">${quest.icon}</span> ${quest.name}</div>
+            <div class="quest-desc">${quest.desc}${quest.tweetUrl ? ` <a href="${quest.tweetUrl}" target="_blank" style="color:var(--gold);text-decoration:underline;">View Tweet</a>` : ''}</div>
+            <div class="quest-progress">
+              <button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="verifySocialQuest('${quest.id}', '${quest.type}')">
+                ${completed ? '✓ VERIFIED' : 'VERIFY'}
+              </button>
             </div>
-            <div class="progress-text">${progress} / ${quest.target}</div>
-          </div>
-          <div class="quest-reward">
-            💰 ${quest.reward} GP ${completed && !claimed ? '• <span style="color:var(--gold)">CLAIM!</span>' : completed ? '✓ CLAIMED' : ''}
-          </div>
-        `;
+            <div class="quest-reward">
+              💰 ${quest.reward} GP ${completed && !claimed ? '• <span style="color:var(--gold)">CLAIM!</span>' : completed ? '✓ CLAIMED' : ''}
+            </div>
+          `;
+        } else {
+          // Regular quest with progress bar
+          card.innerHTML = `
+            <div class="quest-name"><span class="quest-icon">${quest.icon}</span> ${quest.name}</div>
+            <div class="quest-desc">${quest.desc}</div>
+            <div class="quest-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:${Math.min(100, (progress/quest.target)*100)}%"></div>
+              </div>
+              <div class="progress-text">${progress} / ${quest.target}</div>
+            </div>
+            <div class="quest-reward">
+              💰 ${quest.reward} GP ${completed && !claimed ? '• <span style="color:var(--gold)">CLAIM!</span>' : completed ? '✓ CLAIMED' : ''}
+            </div>
+          `;
+        }
 
         if (completed && !claimed) {
           card.style.cursor = 'pointer';
@@ -3102,6 +3129,98 @@
 
       if (quests.length === 0) {
         questGrid.innerHTML = '<div class="no-data">No quests available</div>';
+      }
+    }
+
+    // Social quest verification (manual for now, Galxe integration ready)
+    async function verifySocialQuest(questId, questType) {
+      const email = localStorage.getItem('duelpvp_email') || 'anonymous';
+      let questProgress = JSON.parse(localStorage.getItem(`duelpvp_quests_${email}`) || '{}');
+
+      // Check if already completed
+      if (questProgress[questId] >= 1) {
+        alert('Quest already verified!');
+        return;
+      }
+
+      // MANUAL VERIFICATION (Free, no API costs)
+      // TODO: Replace with Galxe API when ready
+      if (questType === 'twitter') {
+        const handle = prompt('Enter your Twitter handle (@username) to verify:');
+        if (!handle) return;
+
+        // Show confirmation
+        const confirmed = confirm(`
+Please complete the quest first, then click OK.
+
+Your handle: ${handle}
+
+We'll verify manually within 24 hours.
+Check back to claim your reward!
+        `);
+
+        if (confirmed) {
+          // Store pending verification
+          questProgress[`${questId}_pending`] = handle;
+          questProgress[`${questId}_timestamp`] = Date.now();
+          localStorage.setItem(`duelpvp_quests_${email}`, JSON.stringify(questProgress));
+
+          alert('Verification submitted! We\'ll check within 24 hours.');
+
+          // GALXE INTEGRATION POINT:
+          // Uncomment below when Galxe is set up
+          /*
+          try {
+            const wallet = localStorage.getItem(`duelpvp_wallet_${email}`);
+            const verified = await checkGalxeCredential(wallet, questId);
+            if (verified) {
+              questProgress[questId] = 1;
+              localStorage.setItem(`duelpvp_quests_${email}`, JSON.stringify(questProgress));
+              alert('Quest verified! Claim your reward.');
+              loadQuests('social');
+            }
+          } catch (error) {
+            alert('Verification failed. Please try again.');
+          }
+          */
+        }
+      } else if (questType === 'discord') {
+        const discordTag = prompt('Enter your Discord username:');
+        if (!discordTag) return;
+
+        // Store pending
+        questProgress[`${questId}_pending`] = discordTag;
+        localStorage.setItem(`duelpvp_quests_${email}`, JSON.stringify(questProgress));
+
+        alert(`Please join our Discord, then we'll verify @${discordTag} within 24 hours.`);
+      }
+    }
+
+    // Helper function for Galxe API (ready for when you set it up)
+    async function checkGalxeCredential(walletAddress, questId) {
+      // TODO: Replace with your actual Galxe campaign ID
+      const GALXE_CAMPAIGN_ID = 'YOUR_CAMPAIGN_ID';
+
+      try {
+        const response = await fetch('https://graphigo.prd.galaxy.eco/query', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            query: `{
+              campaign(id: "${GALXE_CAMPAIGN_ID}") {
+                participants(address: "${walletAddress}") {
+                  eligible
+                }
+              }
+            }`
+          })
+        });
+
+        const data = await response.json();
+        return data?.data?.campaign?.participants?.eligible || false;
+      } catch (error) {
+        console.error('Galxe verification error:', error);
+        return false;
       }
     }
 
