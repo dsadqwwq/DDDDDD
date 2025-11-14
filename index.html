@@ -1611,19 +1611,54 @@
       }
 
       createTwinklingStar() {
-        // Stars appear in top 30% of screen
+        // Stars appear in top 30% of screen with size variations
+        const sizeRoll = Math.random();
+        let size, glowIntensity;
+
+        if (sizeRoll > 0.95) {
+          // 5% chance - Large bright star
+          size = Math.random() * 1.5 + 2.5; // 2.5-4px
+          glowIntensity = 1.2;
+        } else if (sizeRoll > 0.7) {
+          // 25% chance - Medium star
+          size = Math.random() * 1 + 1.5; // 1.5-2.5px
+          glowIntensity = 0.9;
+        } else {
+          // 70% chance - Small star
+          size = Math.random() * 0.8 + 0.5; // 0.5-1.3px
+          glowIntensity = 0.6;
+        }
+
         return {
           x: Math.random() * this.canvas.width,
           y: Math.random() * this.canvas.height * 0.3, // Top 30%
           vx: 0,
           vy: 0,
-          size: Math.random() * 2 + 0.5, // 0.5-2.5px
+          size: size,
           life: 1,
           decay: 0, // Stars don't fade out
           color: 'rgba(255,255,255,',
           twinkle: Math.random() * Math.PI * 2,
           twinkleSpeed: Math.random() * 0.03 + 0.01,
+          glowIntensity: glowIntensity,
           type: 'star'
+        };
+      }
+
+      createShootingStar() {
+        // Shooting stars streak across the top half
+        const startSide = Math.random() > 0.5 ? 'left' : 'right';
+        return {
+          x: startSide === 'left' ? 0 : this.canvas.width,
+          y: Math.random() * this.canvas.height * 0.4, // Top 40%
+          vx: (startSide === 'left' ? 1 : -1) * (Math.random() * 3 + 4), // Fast horizontal
+          vy: Math.random() * 0.5 + 0.5, // Slight downward angle
+          size: Math.random() * 1 + 1.5, // 1.5-2.5px
+          life: 1,
+          decay: 0.015, // Fade quickly
+          color: 'rgba(255,255,220,',
+          tailLength: Math.random() * 40 + 60, // 60-100px tail
+          type: 'shooting'
         };
       }
 
@@ -1634,8 +1669,13 @@
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         // Add new particles
-        if (Math.random() < 0.15) { // 15% chance each frame
+        if (Math.random() < 0.15) { // 15% chance each frame for embers
           this.particles.push(this.createLavaEmber());
+        }
+
+        // Occasionally add shooting stars (rare)
+        if (Math.random() < 0.002) { // 0.2% chance per frame (~1 every 8 seconds)
+          this.particles.push(this.createShootingStar());
         }
 
         // Update and draw particles
@@ -1647,28 +1687,65 @@
           // Update life
           p.life -= p.decay;
 
-          // Update twinkle
-          p.twinkle += p.twinkleSpeed;
-
-          // Calculate opacity based on twinkle and life
-          let opacity;
-          if (p.type === 'star') {
-            opacity = (Math.sin(p.twinkle) * 0.3 + 0.7) * 0.6; // Pulse between 0.4 and 1.0, then reduce to 60%
-          } else {
-            opacity = p.life * (Math.sin(p.twinkle) * 0.2 + 0.8); // Embers fade with life
+          // Update twinkle (if applicable)
+          if (p.twinkle !== undefined) {
+            p.twinkle += p.twinkleSpeed;
           }
 
-          // Draw particle with glow
-          this.ctx.shadowBlur = p.size * 8;
-          this.ctx.shadowColor = p.type === 'star' ? 'rgba(255,255,255,0.8)' : 'rgba(255,140,60,0.6)';
-          this.ctx.fillStyle = p.color + opacity + ')';
-          this.ctx.beginPath();
-          this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-          this.ctx.fill();
+          // Calculate opacity and draw based on type
+          let opacity;
+
+          if (p.type === 'star') {
+            opacity = (Math.sin(p.twinkle) * 0.3 + 0.7) * 0.6 * p.glowIntensity;
+            this.ctx.shadowBlur = p.size * 8 * p.glowIntensity;
+            this.ctx.shadowColor = `rgba(255,255,255,${0.8 * p.glowIntensity})`;
+            this.ctx.fillStyle = p.color + opacity + ')';
+            this.ctx.beginPath();
+            this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            this.ctx.fill();
+
+          } else if (p.type === 'shooting') {
+            opacity = p.life;
+            // Draw shooting star trail
+            const gradient = this.ctx.createLinearGradient(
+              p.x, p.y,
+              p.x - p.vx * p.tailLength / 5, p.y - p.vy * p.tailLength / 5
+            );
+            gradient.addColorStop(0, `rgba(255,255,220,${opacity * 0.8})`);
+            gradient.addColorStop(0.5, `rgba(255,255,255,${opacity * 0.4})`);
+            gradient.addColorStop(1, 'rgba(255,255,255,0)');
+
+            this.ctx.shadowBlur = 15;
+            this.ctx.shadowColor = `rgba(255,255,220,${opacity})`;
+            this.ctx.strokeStyle = gradient;
+            this.ctx.lineWidth = p.size * 2;
+            this.ctx.lineCap = 'round';
+            this.ctx.beginPath();
+            this.ctx.moveTo(p.x, p.y);
+            this.ctx.lineTo(p.x - p.vx * 10, p.y - p.vy * 10);
+            this.ctx.stroke();
+
+            // Draw bright head
+            this.ctx.fillStyle = `rgba(255,255,255,${opacity})`;
+            this.ctx.beginPath();
+            this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            this.ctx.fill();
+
+          } else { // ember
+            opacity = p.life * (Math.sin(p.twinkle) * 0.2 + 0.8);
+            this.ctx.shadowBlur = p.size * 8;
+            this.ctx.shadowColor = 'rgba(255,140,60,0.6)';
+            this.ctx.fillStyle = p.color + opacity + ')';
+            this.ctx.beginPath();
+            this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            this.ctx.fill();
+          }
 
           // Keep particle if alive and on screen
           if (p.type === 'star') {
             return true; // Stars stay forever
+          } else if (p.type === 'shooting') {
+            return p.life > 0 && p.x > -100 && p.x < this.canvas.width + 100; // Shooting stars fade or leave screen
           } else {
             return p.life > 0 && p.y > -50; // Embers fade or go off screen
           }
@@ -1676,7 +1753,7 @@
 
         // Maintain star count
         const starCount = this.particles.filter(p => p.type === 'star').length;
-        if (starCount < 30) { // Keep ~30 stars
+        if (starCount < 40) { // Keep ~40 stars with variations
           this.particles.push(this.createTwinklingStar());
         }
       }
