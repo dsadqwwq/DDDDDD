@@ -1049,6 +1049,214 @@
     image-rendering:crisp-edges;
   }
 
+  /* Crash Rocket Game Styles */
+  .crash-bet-section{
+    background:rgba(255,214,77,.05);
+    border:1px solid rgba(255,214,77,.2);
+    border-radius:8px;
+    padding:12px;
+    margin-bottom:16px;
+  }
+
+  .crash-input{
+    width:100%;
+    background:rgba(0,0,0,.3);
+    border:1px solid rgba(255,214,77,.2);
+    border-radius:4px;
+    padding:8px;
+    color:var(--gold);
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+  }
+
+  .crash-input:focus{
+    outline:none;
+    border-color:var(--gold);
+  }
+
+  .crash-info-section{
+    background:rgba(0,0,0,.3);
+    border:1px solid rgba(255,214,77,.2);
+    border-radius:8px;
+    padding:12px;
+    margin-bottom:16px;
+  }
+
+  .crash-stat{
+    padding:8px 0;
+    border-bottom:1px solid rgba(255,214,77,.1);
+  }
+
+  .crash-stat:last-child{
+    border-bottom:none;
+  }
+
+  .crash-history{
+    background:rgba(0,0,0,.3);
+    border:1px solid rgba(255,214,77,.2);
+    border-radius:8px;
+    padding:12px;
+  }
+
+  .crash-history-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:4px;
+    margin-top:8px;
+  }
+
+  .crash-history-item{
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    padding:6px 8px;
+    border-radius:4px;
+    background:rgba(0,0,0,.3);
+  }
+
+  .crash-history-item.crashed-low{
+    color:#F44336;
+    border:1px solid rgba(244,67,54,.3);
+  }
+
+  .crash-history-item.crashed-med{
+    color:#FF9800;
+    border:1px solid rgba(255,152,0,.3);
+  }
+
+  .crash-history-item.crashed-high{
+    color:#4CAF50;
+    border:1px solid rgba(76,175,80,.3);
+  }
+
+  .crash-game-area{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+
+  .crash-hash-display{
+    background:rgba(0,0,0,.3);
+    border:1px solid rgba(255,214,77,.2);
+    border-radius:8px;
+    padding:12px;
+  }
+
+  .crash-rocket-container{
+    position:relative;
+    height:350px;
+    background:linear-gradient(to bottom, rgba(16,20,24,.9), rgba(16,16,32,.9));
+    border:2px solid rgba(255,214,77,.2);
+    border-radius:8px;
+    overflow:hidden;
+  }
+
+  .crash-rocket-container.crashed{
+    animation:explosion 0.5s ease-out;
+    border-color:rgba(244,67,54,.8);
+  }
+
+  @keyframes explosion{
+    0%{background:rgba(16,20,24,.9);}
+    50%{background:rgba(244,67,54,.3);}
+    100%{background:rgba(16,20,24,.9);}
+  }
+
+  .crash-multiplier-display{
+    position:absolute;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
+    text-align:center;
+    z-index:10;
+  }
+
+  .crash-multiplier-value{
+    font-family:'Press Start 2P', monospace;
+    font-size:48px;
+    color:var(--gold);
+    text-shadow:0 0 20px rgba(255,214,77,.8), 0 4px 8px rgba(0,0,0,.8);
+    animation:pulse 2s ease-in-out infinite;
+  }
+
+  .crash-multiplier-value.flying{
+    animation:flyingPulse 0.3s ease-in-out infinite;
+  }
+
+  @keyframes flyingPulse{
+    0%, 100%{transform:scale(1);}
+    50%{transform:scale(1.1);}
+  }
+
+  .crash-status-text{
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    color:#a0a8b0;
+    margin-top:8px;
+  }
+
+  .crash-rocket{
+    position:absolute;
+    font-size:40px;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    transition:all 0.05s linear;
+    z-index:5;
+  }
+
+  .crash-rocket.flying{
+    animation:rocketShake 0.1s infinite;
+  }
+
+  @keyframes rocketShake{
+    0%, 100%{transform:translateX(-50%) rotate(-2deg);}
+    50%{transform:translateX(-50%) rotate(2deg);}
+  }
+
+  .crash-trail-canvas{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:1;
+  }
+
+  .crash-cashout-btn{
+    width:100%;
+    padding:16px;
+    background:var(--gold);
+    border:2px solid var(--gold);
+    color:#000;
+    font-family:'Press Start 2P', monospace;
+    font-size:14px;
+    cursor:pointer;
+    border-radius:8px;
+    transition:all 0.2s;
+  }
+
+  .crash-cashout-btn:hover:not(:disabled){
+    background:rgba(255,214,77,.8);
+    transform:scale(1.02);
+  }
+
+  .crash-cashout-btn:disabled{
+    background:rgba(255,214,77,.2);
+    border-color:rgba(255,214,77,.2);
+    color:rgba(255,255,255,.3);
+    cursor:not-allowed;
+  }
+
+  .crash-game-status{
+    text-align:center;
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    color:#a0a8b0;
+    padding:12px;
+    background:rgba(0,0,0,.3);
+    border-radius:8px;
+  }
+
   /* Leaderboard Screen Styles */
   .leaderboard-container{
     display:none;
@@ -2382,6 +2590,7 @@
           <div class="card-title">QUICK ACTIONS</div>
           <div class="card-content">
             <button class="action-btn btn-primary" id="playReactionBtn" aria-label="Play reaction game" style="width:100%;margin-bottom:12px;">PLAY REACTION</button>
+            <button class="action-btn btn-primary" id="playCrashBtn" aria-label="Play crash rocket game" style="width:100%;margin-bottom:12px;">PLAY ROCKET CRASH</button>
             <button class="action-btn btn-secondary" id="viewLeaderboardBtn" aria-label="View global leaderboard" style="width:100%;margin-bottom:12px;">VIEW LEADERBOARD</button>
             <button class="action-btn btn-secondary" id="viewQuestsBtn" aria-label="View quests" style="width:100%;margin-bottom:12px;">VIEW QUESTS</button>
             <button class="action-btn btn-secondary" id="viewInventoryBtn" aria-label="View inventory" style="width:100%;margin-bottom:12px;">INVENTORY</button>
@@ -2625,6 +2834,85 @@
           <div class="action-buttons" style="margin-top:16px;">
             <button class="action-btn btn-primary" id="startGameBtn">START GAME</button>
             <button class="action-btn btn-secondary" id="resetGameBtn">RESET</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Crash Rocket Game content (hidden initially) -->
+    <div class="game-container" id="crashContent" role="region" aria-label="Crash rocket game">
+      <div class="game-header">
+        <div class="game-title">ROCKET CRASH</div>
+        <button class="back-btn" id="backFromCrashBtn" aria-label="Back to dashboard">BACK</button>
+      </div>
+
+      <div class="game-layout">
+        <!-- Left sidebar -->
+        <div class="game-sidebar">
+          <div class="crash-bet-section">
+            <div class="instructions-title">PLACE BET</div>
+            <div style="margin-bottom:12px;">
+              <label style="font-size:10px;color:#a0a8b0;display:block;margin-bottom:4px;">BET AMOUNT</label>
+              <input type="number" id="crashBetAmount" class="crash-input" placeholder="100" min="10" value="100">
+              <div style="font-size:9px;color:#a0a8b0;margin-top:4px;">Min: 10 GP • Max: 10,000 GP</div>
+            </div>
+            <div style="margin-bottom:12px;">
+              <label style="font-size:10px;color:#a0a8b0;display:block;margin-bottom:4px;">AUTO CASHOUT (Optional)</label>
+              <input type="number" id="crashAutoCashout" class="crash-input" placeholder="2.00" min="1.01" step="0.01">
+              <div style="font-size:9px;color:#a0a8b0;margin-top:4px;">Auto-cashout at multiplier</div>
+            </div>
+            <button class="action-btn btn-primary" id="crashPlaceBetBtn" style="width:100%;">PLACE BET</button>
+          </div>
+
+          <div class="crash-info-section">
+            <div class="crash-stat">
+              <div class="stat-label">YOUR GP</div>
+              <div class="stat-value" id="crashGPDisplay">0</div>
+            </div>
+            <div class="crash-stat">
+              <div class="stat-label">CURRENT BET</div>
+              <div class="stat-value" id="crashCurrentBet">0</div>
+            </div>
+            <div class="crash-stat">
+              <div class="stat-label">POTENTIAL WIN</div>
+              <div class="stat-value" id="crashPotentialWin">0</div>
+            </div>
+          </div>
+
+          <div class="crash-history" id="crashHistory">
+            <div class="instructions-title">CRASH HISTORY</div>
+            <div id="crashHistoryList" class="crash-history-list">
+              <!-- History items will appear here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Main game area -->
+        <div class="game-main">
+          <div class="crash-game-area">
+            <!-- Provably Fair Hash Display -->
+            <div class="crash-hash-display" id="crashHashDisplay">
+              <div style="font-size:9px;color:#a0a8b0;margin-bottom:4px;">PROVABLY FAIR HASH</div>
+              <div style="font-family:monospace;font-size:10px;color:var(--gold);word-break:break-all;" id="crashHash">Waiting for next round...</div>
+            </div>
+
+            <!-- Rocket Animation Area -->
+            <div class="crash-rocket-container" id="crashRocketContainer">
+              <div class="crash-multiplier-display" id="crashMultiplierDisplay">
+                <div class="crash-multiplier-value" id="crashMultiplierValue">1.00x</div>
+                <div class="crash-status-text" id="crashStatusText">Waiting for bets...</div>
+              </div>
+              <div class="crash-rocket" id="crashRocket">🚀</div>
+              <canvas class="crash-trail-canvas" id="crashTrailCanvas"></canvas>
+            </div>
+
+            <!-- Cashout Button -->
+            <button class="crash-cashout-btn" id="crashCashoutBtn" disabled>CASH OUT</button>
+
+            <!-- Game Status -->
+            <div class="crash-game-status" id="crashGameStatus">
+              Next round starts in <span id="crashCountdown">5</span>s
+            </div>
           </div>
         </div>
       </div>
@@ -3055,6 +3343,7 @@
     const questContent = document.getElementById('questContent');
     const inventoryContent = document.getElementById('inventoryContent');
     const shopContent = document.getElementById('shopContent');
+    const crashContent = document.getElementById('crashContent');
 
     // Debug: Check if all elements exist
     console.log('Elements loaded:', {
@@ -3090,7 +3379,7 @@
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
       // Find currently visible element
-      const allContainers = [panelContent, dashboardContent, gameContent, leaderboardContent, questContent, inventoryContent];
+      const allContainers = [panelContent, dashboardContent, gameContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent];
       const currentVisible = allContainers.find(el => el.style.display !== 'none' && el.style.display !== '');
 
       // Add fade-out to current visible element
@@ -3338,8 +3627,21 @@
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
         shopContent.style.display = 'none';
+        crashContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initChart();
+
+      } else if (newContent === 'crash') {
+        panelContent.style.display = 'none';
+        dashboardContent.style.display = 'none';
+        gameContent.style.display = 'none';
+        leaderboardContent.style.display = 'none';
+        questContent.style.display = 'none';
+        inventoryContent.style.display = 'none';
+        shopContent.style.display = 'none';
+        crashContent.style.display = 'block';
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        initCrashGame();
 
       } else if (newContent === 'leaderboard') {
         console.log('Switching to leaderboard...');
@@ -5069,11 +5371,16 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       console.log('Play Reaction clicked');
       swapContent('game');
     });
+    document.getElementById('playCrashBtn').addEventListener('click', () => {
+      console.log('Play Crash clicked');
+      swapContent('crash');
+    });
     document.getElementById('viewLeaderboardBtn').addEventListener('click', () => {
       console.log('View Leaderboard clicked');
       swapContent('leaderboard');
     });
     document.getElementById('backToDashBtn').addEventListener('click', () => swapContent('dashboard'));
+    document.getElementById('backFromCrashBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('backFromLeaderboardBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('backFromQuestsBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('backFromInventoryBtn').addEventListener('click', () => swapContent('dashboard'));
