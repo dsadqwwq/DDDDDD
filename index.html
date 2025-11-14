@@ -961,6 +961,307 @@
     .podium-item.rank-3{
       order:3;
     }
+    .quest-grid, .inventory-grid{
+      grid-template-columns:1fr;
+    }
+  }
+
+  /* Quest System Styles */
+  .quest-container{
+    display:none;
+    width:min(720px,92vw);
+    background:rgba(12,16,20,.92);
+    border:2px solid rgba(255,214,77,.3);
+    border-radius:12px;
+    padding:24px;
+    backdrop-filter:blur(8px);
+  }
+
+  .quest-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:24px;
+    padding-bottom:16px;
+    border-bottom:1px solid rgba(255,214,77,.2);
+  }
+
+  .quest-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:18px;
+    color:var(--gold);
+  }
+
+  .quest-tabs{
+    display:flex;
+    gap:12px;
+    margin-bottom:20px;
+  }
+
+  .quest-tab{
+    padding:10px 20px;
+    background:rgba(255,214,77,.1);
+    border:1px solid rgba(255,214,77,.3);
+    color:var(--gold);
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    cursor:pointer;
+    border-radius:6px;
+    transition:all 0.2s;
+  }
+
+  .quest-tab.active{
+    background:var(--gold);
+    color:#000;
+  }
+
+  .quest-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
+    gap:16px;
+    margin-bottom:20px;
+  }
+
+  .quest-card{
+    background:rgba(255,214,77,.05);
+    border:1px solid rgba(255,214,77,.2);
+    border-radius:8px;
+    padding:16px;
+    transition:all 0.2s;
+  }
+
+  .quest-card:hover{
+    border-color:var(--gold);
+    background:rgba(255,214,77,.1);
+  }
+
+  .quest-card.completed{
+    background:rgba(76,175,80,.1);
+    border-color:rgba(76,175,80,.3);
+  }
+
+  .quest-name{
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    color:var(--gold);
+    margin-bottom:8px;
+  }
+
+  .quest-desc{
+    font-family:Inter, system-ui, Arial;
+    font-size:12px;
+    color:#a0a8b0;
+    margin-bottom:12px;
+    line-height:1.5;
+  }
+
+  .quest-progress{
+    margin-bottom:10px;
+  }
+
+  .progress-bar{
+    width:100%;
+    height:8px;
+    background:rgba(0,0,0,.4);
+    border-radius:4px;
+    overflow:hidden;
+  }
+
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--gold), var(--gold-hi));
+    transition:width 0.3s;
+  }
+
+  .progress-text{
+    font-family:'Press Start 2P', monospace;
+    font-size:9px;
+    color:#a0a8b0;
+    margin-top:4px;
+  }
+
+  .quest-reward{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    color:#4CAF50;
+  }
+
+  .quest-icon{
+    font-size:16px;
+  }
+
+  /* Inventory System Styles */
+  .inventory-container{
+    display:none;
+    width:min(820px,92vw);
+    background:rgba(12,16,20,.92);
+    border:2px solid rgba(255,214,77,.3);
+    border-radius:12px;
+    padding:24px;
+    backdrop-filter:blur(8px);
+  }
+
+  .inventory-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:24px;
+    padding-bottom:16px;
+    border-bottom:1px solid rgba(255,214,77,.2);
+  }
+
+  .inventory-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:18px;
+    color:var(--gold);
+  }
+
+  .gp-display{
+    font-family:'Press Start 2P', monospace;
+    font-size:14px;
+    color:#4CAF50;
+  }
+
+  .inventory-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(100px, 1fr));
+    gap:12px;
+    margin-bottom:20px;
+  }
+
+  .inventory-slot{
+    aspect-ratio:1;
+    background:rgba(0,0,0,.4);
+    border:2px solid rgba(255,214,77,.2);
+    border-radius:8px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:all 0.2s;
+    padding:8px;
+    position:relative;
+  }
+
+  .inventory-slot:hover{
+    border-color:var(--gold);
+    background:rgba(255,214,77,.1);
+  }
+
+  .inventory-slot.empty{
+    opacity:0.3;
+  }
+
+  .item-icon{
+    font-size:32px;
+    margin-bottom:4px;
+  }
+
+  .item-name{
+    font-family:'Press Start 2P', monospace;
+    font-size:8px;
+    color:#e6ecf1;
+    text-align:center;
+  }
+
+  .item-count{
+    position:absolute;
+    bottom:4px;
+    right:4px;
+    background:rgba(0,0,0,.8);
+    padding:2px 4px;
+    border-radius:3px;
+    font-family:'Press Start 2P', monospace;
+    font-size:9px;
+    color:var(--gold);
+  }
+
+  .shop-section{
+    margin-top:30px;
+    padding-top:20px;
+    border-top:1px solid rgba(255,214,77,.2);
+  }
+
+  .shop-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:14px;
+    color:var(--gold);
+    margin-bottom:16px;
+  }
+
+  .shop-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));
+    gap:16px;
+  }
+
+  .shop-item{
+    background:rgba(255,214,77,.05);
+    border:1px solid rgba(255,214,77,.2);
+    border-radius:8px;
+    padding:16px;
+    text-align:center;
+    transition:all 0.2s;
+  }
+
+  .shop-item:hover{
+    border-color:var(--gold);
+    background:rgba(255,214,77,.1);
+  }
+
+  .shop-item .item-icon{
+    font-size:48px;
+    margin-bottom:8px;
+  }
+
+  .shop-item-name{
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    color:var(--gold);
+    margin-bottom:8px;
+  }
+
+  .shop-item-desc{
+    font-family:Inter, system-ui, Arial;
+    font-size:11px;
+    color:#a0a8b0;
+    margin-bottom:12px;
+  }
+
+  .shop-item-price{
+    font-family:'Press Start 2P', monospace;
+    font-size:12px;
+    color:#4CAF50;
+    margin-bottom:12px;
+  }
+
+  .buy-btn{
+    width:100%;
+    padding:8px;
+    background:var(--gold);
+    border:2px solid var(--gold);
+    color:#000;
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    cursor:pointer;
+    border-radius:6px;
+    transition:all 0.2s;
+  }
+
+  .buy-btn:hover:not(:disabled){
+    background:var(--gold-hi);
+    transform:translateY(-2px);
+  }
+
+  .buy-btn:disabled{
+    background:rgba(100,100,100,.3);
+    border-color:rgba(100,100,100,.2);
+    color:rgba(255,255,255,.3);
+    cursor:not-allowed;
   }
 </style>
 </head>
@@ -1055,6 +1356,11 @@
         <button class="action-btn btn-primary" id="playReactionBtn" aria-label="Play reaction game">PLAY REACTION</button>
         <button class="action-btn btn-secondary" id="viewLeaderboardBtn" aria-label="View global leaderboard">VIEW LEADERBOARD</button>
       </div>
+
+      <div class="action-buttons" style="margin-top:12px;">
+        <button class="action-btn btn-secondary" id="viewQuestsBtn" aria-label="View quests">VIEW QUESTS</button>
+        <button class="action-btn btn-secondary" id="viewInventoryBtn" aria-label="View inventory and shop">INVENTORY & SHOP</button>
+      </div>
     </div>
 
     <!-- Leaderboard content (hidden initially) -->
@@ -1089,6 +1395,46 @@
         </div>
         <div id="leaderboardTableBody">
           <!-- Table rows will be generated here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Quest content (hidden initially) -->
+    <div class="quest-container" id="questContent" role="region" aria-label="Quest log">
+      <div class="quest-header">
+        <div class="quest-title">QUEST LOG</div>
+        <button class="back-btn" id="backFromQuestsBtn" aria-label="Back to dashboard">BACK</button>
+      </div>
+
+      <div class="quest-tabs">
+        <button class="quest-tab active" data-quest-tab="daily">DAILY QUESTS</button>
+        <button class="quest-tab" data-quest-tab="weekly">WEEKLY QUESTS</button>
+        <button class="quest-tab" data-quest-tab="completed">COMPLETED</button>
+      </div>
+
+      <div id="questGrid" class="quest-grid">
+        <!-- Quest cards will be generated here -->
+      </div>
+    </div>
+
+    <!-- Inventory content (hidden initially) -->
+    <div class="inventory-container" id="inventoryContent" role="region" aria-label="Inventory and shop">
+      <div class="inventory-header">
+        <div class="inventory-title">INVENTORY</div>
+        <div>
+          <div class="gp-display" id="gpDisplay">GP: 0</div>
+          <button class="back-btn" id="backFromInventoryBtn" aria-label="Back to dashboard" style="margin-top:8px;">BACK</button>
+        </div>
+      </div>
+
+      <div class="inventory-grid" id="inventoryGrid">
+        <!-- Inventory slots will be generated here -->
+      </div>
+
+      <div class="shop-section">
+        <div class="shop-title">GP SHOP</div>
+        <div class="shop-grid" id="shopGrid">
+          <!-- Shop items will be generated here -->
         </div>
       </div>
     </div>
@@ -1144,6 +1490,8 @@
     const dashboardContent = document.getElementById('dashboardContent');
     const gameContent = document.getElementById('gameContent');
     const leaderboardContent = document.getElementById('leaderboardContent');
+    const questContent = document.getElementById('questContent');
+    const inventoryContent = document.getElementById('inventoryContent');
 
     // Debug: Check if all elements exist
     console.log('Elements loaded:', {
@@ -1152,6 +1500,8 @@
       dashboardContent: !!dashboardContent,
       gameContent: !!gameContent,
       leaderboardContent: !!leaderboardContent,
+      questContent: !!questContent,
+      inventoryContent: !!inventoryContent,
       viewLeaderboardBtn: !!document.getElementById('viewLeaderboardBtn')
     });
     
@@ -1173,6 +1523,8 @@
         dashboardContent.style.display = 'none';
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
+        questContent.style.display = 'none';
+        inventoryContent.style.display = 'none';
 
         panelContent.innerHTML = `
           <div class="panel-header">
@@ -1220,6 +1572,8 @@
         dashboardContent.style.display = 'none';
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
+        questContent.style.display = 'none';
+        inventoryContent.style.display = 'none';
 
         panelContent.innerHTML = `
           <div class="panel-header">
@@ -1261,6 +1615,8 @@
         dashboardContent.style.display = 'block';
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
+        questContent.style.display = 'none';
+        inventoryContent.style.display = 'none';
         dashboardContent.classList.add('fade-in');
         updateDashboardStats();
 
@@ -1269,6 +1625,8 @@
         dashboardContent.style.display = 'none';
         gameContent.style.display = 'block';
         leaderboardContent.style.display = 'none';
+        questContent.style.display = 'none';
+        inventoryContent.style.display = 'none';
         gameContent.classList.add('fade-in');
         initChart();
 
@@ -1278,10 +1636,32 @@
         dashboardContent.style.display = 'none';
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'block';
+        questContent.style.display = 'none';
+        inventoryContent.style.display = 'none';
         leaderboardContent.classList.add('fade-in');
         console.log('Leaderboard display set to block');
         loadLeaderboard('all');
         console.log('loadLeaderboard called');
+
+      } else if (newContent === 'quests') {
+        panelContent.style.display = 'none';
+        dashboardContent.style.display = 'none';
+        gameContent.style.display = 'none';
+        leaderboardContent.style.display = 'none';
+        questContent.style.display = 'block';
+        inventoryContent.style.display = 'none';
+        questContent.classList.add('fade-in');
+        loadQuests('daily');
+
+      } else if (newContent === 'inventory') {
+        panelContent.style.display = 'none';
+        dashboardContent.style.display = 'none';
+        gameContent.style.display = 'none';
+        leaderboardContent.style.display = 'none';
+        questContent.style.display = 'none';
+        inventoryContent.style.display = 'block';
+        inventoryContent.classList.add('fade-in');
+        loadInventory();
       }
 
       // Add fade-in animation
@@ -1765,7 +2145,7 @@
     function endGame() {
       const bestTime = Math.min(...gameState.attempts);
       document.getElementById('gameStatus').textContent = `Game Over! Best: ${bestTime.toFixed(0)}ms`;
-      
+
       // Save to "database" (localStorage for now)
       try {
         const email = localStorage.getItem('duelpvp_email') || 'anonymous';
@@ -1776,6 +2156,22 @@
           date: new Date().toISOString()
         });
         localStorage.setItem('duelpvp_scores', JSON.stringify(scores));
+
+        // Update quest progress
+        updateQuestProgress('daily_play_3');
+        updateQuestProgress('weekly_play_20');
+
+        // Check for fast time quests
+        if (bestTime < 300) {
+          updateQuestProgress('daily_fast_time');
+        }
+        if (bestTime < 250) {
+          updateQuestProgress('weekly_sub_250');
+        }
+
+        // Auto-complete login quest on first game
+        updateQuestProgress('daily_login');
+
       } catch (e) {}
     }
     
@@ -1805,7 +2201,218 @@
       const ctx = canvas.getContext('2d');
       drawChart(ctx, false);
     }
-    
+
+    // Quest System Data and Functions
+    const QUESTS = {
+      daily: [
+        {id: 'daily_play_3', name: 'Speed Demon', desc: 'Play 3 reaction games', target: 3, reward: 500, icon: '⚡'},
+        {id: 'daily_fast_time', name: 'Lightning Reflexes', desc: 'Get a time under 300ms', target: 1, reward: 750, icon: '⏱️'},
+        {id: 'daily_streak_3', name: 'On Fire', desc: 'Win 3 games in a row', target: 3, reward: 600, icon: '🔥'},
+        {id: 'daily_login', name: 'Daily Warrior', desc: 'Login to the arena', target: 1, reward: 250, icon: '🗡️'}
+      ],
+      weekly: [
+        {id: 'weekly_play_20', name: 'Arena Regular', desc: 'Play 20 reaction games', target: 20, reward: 2500, icon: '🎮'},
+        {id: 'weekly_top_10', name: 'Elite Fighter', desc: 'Reach top 10 on leaderboard', target: 1, reward: 5000, icon: '🏆'},
+        {id: 'weekly_sub_250', name: 'Reflex Master', desc: 'Get 5 times under 250ms', target: 5, reward: 3000, icon: '⚡'},
+        {id: 'weekly_shop', name: 'Merchant', desc: 'Buy 3 items from shop', target: 3, reward: 1500, icon: '🛒'}
+      ]
+    };
+
+    function loadQuests(type) {
+      const questGrid = document.getElementById('questGrid');
+      const email = localStorage.getItem('duelpvp_email') || 'anonymous';
+      let questProgress = JSON.parse(localStorage.getItem(`duelpvp_quests_${email}`) || '{}');
+
+      // Reset daily quests if needed
+      const lastDaily = localStorage.getItem(`duelpvp_last_daily_${email}`);
+      const today = new Date().toDateString();
+      if (lastDaily !== today) {
+        Object.keys(questProgress).forEach(key => {
+          if (key.startsWith('daily_')) delete questProgress[key];
+        });
+        localStorage.setItem(`duelpvp_last_daily_${email}`, today);
+      }
+
+      questGrid.innerHTML = '';
+      const quests = type === 'completed'
+        ? [...QUESTS.daily, ...QUESTS.weekly].filter(q => (questProgress[q.id] || 0) >= q.target)
+        : QUESTS[type] || QUESTS.daily;
+
+      quests.forEach(quest => {
+        const progress = questProgress[quest.id] || 0;
+        const completed = progress >= quest.target;
+        const claimed = questProgress[`${quest.id}_claimed`] || false;
+
+        const card = document.createElement('div');
+        card.className = `quest-card ${completed ? 'completed' : ''}`;
+        card.innerHTML = `
+          <div class="quest-name"><span class="quest-icon">${quest.icon}</span> ${quest.name}</div>
+          <div class="quest-desc">${quest.desc}</div>
+          <div class="quest-progress">
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:${Math.min(100, (progress/quest.target)*100)}%"></div>
+            </div>
+            <div class="progress-text">${progress} / ${quest.target}</div>
+          </div>
+          <div class="quest-reward">
+            💰 ${quest.reward} GP ${completed && !claimed ? '• <span style="color:var(--gold)">CLAIM!</span>' : completed ? '✓ CLAIMED' : ''}
+          </div>
+        `;
+
+        if (completed && !claimed) {
+          card.style.cursor = 'pointer';
+          card.addEventListener('click', () => claimQuestReward(quest.id, quest.reward));
+        }
+
+        questGrid.appendChild(card);
+      });
+
+      if (quests.length === 0) {
+        questGrid.innerHTML = '<div class="no-data">No quests available</div>';
+      }
+    }
+
+    function claimQuestReward(questId, reward) {
+      const email = localStorage.getItem('duelpvp_email') || 'anonymous';
+      let questProgress = JSON.parse(localStorage.getItem(`duelpvp_quests_${email}`) || '{}');
+
+      if (questProgress[`${questId}_claimed`]) return;
+
+      questProgress[`${questId}_claimed`] = true;
+      localStorage.setItem(`duelpvp_quests_${email}`, JSON.stringify(questProgress));
+
+      // Add GP
+      let gp = parseInt(localStorage.getItem(`duelpvp_gp_${email}`) || '0');
+      gp += reward;
+      localStorage.setItem(`duelpvp_gp_${email}`, gp.toString());
+
+      // Reload quests
+      const activeTab = document.querySelector('.quest-tab.active').getAttribute('data-quest-tab');
+      loadQuests(activeTab);
+
+      // Show notification
+      alert(`Quest completed! +${reward} GP`);
+    }
+
+    function updateQuestProgress(questId, amount = 1) {
+      const email = localStorage.getItem('duelpvp_email') || 'anonymous';
+      let questProgress = JSON.parse(localStorage.getItem(`duelpvp_quests_${email}`) || '{}');
+      questProgress[questId] = (questProgress[questId] || 0) + amount;
+      localStorage.setItem(`duelpvp_quests_${email}`, JSON.stringify(questProgress));
+    }
+
+    // Inventory and Shop System
+    const SHOP_ITEMS = [
+      {id: 'sword_bronze', name: 'Bronze Sword', desc: 'A sturdy starter weapon', price: 1000, icon: '🗡️', type: 'weapon'},
+      {id: 'sword_iron', name: 'Iron Sword', desc: 'Sharper than bronze', price: 2500, icon: '⚔️', type: 'weapon'},
+      {id: 'sword_steel', name: 'Steel Sword', desc: 'Forged with precision', price: 5000, icon: '🗡️', type: 'weapon'},
+      {id: 'armor_leather', name: 'Leather Armor', desc: 'Basic protection', price: 1500, icon: '🛡️', type: 'armor'},
+      {id: 'armor_chain', name: 'Chain Mail', desc: 'Medium protection', price: 3500, icon: '🛡️', type: 'armor'},
+      {id: 'armor_plate', name: 'Plate Armor', desc: 'Heavy protection', price: 7500, icon: '🛡️', type: 'armor'},
+      {id: 'potion_health', name: 'Health Potion', desc: 'Restores vitality', price: 500, icon: '🧪', type: 'consumable'},
+      {id: 'potion_speed', name: 'Speed Potion', desc: 'Boosts reflexes', price: 750, icon: '⚗️', type: 'consumable'},
+      {id: 'cape_red', name: 'Red Cape', desc: 'Show off your style', price: 2000, icon: '🎽', type: 'cosmetic'},
+      {id: 'cape_blue', name: 'Blue Cape', desc: 'Cool and collected', price: 2000, icon: '🎽', type: 'cosmetic'},
+      {id: 'pet_dog', name: 'War Hound', desc: 'A loyal companion', price: 10000, icon: '🐕', type: 'pet'},
+      {id: 'pet_dragon', name: 'Baby Dragon', desc: 'Rare and powerful', price: 50000, icon: '🐉', type: 'pet'}
+    ];
+
+    function loadInventory() {
+      const email = localStorage.getItem('duelpvp_email') || 'anonymous';
+      const gp = parseInt(localStorage.getItem(`duelpvp_gp_${email}`) || '0');
+      const inventory = JSON.parse(localStorage.getItem(`duelpvp_inventory_${email}`) || '[]');
+
+      // Update GP display
+      document.getElementById('gpDisplay').textContent = `GP: ${gp.toLocaleString()}`;
+
+      // Render inventory
+      const inventoryGrid = document.getElementById('inventoryGrid');
+      inventoryGrid.innerHTML = '';
+
+      // Show first 28 slots (like RuneScape)
+      for (let i = 0; i < 28; i++) {
+        const item = inventory[i];
+        const slot = document.createElement('div');
+        slot.className = item ? 'inventory-slot' : 'inventory-slot empty';
+
+        if (item) {
+          const shopItem = SHOP_ITEMS.find(si => si.id === item.id);
+          slot.innerHTML = `
+            <div class="item-icon">${shopItem.icon}</div>
+            <div class="item-name">${shopItem.name}</div>
+            ${item.count > 1 ? `<div class="item-count">${item.count}</div>` : ''}
+          `;
+        } else {
+          slot.innerHTML = '<div style="opacity:0.3">━</div>';
+        }
+
+        inventoryGrid.appendChild(slot);
+      }
+
+      // Render shop
+      const shopGrid = document.getElementById('shopGrid');
+      shopGrid.innerHTML = '';
+
+      SHOP_ITEMS.forEach(item => {
+        const shopCard = document.createElement('div');
+        shopCard.className = 'shop-item';
+        shopCard.innerHTML = `
+          <div class="item-icon">${item.icon}</div>
+          <div class="shop-item-name">${item.name}</div>
+          <div class="shop-item-desc">${item.desc}</div>
+          <div class="shop-item-price">💰 ${item.price.toLocaleString()} GP</div>
+          <button class="buy-btn" ${gp < item.price ? 'disabled' : ''}>BUY</button>
+        `;
+
+        const buyBtn = shopCard.querySelector('.buy-btn');
+        buyBtn.addEventListener('click', () => buyItem(item));
+
+        shopGrid.appendChild(shopCard);
+      });
+    }
+
+    function buyItem(item) {
+      const email = localStorage.getItem('duelpvp_email') || 'anonymous';
+      let gp = parseInt(localStorage.getItem(`duelpvp_gp_${email}`) || '0');
+      let inventory = JSON.parse(localStorage.getItem(`duelpvp_inventory_${email}`) || '[]');
+
+      if (gp < item.price) {
+        alert('Not enough GP!');
+        return;
+      }
+
+      // Check if inventory is full
+      if (inventory.length >= 28 && !inventory.find(i => i.id === item.id && item.type === 'consumable')) {
+        alert('Inventory full!');
+        return;
+      }
+
+      // Deduct GP
+      gp -= item.price;
+      localStorage.setItem(`duelpvp_gp_${email}`, gp.toString());
+
+      // Add to inventory
+      if (item.type === 'consumable') {
+        const existing = inventory.find(i => i.id === item.id);
+        if (existing) {
+          existing.count++;
+        } else {
+          inventory.push({id: item.id, count: 1});
+        }
+      } else {
+        inventory.push({id: item.id, count: 1});
+      }
+
+      localStorage.setItem(`duelpvp_inventory_${email}`, JSON.stringify(inventory));
+
+      // Update quest progress
+      updateQuestProgress('weekly_shop');
+
+      // Reload
+      loadInventory();
+      alert(`Purchased ${item.name}!`);
+    }
+
     // Initial event listeners
     document.getElementById('joinBtn').addEventListener('click', handleJoin);
     document.getElementById('loginLink').addEventListener('click', () => swapContent('login'));
@@ -1820,6 +2427,10 @@
     });
     document.getElementById('backToDashBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('backFromLeaderboardBtn').addEventListener('click', () => swapContent('dashboard'));
+    document.getElementById('backFromQuestsBtn').addEventListener('click', () => swapContent('dashboard'));
+    document.getElementById('backFromInventoryBtn').addEventListener('click', () => swapContent('dashboard'));
+    document.getElementById('viewQuestsBtn').addEventListener('click', () => swapContent('quests'));
+    document.getElementById('viewInventoryBtn').addEventListener('click', () => swapContent('inventory'));
     document.getElementById('startGameBtn').addEventListener('click', startGame);
     document.getElementById('sellButton').addEventListener('click', handleSell);
     document.getElementById('resetGameBtn').addEventListener('click', resetGame);
@@ -1832,6 +2443,16 @@
       });
     });
 
+    // Quest tab switching
+    document.querySelectorAll('.quest-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.quest-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        const questType = this.getAttribute('data-quest-tab');
+        loadQuests(questType);
+      });
+    });
+
     // Add keyboard navigation support
     document.addEventListener('keydown', (e) => {
       // ESC key to go back
@@ -1839,6 +2460,10 @@
         if (gameContent.style.display === 'block') {
           swapContent('dashboard');
         } else if (leaderboardContent.style.display === 'block') {
+          swapContent('dashboard');
+        } else if (questContent.style.display === 'block') {
+          swapContent('dashboard');
+        } else if (inventoryContent.style.display === 'block') {
           swapContent('dashboard');
         }
       }
