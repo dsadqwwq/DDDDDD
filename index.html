@@ -5970,6 +5970,26 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     // OVEN INVESTMENT SYSTEM
     // ===============================================
 
+    // Helper functions for GP
+    function getUserGP() {
+      return parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+    }
+
+    async function updateUserGP(amount) {
+      const currentGP = getUserGP();
+      const newGP = currentGP + amount;
+      localStorage.setItem('duelpvp_gp', newGP.toString());
+
+      // Update dashboard display if visible
+      const dashboardGPEl = document.getElementById('dashboardGPBalance');
+      if (dashboardGPEl) {
+        const displayGP = newGP;
+        dashboardGPEl.textContent = displayGP >= 1000000 ? `${(displayGP/1000000).toFixed(1)}M` : displayGP >= 1000 ? `${(displayGP/1000).toFixed(1)}K` : displayGP;
+      }
+
+      return newGP;
+    }
+
     let ovenState = {
       invested: 0,
       lastCompoundTime: null,
@@ -6023,10 +6043,18 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     }
 
     function updateOvenDisplay() {
-      const userGP = getUserGP();
-      document.getElementById('ovenUserBalance').textContent = Math.floor(userGP) + ' GP';
-      document.getElementById('ovenInvested').textContent = Math.floor(ovenState.invested) + ' GP';
-      document.getElementById('ovenCurrentValue').textContent = Math.floor(ovenState.invested) + ' GP';
+      try {
+        const userGP = getUserGP();
+        const balanceEl = document.getElementById('ovenUserBalance');
+        const investedEl = document.getElementById('ovenInvested');
+        const valueEl = document.getElementById('ovenCurrentValue');
+
+        if (balanceEl) balanceEl.textContent = Math.floor(userGP) + ' GP';
+        if (investedEl) investedEl.textContent = Math.floor(ovenState.invested) + ' GP';
+        if (valueEl) valueEl.textContent = Math.floor(ovenState.invested) + ' GP';
+      } catch (e) {
+        console.error('Error updating oven display:', e);
+      }
     }
 
     function startOvenTimer() {
@@ -6035,8 +6063,14 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
         clearInterval(ovenState.timerInterval);
       }
 
+      const timerEl = document.getElementById('ovenTimer');
+      if (!timerEl) {
+        console.error('Timer element not found');
+        return;
+      }
+
       if (ovenState.invested <= 0) {
-        document.getElementById('ovenTimer').textContent = 'No active investment';
+        timerEl.textContent = 'No active investment';
         return;
       }
 
@@ -6060,8 +6094,10 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
           const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
           const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
-          document.getElementById('ovenTimer').textContent =
-            `Next compound in: ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+          const timer = document.getElementById('ovenTimer');
+          if (timer) {
+            timer.textContent = `Next compound in: ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+          }
         }
       }, 1000);
     }
@@ -6080,7 +6116,9 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
 
       // Show notification
       const timer = document.getElementById('ovenTimer');
-      timer.textContent = `🔥 COMPOUNDED! +${Math.floor(profit)} GP`;
+      if (timer) {
+        timer.textContent = `🔥 COMPOUNDED! +${Math.floor(profit)} GP`;
+      }
 
       Toast.success(`Oven compounded! +${Math.floor(profit)} GP`, 'COMPOUND');
 
@@ -6143,7 +6181,9 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       saveOvenState();
       updateOvenDisplay();
 
-      document.getElementById('ovenTimer').textContent = 'No active investment';
+      const timer = document.getElementById('ovenTimer');
+      if (timer) timer.textContent = 'No active investment';
+
       Toast.success(`Withdrawn ${amount} GP from the Oven!`, 'WITHDRAW');
     }
 
