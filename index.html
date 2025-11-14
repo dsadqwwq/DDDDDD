@@ -480,13 +480,38 @@
     color:var(--gold);
   }
 
-  .recent-matches{
-    position:relative;
+  /* Card-based dashboard layout */
+  .dashboard-cards-row{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:20px;
+    margin-bottom:20px;
+  }
+
+  .dashboard-card{
     background:rgba(0,0,0,.3);
     border:1px solid rgba(255,214,77,.2);
     border-radius:8px;
-    padding:16px;
-    margin-bottom:24px;
+    padding:20px;
+    margin-bottom:20px;
+  }
+
+  .card-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:12px;
+    color:var(--gold);
+    margin-bottom:16px;
+    padding-bottom:12px;
+    border-bottom:1px solid rgba(255,214,77,.15);
+  }
+
+  .card-content{
+    font-size:13px;
+    line-height:1.6;
+  }
+
+  .recent-matches{
+    /* Removed redundant styles - now inside dashboard-card */
   }
 
   .recent-matches-content{
@@ -545,10 +570,7 @@
   .loss{background:rgba(244,67,54,.3);color:#F44336;}
 
   .dashboard-inventory{
-    background:rgba(0,0,0,.3);
-    border:1px solid rgba(255,214,77,.2);
-    border-radius:8px;
-    padding:16px;
+    /* Removed redundant styles - now inside dashboard-card */
   }
 
   .section-title{
@@ -664,11 +686,7 @@
   }
 
   .wallet-section{
-    background:rgba(0,0,0,.3);
-    border:1px solid rgba(255,214,77,.2);
-    border-radius:8px;
-    padding:16px;
-    margin-bottom:24px;
+    /* Removed redundant styles - now inside dashboard-card */
   }
 
   .wallet-info{
@@ -2207,6 +2225,21 @@
 
   /* Mobile responsive for new elements */
   @media(max-width:600px){
+    /* Card layout - single column on mobile */
+    .dashboard-cards-row{
+      grid-template-columns:1fr;
+      gap:16px;
+    }
+
+    .dashboard-card{
+      padding:16px;
+      margin-bottom:16px;
+    }
+
+    .card-title{
+      font-size:10px;
+    }
+
     .toast-container{
       top:10px;
       right:10px;
@@ -2314,60 +2347,69 @@
         </div>
       </div>
 
-      <div class="recent-matches">
-        <div class="recent-matches-content">
-          <div class="section-title">RECENT BATTLES</div>
-          <div class="match-list">
-            <div class="match-item">
-              <span>vs. DragonSlayer99</span>
-              <span class="match-result win">WIN</span>
+      <!-- Two-column card layout -->
+      <div class="dashboard-cards-row">
+        <!-- Left column: Quick Actions -->
+        <div class="dashboard-card">
+          <div class="card-title">QUICK ACTIONS</div>
+          <div class="card-content">
+            <button class="action-btn btn-primary" id="playReactionBtn" aria-label="Play reaction game" style="width:100%;margin-bottom:12px;">PLAY REACTION</button>
+            <button class="action-btn btn-secondary" id="viewLeaderboardBtn" aria-label="View global leaderboard" style="width:100%;margin-bottom:12px;">VIEW LEADERBOARD</button>
+            <button class="action-btn btn-secondary" id="viewQuestsBtn" aria-label="View quests" style="width:100%;margin-bottom:12px;">VIEW QUESTS</button>
+            <button class="action-btn btn-secondary" id="viewInventoryBtn" aria-label="View inventory" style="width:100%;margin-bottom:12px;">INVENTORY</button>
+            <button class="action-btn btn-secondary" id="viewShopBtn" aria-label="View shop" style="width:100%;">SHOP</button>
+          </div>
+        </div>
+
+        <!-- Right column: Recent Activity -->
+        <div class="dashboard-card">
+          <div class="card-title">RECENT BATTLES</div>
+          <div class="card-content" style="position:relative;">
+            <div class="recent-matches-content">
+              <div class="match-list">
+                <div class="match-item">
+                  <span>vs. DragonSlayer99</span>
+                  <span class="match-result win">WIN</span>
+                </div>
+                <div class="match-item">
+                  <span>vs. PkMaster420</span>
+                  <span class="match-result win">WIN</span>
+                </div>
+                <div class="match-item">
+                  <span>vs. IronDefender</span>
+                  <span class="match-result loss">LOSS</span>
+                </div>
+                <div class="match-item">
+                  <span>vs. RuneKnight</span>
+                  <span class="match-result win">WIN</span>
+                </div>
+              </div>
             </div>
-            <div class="match-item">
-              <span>vs. PkMaster420</span>
-              <span class="match-result win">WIN</span>
-            </div>
-            <div class="match-item">
-              <span>vs. IronDefender</span>
-              <span class="match-result loss">LOSS</span>
-            </div>
-            <div class="match-item">
-              <span>vs. RuneKnight</span>
-              <span class="match-result win">WIN</span>
+            <div class="coming-soon-overlay">
+              <div class="coming-soon-text">COMING SOON</div>
             </div>
           </div>
         </div>
-        <div class="coming-soon-overlay">
-          <div class="coming-soon-text">COMING SOON</div>
+      </div>
+
+      <!-- Full-width cards -->
+      <div class="dashboard-card">
+        <div class="card-title">INVENTORY</div>
+        <div class="card-content">
+          <div class="dashboard-items-grid" id="dashboardItemsGrid">
+            <!-- Items will be loaded dynamically -->
+          </div>
         </div>
       </div>
 
-      <div class="dashboard-inventory">
-        <div class="section-title">INVENTORY</div>
-        <div class="dashboard-items-grid" id="dashboardItemsGrid">
-          <!-- Items will be loaded dynamically -->
+      <div class="dashboard-card">
+        <div class="card-title">WALLET CONNECTION</div>
+        <div class="card-content">
+          <div class="wallet-info" id="walletInfo">
+            <div class="wallet-status" id="walletStatus">No wallet connected</div>
+            <button class="action-btn btn-secondary" id="connectWalletBtn" style="width:100%;margin-top:12px;">CONNECT WALLET</button>
+          </div>
         </div>
-      </div>
-
-      <div class="wallet-section" id="walletSection">
-        <div class="section-title">WALLET CONNECTION</div>
-        <div class="wallet-info" id="walletInfo">
-          <div class="wallet-status" id="walletStatus">No wallet connected</div>
-          <button class="action-btn btn-secondary" id="connectWalletBtn" style="width:100%;margin-top:12px;">CONNECT WALLET</button>
-        </div>
-      </div>
-
-      <div class="action-buttons">
-        <button class="action-btn btn-primary" id="playReactionBtn" aria-label="Play reaction game">PLAY REACTION</button>
-        <button class="action-btn btn-secondary" id="viewLeaderboardBtn" aria-label="View global leaderboard">VIEW LEADERBOARD</button>
-      </div>
-
-      <div class="action-buttons" style="margin-top:12px;">
-        <button class="action-btn btn-secondary" id="viewQuestsBtn" aria-label="View quests">VIEW QUESTS</button>
-        <button class="action-btn btn-secondary" id="viewInventoryBtn" aria-label="View inventory">INVENTORY</button>
-      </div>
-
-      <div class="action-buttons" style="margin-top:12px;">
-        <button class="action-btn btn-secondary" id="viewShopBtn" aria-label="View shop">SHOP</button>
       </div>
     </div>
 
