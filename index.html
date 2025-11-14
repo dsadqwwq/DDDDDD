@@ -2911,7 +2911,7 @@
 
             <!-- Game Status -->
             <div class="crash-game-status" id="crashGameStatus">
-              Next round starts in <span id="crashCountdown">5</span>s
+              Next round starts in <span id="crashCountdown">3</span>s
             </div>
           </div>
         </div>
@@ -4811,7 +4811,7 @@
       autoCashout: 0,
       hashedIn: false,
       startTime: 0,
-      countdown: 5,
+      countdown: 3, // Reduced from 5 to 3 seconds between rounds
       history: []
     };
 
@@ -4880,13 +4880,16 @@
       crashGameState.phase = 'waiting';
       crashGameState.currentMultiplier = 1.00;
       crashGameState.hashedIn = false;
-      crashGameState.countdown = 5;
+      crashGameState.betAmount = 0; // Reset bet for new round
+      crashGameState.countdown = 3; // Reduced from 5 to 3 seconds
 
       // Generate crash point for next round
       const { seed, hash, crashPoint } = generateCrashPoint();
       crashGameState.seed = seed;
       crashGameState.hash = hash;
       crashGameState.crashPoint = crashPoint;
+
+      console.log('[Crash Game] New round started. Crash point:', crashPoint);
 
       // Display hash
       document.getElementById('crashHash').textContent = hash.substring(0, 32) + '...';
@@ -4897,10 +4900,16 @@
       document.getElementById('crashPlaceBetBtn').disabled = false;
       document.getElementById('crashPlaceBetBtn').textContent = 'PLACE BET';
 
+      // Update GP display
+      updateCrashGPDisplay();
+
       // Countdown phase
       const countdownInterval = setInterval(() => {
         crashGameState.countdown--;
-        document.getElementById('crashCountdown').textContent = crashGameState.countdown;
+        const countdownEl = document.getElementById('crashCountdown');
+        if (countdownEl) {
+          countdownEl.textContent = crashGameState.countdown;
+        }
         document.getElementById('crashGameStatus').innerHTML = `Next round starts in <span id="crashCountdown">${crashGameState.countdown}</span>s`;
 
         if (crashGameState.countdown <= 0) {
@@ -5010,13 +5019,17 @@
         Toast.error(`Lost ${crashGameState.betAmount} GP at ${crashGameState.crashPoint.toFixed(2)}x`, 'CRASHED');
         crashGameState.betAmount = 0;
         updateCrashGPDisplay();
+        updateDashboardStats();
       }
 
       // Add to history
       addToCrashHistory(crashGameState.crashPoint);
 
-      // Reset rocket position
+      console.log('[Crash Game] Crashed at', crashGameState.crashPoint.toFixed(2) + 'x', '- restarting in 2 seconds...');
+
+      // Reset rocket position and start new round
       setTimeout(() => {
+        console.log('[Crash Game] Starting new round...');
         rocket.style.bottom = '20px';
         container.classList.remove('crashed');
         document.getElementById('crashStatusText').style.color = '#a0a8b0';
@@ -5028,7 +5041,7 @@
 
         // Start new round
         startCrashRound();
-      }, 3000);
+      }, 2000); // Reduced from 3000ms to 2000ms
     }
 
     function placeCrashBet() {
