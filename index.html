@@ -2092,11 +2092,7 @@
         return;
       }
 
-      if (!validateAccessCode(code)) {
-        showError('codeError', 'Invalid format. Use: XXXX-XXXX-XXXX');
-        return;
-      }
-
+      // Accept any code - no validation required
       swapContent('register', code);
     }
 
