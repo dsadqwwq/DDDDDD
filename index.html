@@ -1111,6 +1111,185 @@
     font-family:Inter, system-ui, Arial;
   }
 
+  /* Blackjack Game Styles */
+  .blackjack-game-area{
+    max-width:700px;
+    margin:0 auto;
+  }
+
+  .blackjack-bet-section{
+    background:rgba(0,0,0,.3);
+    border:1px solid rgba(255,214,77,.2);
+    border-radius:8px;
+    padding:16px;
+    margin-bottom:20px;
+  }
+
+  .blackjack-bet-row{
+    display:flex;
+    gap:12px;
+    align-items:flex-end;
+  }
+
+  .blackjack-input-group{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+
+  .blackjack-label{
+    font-family:'Press Start 2P', monospace;
+    font-size:9px;
+    color:#a0a8b0;
+    letter-spacing:0.05em;
+  }
+
+  .blackjack-input{
+    padding:10px 12px;
+    background:rgba(0,0,0,.4);
+    border:1px solid rgba(255,214,77,.2);
+    border-radius:6px;
+    color:#e6ecf1;
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+  }
+
+  .blackjack-input:focus{
+    outline:none;
+    border-color:var(--gold);
+    box-shadow:0 0 0 2px rgba(255,214,77,.1);
+  }
+
+  .blackjack-stats-display{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:12px;
+    margin-bottom:20px;
+  }
+
+  .blackjack-stat{
+    background:rgba(0,0,0,.3);
+    border:1px solid rgba(255,214,77,.2);
+    border-radius:8px;
+    padding:12px;
+    text-align:center;
+  }
+
+  .blackjack-stat-label{
+    font-family:'Press Start 2P', monospace;
+    font-size:8px;
+    color:#a0a8b0;
+    margin-bottom:6px;
+  }
+
+  .blackjack-stat-value{
+    font-family:'Press Start 2P', monospace;
+    font-size:14px;
+    color:var(--gold);
+  }
+
+  .blackjack-table{
+    background:rgba(16,24,16,.3);
+    border:2px solid rgba(255,214,77,.2);
+    border-radius:12px;
+    padding:24px;
+    margin-bottom:20px;
+    min-height:300px;
+  }
+
+  .blackjack-hand-section{
+    margin-bottom:24px;
+  }
+
+  .blackjack-hand-section.player{
+    border-top:1px solid rgba(255,214,77,.1);
+    padding-top:24px;
+  }
+
+  .blackjack-hand-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    color:#a0a8b0;
+    margin-bottom:12px;
+    text-align:center;
+  }
+
+  .blackjack-cards{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    flex-wrap:wrap;
+    min-height:80px;
+  }
+
+  .blackjack-card{
+    width:60px;
+    height:84px;
+    background:#fff;
+    border:2px solid #333;
+    border-radius:8px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    font-family:'Press Start 2P', monospace;
+    font-size:18px;
+    box-shadow:0 4px 8px rgba(0,0,0,.3);
+    animation:cardDeal 0.3s ease-out;
+  }
+
+  @keyframes cardDeal{
+    from{
+      opacity:0;
+      transform:translateY(-20px) scale(0.8);
+    }
+    to{
+      opacity:1;
+      transform:translateY(0) scale(1);
+    }
+  }
+
+  .blackjack-card.red{
+    color:#dc143c;
+  }
+
+  .blackjack-card.black{
+    color:#000;
+  }
+
+  .blackjack-card.hidden{
+    background:linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    color:#fff;
+    font-size:24px;
+  }
+
+  .blackjack-card-value{
+    font-size:14px;
+    margin-top:4px;
+  }
+
+  .blackjack-actions{
+    display:flex;
+    gap:12px;
+    margin-bottom:20px;
+  }
+
+  .blackjack-actions .action-btn{
+    flex:1;
+  }
+
+  .blackjack-info{
+    background:rgba(255,214,77,.05);
+    border:1px solid rgba(255,214,77,.15);
+    border-radius:8px;
+    padding:12px;
+    text-align:center;
+    font-size:12px;
+    color:#a0a8b0;
+    font-family:Inter, system-ui, Arial;
+  }
+
   /* Reaction Game Styles */
   .game-container{
     display:none;
@@ -2914,7 +3093,8 @@
           <div class="card-content">
             <button class="action-btn btn-gamble" id="playReactionBtn" aria-label="Play reaction game" style="width:100%;margin-bottom:12px;">REACTION</button>
             <button class="action-btn btn-gamble" id="playCrashBtn" aria-label="Play crash rocket game" style="width:100%;margin-bottom:12px;">CRASH</button>
-            <button class="action-btn btn-gamble" id="playMinesBtn" aria-label="Play mines game" style="width:100%;">MINES</button>
+            <button class="action-btn btn-gamble" id="playMinesBtn" aria-label="Play mines game" style="width:100%;margin-bottom:12px;">MINES</button>
+            <button class="action-btn btn-gamble" id="playBlackjackBtn" aria-label="Play blackjack game" style="width:100%;">BLACKJACK</button>
           </div>
         </div>
       </div>
@@ -3359,6 +3539,73 @@
         </div>
       </div>
     </div>
+
+    <!-- Blackjack Game content (hidden initially) -->
+    <div class="game-container" id="blackjackContent" role="region" aria-label="Blackjack game">
+      <div class="game-header">
+        <div class="game-title">♠️ BLACKJACK</div>
+        <button class="back-btn" id="backFromBlackjackBtn" aria-label="Back to dashboard">BACK</button>
+      </div>
+
+      <div class="blackjack-game-area">
+        <!-- Betting Section -->
+        <div class="blackjack-bet-section">
+          <div class="blackjack-bet-row">
+            <div class="blackjack-input-group">
+              <label class="blackjack-label">BET AMOUNT</label>
+              <input type="number" class="blackjack-input" id="blackjackBetAmount" placeholder="10" min="10" max="10000" value="100">
+            </div>
+            <button class="action-btn btn-invest" id="blackjackDealBtn" style="flex:1;">DEAL</button>
+          </div>
+        </div>
+
+        <!-- Stats Display -->
+        <div class="blackjack-stats-display">
+          <div class="blackjack-stat">
+            <div class="blackjack-stat-label">YOUR HAND</div>
+            <div class="blackjack-stat-value" id="blackjackPlayerValue">0</div>
+          </div>
+          <div class="blackjack-stat">
+            <div class="blackjack-stat-label">DEALER HAND</div>
+            <div class="blackjack-stat-value" id="blackjackDealerValue">0</div>
+          </div>
+          <div class="blackjack-stat">
+            <div class="blackjack-stat-label">BET</div>
+            <div class="blackjack-stat-value" id="blackjackCurrentBet">0 GP</div>
+          </div>
+        </div>
+
+        <!-- Game Table -->
+        <div class="blackjack-table">
+          <!-- Dealer's Hand -->
+          <div class="blackjack-hand-section">
+            <div class="blackjack-hand-title">DEALER</div>
+            <div class="blackjack-cards" id="blackjackDealerCards">
+              <!-- Cards will be added here -->
+            </div>
+          </div>
+
+          <!-- Player's Hand -->
+          <div class="blackjack-hand-section player">
+            <div class="blackjack-hand-title">YOU</div>
+            <div class="blackjack-cards" id="blackjackPlayerCards">
+              <!-- Cards will be added here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="blackjack-actions" id="blackjackActions" style="display:none;">
+          <button class="action-btn btn-invest" id="blackjackHitBtn">HIT</button>
+          <button class="action-btn btn-gamble" id="blackjackStandBtn">STAND</button>
+        </div>
+
+        <!-- Game Info -->
+        <div class="blackjack-info" id="blackjackGameInfo">
+          Place your bet and click DEAL to start. Get closer to 21 than the dealer without going over!
+        </div>
+      </div>
+    </div>
   </main>
 
   <!-- Custom Modal System -->
@@ -3783,6 +4030,7 @@
     const gameContent = document.getElementById('gameContent');
     const ovenContent = document.getElementById('ovenContent');
     const minesContent = document.getElementById('minesContent');
+    const blackjackContent = document.getElementById('blackjackContent');
     const leaderboardContent = document.getElementById('leaderboardContent');
     const questContent = document.getElementById('questContent');
     const inventoryContent = document.getElementById('inventoryContent');
@@ -3823,7 +4071,7 @@
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
       // Find currently visible element
-      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, minesContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent];
+      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent];
       const currentVisible = allContainers.find(el => el.style.display !== 'none' && el.style.display !== '');
 
       // Add fade-out to current visible element
@@ -4115,6 +4363,21 @@
         minesContent.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initMinesGame();
+
+      } else if (newContent === 'blackjack') {
+        panelContent.style.display = 'none';
+        dashboardContent.style.display = 'none';
+        gameContent.style.display = 'none';
+        leaderboardContent.style.display = 'none';
+        questContent.style.display = 'none';
+        inventoryContent.style.display = 'none';
+        shopContent.style.display = 'none';
+        crashContent.style.display = 'none';
+        ovenContent.style.display = 'none';
+        minesContent.style.display = 'none';
+        blackjackContent.style.display = 'block';
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        initBlackjack();
 
       } else if (newContent === 'leaderboard') {
         console.log('Switching to leaderboard...');
@@ -6596,6 +6859,286 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       document.getElementById('minesRevealed').textContent = `${minesGameState.revealedCount} / ${25 - minesGameState.minesCount}`;
     }
 
+    // ===============================================
+    // BLACKJACK GAME SYSTEM
+    // ===============================================
+
+    let blackjackGameState = {
+      isPlaying: false,
+      betAmount: 0,
+      playerCards: [],
+      dealerCards: [],
+      deck: [],
+      dealerHiddenCard: null
+    };
+
+    const suits = ['♠', '♥', '♣', '♦'];
+    const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+
+    function createDeck() {
+      const deck = [];
+      for (let suit of suits) {
+        for (let value of values) {
+          deck.push({ suit, value });
+        }
+      }
+      return shuffle(deck);
+    }
+
+    function shuffle(deck) {
+      for (let i = deck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [deck[i], deck[j]] = [deck[j], deck[i]];
+      }
+      return deck;
+    }
+
+    function getCardValue(card) {
+      if (card.value === 'A') return 11;
+      if (['J', 'Q', 'K'].includes(card.value)) return 10;
+      return parseInt(card.value);
+    }
+
+    function calculateHandValue(cards) {
+      let value = 0;
+      let aces = 0;
+
+      for (let card of cards) {
+        const cardVal = getCardValue(card);
+        value += cardVal;
+        if (card.value === 'A') aces++;
+      }
+
+      // Adjust for aces
+      while (value > 21 && aces > 0) {
+        value -= 10;
+        aces--;
+      }
+
+      return value;
+    }
+
+    function createCardElement(card, hidden = false) {
+      const cardDiv = document.createElement('div');
+      cardDiv.className = 'blackjack-card';
+
+      if (hidden) {
+        cardDiv.classList.add('hidden');
+        cardDiv.textContent = '?';
+        return cardDiv;
+      }
+
+      const isRed = card.suit === '♥' || card.suit === '♦';
+      cardDiv.classList.add(isRed ? 'red' : 'black');
+
+      cardDiv.innerHTML = `
+        <div>${card.suit}</div>
+        <div class="blackjack-card-value">${card.value}</div>
+      `;
+
+      return cardDiv;
+    }
+
+    function dealBlackjack() {
+      const betAmount = parseInt(document.getElementById('blackjackBetAmount').value);
+      const userGP = getUserGP();
+
+      // Validation
+      if (isNaN(betAmount) || betAmount < 10) {
+        Toast.error('Minimum bet is 10 GP', 'INVALID BET');
+        return;
+      }
+
+      if (betAmount > 10000) {
+        Toast.error('Maximum bet is 10,000 GP', 'INVALID BET');
+        return;
+      }
+
+      if (betAmount > userGP) {
+        Toast.error('Insufficient GP', 'INSUFFICIENT FUNDS');
+        return;
+      }
+
+      // Deduct bet
+      updateUserGP(-betAmount);
+
+      // Initialize game
+      blackjackGameState = {
+        isPlaying: true,
+        betAmount: betAmount,
+        playerCards: [],
+        dealerCards: [],
+        deck: createDeck(),
+        dealerHiddenCard: null
+      };
+
+      // Deal initial cards
+      blackjackGameState.playerCards.push(blackjackGameState.deck.pop());
+      blackjackGameState.dealerCards.push(blackjackGameState.deck.pop());
+      blackjackGameState.playerCards.push(blackjackGameState.deck.pop());
+      blackjackGameState.dealerHiddenCard = blackjackGameState.deck.pop();
+
+      // Update UI
+      updateBlackjackDisplay();
+      document.getElementById('blackjackActions').style.display = 'flex';
+      document.getElementById('blackjackDealBtn').disabled = true;
+      document.getElementById('blackjackBetAmount').disabled = true;
+
+      // Check for instant blackjack
+      const playerValue = calculateHandValue(blackjackGameState.playerCards);
+      if (playerValue === 21) {
+        setTimeout(() => blackjackStand(), 500);
+      }
+    }
+
+    function blackjackHit() {
+      if (!blackjackGameState.isPlaying) return;
+
+      // Deal card to player
+      blackjackGameState.playerCards.push(blackjackGameState.deck.pop());
+      updateBlackjackDisplay();
+
+      const playerValue = calculateHandValue(blackjackGameState.playerCards);
+
+      // Check for bust
+      if (playerValue > 21) {
+        endBlackjack('bust');
+      }
+    }
+
+    function blackjackStand() {
+      if (!blackjackGameState.isPlaying) return;
+
+      // Reveal dealer's hidden card
+      blackjackGameState.dealerCards.push(blackjackGameState.dealerHiddenCard);
+      blackjackGameState.dealerHiddenCard = null;
+      updateBlackjackDisplay();
+
+      // Dealer must hit until 17 or higher
+      const dealerPlay = () => {
+        const dealerValue = calculateHandValue(blackjackGameState.dealerCards);
+
+        if (dealerValue < 17) {
+          setTimeout(() => {
+            blackjackGameState.dealerCards.push(blackjackGameState.deck.pop());
+            updateBlackjackDisplay();
+            dealerPlay();
+          }, 800);
+        } else {
+          // Determine winner
+          setTimeout(() => {
+            determineBlackjackWinner();
+          }, 500);
+        }
+      };
+
+      dealerPlay();
+    }
+
+    function determineBlackjackWinner() {
+      const playerValue = calculateHandValue(blackjackGameState.playerCards);
+      const dealerValue = calculateHandValue(blackjackGameState.dealerCards);
+
+      if (dealerValue > 21) {
+        endBlackjack('dealerBust');
+      } else if (playerValue > dealerValue) {
+        endBlackjack('win');
+      } else if (playerValue < dealerValue) {
+        endBlackjack('lose');
+      } else {
+        endBlackjack('push');
+      }
+    }
+
+    function endBlackjack(result) {
+      blackjackGameState.isPlaying = false;
+
+      let message = '';
+      let winAmount = 0;
+
+      switch(result) {
+        case 'bust':
+          message = `Bust! Lost ${blackjackGameState.betAmount} GP`;
+          Toast.error(message, 'BUST');
+          break;
+        case 'dealerBust':
+          winAmount = blackjackGameState.betAmount * 2;
+          message = `Dealer bust! Won ${winAmount} GP`;
+          updateUserGP(winAmount);
+          Toast.success(message, 'WIN');
+          break;
+        case 'win':
+          winAmount = blackjackGameState.betAmount * 2;
+          message = `You win! Won ${winAmount} GP`;
+          updateUserGP(winAmount);
+          Toast.success(message, 'WIN');
+          break;
+        case 'lose':
+          message = `Dealer wins! Lost ${blackjackGameState.betAmount} GP`;
+          Toast.error(message, 'LOSE');
+          break;
+        case 'push':
+          winAmount = blackjackGameState.betAmount;
+          message = `Push! Bet returned`;
+          updateUserGP(winAmount);
+          Toast.info(message, 'PUSH');
+          break;
+      }
+
+      // Update info display
+      document.getElementById('blackjackGameInfo').textContent = message;
+
+      // Reset UI
+      document.getElementById('blackjackActions').style.display = 'none';
+
+      setTimeout(() => {
+        resetBlackjack();
+      }, 3000);
+    }
+
+    function resetBlackjack() {
+      document.getElementById('blackjackPlayerCards').innerHTML = '';
+      document.getElementById('blackjackDealerCards').innerHTML = '';
+      document.getElementById('blackjackPlayerValue').textContent = '0';
+      document.getElementById('blackjackDealerValue').textContent = '0';
+      document.getElementById('blackjackCurrentBet').textContent = '0 GP';
+      document.getElementById('blackjackGameInfo').textContent = 'Place your bet and click DEAL to start. Get closer to 21 than the dealer without going over!';
+      document.getElementById('blackjackDealBtn').disabled = false;
+      document.getElementById('blackjackBetAmount').disabled = false;
+    }
+
+    function updateBlackjackDisplay() {
+      // Update player cards
+      const playerCardsDiv = document.getElementById('blackjackPlayerCards');
+      playerCardsDiv.innerHTML = '';
+      blackjackGameState.playerCards.forEach(card => {
+        playerCardsDiv.appendChild(createCardElement(card));
+      });
+
+      // Update dealer cards
+      const dealerCardsDiv = document.getElementById('blackjackDealerCards');
+      dealerCardsDiv.innerHTML = '';
+      blackjackGameState.dealerCards.forEach(card => {
+        dealerCardsDiv.appendChild(createCardElement(card));
+      });
+
+      // Add hidden card if exists
+      if (blackjackGameState.dealerHiddenCard) {
+        dealerCardsDiv.appendChild(createCardElement(null, true));
+      }
+
+      // Update values
+      const playerValue = calculateHandValue(blackjackGameState.playerCards);
+      document.getElementById('blackjackPlayerValue').textContent = playerValue;
+
+      const dealerValue = blackjackGameState.dealerHiddenCard
+        ? calculateHandValue(blackjackGameState.dealerCards)
+        : calculateHandValue(blackjackGameState.dealerCards);
+      document.getElementById('blackjackDealerValue').textContent = dealerValue;
+
+      document.getElementById('blackjackCurrentBet').textContent = blackjackGameState.betAmount + ' GP';
+    }
+
     // Initial event listeners
     document.getElementById('joinBtn').addEventListener('click', handleJoin);
     document.getElementById('loginLink').addEventListener('click', () => swapContent('login'));
@@ -6613,6 +7156,10 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       console.log('Play Mines clicked');
       swapContent('mines');
     });
+    document.getElementById('playBlackjackBtn').addEventListener('click', () => {
+      console.log('Play Blackjack clicked');
+      swapContent('blackjack');
+    });
     document.getElementById('openOvenBtn').addEventListener('click', () => {
       console.log('Open Oven clicked');
       swapContent('oven');
@@ -6629,6 +7176,10 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     document.getElementById('backFromMinesBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('minesStartBtn').addEventListener('click', startMinesGame);
     document.getElementById('minesCashoutBtn').addEventListener('click', cashoutMines);
+    document.getElementById('backFromBlackjackBtn').addEventListener('click', () => swapContent('dashboard'));
+    document.getElementById('blackjackDealBtn').addEventListener('click', dealBlackjack);
+    document.getElementById('blackjackHitBtn').addEventListener('click', blackjackHit);
+    document.getElementById('blackjackStandBtn').addEventListener('click', blackjackStand);
     document.getElementById('backFromLeaderboardBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('backFromQuestsBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('backFromInventoryBtn').addEventListener('click', () => swapContent('dashboard'));
