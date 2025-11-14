@@ -800,11 +800,11 @@
   /* Reaction Game Styles */
   .game-container{
     display:none;
-    width:min(680px,92vw);
+    width:min(900px,92vw);
     background:rgba(12,16,20,.10);
     border:2px solid rgba(255,214,77,.3);
     border-radius:12px;
-    padding:24px;
+    padding:20px;
     backdrop-filter:blur(8px);
   }
 
@@ -812,14 +812,14 @@
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:24px;
-    padding-bottom:16px;
+    margin-bottom:16px;
+    padding-bottom:12px;
     border-bottom:1px solid rgba(255,214,77,.2);
   }
 
   .game-title{
     font-family:'Press Start 2P', monospace;
-    font-size:18px;
+    font-size:16px;
     color:var(--gold);
   }
 
@@ -836,6 +836,27 @@
   }
   .back-btn:hover{background:rgba(255,214,77,.2);}
 
+  /* Game layout - sidebar + main */
+  .game-layout{
+    display:grid;
+    grid-template-columns:220px 1fr;
+    gap:20px;
+  }
+
+  .game-sidebar{
+    background:rgba(0,0,0,.3);
+    border:1px solid rgba(255,214,77,.15);
+    border-radius:8px;
+    padding:16px;
+  }
+
+  .game-main{
+    background:rgba(0,0,0,.2);
+    border:1px solid rgba(255,214,77,.15);
+    border-radius:8px;
+    padding:20px;
+  }
+
   .game-area{
     background:rgba(0,0,0,.5);
     border:1px solid rgba(255,214,77,.2);
@@ -846,13 +867,13 @@
 
   .chart-container{
     width:100%;
-    height:240px;
+    height:200px;
     background:rgba(16,20,24,.8);
     border:2px solid rgba(255,214,77,.1);
     border-radius:8px;
     position:relative;
     overflow:hidden;
-    margin-bottom:20px;
+    margin-bottom:16px;
     transition:all 0.2s;
   }
 
@@ -932,15 +953,15 @@
     background:rgba(255,214,77,.05);
     border:1px solid rgba(255,214,77,.2);
     border-radius:8px;
-    padding:16px;
-    margin-bottom:20px;
+    padding:12px;
+    margin-bottom:16px;
   }
 
   .instructions-title{
     font-family:'Press Start 2P', monospace;
-    font-size:12px;
+    font-size:10px;
     color:var(--gold);
-    margin-bottom:12px;
+    margin-bottom:8px;
   }
 
   .instructions-text{
@@ -952,39 +973,39 @@
 
   .attempts-counter{
     display:flex;
-    justify-content:space-between;
+    flex-direction:column;
     align-items:center;
+    gap:6px;
     background:rgba(0,0,0,.3);
     border:1px solid rgba(255,214,77,.2);
     border-radius:8px;
-    padding:12px 16px;
-    margin-bottom:20px;
+    padding:12px;
+    margin-bottom:16px;
   }
 
   .attempts-label{
     font-family:'Press Start 2P', monospace;
-    font-size:11px;
+    font-size:9px;
     color:#a0a8b0;
   }
 
   .attempts-value{
     font-family:'Press Start 2P', monospace;
-    font-size:14px;
+    font-size:16px;
     color:var(--gold);
   }
 
   .results-grid{
     display:grid;
-    grid-template-columns:repeat(5, 1fr);
-    gap:8px;
-    margin-bottom:16px;
+    grid-template-columns:1fr;
+    gap:6px;
   }
 
   .result-card{
     background:rgba(255,214,77,.05);
     border:1px solid rgba(255,214,77,.2);
     border-radius:6px;
-    padding:12px;
+    padding:8px;
     text-align:center;
   }
 
@@ -1400,9 +1421,15 @@
       font-size:11px;
     }
 
+    /* Game layout - stack vertically on mobile */
+    .game-layout{
+      grid-template-columns:1fr;
+      gap:16px;
+    }
+
     /* Chart game */
     .chart-container{
-      height:250px;
+      height:200px;
     }
     .price-display{
       font-size:14px;
@@ -2394,15 +2421,6 @@
 
       <!-- Full-width cards -->
       <div class="dashboard-card">
-        <div class="card-title">INVENTORY</div>
-        <div class="card-content">
-          <div class="dashboard-items-grid" id="dashboardItemsGrid">
-            <!-- Items will be loaded dynamically -->
-          </div>
-        </div>
-      </div>
-
-      <div class="dashboard-card">
         <div class="card-title">WALLET CONNECTION</div>
         <div class="card-content">
           <div class="wallet-info" id="walletInfo">
@@ -2563,37 +2581,43 @@
         <button class="back-btn" id="backToDashBtn" aria-label="Back to dashboard">BACK</button>
       </div>
 
-      <div class="instructions">
-        <div class="instructions-title">HOW TO PLAY</div>
-        <div class="instructions-text">
-          Watch the chart closely. When it turns RED and starts dropping, hit SELL as fast as you can! 
-          You have 5 attempts. Your best time will be recorded on the leaderboard.
-        </div>
-      </div>
+      <div class="game-layout">
+        <!-- Left sidebar with instructions -->
+        <div class="game-sidebar">
+          <div class="instructions">
+            <div class="instructions-title">HOW TO PLAY</div>
+            <div class="instructions-text">
+              Watch the chart closely. When it turns RED and starts dropping, hit SELL as fast as you can!
+              You have 5 attempts. Your best time will be recorded on the leaderboard.
+            </div>
+          </div>
 
-      <div class="attempts-counter">
-        <span class="attempts-label">ATTEMPTS REMAINING</span>
-        <span class="attempts-value" id="attemptsLeft">5 / 5</span>
-      </div>
+          <div class="attempts-counter">
+            <span class="attempts-label">ATTEMPTS</span>
+            <span class="attempts-value" id="attemptsLeft">5 / 5</span>
+          </div>
 
-      <div class="results-grid" id="resultsGrid">
-        <!-- Results will be added here dynamically -->
-      </div>
-
-      <div class="game-area">
-        <div class="game-status" id="gameStatus">Click START to begin</div>
-        
-        <div class="chart-container" id="chartContainer">
-          <canvas class="canvas-chart" id="chartCanvas"></canvas>
-          <div class="price-display" id="priceDisplay">$42,156</div>
+          <div class="results-grid" id="resultsGrid">
+            <!-- Results will be added here dynamically -->
+          </div>
         </div>
 
-        <button class="sell-button" id="sellButton" disabled>SELL</button>
-      </div>
+        <!-- Main game area -->
+        <div class="game-main">
+          <div class="game-status" id="gameStatus">Click START to begin</div>
 
-      <div class="action-buttons" style="margin-top:20px;">
-        <button class="action-btn btn-primary" id="startGameBtn">START GAME</button>
-        <button class="action-btn btn-secondary" id="resetGameBtn">RESET</button>
+          <div class="chart-container" id="chartContainer">
+            <canvas class="canvas-chart" id="chartCanvas"></canvas>
+            <div class="price-display" id="priceDisplay">$42,156</div>
+          </div>
+
+          <button class="sell-button" id="sellButton" disabled>SELL</button>
+
+          <div class="action-buttons" style="margin-top:16px;">
+            <button class="action-btn btn-primary" id="startGameBtn">START GAME</button>
+            <button class="action-btn btn-secondary" id="resetGameBtn">RESET</button>
+          </div>
+        </div>
       </div>
     </div>
   </main>
