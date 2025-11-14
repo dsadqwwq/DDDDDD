@@ -2880,16 +2880,19 @@
           <div class="input-group">
             <label class="input-label">Email Address</label>
             <input id="registerEmail" class="input-field" type="email" placeholder="name@example.com" autocomplete="email">
+            <div class="error-msg" id="emailError"></div>
           </div>
 
           <div class="input-group">
             <label class="input-label">Password</label>
             <input id="registerPass" class="input-field" type="password" placeholder="Enter your password" autocomplete="new-password">
+            <div class="error-msg" id="passError"></div>
           </div>
 
           <div class="input-group">
             <label class="input-label">Confirm Password</label>
             <input id="registerPassConfirm" class="input-field" type="password" placeholder="Confirm your password" autocomplete="new-password">
+            <div class="error-msg" id="passConfirmError"></div>
           </div>
 
           <div class="input-group">
@@ -2898,6 +2901,7 @@
               <input id="registerCode" class="input-field" type="text" placeholder="XXXX-XXXX-XXXX" autocomplete="off" value="${data || ''}">
               <button class="btn-submit" id="registerBtn">CREATE ACCOUNT</button>
             </div>
+            <div class="error-msg" id="codeError"></div>
           </div>
 
           <div class="helper">
@@ -2915,6 +2919,16 @@
             swapContent('login');
           }
         });
+
+        // Clear errors on input
+        document.getElementById('registerEmail').addEventListener('input', () => clearError('emailError'));
+        document.getElementById('registerPass').addEventListener('input', () => {
+          clearError('passError');
+          clearError('passConfirmError');
+        });
+        document.getElementById('registerPassConfirm').addEventListener('input', () => clearError('passConfirmError'));
+        document.getElementById('registerCode').addEventListener('input', () => clearError('codeError'));
+
         // Allow enter key to submit
         document.getElementById('registerPassConfirm').addEventListener('keypress', (e) => {
           if (e.key === 'Enter') handleRegister();
@@ -2939,6 +2953,7 @@
 
           <div class="input-group">
             <input id="warriorName" class="warrior-input" type="text" placeholder="Enter warrior name" maxlength="16" autocomplete="off">
+            <div class="error-msg" id="warriorNameError"></div>
           </div>
 
           <div class="input-group">
@@ -2952,6 +2967,7 @@
 
         // Re-attach event listeners
         document.getElementById('confirmNameBtn').addEventListener('click', handleNameWarrior);
+        document.getElementById('warriorName').addEventListener('input', () => clearError('warriorNameError'));
         document.getElementById('warriorName').addEventListener('keypress', (e) => {
           if (e.key === 'Enter') handleNameWarrior();
         });
@@ -3156,31 +3172,68 @@
       swapContent('dashboard');
     }
 
+    // Helper functions for inline error messages
+    function showError(elementId, message) {
+      const errorElement = document.getElementById(elementId);
+      if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.classList.add('show');
+      }
+    }
+
+    function clearError(elementId) {
+      const errorElement = document.getElementById(elementId);
+      if (errorElement) {
+        errorElement.textContent = '';
+        errorElement.classList.remove('show');
+      }
+    }
+
+    function clearAllErrors() {
+      ['emailError', 'passError', 'passConfirmError', 'codeError', 'warriorNameError'].forEach(clearError);
+    }
+
     function handleRegister() {
       const email = document.getElementById('registerEmail').value.trim();
       const pass = document.getElementById('registerPass').value.trim();
       const passConfirm = document.getElementById('registerPassConfirm').value.trim();
       const code = document.getElementById('registerCode').value.trim();
 
-      if (!email || !pass || !passConfirm || !code) {
-        Modal.alert('Please fill in all fields', 'Incomplete Form');
-        return;
+      // Clear all previous errors
+      clearAllErrors();
+
+      let hasError = false;
+
+      if (!email) {
+        showError('emailError', 'Email is required');
+        hasError = true;
+      } else if (!validateEmail(email)) {
+        showError('emailError', 'Please enter a valid email address');
+        hasError = true;
       }
 
-      if (!validateEmail(email)) {
-        Modal.alert('Please enter a valid email address', 'Invalid Email');
-        return;
+      if (!pass) {
+        showError('passError', 'Password is required');
+        hasError = true;
+      } else if (pass.length < 8) {
+        showError('passError', 'Password must be at least 8 characters');
+        hasError = true;
       }
 
-      if (pass !== passConfirm) {
-        Modal.alert('Passwords do not match', 'Password Mismatch');
-        return;
+      if (!passConfirm) {
+        showError('passConfirmError', 'Please confirm your password');
+        hasError = true;
+      } else if (pass !== passConfirm) {
+        showError('passConfirmError', 'Passwords do not match');
+        hasError = true;
       }
 
-      if (pass.length < 8) {
-        Modal.alert('Password must be at least 8 characters', 'Weak Password');
-        return;
+      if (!code) {
+        showError('codeError', 'Access code is required');
+        hasError = true;
       }
+
+      if (hasError) return;
 
       // Store email temporarily and show warrior naming screen
       tempRegistrationData.email = email;
@@ -3190,18 +3243,21 @@
     function handleNameWarrior() {
       const warriorName = document.getElementById('warriorName').value.trim();
 
+      // Clear previous errors
+      clearError('warriorNameError');
+
       if (!warriorName) {
-        Modal.alert('Please enter a warrior name', 'Name Required');
+        showError('warriorNameError', 'Warrior name is required');
         return;
       }
 
       if (warriorName.length < 3) {
-        Modal.alert('Warrior name must be at least 3 characters', 'Name Too Short');
+        showError('warriorNameError', 'Must be at least 3 characters');
         return;
       }
 
       if (warriorName.length > 16) {
-        Modal.alert('Warrior name must be 16 characters or less', 'Name Too Long');
+        showError('warriorNameError', 'Must be 16 characters or less');
         return;
       }
 
@@ -3213,6 +3269,7 @@
         document.getElementById('userName').textContent = warriorName.toUpperCase();
         Toast.success(`Welcome to the arena, ${warriorName}!`, 'WARRIOR REGISTERED');
       } catch (e) {
+        // Storage errors are serious - still use modal
         Modal.alert('Failed to save registration. Check browser settings.', 'Storage Error');
         return;
       }
