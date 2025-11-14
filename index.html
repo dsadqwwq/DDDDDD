@@ -145,16 +145,30 @@
   /* Page container */
   .page-container{position:fixed;inset:0;display:grid;place-items:center center;padding:20px;overflow-y:auto; z-index:4}
   
-  /* Modern panel styles matching dashboard */
+  /* Premium glassmorphism panel styles */
   .panel{
     position:relative;
     width:min(520px,92vw);
-    background:rgba(12,16,20,.92);
-    border:2px solid rgba(255,214,77,.3);
-    border-radius:12px;
+    background:rgba(12,16,20,.45);
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:16px;
     padding:32px 28px;
-    backdrop-filter:blur(8px);
-    box-shadow:0 8px 32px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.05);
+    backdrop-filter:blur(20px) saturate(180%);
+    box-shadow:
+      0 8px 32px rgba(0,0,0,.37),
+      0 0 0 1px rgba(255,214,77,.1),
+      inset 0 1px 0 rgba(255,255,255,.15),
+      inset 0 0 20px rgba(255,214,77,.03);
+    transition:all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .panel:hover{
+    transform:translateY(-4px);
+    box-shadow:
+      0 16px 48px rgba(0,0,0,.5),
+      0 0 0 1px rgba(255,214,77,.2),
+      inset 0 1px 0 rgba(255,255,255,.2),
+      inset 0 0 30px rgba(255,214,77,.05);
   }
 
   .panel-header{
@@ -207,14 +221,17 @@
     color:#e6ecf1;
     font-family:'Press Start 2P', monospace;
     font-size:11px;
-    transition:all 0.2s;
+    transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   .input-field:focus{
     outline:none;
     border-color:var(--gold);
     background:rgba(0,0,0,.6);
-    box-shadow:0 0 0 2px rgba(255,214,77,.1);
+    box-shadow:
+      0 0 0 3px rgba(255,214,77,.15),
+      0 0 20px rgba(255,214,77,.1);
+    transform:translateY(-2px);
   }
   
   .input-field::placeholder{
@@ -231,19 +248,39 @@
     font-size:11px;
     font-weight:bold;
     cursor:pointer;
-    transition:all 0.2s;
+    transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     white-space:nowrap;
+    position:relative;
+    overflow:hidden;
   }
-  
+
+  .btn-submit::before{
+    content:'';
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:0;
+    height:0;
+    border-radius:50%;
+    background:rgba(255,255,255,.3);
+    transform:translate(-50%, -50%);
+    transition:width 0.6s, height 0.6s;
+  }
+
+  .btn-submit:active::before{
+    width:300px;
+    height:300px;
+  }
+
   .btn-submit:hover{
     background:var(--gold-hi);
-    transform:translateY(-2px);
-    box-shadow:0 4px 16px rgba(255,214,77,.4);
+    transform:translateY(-3px) scale(1.02);
+    box-shadow:0 8px 24px rgba(255,214,77,.5);
   }
-  
+
   .btn-submit:active{
-    transform:translateY(0);
-    box-shadow:0 2px 8px rgba(255,214,77,.3);
+    transform:translateY(-1px) scale(0.98);
+    box-shadow:0 4px 12px rgba(255,214,77,.3);
   }
 
   .helper{
@@ -268,7 +305,21 @@
     text-shadow:0 0 8px rgba(255,214,77,.5);
   }
   
-  /* Decorative elements */
+  /* Decorative elements with animation */
+  @keyframes decorativeLine{
+    0%{
+      width:0;
+      opacity:0;
+    }
+    50%{
+      opacity:1;
+    }
+    100%{
+      width:100px;
+      opacity:0.8;
+    }
+  }
+
   .panel::before{
     content:'';
     position:absolute;
@@ -279,19 +330,26 @@
     height:1px;
     background:linear-gradient(90deg, transparent, var(--gold), transparent);
     opacity:0.8;
+    animation:decorativeLine 1s ease-out;
   }
 
   .footer{position:fixed;right:20px;bottom:16px;font-size:12px;opacity:.85; z-index:3}
 
-  /* Dashboard specific styles */
+  /* Dashboard specific styles with premium glass */
   .dashboard-content{
     display:none;
     width:min(720px,92vw);
-    background:rgba(12,16,20,.92);
-    border:2px solid rgba(255,214,77,.3);
-    border-radius:12px;
+    background:rgba(12,16,20,.45);
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:16px;
     padding:24px;
-    backdrop-filter:blur(8px);
+    backdrop-filter:blur(20px) saturate(180%);
+    box-shadow:
+      0 8px 32px rgba(0,0,0,.37),
+      0 0 0 1px rgba(255,214,77,.1),
+      inset 0 1px 0 rgba(255,255,255,.15),
+      inset 0 0 20px rgba(255,214,77,.03);
+    transition:all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .dashboard-header{
@@ -327,12 +385,65 @@
     margin-bottom:24px;
   }
 
+  @keyframes slideInUp{
+    from{
+      opacity:0;
+      transform:translateY(20px);
+    }
+    to{
+      opacity:1;
+      transform:translateY(0);
+    }
+  }
+
+  .dashboard-content .stat-card{
+    animation:slideInUp 0.6s ease-out backwards;
+  }
+
+  .dashboard-content .stat-card:nth-child(1){animation-delay:0.1s;}
+  .dashboard-content .stat-card:nth-child(2){animation-delay:0.2s;}
+  .dashboard-content .stat-card:nth-child(3){animation-delay:0.3s;}
+  .dashboard-content .stat-card:nth-child(4){animation-delay:0.4s;}
+
   .stat-card{
-    background:rgba(255,214,77,.05);
-    border:1px solid rgba(255,214,77,.2);
-    border-radius:8px;
+    background:rgba(255,214,77,.08);
+    border:1px solid rgba(255,214,77,.25);
+    border-radius:12px;
     padding:16px;
     text-align:center;
+    backdrop-filter:blur(10px);
+    box-shadow:
+      0 4px 16px rgba(0,0,0,.2),
+      inset 0 1px 0 rgba(255,255,255,.1);
+    transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position:relative;
+    overflow:hidden;
+  }
+
+  .stat-card::before{
+    content:'';
+    position:absolute;
+    top:-50%;
+    left:-50%;
+    width:200%;
+    height:200%;
+    background:radial-gradient(circle, rgba(255,214,77,.15) 0%, transparent 70%);
+    opacity:0;
+    transition:opacity 0.3s;
+  }
+
+  .stat-card:hover{
+    transform:translateY(-6px) scale(1.02);
+    background:rgba(255,214,77,.12);
+    border-color:rgba(255,214,77,.4);
+    box-shadow:
+      0 12px 32px rgba(0,0,0,.3),
+      0 0 20px rgba(255,214,77,.15),
+      inset 0 1px 0 rgba(255,255,255,.15);
+  }
+
+  .stat-card:hover::before{
+    opacity:1;
   }
 
   .stat-label{
@@ -346,6 +457,13 @@
     font-family:'Press Start 2P', monospace;
     font-size:18px;
     color:var(--gold);
+    text-shadow:0 0 15px rgba(255,214,77,.3);
+    transition:all 0.3s;
+  }
+
+  .stat-card:hover .stat-value{
+    transform:scale(1.1);
+    text-shadow:0 0 25px rgba(255,214,77,.5);
   }
 
   .recent-matches{
@@ -378,6 +496,13 @@
     border-radius:4px;
     font-family:'Press Start 2P', monospace;
     font-size:10px;
+    transition:all 0.2s;
+  }
+
+  .match-item:hover{
+    background:rgba(255,214,77,.08);
+    border-color:rgba(255,214,77,.2);
+    transform:translateX(4px);
   }
 
   .match-result{
@@ -401,8 +526,23 @@
     font-size:11px;
     border-radius:8px;
     cursor:pointer;
-    transition:all 0.2s;
+    transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border:2px solid;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .action-btn::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(45deg, transparent 30%, rgba(255,255,255,.1) 50%, transparent 70%);
+    transform:translateX(-100%);
+    transition:transform 0.6s;
+  }
+
+  .action-btn:hover::after{
+    transform:translateX(100%);
   }
 
   .btn-primary{
@@ -412,8 +552,12 @@
   }
   .btn-primary:hover{
     background:var(--gold-hi);
-    transform:translateY(-2px);
-    box-shadow:0 4px 12px rgba(255,214,77,.3);
+    transform:translateY(-3px) scale(1.02);
+    box-shadow:0 8px 20px rgba(255,214,77,.4);
+  }
+
+  .btn-primary:active{
+    transform:translateY(-1px) scale(0.98);
   }
 
   .btn-secondary{
@@ -422,8 +566,14 @@
     color:var(--gold);
   }
   .btn-secondary:hover{
-    background:rgba(255,214,77,.1);
-    transform:translateY(-2px);
+    background:rgba(255,214,77,.15);
+    border-color:var(--gold);
+    transform:translateY(-3px) scale(1.02);
+    box-shadow:0 8px 20px rgba(255,214,77,.2);
+  }
+
+  .btn-secondary:active{
+    transform:translateY(-1px) scale(0.98);
   }
 
   /* Page transitions */
@@ -435,15 +585,21 @@
     to{opacity:1;transform:translateY(0);}
   }
 
-  /* Reaction Game Styles */
+  /* Reaction Game Styles with premium glass */
   .game-container{
     display:none;
     width:min(680px,92vw);
-    background:rgba(12,16,20,.92);
-    border:2px solid rgba(255,214,77,.3);
-    border-radius:12px;
+    background:rgba(12,16,20,.45);
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:16px;
     padding:24px;
-    backdrop-filter:blur(8px);
+    backdrop-filter:blur(20px) saturate(180%);
+    box-shadow:
+      0 8px 32px rgba(0,0,0,.37),
+      0 0 0 1px rgba(255,214,77,.1),
+      inset 0 1px 0 rgba(255,255,255,.15),
+      inset 0 0 20px rgba(255,214,77,.03);
+    transition:all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .game-header{
@@ -624,11 +780,25 @@
     border-radius:6px;
     padding:12px;
     text-align:center;
+    transition:all 0.3s;
+    animation:slideInUp 0.4s ease-out backwards;
+  }
+
+  .result-card:hover{
+    transform:translateY(-4px) scale(1.05);
+    background:rgba(255,214,77,.1);
+    box-shadow:0 8px 16px rgba(0,0,0,.2);
   }
 
   .result-card.best{
     background:rgba(76,175,80,.1);
     border-color:rgba(76,175,80,.4);
+    box-shadow:0 0 20px rgba(76,175,80,.2);
+  }
+
+  .result-card.best:hover{
+    background:rgba(76,175,80,.15);
+    box-shadow:0 8px 24px rgba(76,175,80,.3);
   }
 
   .result-attempt{
@@ -810,7 +980,7 @@
     const panelContent = document.getElementById('panelContent');
     const dashboardContent = document.getElementById('dashboardContent');
     const gameContent = document.getElementById('gameContent');
-    
+
     // Game variables
     let gameState = {
       attempts: [],
@@ -821,6 +991,70 @@
       reactionTimer: null,
       chartAnimation: null
     };
+
+    // Animated counter function
+    function animateCounter(element, target, duration = 1500, suffix = '') {
+      const start = 0;
+      const startTime = performance.now();
+      const isDecimal = target.toString().includes('.');
+
+      function updateCounter(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // Easing function (easeOutCubic)
+        const easeProgress = 1 - Math.pow(1 - progress, 3);
+
+        const current = start + (target - start) * easeProgress;
+
+        if (isDecimal) {
+          element.textContent = current.toFixed(1) + suffix;
+        } else {
+          element.textContent = Math.floor(current) + suffix;
+        }
+
+        if (progress < 1) {
+          requestAnimationFrame(updateCounter);
+        } else {
+          element.textContent = target + suffix;
+        }
+      }
+
+      requestAnimationFrame(updateCounter);
+    }
+
+    // Function to animate all dashboard stats
+    function animateDashboardStats() {
+      const statValues = document.querySelectorAll('.stat-value');
+      const stats = [
+        { value: 342, suffix: '' },
+        { value: 7, suffix: '' },
+        { value: 127, suffix: '', prefix: '#' },
+        { value: 2.3, suffix: 'M' }
+      ];
+
+      statValues.forEach((element, index) => {
+        if (stats[index]) {
+          const { value, suffix, prefix } = stats[index];
+          setTimeout(() => {
+            if (prefix) {
+              const tempDiv = document.createElement('span');
+              element.parentNode.replaceChild(tempDiv, element);
+              tempDiv.className = element.className;
+
+              animateCounter(tempDiv, value, 1500, '');
+
+              // Add prefix after animation
+              setTimeout(() => {
+                tempDiv.textContent = prefix + tempDiv.textContent;
+              }, 1600);
+            } else {
+              animateCounter(element, value, 1500, suffix);
+            }
+          }, index * 100); // Stagger the animations
+        }
+      });
+    }
     
     // Helper function to swap content with fade animation
     function swapContent(newContent) {
@@ -898,7 +1132,12 @@
         dashboardContent.style.display = 'block';
         gameContent.style.display = 'none';
         dashboardContent.classList.add('fade-in');
-        
+
+        // Trigger animated counters after a short delay
+        setTimeout(() => {
+          animateDashboardStats();
+        }, 200);
+
       } else if (newContent === 'game') {
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'none';
