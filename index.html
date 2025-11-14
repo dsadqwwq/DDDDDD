@@ -1628,6 +1628,485 @@
     color:rgba(255,255,255,.3);
     cursor:not-allowed;
   }
+
+  /* ===== CUSTOM MODAL SYSTEM ===== */
+  .modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.85);
+    backdrop-filter:blur(8px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+    animation:fadeIn 0.2s ease-out;
+  }
+
+  .modal-overlay.show{
+    display:flex;
+  }
+
+  .modal-container{
+    background:rgba(12,16,20,0.95);
+    border:2px solid var(--gold);
+    border-radius:12px;
+    max-width:480px;
+    width:90%;
+    box-shadow:0 20px 60px rgba(0,0,0,0.8), 0 0 40px rgba(255,214,77,0.3);
+    animation:modalSlideIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    overflow:hidden;
+  }
+
+  @keyframes modalSlideIn{
+    0%{
+      opacity:0;
+      transform:scale(0.8) translateY(-40px);
+    }
+    100%{
+      opacity:1;
+      transform:scale(1) translateY(0);
+    }
+  }
+
+  .modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 24px;
+    border-bottom:1px solid rgba(255,214,77,0.2);
+    background:rgba(255,214,77,0.05);
+  }
+
+  .modal-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:14px;
+    color:var(--gold);
+    text-shadow:0 0 10px rgba(255,214,77,0.5);
+  }
+
+  .modal-close{
+    background:none;
+    border:none;
+    color:var(--gold);
+    font-size:32px;
+    line-height:1;
+    cursor:pointer;
+    padding:0;
+    width:32px;
+    height:32px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:all 0.2s;
+    border-radius:4px;
+  }
+
+  .modal-close:hover{
+    background:rgba(255,214,77,0.1);
+    transform:scale(1.1);
+  }
+
+  .modal-body{
+    padding:24px;
+    font-family:Inter, system-ui, Arial;
+    font-size:14px;
+    line-height:1.6;
+    color:#e6ecf1;
+    white-space:pre-wrap;
+  }
+
+  .modal-actions{
+    display:flex;
+    gap:12px;
+    padding:20px 24px;
+    background:rgba(0,0,0,0.2);
+    border-top:1px solid rgba(255,214,77,0.1);
+  }
+
+  .modal-btn{
+    flex:1;
+    padding:12px 24px;
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    border:2px solid;
+    border-radius:6px;
+    cursor:pointer;
+    transition:all 0.2s;
+    text-transform:uppercase;
+  }
+
+  .modal-btn-primary{
+    background:var(--gold);
+    border-color:var(--gold-hi);
+    color:#000;
+    box-shadow:0 4px 12px rgba(255,214,77,0.3);
+  }
+
+  .modal-btn-primary:hover{
+    background:var(--gold-hi);
+    transform:translateY(-2px);
+    box-shadow:0 6px 20px rgba(255,214,77,0.5);
+  }
+
+  .modal-btn-primary:active{
+    transform:translateY(0);
+  }
+
+  .modal-btn-secondary{
+    background:transparent;
+    border-color:rgba(255,214,77,0.3);
+    color:var(--gold);
+  }
+
+  .modal-btn-secondary:hover{
+    background:rgba(255,214,77,0.1);
+    border-color:var(--gold);
+  }
+
+  /* ===== TOAST NOTIFICATION SYSTEM ===== */
+  .toast-container{
+    position:fixed;
+    top:20px;
+    right:20px;
+    z-index:10000;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    pointer-events:none;
+  }
+
+  .toast{
+    background:rgba(12,16,20,0.95);
+    border:2px solid;
+    border-radius:8px;
+    padding:16px 20px;
+    min-width:300px;
+    max-width:420px;
+    box-shadow:0 8px 32px rgba(0,0,0,0.6);
+    display:flex;
+    align-items:center;
+    gap:12px;
+    pointer-events:auto;
+    animation:toastSlideIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    backdrop-filter:blur(8px);
+  }
+
+  .toast.removing{
+    animation:toastSlideOut 0.3s ease-out forwards;
+  }
+
+  @keyframes toastSlideIn{
+    0%{
+      opacity:0;
+      transform:translateX(400px);
+    }
+    100%{
+      opacity:1;
+      transform:translateX(0);
+    }
+  }
+
+  @keyframes toastSlideOut{
+    0%{
+      opacity:1;
+      transform:translateX(0) scale(1);
+    }
+    100%{
+      opacity:0;
+      transform:translateX(400px) scale(0.8);
+    }
+  }
+
+  .toast-icon{
+    font-size:24px;
+    line-height:1;
+    flex-shrink:0;
+  }
+
+  .toast-content{
+    flex:1;
+  }
+
+  .toast-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    margin-bottom:4px;
+    line-height:1.4;
+  }
+
+  .toast-message{
+    font-family:Inter, system-ui, Arial;
+    font-size:13px;
+    color:#a0a8b0;
+    line-height:1.4;
+  }
+
+  .toast-success{
+    border-color:#4CAF50;
+    background:rgba(76,175,80,0.1);
+  }
+
+  .toast-success .toast-title{
+    color:#4CAF50;
+  }
+
+  .toast-error{
+    border-color:#F44336;
+    background:rgba(244,67,54,0.1);
+  }
+
+  .toast-error .toast-title{
+    color:#F44336;
+  }
+
+  .toast-warning{
+    border-color:#FF9800;
+    background:rgba(255,152,0,0.1);
+  }
+
+  .toast-warning .toast-title{
+    color:#FF9800;
+  }
+
+  .toast-info{
+    border-color:var(--gold);
+    background:rgba(255,214,77,0.1);
+  }
+
+  .toast-info .toast-title{
+    color:var(--gold);
+  }
+
+  /* ===== LOADING OVERLAY ===== */
+  .loading-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.85);
+    backdrop-filter:blur(8px);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    z-index:9998;
+    animation:fadeIn 0.2s ease-out;
+  }
+
+  .loading-spinner{
+    position:relative;
+    width:80px;
+    height:80px;
+  }
+
+  .spinner-ring{
+    position:absolute;
+    width:100%;
+    height:100%;
+    border:4px solid transparent;
+    border-top-color:var(--gold);
+    border-radius:50%;
+    animation:spinnerRotate 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  }
+
+  .spinner-ring:nth-child(1){
+    animation-delay:-0.45s;
+    border-top-color:rgba(255,214,77,1);
+  }
+
+  .spinner-ring:nth-child(2){
+    animation-delay:-0.3s;
+    border-top-color:rgba(255,214,77,0.6);
+  }
+
+  .spinner-ring:nth-child(3){
+    animation-delay:-0.15s;
+    border-top-color:rgba(255,214,77,0.3);
+  }
+
+  @keyframes spinnerRotate{
+    0%{
+      transform:rotate(0deg);
+    }
+    100%{
+      transform:rotate(360deg);
+    }
+  }
+
+  .loading-text{
+    margin-top:24px;
+    font-family:'Press Start 2P', monospace;
+    font-size:12px;
+    color:var(--gold);
+    text-shadow:0 0 10px rgba(255,214,77,0.5);
+    animation:pulse 2s ease-in-out infinite;
+  }
+
+  /* ===== PULSE EFFECTS ===== */
+  @keyframes pulse{
+    0%, 100%{
+      opacity:1;
+      transform:scale(1);
+    }
+    50%{
+      opacity:0.7;
+      transform:scale(1.05);
+    }
+  }
+
+  .pulse{
+    animation:pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulseGlow{
+    0%, 100%{
+      box-shadow:0 0 5px rgba(255,214,77,0.3), 0 0 10px rgba(255,214,77,0.2);
+    }
+    50%{
+      box-shadow:0 0 20px rgba(255,214,77,0.6), 0 0 40px rgba(255,214,77,0.3);
+    }
+  }
+
+  .pulse-glow{
+    animation:pulseGlow 2s ease-in-out infinite;
+  }
+
+  .quest-card.claimable{
+    animation:pulseGlow 2s ease-in-out infinite;
+    cursor:pointer;
+  }
+
+  /* ===== ENHANCED HOVER EFFECTS ===== */
+  .btn-submit, .action-btn, .back-btn, .filter-btn{
+    transition:all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position:relative;
+    overflow:hidden;
+  }
+
+  .btn-submit::before, .action-btn::before, .back-btn::before{
+    content:'';
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:0;
+    height:0;
+    border-radius:50%;
+    background:rgba(255,255,255,0.2);
+    transform:translate(-50%, -50%);
+    transition:width 0.6s, height 0.6s;
+  }
+
+  .btn-submit:active::before, .action-btn:active::before, .back-btn:active::before{
+    width:300px;
+    height:300px;
+  }
+
+  .dashboard-stat{
+    transition:all 0.3s ease;
+  }
+
+  .dashboard-stat:hover{
+    transform:translateY(-4px) scale(1.02);
+    border-color:var(--gold);
+    box-shadow:0 8px 24px rgba(255,214,77,0.2);
+  }
+
+  .quest-card{
+    transition:all 0.3s ease;
+    transform-origin:center;
+  }
+
+  .quest-card:hover:not(.claimable){
+    transform:translateY(-4px);
+    box-shadow:0 8px 24px rgba(255,214,77,0.2);
+  }
+
+  .leaderboard-entry{
+    transition:all 0.2s ease;
+  }
+
+  .leaderboard-entry:hover{
+    background:rgba(255,214,77,0.05);
+    transform:translateX(4px);
+  }
+
+  .shop-item{
+    transition:all 0.3s ease;
+  }
+
+  .shop-item:hover{
+    transform:translateY(-4px) scale(1.02);
+    border-color:var(--gold);
+    box-shadow:0 8px 24px rgba(255,214,77,0.2);
+  }
+
+  .inventory-item{
+    transition:all 0.3s ease;
+  }
+
+  .inventory-item:hover{
+    transform:scale(1.05) rotate(2deg);
+    box-shadow:0 8px 24px rgba(255,214,77,0.3);
+  }
+
+  .podium-item{
+    transition:all 0.3s ease;
+  }
+
+  .podium-item:hover{
+    transform:translateY(-8px) scale(1.03);
+    box-shadow:0 12px 32px rgba(255,214,77,0.3);
+  }
+
+  /* Button press effect */
+  .btn-submit:active, .action-btn:active, .back-btn:active{
+    transform:scale(0.95);
+  }
+
+  /* Fade in animation */
+  @keyframes fadeIn{
+    0%{
+      opacity:0;
+    }
+    100%{
+      opacity:1;
+    }
+  }
+
+  /* Mobile responsive for new elements */
+  @media(max-width:600px){
+    .toast-container{
+      top:10px;
+      right:10px;
+      left:10px;
+    }
+
+    .toast{
+      min-width:unset;
+      width:100%;
+    }
+
+    .modal-container{
+      width:95%;
+      max-width:unset;
+    }
+
+    .modal-title{
+      font-size:11px;
+    }
+
+    .modal-btn{
+      font-size:9px;
+      padding:10px 16px;
+    }
+
+    .loading-spinner{
+      width:60px;
+      height:60px;
+    }
+
+    .loading-text{
+      font-size:10px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -1864,6 +2343,36 @@
     </div>
   </main>
 
+  <!-- Custom Modal System -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-container">
+      <div class="modal-header">
+        <div class="modal-title" id="modalTitle">Confirmation</div>
+        <button class="modal-close" id="modalClose" aria-label="Close modal">×</button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        Are you sure?
+      </div>
+      <div class="modal-actions" id="modalActions">
+        <button class="modal-btn modal-btn-secondary" id="modalCancelBtn">CANCEL</button>
+        <button class="modal-btn modal-btn-primary" id="modalConfirmBtn">CONFIRM</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay" style="display:none;">
+    <div class="loading-spinner">
+      <div class="spinner-ring"></div>
+      <div class="spinner-ring"></div>
+      <div class="spinner-ring"></div>
+    </div>
+    <div class="loading-text" id="loadingText">Loading...</div>
+  </div>
+
   <div class="footer">
     <span>© 2025 Duel PVP</span>
     <a href="https://x.com/YourProject" target="_blank" rel="noopener noreferrer" aria-label="Follow us on X">
@@ -1874,6 +2383,189 @@
   </div>
 
   <script>
+    // ===== MODAL SYSTEM =====
+    const Modal = {
+      overlay: null,
+      title: null,
+      body: null,
+      actions: null,
+      confirmBtn: null,
+      cancelBtn: null,
+      closeBtn: null,
+      resolveCallback: null,
+
+      init() {
+        this.overlay = document.getElementById('modalOverlay');
+        this.title = document.getElementById('modalTitle');
+        this.body = document.getElementById('modalBody');
+        this.actions = document.getElementById('modalActions');
+        this.confirmBtn = document.getElementById('modalConfirmBtn');
+        this.cancelBtn = document.getElementById('modalCancelBtn');
+        this.closeBtn = document.getElementById('modalClose');
+
+        // Close modal handlers
+        this.closeBtn.addEventListener('click', () => this.close(false));
+        this.cancelBtn.addEventListener('click', () => this.close(false));
+        this.confirmBtn.addEventListener('click', () => this.close(true));
+
+        // Close on overlay click
+        this.overlay.addEventListener('click', (e) => {
+          if (e.target === this.overlay) this.close(false);
+        });
+
+        // Close on ESC key
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && this.overlay.classList.contains('show')) {
+            this.close(false);
+          }
+        });
+      },
+
+      show(options) {
+        return new Promise((resolve) => {
+          this.resolveCallback = resolve;
+
+          this.title.textContent = options.title || 'Confirmation';
+          this.body.textContent = options.message || '';
+
+          // Show/hide action buttons based on type
+          if (options.type === 'alert') {
+            this.cancelBtn.style.display = 'none';
+            this.confirmBtn.textContent = 'OK';
+          } else {
+            this.cancelBtn.style.display = 'block';
+            this.confirmBtn.textContent = options.confirmText || 'CONFIRM';
+            this.cancelBtn.textContent = options.cancelText || 'CANCEL';
+          }
+
+          this.overlay.classList.add('show');
+        });
+      },
+
+      close(confirmed) {
+        this.overlay.classList.remove('show');
+        if (this.resolveCallback) {
+          this.resolveCallback(confirmed);
+          this.resolveCallback = null;
+        }
+      },
+
+      alert(message, title = 'Alert') {
+        return this.show({ type: 'alert', message, title });
+      },
+
+      confirm(message, title = 'Confirmation') {
+        return this.show({ type: 'confirm', message, title });
+      }
+    };
+
+    // ===== TOAST NOTIFICATION SYSTEM =====
+    const Toast = {
+      container: null,
+
+      init() {
+        this.container = document.getElementById('toastContainer');
+      },
+
+      show(options) {
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${options.type || 'info'}`;
+
+        const icon = this.getIcon(options.type);
+        const title = options.title || this.getDefaultTitle(options.type);
+
+        toast.innerHTML = `
+          <div class="toast-icon">${icon}</div>
+          <div class="toast-content">
+            <div class="toast-title">${title}</div>
+            ${options.message ? `<div class="toast-message">${options.message}</div>` : ''}
+          </div>
+        `;
+
+        this.container.appendChild(toast);
+
+        // Auto dismiss after duration
+        const duration = options.duration || 3000;
+        setTimeout(() => {
+          this.remove(toast);
+        }, duration);
+
+        return toast;
+      },
+
+      remove(toast) {
+        toast.classList.add('removing');
+        setTimeout(() => {
+          if (toast.parentNode) {
+            toast.parentNode.removeChild(toast);
+          }
+        }, 300);
+      },
+
+      success(message, title) {
+        return this.show({ type: 'success', message, title });
+      },
+
+      error(message, title) {
+        return this.show({ type: 'error', message, title });
+      },
+
+      warning(message, title) {
+        return this.show({ type: 'warning', message, title });
+      },
+
+      info(message, title) {
+        return this.show({ type: 'info', message, title });
+      },
+
+      getIcon(type) {
+        const icons = {
+          success: '✓',
+          error: '✕',
+          warning: '⚠',
+          info: 'ℹ'
+        };
+        return icons[type] || icons.info;
+      },
+
+      getDefaultTitle(type) {
+        const titles = {
+          success: 'SUCCESS',
+          error: 'ERROR',
+          warning: 'WARNING',
+          info: 'INFO'
+        };
+        return titles[type] || 'INFO';
+      }
+    };
+
+    // ===== LOADING OVERLAY =====
+    const Loading = {
+      overlay: null,
+      text: null,
+
+      init() {
+        this.overlay = document.getElementById('loadingOverlay');
+        this.text = document.getElementById('loadingText');
+      },
+
+      show(message = 'Loading...') {
+        this.text.textContent = message;
+        this.overlay.style.display = 'flex';
+      },
+
+      hide() {
+        this.overlay.style.display = 'none';
+      }
+    };
+
+    // Initialize systems on DOM ready
+    document.addEventListener('DOMContentLoaded', () => {
+      Modal.init();
+      Toast.init();
+      Loading.init();
+    });
+
     // Particle System
     class ParticleSystem {
       constructor(canvas) {
@@ -2471,22 +3163,22 @@
       const code = document.getElementById('registerCode').value.trim();
 
       if (!email || !pass || !passConfirm || !code) {
-        alert('Please fill in all fields');
+        Modal.alert('Please fill in all fields', 'Incomplete Form');
         return;
       }
 
       if (!validateEmail(email)) {
-        alert('Please enter a valid email address');
+        Modal.alert('Please enter a valid email address', 'Invalid Email');
         return;
       }
 
       if (pass !== passConfirm) {
-        alert('Passwords do not match');
+        Modal.alert('Passwords do not match', 'Password Mismatch');
         return;
       }
 
       if (pass.length < 8) {
-        alert('Password must be at least 8 characters');
+        Modal.alert('Password must be at least 8 characters', 'Weak Password');
         return;
       }
 
@@ -2499,17 +3191,17 @@
       const warriorName = document.getElementById('warriorName').value.trim();
 
       if (!warriorName) {
-        alert('Please enter a warrior name');
+        Modal.alert('Please enter a warrior name', 'Name Required');
         return;
       }
 
       if (warriorName.length < 3) {
-        alert('Warrior name must be at least 3 characters');
+        Modal.alert('Warrior name must be at least 3 characters', 'Name Too Short');
         return;
       }
 
       if (warriorName.length > 16) {
-        alert('Warrior name must be 16 characters or less');
+        Modal.alert('Warrior name must be 16 characters or less', 'Name Too Long');
         return;
       }
 
@@ -2519,8 +3211,9 @@
         localStorage.setItem('duelpvp_email', tempRegistrationData.email);
         localStorage.setItem('duelpvp_warrior', warriorName);
         document.getElementById('userName').textContent = warriorName.toUpperCase();
+        Toast.success(`Welcome to the arena, ${warriorName}!`, 'WARRIOR REGISTERED');
       } catch (e) {
-        alert('Failed to save registration. Check browser settings.');
+        Modal.alert('Failed to save registration. Check browser settings.', 'Storage Error');
         return;
       }
 
@@ -2538,9 +3231,11 @@
       try {
         // Check if MetaMask/wallet is installed
         if (typeof window.ethereum === 'undefined') {
-          alert('No Web3 wallet detected! Please install MetaMask or another Ethereum wallet.');
+          Modal.alert('No Web3 wallet detected! Please install MetaMask or another Ethereum wallet.', 'Wallet Not Found');
           return;
         }
+
+        Loading.show('Connecting wallet...');
 
         // Request account access
         const accounts = await window.ethereum.request({
@@ -2567,16 +3262,19 @@
           localStorage.setItem(`duelpvp_email_${walletAddress.toLowerCase()}`, email);
 
           updateWalletDisplay(walletAddress);
-          alert('Wallet connected successfully!');
+          Loading.hide();
+          Toast.success(`Wallet ${walletAddress.substring(0, 6)}...${walletAddress.substring(38)} linked to your account`, 'WALLET CONNECTED');
         } else {
-          alert('No email found. Please login first.');
+          Loading.hide();
+          Modal.alert('No email found. Please login first.', 'Login Required');
         }
       } catch (error) {
+        Loading.hide();
         console.error('Wallet connection error:', error);
         if (error.code === 4001) {
-          alert('Wallet connection cancelled');
+          Toast.warning('You cancelled the wallet connection request', 'Connection Cancelled');
         } else {
-          alert('Failed to connect wallet: ' + error.message);
+          Modal.alert('Failed to connect wallet: ' + error.message, 'Connection Error');
         }
       }
     }
@@ -2617,16 +3315,18 @@
           localStorage.removeItem(`duelpvp_email_${wallet.toLowerCase()}`);
         }
         updateWalletDisplay();
-        alert('Wallet disconnected');
+        Toast.info('Wallet disconnected from your account', 'DISCONNECTED');
       }
     }
 
     async function handleWalletLogin() {
       try {
         if (typeof window.ethereum === 'undefined') {
-          alert('No Web3 wallet detected! Please install MetaMask.');
+          Modal.alert('No Web3 wallet detected! Please install MetaMask.', 'Wallet Not Found');
           return;
         }
+
+        Loading.show('Connecting to wallet...');
 
         const accounts = await window.ethereum.request({
           method: 'eth_requestAccounts'
@@ -2652,13 +3352,17 @@
           if (warriorName) {
             document.getElementById('userName').textContent = warriorName.toUpperCase();
           }
+          Loading.hide();
+          Toast.success('Signed in successfully!', 'WELCOME BACK');
           swapContent('dashboard');
         } else {
-          alert('This wallet is not linked to any account. Please login with email and connect your wallet first.');
+          Loading.hide();
+          Modal.alert('This wallet is not linked to any account. Please login with email and connect your wallet first.', 'Wallet Not Linked');
         }
       } catch (error) {
+        Loading.hide();
         console.error('Wallet login error:', error);
-        alert('Failed to login with wallet: ' + error.message);
+        Modal.alert('Failed to login with wallet: ' + error.message, 'Login Failed');
       }
     }
 
@@ -2946,7 +3650,7 @@
     
     function startGame() {
       if (gameState.currentAttempt >= gameState.maxAttempts) {
-        alert('All attempts used! Click RESET to play again.');
+        Modal.alert('All attempts used! Click RESET to play again.', 'Game Over');
         return;
       }
 
@@ -3335,7 +4039,7 @@
         }
 
         const card = document.createElement('div');
-        card.className = `quest-card ${completed ? 'completed' : ''}`;
+        card.className = `quest-card ${completed ? 'completed' : ''} ${completed && !claimed ? 'claimable' : ''}`;
 
         if (isSocialQuest) {
           // Social quest with verify button
@@ -3389,12 +4093,14 @@
 
       // Check if already completed
       if (questProgress[questId] >= 1) {
-        alert('Quest already verified!');
+        Modal.alert('Quest already verified!', 'Already Completed');
         return;
       }
 
       // Get server time for timer
+      Loading.show('Checking server time...');
       const serverTime = await getServerTime();
+      Loading.hide();
 
       // MANUAL VERIFICATION (Free, no API costs)
       // TODO: Replace with Galxe API when ready
@@ -3403,14 +4109,12 @@
         if (!handle) return;
 
         // Show confirmation
-        const confirmed = confirm(`
-Please complete the quest first, then click OK.
+        const confirmed = await Modal.confirm(`Please complete the quest first, then click CONFIRM.
 
 Your handle: ${handle}
 
 You have 24 hours to complete this quest.
-We'll verify manually and you can claim your reward!
-        `);
+We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
 
         if (confirmed) {
           // Store pending verification and start 24-hour timer
@@ -3419,7 +4123,7 @@ We'll verify manually and you can claim your reward!
           questProgress[`${questId}_start_time`] = serverTime.getTime();
           localStorage.setItem(`duelpvp_quests_${email}`, JSON.stringify(questProgress));
 
-          alert('Quest started! You have 24 hours to complete it.');
+          Toast.info('You have 24 hours to complete this quest', 'QUEST STARTED');
           loadQuests('daily');
 
           // GALXE INTEGRATION POINT:
@@ -3431,11 +4135,11 @@ We'll verify manually and you can claim your reward!
             if (verified) {
               questProgress[questId] = 1;
               localStorage.setItem(`duelpvp_quests_${email}`, JSON.stringify(questProgress));
-              alert('Quest verified! Claim your reward.');
+              Toast.success('Quest verified! Claim your reward.', 'QUEST COMPLETE');
               loadQuests('daily');
             }
           } catch (error) {
-            alert('Verification failed. Please try again.');
+            Toast.error('Verification failed. Please try again.', 'ERROR');
           }
           */
         }
@@ -3449,7 +4153,7 @@ We'll verify manually and you can claim your reward!
         questProgress[`${questId}_start_time`] = serverTime.getTime();
         localStorage.setItem(`duelpvp_quests_${email}`, JSON.stringify(questProgress));
 
-        alert(`Quest started! Join our Discord and complete within 24 hours.`);
+        Toast.info('Join our Discord and complete within 24 hours', 'QUEST STARTED');
         loadQuests('daily');
       }
     }
@@ -3501,7 +4205,7 @@ We'll verify manually and you can claim your reward!
       loadQuests(activeTab);
 
       // Show notification
-      alert(`Quest completed! +${reward} GP`);
+      Toast.success(`+${reward} GP earned!`, 'QUEST COMPLETED');
     }
 
     function updateQuestProgress(questId, amount = 1) {
@@ -3587,13 +4291,13 @@ We'll verify manually and you can claim your reward!
       let inventory = JSON.parse(localStorage.getItem(`duelpvp_inventory_${email}`) || '[]');
 
       if (gp < item.price) {
-        alert('Not enough GP!');
+        Modal.alert('Not enough GP! Complete quests or play games to earn more.', 'Insufficient Funds');
         return;
       }
 
       // Check if inventory is full
       if (inventory.length >= 28 && !inventory.find(i => i.id === item.id && item.type === 'consumable')) {
-        alert('Inventory full!');
+        Modal.alert('Your inventory is full! Maximum 28 items can be held.', 'Inventory Full');
         return;
       }
 
@@ -3620,7 +4324,7 @@ We'll verify manually and you can claim your reward!
 
       // Reload
       loadInventory();
-      alert(`Purchased ${item.name}!`);
+      Toast.success(`${item.icon} ${item.name} added to inventory!`, 'ITEM PURCHASED');
     }
 
     // Initial event listeners
