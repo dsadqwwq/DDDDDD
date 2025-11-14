@@ -1,0 +1,50 @@
+# Duel PVP - Single Page Application
+
+A RuneScape-inspired PvP gaming platform with continuous animations and smooth page transitions.
+
+## Features
+
+- **Single Page Application**: All content stays in the DOM with smooth transitions
+- **Continuous Animations**: 
+  - Lava glow effect (6s loop)
+  - Slogan fade animation (6s loop)
+  - Blinking cursor effect (1s loop)
+  - All animations run continuously without interruption
+- **Three Views**:
+  1. Access code entry
+  2. Login screen
+  3. Dashboard with stats
+
+## Technical Details
+
+- Pure HTML/CSS/JavaScript (no frameworks)
+- All animations use CSS keyframes for smooth performance
+- Content swapping without page reloads
+- Responsive design with mobile support
+- Pixel-perfect RuneScape-style UI
+
+## File Structure
+
+```
+duelpvp-site/
+├── index.html       # Main single-page application
+├── vercel.json      # Vercel configuration
+├── assets/
+│   ├── bg-wildy.png # Background image
+│   └── logo-pvp.png # Logo (unused in current version)
+└── README.md        # This file
+```
+
+## Deployment
+
+1. Push to GitHub repository
+2. Connect to Vercel
+3. Deploy automatically
+
+## Animation Timings
+
+- **Lava Glow**: 6 second loop with brightness variations
+- **Slogan Pulse**: 6 second fade in/out cycle
+- **Cursor Blink**: 1 second on/off cycle
+
+All animations are synchronized to create a cohesive visual experience.

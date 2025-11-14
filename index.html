@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Duel PVP – Enter the Arena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#FFD64D;
+    --gold-hi:#FFF3A3;
+    --bg:#0b0f12;
+
+    /* Glow position */
+    --glow-x: 80%;
+    --glow-y: 32%;
+    --glow-w: 211px;
+    --glow-h: 366px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:var(--bg);color:#e6ecf1;font-family:Inter,system-ui,Segoe UI,Roboto,Arial}
+  
+  /* Background with continuous animation */
+  .bg{position:fixed;inset:0;overflow:hidden;z-index:0}
+  .bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;image-rendering:pixelated;filter:contrast(1.04) saturate(1.02)}
+
+  /* Enhanced multi-layer lava glow animations */
+  @keyframes lavaPulse{
+    0%,100% { opacity:.25; filter:brightness(1.0) saturate(1.0); }
+    20%     { opacity:.45; filter:brightness(1.25) saturate(1.2); }
+    40%     { opacity:.35; filter:brightness(1.15) saturate(1.1); }
+    60%     { opacity:.55; filter:brightness(1.35) saturate(1.3); }
+    80%     { opacity:.30; filter:brightness(1.1) saturate(1.05); }
+  }
+  
+  @keyframes lavaFlicker{
+    0%,100% { opacity:0.3; }
+    50%     { opacity:0.7; }
+  }
+
+  /* Primary glow layer */
+  .bg::after{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:
+      /* Core bright glow */
+      radial-gradient( circle 220px at var(--glow-x) var(--glow-y),
+        rgba(255,180,80,.8), rgba(255,140,60,.4) 30%, rgba(255,100,40,.2) 50%, transparent 70%),
+      /* Secondary warm glow */
+      radial-gradient( ellipse 280px 400px at var(--glow-x) var(--glow-y),
+        rgba(255,200,120,.5), rgba(255,160,80,.25) 40%, rgba(255,120,60,.1) 60%, transparent 80%),
+      /* Outer ambient glow */
+      radial-gradient( circle 350px at var(--glow-x) var(--glow-y),
+        rgba(255,220,180,.2), rgba(255,180,140,.1) 50%, transparent 75%);
+    mix-blend-mode: screen;
+    animation: lavaPulse 6s ease-in-out infinite;
+  }
+  
+  /* Additional flicker layer for more dynamic effect */
+  .bg::before{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:
+      radial-gradient( circle 180px at var(--glow-x) var(--glow-y),
+        rgba(255,220,180,.6), rgba(255,160,100,.2) 40%, transparent 60%);
+    mix-blend-mode: color-dodge;
+    animation: lavaFlicker 3s ease-in-out infinite;
+  }
+
+  /* Enhanced brand design */
+  .brand{
+    position:fixed; 
+    left:24px; 
+    top:24px; 
+    z-index:6;
+  }
+  
+  .brand .title{
+    font-family:'Press Start 2P', monospace;
+    font-size:32px;
+    letter-spacing:.08em;
+    margin-bottom:12px;
+    /* Multi-layer text effects */
+    background: linear-gradient(180deg, var(--gold-hi) 0%, var(--gold) 50%, #D4A033 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(2px 2px 0px #000) 
+            drop-shadow(0 0 20px rgba(255,214,77,.4))
+            drop-shadow(0 0 40px rgba(255,214,77,.2));
+    position: relative;
+  }
+  
+  /* 3D effect for title */
+  .brand .title::before{
+    content: 'DUEL PVP';
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    z-index: -1;
+    background: linear-gradient(180deg, #8B6914 0%, #5C440E 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: blur(0.5px);
+  }
+
+  /* Enhanced slogan with better styling */
+  .brand .slogan{
+    font-family: Inter, system-ui, Segoe UI, Roboto, Arial;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #ffffff;
+    opacity: 0.9;
+    animation: sloganFade 8s ease-in-out infinite;
+    position: relative;
+    padding-left: 2px;
+  }
+  
+  /* Divider dots between slogan parts */
+  .slogan-divider{
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    background: var(--gold);
+    border-radius: 50%;
+    margin: 0 8px 1px;
+    opacity: 0.6;
+    box-shadow: 0 0 6px rgba(255,214,77,.5);
+  }
+
+  @keyframes sloganFade{
+    0%, 100% { 
+      opacity: 0.4; 
+      filter: blur(0.5px);
+    }
+    50% { 
+      opacity: 1; 
+      filter: blur(0px) drop-shadow(0 0 8px rgba(255,255,255,.3));
+    }
+  }
+
+  /* Page container */
+  .page-container{position:fixed;inset:0;display:grid;place-items:end center;padding-bottom:10vh; z-index:4}
+  
+  /* Modern panel styles matching dashboard */
+  .panel{
+    position:relative;
+    width:min(520px,92vw);
+    background:rgba(12,16,20,.92);
+    border:2px solid rgba(255,214,77,.3);
+    border-radius:12px;
+    padding:32px 28px;
+    backdrop-filter:blur(8px);
+    box-shadow:0 8px 32px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.05);
+  }
+
+  .panel-header{
+    text-align:center;
+    margin-bottom:28px;
+    padding-bottom:20px;
+    border-bottom:1px solid rgba(255,214,77,.15);
+  }
+
+  .sys{
+    font-family:'Press Start 2P', monospace;
+    font-size:16px;
+    color:var(--gold);
+    text-shadow:0 0 20px rgba(255,214,77,.5);
+    margin-bottom:8px;
+  }
+  
+  .sub-text{
+    font-family:Inter,system-ui,Segoe UI,Roboto,Arial;
+    font-size:13px;
+    color:#a0a8b0;
+    margin-top:8px;
+  }
+  
+  /* Continuous blink animation */
+  .blink{animation:blinkDot 1s infinite}
+  @keyframes blinkDot{0%,50%{opacity:1}50.1%,100%{opacity:0}}
+
+  .input-group{
+    margin-bottom:16px;
+  }
+
+  .input-label{
+    display:block;
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    color:#a0a8b0;
+    margin-bottom:8px;
+    text-transform:uppercase;
+  }
+
+  .bar{display:flex;gap:12px;align-items:stretch;}
+  
+  .input-field{
+    flex:1;
+    padding:12px 14px;
+    background:rgba(0,0,0,.4);
+    border:1px solid rgba(255,214,77,.2);
+    border-radius:8px;
+    color:#e6ecf1;
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    transition:all 0.2s;
+  }
+  
+  .input-field:focus{
+    outline:none;
+    border-color:var(--gold);
+    background:rgba(0,0,0,.6);
+    box-shadow:0 0 0 2px rgba(255,214,77,.1);
+  }
+  
+  .input-field::placeholder{
+    color:rgba(160,168,176,.5);
+  }
+
+  .btn-submit{
+    padding:12px 24px;
+    background:var(--gold);
+    border:2px solid var(--gold);
+    border-radius:8px;
+    color:#000;
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:all 0.2s;
+    white-space:nowrap;
+  }
+  
+  .btn-submit:hover{
+    background:var(--gold-hi);
+    transform:translateY(-2px);
+    box-shadow:0 4px 16px rgba(255,214,77,.4);
+  }
+  
+  .btn-submit:active{
+    transform:translateY(0);
+    box-shadow:0 2px 8px rgba(255,214,77,.3);
+  }
+
+  .helper{
+    margin-top:20px;
+    text-align:center;
+    font-family:Inter,system-ui,Segoe UI,Roboto,Arial;
+    font-size:13px;
+    color:#a0a8b0;
+  }
+  
+  .helper a{
+    color:var(--gold);
+    text-decoration:none;
+    cursor:pointer;
+    transition:color 0.2s;
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+  }
+  
+  .helper a:hover{
+    color:var(--gold-hi);
+    text-shadow:0 0 8px rgba(255,214,77,.5);
+  }
+  
+  /* Decorative elements */
+  .panel::before{
+    content:'';
+    position:absolute;
+    top:-1px;
+    left:50%;
+    transform:translateX(-50%);
+    width:100px;
+    height:1px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity:0.8;
+  }
+
+  .footer{position:fixed;right:20px;bottom:16px;font-size:12px;opacity:.85; z-index:3}
+
+  /* Dashboard specific styles */
+  .dashboard-content{
+    display:none;
+    width:min(920px,92vw);
+    background:rgba(12,16,20,.92);
+    border:2px solid rgba(255,214,77,.3);
+    border-radius:12px;
+    padding:24px;
+    backdrop-filter:blur(8px);
+  }
+
+  .dashboard-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:24px;
+    padding-bottom:16px;
+    border-bottom:1px solid rgba(255,214,77,.2);
+  }
+
+  .user-info{font-family:'Press Start 2P', monospace;}
+  .user-name{color:var(--gold);font-size:16px;margin-bottom:4px;}
+  .user-stats{color:#a0a8b0;font-size:10px;}
+
+  .logout-btn{
+    padding:8px 12px;
+    background:rgba(255,214,77,.1);
+    border:1px solid var(--gold);
+    color:var(--gold);
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    cursor:pointer;
+    border-radius:4px;
+    transition:all 0.2s;
+  }
+  .logout-btn:hover{background:rgba(255,214,77,.2);}
+
+  .stats-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+    gap:16px;
+    margin-bottom:24px;
+  }
+
+  .stat-card{
+    background:rgba(255,214,77,.05);
+    border:1px solid rgba(255,214,77,.2);
+    border-radius:8px;
+    padding:16px;
+    text-align:center;
+  }
+
+  .stat-label{
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    color:#a0a8b0;
+    margin-bottom:8px;
+  }
+
+  .stat-value{
+    font-family:'Press Start 2P', monospace;
+    font-size:18px;
+    color:var(--gold);
+  }
+
+  .recent-matches{
+    background:rgba(0,0,0,.3);
+    border:1px solid rgba(255,214,77,.2);
+    border-radius:8px;
+    padding:16px;
+  }
+
+  .section-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:12px;
+    color:var(--gold);
+    margin-bottom:12px;
+  }
+
+  .match-list{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+
+  .match-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:8px;
+    background:rgba(255,214,77,.02);
+    border:1px solid rgba(255,214,77,.1);
+    border-radius:4px;
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+  }
+
+  .match-result{
+    padding:2px 6px;
+    border-radius:3px;
+    font-size:9px;
+  }
+  .win{background:rgba(76,175,80,.3);color:#4CAF50;}
+  .loss{background:rgba(244,67,54,.3);color:#F44336;}
+
+  .action-buttons{
+    display:flex;
+    gap:12px;
+    margin-top:24px;
+  }
+
+  .action-btn{
+    flex:1;
+    padding:12px;
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:all 0.2s;
+    border:2px solid;
+  }
+
+  .btn-primary{
+    background:var(--gold);
+    border-color:var(--gold);
+    color:#000;
+  }
+  .btn-primary:hover{
+    background:var(--gold-hi);
+    transform:translateY(-2px);
+    box-shadow:0 4px 12px rgba(255,214,77,.3);
+  }
+
+  .btn-secondary{
+    background:transparent;
+    border-color:rgba(255,214,77,.5);
+    color:var(--gold);
+  }
+  .btn-secondary:hover{
+    background:rgba(255,214,77,.1);
+    transform:translateY(-2px);
+  }
+
+  /* Page transitions */
+  .fade-in{
+    animation: fadeIn 0.3s ease-in;
+  }
+  @keyframes fadeIn{
+    from{opacity:0;transform:translateY(10px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+
+  /* Reaction Game Styles */
+  .game-container{
+    display:none;
+    width:min(920px,92vw);
+    background:rgba(12,16,20,.92);
+    border:2px solid rgba(255,214,77,.3);
+    border-radius:12px;
+    padding:24px;
+    backdrop-filter:blur(8px);
+  }
+
+  .game-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:24px;
+    padding-bottom:16px;
+    border-bottom:1px solid rgba(255,214,77,.2);
+  }
+
+  .game-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:18px;
+    color:var(--gold);
+  }
+
+  .back-btn{
+    padding:8px 12px;
+    background:rgba(255,214,77,.1);
+    border:1px solid var(--gold);
+    color:var(--gold);
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    cursor:pointer;
+    border-radius:4px;
+    transition:all 0.2s;
+  }
+  .back-btn:hover{background:rgba(255,214,77,.2);}
+
+  .game-area{
+    background:rgba(0,0,0,.5);
+    border:1px solid rgba(255,214,77,.2);
+    border-radius:8px;
+    padding:24px;
+    margin-bottom:20px;
+  }
+
+  .chart-container{
+    width:100%;
+    height:300px;
+    background:rgba(16,20,24,.8);
+    border:2px solid rgba(255,214,77,.1);
+    border-radius:8px;
+    position:relative;
+    overflow:hidden;
+    margin-bottom:20px;
+    transition:all 0.2s;
+  }
+
+  .chart-container.green{
+    border-color:rgba(76,175,80,.5);
+    background:rgba(16,24,16,.8);
+  }
+
+  .chart-container.red{
+    border-color:rgba(244,67,54,.8);
+    background:rgba(24,16,16,.9);
+    animation:redPulse 0.5s ease-out;
+  }
+
+  @keyframes redPulse{
+    0%{box-shadow:0 0 0 0 rgba(244,67,54,.8);}
+    100%{box-shadow:0 0 30px 10px rgba(244,67,54,0);}
+  }
+
+  .chart-line{
+    position:absolute;
+    bottom:0;
+    left:0;
+    right:0;
+    height:60%;
+    overflow:hidden;
+  }
+
+  .price-display{
+    position:absolute;
+    top:20px;
+    right:20px;
+    font-family:'Press Start 2P', monospace;
+    font-size:18px;
+    color:#4CAF50;
+    text-shadow:0 0 10px currentColor;
+    transition:all 0.2s;
+  }
+
+  .red .price-display{
+    color:#F44336;
+  }
+
+  .sell-button{
+    width:100%;
+    padding:20px;
+    font-family:'Press Start 2P', monospace;
+    font-size:16px;
+    background:#F44336;
+    border:2px solid #D32F2F;
+    color:#fff;
+    border-radius:8px;
+    cursor:pointer;
+    transition:all 0.2s;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+  }
+
+  .sell-button:hover:not(:disabled){
+    background:#D32F2F;
+    transform:translateY(-2px);
+    box-shadow:0 4px 20px rgba(244,67,54,.4);
+  }
+
+  .sell-button:active:not(:disabled){
+    transform:translateY(0);
+  }
+
+  .sell-button:disabled{
+    background:rgba(100,100,100,.3);
+    border-color:rgba(100,100,100,.2);
+    color:rgba(255,255,255,.3);
+    cursor:not-allowed;
+  }
+
+  .instructions{
+    background:rgba(255,214,77,.05);
+    border:1px solid rgba(255,214,77,.2);
+    border-radius:8px;
+    padding:16px;
+    margin-bottom:20px;
+  }
+
+  .instructions-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:12px;
+    color:var(--gold);
+    margin-bottom:12px;
+  }
+
+  .instructions-text{
+    font-family:Inter, system-ui, Arial;
+    font-size:13px;
+    color:#a0a8b0;
+    line-height:1.6;
+  }
+
+  .attempts-counter{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:rgba(0,0,0,.3);
+    border:1px solid rgba(255,214,77,.2);
+    border-radius:8px;
+    padding:12px 16px;
+    margin-bottom:20px;
+  }
+
+  .attempts-label{
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    color:#a0a8b0;
+  }
+
+  .attempts-value{
+    font-family:'Press Start 2P', monospace;
+    font-size:14px;
+    color:var(--gold);
+  }
+
+  .results-grid{
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    gap:12px;
+    margin-bottom:20px;
+  }
+
+  .result-card{
+    background:rgba(255,214,77,.05);
+    border:1px solid rgba(255,214,77,.2);
+    border-radius:6px;
+    padding:12px;
+    text-align:center;
+  }
+
+  .result-card.best{
+    background:rgba(76,175,80,.1);
+    border-color:rgba(76,175,80,.4);
+  }
+
+  .result-attempt{
+    font-family:'Press Start 2P', monospace;
+    font-size:9px;
+    color:#a0a8b0;
+    margin-bottom:6px;
+  }
+
+  .result-time{
+    font-family:'Press Start 2P', monospace;
+    font-size:12px;
+    color:var(--gold);
+  }
+
+  .game-status{
+    text-align:center;
+    font-family:'Press Start 2P', monospace;
+    font-size:14px;
+    padding:16px;
+    margin-bottom:20px;
+  }
+
+  .status-ready{
+    color:#4CAF50;
+  }
+
+  .status-go{
+    color:#F44336;
+  }
+
+  .canvas-chart{
+    width:100%;
+    height:100%;
+    image-rendering:crisp-edges;
+  }
+</style>
+</head>
+<body>
+  <!-- Background always visible with continuous animation -->
+  <div class="bg">
+    <img src="assets/bg-wildy.png" alt="Wilderness background">
+  </div>
+
+  <!-- Brand always visible with continuous animation -->
+  <div class="brand">
+    <div class="title">DUEL PVP</div>
+    <div class="slogan">
+      Real Time<span class="slogan-divider"></span>Real Skill<span class="slogan-divider"></span>Real Rewards
+    </div>
+  </div>
+
+  <!-- Single page container that swaps content -->
+  <main class="page-container" id="pageContainer">
+    <!-- Initial page content -->
+    <section class="panel fade-in" id="panelContent">
+      <div class="panel-header">
+        <div class="sys">Welcome to the arena<span class="blink">.</span></div>
+        <div class="sub-text">Enter your exclusive access code to begin</div>
+      </div>
+      
+      <div class="input-group">
+        <label class="input-label">Access Code</label>
+        <div class="bar">
+          <input id="code" class="input-field" type="text" placeholder="XXXX-XXXX-XXXX" autocomplete="off">
+          <button class="btn-submit" id="joinBtn">JOIN</button>
+        </div>
+      </div>
+      
+      <div class="helper">
+        Already have an account? <a id="loginLink">Sign in</a>
+      </div>
+    </section>
+
+    <!-- Dashboard content (hidden initially) -->
+    <div class="dashboard-content" id="dashboardContent">
+      <div class="dashboard-header">
+        <div class="user-info">
+          <div class="user-name" id="userName">Champion</div>
+          <div class="user-stats">Level 87 • Wilderness Elite</div>
+        </div>
+        <button class="logout-btn" id="logoutBtn">LOGOUT</button>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">TOTAL WINS</div>
+          <div class="stat-value">342</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">WIN STREAK</div>
+          <div class="stat-value">7</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">RANK</div>
+          <div class="stat-value">#127</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">GP EARNED</div>
+          <div class="stat-value">2.3M</div>
+        </div>
+      </div>
+
+      <div class="recent-matches">
+        <div class="section-title">RECENT BATTLES</div>
+        <div class="match-list">
+          <div class="match-item">
+            <span>vs. DragonSlayer99</span>
+            <span class="match-result win">WIN</span>
+          </div>
+          <div class="match-item">
+            <span>vs. PkMaster420</span>
+            <span class="match-result win">WIN</span>
+          </div>
+          <div class="match-item">
+            <span>vs. IronDefender</span>
+            <span class="match-result loss">LOSS</span>
+          </div>
+          <div class="match-item">
+            <span>vs. RuneKnight</span>
+            <span class="match-result win">WIN</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button class="action-btn btn-primary" id="playReactionBtn">PLAY REACTION</button>
+        <button class="action-btn btn-secondary">VIEW LEADERBOARD</button>
+      </div>
+    </div>
+
+    <!-- Reaction Game content (hidden initially) -->
+    <div class="game-container" id="gameContent">
+      <div class="game-header">
+        <div class="game-title">REACTION TRADER</div>
+        <button class="back-btn" id="backToDashBtn">BACK</button>
+      </div>
+
+      <div class="instructions">
+        <div class="instructions-title">HOW TO PLAY</div>
+        <div class="instructions-text">
+          Watch the chart closely. When it turns RED and starts dropping, hit SELL as fast as you can! 
+          You have 5 attempts. Your best time will be recorded on the leaderboard.
+        </div>
+      </div>
+
+      <div class="attempts-counter">
+        <span class="attempts-label">ATTEMPTS REMAINING</span>
+        <span class="attempts-value" id="attemptsLeft">5 / 5</span>
+      </div>
+
+      <div class="results-grid" id="resultsGrid">
+        <!-- Results will be added here dynamically -->
+      </div>
+
+      <div class="game-area">
+        <div class="game-status" id="gameStatus">Click START to begin</div>
+        
+        <div class="chart-container" id="chartContainer">
+          <canvas class="canvas-chart" id="chartCanvas"></canvas>
+          <div class="price-display" id="priceDisplay">$42,156</div>
+        </div>
+
+        <button class="sell-button" id="sellButton" disabled>SELL</button>
+      </div>
+
+      <div class="action-buttons" style="margin-top:20px;">
+        <button class="action-btn btn-primary" id="startGameBtn">START GAME</button>
+        <button class="action-btn btn-secondary" id="resetGameBtn">RESET</button>
+      </div>
+    </div>
+  </main>
+
+  <div class="footer">© 2025 Duel PVP</div>
+
+  <script>
+    // Single page app logic
+    const pageContainer = document.getElementById('pageContainer');
+    const panelContent = document.getElementById('panelContent');
+    const dashboardContent = document.getElementById('dashboardContent');
+    const gameContent = document.getElementById('gameContent');
+    
+    // Game variables
+    let gameState = {
+      attempts: [],
+      currentAttempt: 0,
+      maxAttempts: 5,
+      isPlaying: false,
+      startTime: null,
+      reactionTimer: null,
+      chartAnimation: null
+    };
+    
+    // Helper function to swap content with fade animation
+    function swapContent(newContent) {
+      if (newContent === 'login') {
+        panelContent.style.display = 'block';
+        dashboardContent.style.display = 'none';
+        gameContent.style.display = 'none';
+        
+        panelContent.innerHTML = `
+          <div class="panel-header">
+            <div class="sys">Welcome back, champion<span class="blink">.</span></div>
+            <div class="sub-text">Enter your credentials to access the arena</div>
+          </div>
+          
+          <div class="input-group">
+            <label class="input-label">Email Address</label>
+            <input id="loginEmail" class="input-field" type="email" placeholder="name@example.com" autocomplete="email">
+          </div>
+          
+          <div class="input-group">
+            <label class="input-label">Password</label>
+            <div class="bar">
+              <input id="loginPass" class="input-field" type="password" placeholder="Enter your password" autocomplete="current-password">
+              <button class="btn-submit" id="loginBtn">LOG IN</button>
+            </div>
+          </div>
+          
+          <div class="helper">
+            Don't have access? <a id="backLink">Get access code</a>
+          </div>
+        `;
+        
+        // Re-attach event listeners
+        document.getElementById('loginBtn').addEventListener('click', handleLogin);
+        document.getElementById('backLink').addEventListener('click', () => swapContent('home'));
+        // Allow enter key to submit
+        document.getElementById('loginPass').addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') handleLogin();
+        });
+        
+      } else if (newContent === 'home') {
+        panelContent.style.display = 'block';
+        dashboardContent.style.display = 'none';
+        gameContent.style.display = 'none';
+        
+        panelContent.innerHTML = `
+          <div class="panel-header">
+            <div class="sys">Welcome to the arena<span class="blink">.</span></div>
+            <div class="sub-text">Enter your exclusive access code to begin</div>
+          </div>
+          
+          <div class="input-group">
+            <label class="input-label">Access Code</label>
+            <div class="bar">
+              <input id="code" class="input-field" type="text" placeholder="XXXX-XXXX-XXXX" autocomplete="off">
+              <button class="btn-submit" id="joinBtn">JOIN</button>
+            </div>
+          </div>
+          
+          <div class="helper">
+            Already have an account? <a id="loginLink">Sign in</a>
+          </div>
+        `;
+        
+        // Re-attach event listeners
+        document.getElementById('joinBtn').addEventListener('click', handleJoin);
+        document.getElementById('loginLink').addEventListener('click', () => swapContent('login'));
+        // Allow enter key to submit
+        document.getElementById('code').addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') handleJoin();
+        });
+        
+      } else if (newContent === 'dashboard') {
+        panelContent.style.display = 'none';
+        dashboardContent.style.display = 'block';
+        gameContent.style.display = 'none';
+        dashboardContent.classList.add('fade-in');
+        
+      } else if (newContent === 'game') {
+        panelContent.style.display = 'none';
+        dashboardContent.style.display = 'none';
+        gameContent.style.display = 'block';
+        gameContent.classList.add('fade-in');
+        initChart();
+      }
+      
+      // Add fade-in animation
+      if (newContent === 'login' || newContent === 'home') {
+        panelContent.classList.remove('fade-in');
+        void panelContent.offsetWidth; // Force reflow
+        panelContent.classList.add('fade-in');
+      }
+    }
+    
+    // Event handlers
+    function handleJoin() {
+      const code = document.getElementById('code').value.trim();
+      if (!code) {
+        alert('Enter an access code first');
+        return;
+      }
+      swapContent('login');
+    }
+    
+    function handleLogin() {
+      const email = document.getElementById('loginEmail').value.trim();
+      const pass = document.getElementById('loginPass').value.trim();
+      if (!email || !pass) {
+        alert('Please fill in all fields');
+        return;
+      }
+      
+      // Store email and show dashboard
+      try {
+        localStorage.setItem('duelpvp_email', email);
+        document.getElementById('userName').textContent = email.split('@')[0].toUpperCase();
+      } catch (e) {}
+      
+      swapContent('dashboard');
+    }
+    
+    function handleLogout() {
+      dashboardContent.style.display = 'none';
+      panelContent.style.display = 'block';
+      swapContent('home');
+    }
+    
+    // Game functions
+    function initChart() {
+      const canvas = document.getElementById('chartCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      drawChart(ctx, false);
+    }
+    
+    function drawChart(ctx, isRed = false) {
+      const canvas = ctx.canvas;
+      const w = canvas.width;
+      const h = canvas.height;
+      
+      // Clear canvas
+      ctx.clearRect(0, 0, w, h);
+      
+      // Draw grid
+      ctx.strokeStyle = 'rgba(255,214,77,0.1)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([2, 4]);
+      
+      // Horizontal lines
+      for (let i = 0; i < 5; i++) {
+        ctx.beginPath();
+        ctx.moveTo(0, (h / 5) * i);
+        ctx.lineTo(w, (h / 5) * i);
+        ctx.stroke();
+      }
+      
+      // Vertical lines
+      for (let i = 0; i < 10; i++) {
+        ctx.beginPath();
+        ctx.moveTo((w / 10) * i, 0);
+        ctx.lineTo((w / 10) * i, h);
+        ctx.stroke();
+      }
+      
+      ctx.setLineDash([]);
+      
+      // Generate random chart data
+      const points = [];
+      const numPoints = 50;
+      let currentPrice = 42156;
+      
+      for (let i = 0; i < numPoints; i++) {
+        const change = (Math.random() - 0.48) * 500;
+        currentPrice += change;
+        points.push({
+          x: (w / numPoints) * i,
+          y: h - (currentPrice - 40000) / 50
+        });
+      }
+      
+      // Draw line
+      ctx.strokeStyle = isRed ? '#F44336' : '#4CAF50';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      points.forEach((point, i) => {
+        if (i === 0) ctx.moveTo(point.x, point.y);
+        else ctx.lineTo(point.x, point.y);
+      });
+      ctx.stroke();
+      
+      // Draw fill
+      ctx.fillStyle = isRed ? 'rgba(244,67,54,0.1)' : 'rgba(76,175,80,0.1)';
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      points.forEach(point => ctx.lineTo(point.x, point.y));
+      ctx.lineTo(points[points.length - 1].x, h);
+      ctx.lineTo(points[0].x, h);
+      ctx.closePath();
+      ctx.fill();
+      
+      // Animate if red
+      if (isRed && gameState.chartAnimation) {
+        cancelAnimationFrame(gameState.chartAnimation);
+      }
+      
+      if (isRed) {
+        let dropAmount = 0;
+        const animate = () => {
+          dropAmount += 2;
+          ctx.clearRect(0, 0, w, h);
+          
+          // Redraw with dropping effect
+          ctx.strokeStyle = '#F44336';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          points.forEach((point, i) => {
+            const dropY = Math.min(point.y + dropAmount * (i / numPoints), h - 10);
+            if (i === 0) ctx.moveTo(point.x, dropY);
+            else ctx.lineTo(point.x, dropY);
+          });
+          ctx.stroke();
+          
+          if (dropAmount < 100) {
+            gameState.chartAnimation = requestAnimationFrame(animate);
+          }
+        };
+        animate();
+      }
+    }
+    
+    function startGame() {
+      if (gameState.currentAttempt >= gameState.maxAttempts) {
+        alert('All attempts used! Click RESET to play again.');
+        return;
+      }
+      
+      const chartContainer = document.getElementById('chartContainer');
+      const sellButton = document.getElementById('sellButton');
+      const gameStatus = document.getElementById('gameStatus');
+      const canvas = document.getElementById('chartCanvas');
+      const ctx = canvas.getContext('2d');
+      
+      // Reset state
+      chartContainer.className = 'chart-container green';
+      sellButton.disabled = true;
+      gameStatus.textContent = 'Get ready...';
+      gameStatus.className = 'game-status status-ready';
+      drawChart(ctx, false);
+      
+      // Random delay between 2-6 seconds
+      const delay = 2000 + Math.random() * 4000;
+      
+      gameState.reactionTimer = setTimeout(() => {
+        // Turn red and enable sell
+        chartContainer.className = 'chart-container red';
+        sellButton.disabled = false;
+        gameStatus.textContent = 'SELL NOW!';
+        gameStatus.className = 'game-status status-go';
+        drawChart(ctx, true);
+        
+        // Start timing
+        gameState.startTime = performance.now();
+        gameState.isPlaying = true;
+      }, delay);
+    }
+    
+    function handleSell() {
+      if (!gameState.isPlaying || !gameState.startTime) return;
+      
+      const reactionTime = performance.now() - gameState.startTime;
+      gameState.attempts.push(reactionTime);
+      gameState.currentAttempt++;
+      gameState.isPlaying = false;
+      
+      // Update UI
+      const sellButton = document.getElementById('sellButton');
+      sellButton.disabled = true;
+      document.getElementById('gameStatus').textContent = `Time: ${reactionTime.toFixed(0)}ms`;
+      
+      // Update attempts counter
+      const remaining = gameState.maxAttempts - gameState.currentAttempt;
+      document.getElementById('attemptsLeft').textContent = `${remaining} / ${gameState.maxAttempts}`;
+      
+      // Update results grid
+      updateResultsGrid();
+      
+      // Clear timer
+      if (gameState.reactionTimer) {
+        clearTimeout(gameState.reactionTimer);
+      }
+      
+      // Check if game is over
+      if (gameState.currentAttempt >= gameState.maxAttempts) {
+        endGame();
+      }
+    }
+    
+    function updateResultsGrid() {
+      const grid = document.getElementById('resultsGrid');
+      grid.innerHTML = '';
+      
+      const bestTime = Math.min(...gameState.attempts);
+      
+      gameState.attempts.forEach((time, index) => {
+        const card = document.createElement('div');
+        card.className = time === bestTime ? 'result-card best' : 'result-card';
+        card.innerHTML = `
+          <div class="result-attempt">TRY ${index + 1}</div>
+          <div class="result-time">${time.toFixed(0)}ms</div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+    
+    function endGame() {
+      const bestTime = Math.min(...gameState.attempts);
+      document.getElementById('gameStatus').textContent = `Game Over! Best: ${bestTime.toFixed(0)}ms`;
+      
+      // Save to "database" (localStorage for now)
+      try {
+        const email = localStorage.getItem('duelpvp_email') || 'anonymous';
+        const scores = JSON.parse(localStorage.getItem('duelpvp_scores') || '[]');
+        scores.push({
+          email,
+          time: bestTime,
+          date: new Date().toISOString()
+        });
+        localStorage.setItem('duelpvp_scores', JSON.stringify(scores));
+      } catch (e) {}
+    }
+    
+    function resetGame() {
+      gameState = {
+        attempts: [],
+        currentAttempt: 0,
+        maxAttempts: 5,
+        isPlaying: false,
+        startTime: null,
+        reactionTimer: null,
+        chartAnimation: null
+      };
+      
+      // Clear any running timers
+      if (gameState.reactionTimer) clearTimeout(gameState.reactionTimer);
+      if (gameState.chartAnimation) cancelAnimationFrame(gameState.chartAnimation);
+      
+      // Reset UI
+      document.getElementById('chartContainer').className = 'chart-container';
+      document.getElementById('sellButton').disabled = true;
+      document.getElementById('gameStatus').textContent = 'Click START to begin';
+      document.getElementById('attemptsLeft').textContent = '5 / 5';
+      document.getElementById('resultsGrid').innerHTML = '';
+      
+      const canvas = document.getElementById('chartCanvas');
+      const ctx = canvas.getContext('2d');
+      drawChart(ctx, false);
+    }
+    
+    // Initial event listeners
+    document.getElementById('joinBtn').addEventListener('click', handleJoin);
+    document.getElementById('loginLink').addEventListener('click', () => swapContent('login'));
+    document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+    document.getElementById('playReactionBtn').addEventListener('click', () => swapContent('game'));
+    document.getElementById('backToDashBtn').addEventListener('click', () => swapContent('dashboard'));
+    document.getElementById('startGameBtn').addEventListener('click', startGame);
+    document.getElementById('sellButton').addEventListener('click', handleSell);
+    document.getElementById('resetGameBtn').addEventListener('click', resetGame);
+    
+    // Check if user is already logged in
+    try {
+      const savedEmail = localStorage.getItem('duelpvp_email');
+      if (savedEmail) {
+        document.getElementById('userName').textContent = savedEmail.split('@')[0].toUpperCase();
+        // Optionally auto-login: swapContent('dashboard');
+      }
+    } catch (e) {}
+  </script>
+</body>
+</html>
