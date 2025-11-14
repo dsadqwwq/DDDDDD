@@ -67,6 +67,240 @@
     animation: lavaFlicker 3s ease-in-out infinite;
   }
 
+  /* Shooting stars layer */
+  .shooting-stars{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+  }
+
+  .shooting-star{
+    position:absolute;
+    width:2px;
+    height:2px;
+    background:white;
+    border-radius:50%;
+    box-shadow:0 0 6px 2px rgba(255,255,255,.8), 0 0 12px 4px rgba(255,214,77,.4);
+    opacity:0;
+  }
+
+  @keyframes shootingStar1{
+    0%{
+      transform:translate(0, 0) rotate(-45deg);
+      opacity:0;
+    }
+    5%{
+      opacity:1;
+    }
+    100%{
+      transform:translate(-300px, 300px) rotate(-45deg);
+      opacity:0;
+    }
+  }
+
+  @keyframes shootingStar2{
+    0%{
+      transform:translate(0, 0) rotate(-50deg);
+      opacity:0;
+    }
+    5%{
+      opacity:1;
+    }
+    100%{
+      transform:translate(-400px, 400px) rotate(-50deg);
+      opacity:0;
+    }
+  }
+
+  @keyframes shootingStar3{
+    0%{
+      transform:translate(0, 0) rotate(-40deg);
+      opacity:0;
+    }
+    5%{
+      opacity:1;
+    }
+    100%{
+      transform:translate(-250px, 250px) rotate(-40deg);
+      opacity:0;
+    }
+  }
+
+  .shooting-star:nth-child(1){
+    top:10%;
+    left:80%;
+    animation:shootingStar1 3s linear infinite;
+  }
+
+  .shooting-star:nth-child(2){
+    top:30%;
+    left:90%;
+    animation:shootingStar2 4s linear infinite 1.5s;
+  }
+
+  .shooting-star:nth-child(3){
+    top:50%;
+    left:85%;
+    animation:shootingStar3 3.5s linear infinite 2.8s;
+  }
+
+  .shooting-star:nth-child(4){
+    top:70%;
+    left:95%;
+    animation:shootingStar1 4.2s linear infinite 0.8s;
+  }
+
+  .shooting-star:nth-child(5){
+    top:20%;
+    left:75%;
+    animation:shootingStar2 3.8s linear infinite 3.5s;
+  }
+
+  .shooting-star::after{
+    content:'';
+    position:absolute;
+    top:0;
+    left:0;
+    width:60px;
+    height:2px;
+    background:linear-gradient(90deg, rgba(255,255,255,.8), transparent);
+    transform:translateX(-60px);
+  }
+
+  /* Blinking stars layer */
+  .blinking-stars{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+  }
+
+  .blink-star{
+    position:absolute;
+    width:3px;
+    height:3px;
+    background:white;
+    border-radius:50%;
+    box-shadow:0 0 4px 1px rgba(255,255,255,.6);
+  }
+
+  @keyframes starBlink1{
+    0%, 100%{
+      opacity:0.2;
+      transform:scale(0.8);
+    }
+    50%{
+      opacity:1;
+      transform:scale(1.2);
+    }
+  }
+
+  @keyframes starBlink2{
+    0%, 100%{
+      opacity:0.3;
+      transform:scale(0.9);
+    }
+    50%{
+      opacity:0.9;
+      transform:scale(1.1);
+    }
+  }
+
+  @keyframes starBlink3{
+    0%, 100%{
+      opacity:0.15;
+      transform:scale(0.7);
+    }
+    50%{
+      opacity:0.8;
+      transform:scale(1.3);
+    }
+  }
+
+  .blink-star:nth-child(1){top:15%;left:20%;animation:starBlink1 2.5s ease-in-out infinite;}
+  .blink-star:nth-child(2){top:25%;left:65%;animation:starBlink2 3s ease-in-out infinite 0.5s;}
+  .blink-star:nth-child(3){top:35%;left:15%;animation:starBlink3 2.8s ease-in-out infinite 1s;}
+  .blink-star:nth-child(4){top:45%;left:85%;animation:starBlink1 3.2s ease-in-out infinite 1.5s;}
+  .blink-star:nth-child(5){top:55%;left:30%;animation:starBlink2 2.6s ease-in-out infinite 0.8s;}
+  .blink-star:nth-child(6){top:65%;left:70%;animation:starBlink3 3.4s ease-in-out infinite 2s;}
+  .blink-star:nth-child(7){top:75%;left:40%;animation:starBlink1 2.9s ease-in-out infinite 0.3s;}
+  .blink-star:nth-child(8){top:85%;left:55%;animation:starBlink2 3.1s ease-in-out infinite 1.8s;}
+  .blink-star:nth-child(9){top:10%;left:50%;animation:starBlink3 2.7s ease-in-out infinite 2.5s;}
+  .blink-star:nth-child(10){top:60%;left:10%;animation:starBlink1 3.3s ease-in-out infinite 1.2s;}
+  .blink-star:nth-child(11){top:40%;left:95%;animation:starBlink2 2.4s ease-in-out infinite 0.6s;}
+  .blink-star:nth-child(12){top:80%;left:25%;animation:starBlink3 3.5s ease-in-out infinite 2.2s;}
+
+  /* Rising particle sprites layer */
+  .rising-particles{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+  }
+
+  .particle{
+    position:absolute;
+    bottom:0;
+    width:4px;
+    height:4px;
+    background:rgba(255,140,60,.8);
+    border-radius:50%;
+    box-shadow:0 0 8px 2px rgba(255,100,40,.6);
+    opacity:0;
+  }
+
+  @keyframes riseParticle1{
+    0%{
+      transform:translateY(0) translateX(0);
+      opacity:0;
+    }
+    10%{
+      opacity:0.8;
+    }
+    100%{
+      transform:translateY(-100vh) translateX(30px);
+      opacity:0;
+    }
+  }
+
+  @keyframes riseParticle2{
+    0%{
+      transform:translateY(0) translateX(0);
+      opacity:0;
+    }
+    10%{
+      opacity:0.6;
+    }
+    100%{
+      transform:translateY(-100vh) translateX(-40px);
+      opacity:0;
+    }
+  }
+
+  @keyframes riseParticle3{
+    0%{
+      transform:translateY(0) translateX(0);
+      opacity:0;
+    }
+    10%{
+      opacity:0.9;
+    }
+    100%{
+      transform:translateY(-100vh) translateX(20px);
+      opacity:0;
+    }
+  }
+
+  .particle:nth-child(1){left:78%;animation:riseParticle1 8s linear infinite;}
+  .particle:nth-child(2){left:80%;animation:riseParticle2 7s linear infinite 1s;}
+  .particle:nth-child(3){left:82%;animation:riseParticle3 9s linear infinite 2s;}
+  .particle:nth-child(4){left:79%;animation:riseParticle1 7.5s linear infinite 3s;}
+  .particle:nth-child(5){left:81%;animation:riseParticle2 8.5s linear infinite 1.5s;}
+  .particle:nth-child(6){left:77%;animation:riseParticle3 8s linear infinite 4s;}
+  .particle:nth-child(7){left:83%;animation:riseParticle1 7.8s linear infinite 2.5s;}
+  .particle:nth-child(8){left:79.5%;animation:riseParticle2 9.2s linear infinite 0.5s;}
+
   /* Enhanced brand design */
   .brand{
     position:fixed; 
@@ -1269,6 +1503,43 @@
   <!-- Background always visible with continuous animation -->
   <div class="bg">
     <img src="assets/bg-wildy.png" alt="Wilderness background">
+
+    <!-- Shooting stars -->
+    <div class="shooting-stars">
+      <div class="shooting-star"></div>
+      <div class="shooting-star"></div>
+      <div class="shooting-star"></div>
+      <div class="shooting-star"></div>
+      <div class="shooting-star"></div>
+    </div>
+
+    <!-- Blinking stars -->
+    <div class="blinking-stars">
+      <div class="blink-star"></div>
+      <div class="blink-star"></div>
+      <div class="blink-star"></div>
+      <div class="blink-star"></div>
+      <div class="blink-star"></div>
+      <div class="blink-star"></div>
+      <div class="blink-star"></div>
+      <div class="blink-star"></div>
+      <div class="blink-star"></div>
+      <div class="blink-star"></div>
+      <div class="blink-star"></div>
+      <div class="blink-star"></div>
+    </div>
+
+    <!-- Rising particles from lava -->
+    <div class="rising-particles">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
   </div>
 
   <!-- Brand always visible with continuous animation -->
