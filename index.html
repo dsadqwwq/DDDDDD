@@ -3637,14 +3637,30 @@
       min-height:44px;
     }
 
-    /* Input bar - fix join/login button overflow */
+    /* Input bar - stack vertically on mobile for better UX */
     .bar{
-      gap:8px;
+      flex-direction:column;
+      gap:12px;
     }
 
     .btn-submit{
-      padding:12px 16px;
-      white-space:nowrap;
+      width:100%;
+      padding:14px 20px;
+      font-size:13px;
+    }
+
+    .input-field{
+      width:100%;
+    }
+
+    /* Input group spacing */
+    .input-group{
+      margin-bottom:20px;
+    }
+
+    .helper{
+      margin-top:16px;
+      font-size:12px;
     }
 
     /* Stat cards in header - reduce size to prevent overflow */
@@ -3715,8 +3731,8 @@
     }
 
     .btn-submit{
-      padding:12px 14px;
-      font-size:11px;
+      padding:14px 18px;
+      font-size:12px;
     }
 
     .market-bar{
