@@ -3916,18 +3916,8 @@
           <div class="card-content">
             <button class="action-btn btn-invest" id="openOvenBtn" aria-label="Open Oven investment" style="width:100%;margin-bottom:12px;">OVEN</button>
             <button class="action-btn btn-invest" id="openFarmBtn" aria-label="Open Airdrop Farm" style="width:100%;margin-bottom:12px;">FARM</button>
-            <div class="coming-soon-wrapper disabled" style="margin-bottom:12px;">
-              <button class="action-btn btn-invest" aria-label="Swap coming soon" style="width:100%;">SWAP</button>
-              <div class="coming-soon-overlay">
-                <div class="coming-soon-badge" style="font-size:8px;padding:8px 16px;">COMING SOON</div>
-              </div>
-            </div>
-            <div class="coming-soon-wrapper disabled">
-              <button class="action-btn btn-invest" aria-label="Staking coming soon" style="width:100%;">STAKING</button>
-              <div class="coming-soon-overlay">
-                <div class="coming-soon-badge" style="font-size:8px;padding:8px 16px;">COMING SOON</div>
-              </div>
-            </div>
+            <button class="action-btn btn-invest" id="openSwapBtn" aria-label="Open Swap" style="width:100%;margin-bottom:12px;">SWAP</button>
+            <button class="action-btn btn-invest" id="openStakingBtn" aria-label="Open Staking" style="width:100%;">STAKING</button>
           </div>
         </div>
 
@@ -8433,6 +8423,14 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     });
     document.getElementById('backFromFarmBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('farmClickBtn').addEventListener('click', clickFarm);
+    document.getElementById('openSwapBtn').addEventListener('click', () => {
+      console.log('Open Swap clicked');
+      Modal.alert('Swap feature coming soon! Trade your GP tokens for other assets.', 'Swap');
+    });
+    document.getElementById('openStakingBtn').addEventListener('click', () => {
+      console.log('Open Staking clicked');
+      Modal.alert('Staking feature coming soon! Stake your GP to earn rewards.', 'Staking');
+    });
     document.getElementById('viewLeaderboardBtn').addEventListener('click', () => {
       console.log('View Leaderboard clicked');
       swapContent('leaderboard');
