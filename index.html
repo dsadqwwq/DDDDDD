@@ -13,6 +13,8 @@
     --gold:#FFD64D;
     --gold-hi:#FFF3A3;
     --bg:#0b0f12;
+    --success:#4CAF50;
+    --danger:#F44336;
 
     /* Glow position */
     --glow-x: 80%;
@@ -264,6 +266,20 @@
   
   .input-field::placeholder{
     color:rgba(160,168,176,.5);
+  }
+
+  /* Standardized button sizes */
+  .btn-small{
+    padding:8px 16px;
+    font-size:9px;
+  }
+  .btn-medium{
+    padding:10px 20px;
+    font-size:10px;
+  }
+  .btn-large{
+    padding:12px 24px;
+    font-size:11px;
   }
 
   .btn-submit{
@@ -563,28 +579,7 @@
     pointer-events:none;
   }
 
-  .coming-soon-overlay{
-    position:absolute;
-    top:0;
-    left:0;
-    right:0;
-    bottom:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:rgba(0,0,0,0.6);
-    border-radius:8px;
-    z-index:1;
-    pointer-events:none;
-  }
-
-  .coming-soon-text{
-    font-family:'Press Start 2P', monospace;
-    font-size:24px;
-    color:var(--gold);
-    text-shadow:0 0 20px rgba(255,214,77,.8), 0 4px 8px rgba(0,0,0,.8);
-    animation:pulse 2s ease-in-out infinite;
-  }
+  /* Old coming-soon styles removed - now using consistent .coming-soon-wrapper approach */
 
   .match-list{
     display:flex;
@@ -610,7 +605,9 @@
     font-size:9px;
   }
   .win{background:rgba(76,175,80,.3);color:#4CAF50;}
+  .win::before{content:'✓ ';}
   .loss{background:rgba(244,67,54,.3);color:#F44336;}
+  .loss::before{content:'✕ ';}
 
   .dashboard-inventory{
     /* Removed redundant styles - now inside dashboard-card */
@@ -756,9 +753,9 @@
 
   .action-btn{
     flex:1;
-    padding:12px;
+    padding:10px 20px;
     font-family:'Press Start 2P', monospace;
-    font-size:11px;
+    font-size:10px;
     border-radius:8px;
     cursor:pointer;
     transition:all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -1105,21 +1102,25 @@
     background:linear-gradient(135deg, rgba(255,215,0,0.15) 0%, rgba(255,165,0,0.2) 100%);
     border:2px solid rgba(255,215,0,0.4);
     border-radius:12px;
-    padding:16px 24px;
+    padding:20px 24px;
     margin-bottom:24px;
     cursor:pointer;
     transition:all 0.3s ease;
     box-shadow:0 4px 20px rgba(255,215,0,0.15);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:12px;
   }
 
   .campaign-banner:hover{
     border-color:rgba(255,215,0,0.6);
     box-shadow:0 6px 30px rgba(255,215,0,0.25);
     transform:translateY(-2px);
+  }
+
+  .campaign-banner-header{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    margin-bottom:16px;
   }
 
   .campaign-banner-icon{
@@ -1137,6 +1138,43 @@
   .campaign-banner-info{
     font-size:16px;
     opacity:0.8;
+  }
+
+  .campaign-progress{
+    margin-bottom:8px;
+  }
+
+  .campaign-progress-text{
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    color:#FFD700;
+    text-align:center;
+    margin-bottom:8px;
+  }
+
+  .campaign-progress-bar{
+    width:100%;
+    height:8px;
+    background:rgba(0,0,0,0.3);
+    border-radius:4px;
+    overflow:hidden;
+    position:relative;
+  }
+
+  .campaign-progress-fill{
+    height:100%;
+    background:linear-gradient(90deg, #FFD700, #FFA500);
+    border-radius:4px;
+    transition:width 0.5s ease;
+    box-shadow:0 0 10px rgba(255,215,0,0.5);
+  }
+
+  .campaign-time-remaining{
+    font-family:Inter, system-ui, Arial;
+    font-size:11px;
+    color:rgba(255,215,0,0.8);
+    text-align:center;
+    margin-top:8px;
   }
 
   .gambling-disclaimer{
@@ -1499,17 +1537,146 @@
   }
 
   .back-btn{
-    padding:8px 12px;
+    padding:8px 16px;
     background:rgba(255,214,77,.1);
     border:1px solid var(--gold);
     color:var(--gold);
     font-family:'Press Start 2P', monospace;
-    font-size:10px;
+    font-size:9px;
     cursor:pointer;
     border-radius:4px;
     transition:all 0.2s;
   }
   .back-btn:hover{background:rgba(255,214,77,.2);}
+
+  /* Breadcrumb Navigation */
+  .breadcrumb{
+    padding:12px 0;
+    font-family:'Press Start 2P', monospace;
+    font-size:9px;
+    color:#a0a8b0;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:12px;
+  }
+  .breadcrumb-item{
+    cursor:pointer;
+    transition:all 0.2s;
+  }
+  .breadcrumb-item:hover{
+    color:var(--gold-hi);
+  }
+  .breadcrumb-item.active{
+    color:var(--gold);
+    cursor:default;
+  }
+  .breadcrumb-separator{
+    color:rgba(255,214,77,.3);
+  }
+
+  /* Game Disclaimer Bar */
+  .game-disclaimer{
+    background:rgba(244,67,54,.15);
+    border:1px solid rgba(244,67,54,.3);
+    border-radius:6px;
+    padding:12px 16px;
+    margin-top:16px;
+    font-family:Inter,system-ui;
+    font-size:11px;
+    color:#F44336;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .game-disclaimer.info{
+    background:rgba(255,214,77,.1);
+    border-color:rgba(255,214,77,.3);
+    color:var(--gold);
+  }
+  .game-disclaimer.success{
+    background:rgba(76,175,80,.15);
+    border-color:rgba(76,175,80,.3);
+    color:#4CAF50;
+  }
+
+  /* Empty States */
+  .empty-state{
+    text-align:center;
+    padding:48px 24px;
+    color:#a0a8b0;
+  }
+  .empty-state-icon{
+    font-size:48px;
+    margin-bottom:16px;
+    opacity:0.5;
+  }
+  .empty-state-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:12px;
+    color:var(--gold);
+    margin-bottom:12px;
+  }
+  .empty-state-message{
+    font-family:Inter,system-ui;
+    font-size:13px;
+    line-height:1.6;
+    max-width:400px;
+    margin:0 auto;
+  }
+
+  /* Consistent Coming Soon Overlay */
+  .coming-soon-wrapper{
+    position:relative;
+  }
+  .coming-soon-wrapper.disabled{
+    pointer-events:none;
+  }
+  .coming-soon-overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(11,15,18,.85);
+    backdrop-filter:blur(4px);
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:5;
+  }
+  .coming-soon-badge{
+    background:linear-gradient(135deg, var(--gold), var(--gold-hi));
+    color:#000;
+    padding:12px 24px;
+    border-radius:8px;
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    font-weight:bold;
+    box-shadow:0 4px 16px rgba(255,214,77,.4);
+    animation:pulse 2s ease-in-out infinite;
+  }
+
+  /* GP Animation */
+  @keyframes countUp{
+    0%{
+      opacity:0;
+      transform:translateY(10px);
+    }
+    100%{
+      opacity:1;
+      transform:translateY(0);
+    }
+  }
+  .gp-change{
+    animation:countUp 0.3s ease-out;
+  }
+  .gp-increase{
+    color:#4CAF50;
+    text-shadow:0 0 8px rgba(76,175,80,.6);
+  }
+  .gp-decrease{
+    color:#F44336;
+    text-shadow:0 0 8px rgba(244,67,54,.6);
+  }
 
   /* Game layout - sidebar + main */
   .game-layout{
@@ -3339,9 +3506,20 @@
 
       <!-- Campaign Banner -->
       <div class="campaign-banner" id="campaignBanner">
-        <div class="campaign-banner-icon">🏆</div>
-        <div class="campaign-banner-text">WHO WANTS TO BE A MILLIONAIRE</div>
-        <div class="campaign-banner-info">ℹ️</div>
+        <div class="campaign-banner-header">
+          <div class="campaign-banner-icon">🏆</div>
+          <div class="campaign-banner-text">WHO WANTS TO BE A MILLIONAIRE</div>
+          <div class="campaign-banner-info">ℹ️</div>
+        </div>
+        <div class="campaign-progress">
+          <div class="campaign-progress-text">
+            <span id="campaignCurrentGP">0</span> / 1,000,000 GP
+          </div>
+          <div class="campaign-progress-bar">
+            <div class="campaign-progress-fill" id="campaignProgressFill" style="width:0%"></div>
+          </div>
+          <div class="campaign-time-remaining" id="campaignTimeRemaining">Campaign in progress</div>
+        </div>
       </div>
 
       <!-- Two-column card layout -->
@@ -3352,8 +3530,18 @@
           <div class="card-content">
             <button class="action-btn btn-invest" id="openOvenBtn" aria-label="Open Oven investment" style="width:100%;margin-bottom:12px;">OVEN</button>
             <button class="action-btn btn-invest" id="openFarmBtn" aria-label="Open Airdrop Farm" style="width:100%;margin-bottom:12px;">FARM</button>
-            <button class="action-btn btn-invest" aria-label="Swap coming soon" style="width:100%;margin-bottom:12px;opacity:0.5;cursor:not-allowed;">SWAP</button>
-            <button class="action-btn btn-invest" aria-label="Staking coming soon" style="width:100%;opacity:0.5;cursor:not-allowed;">STAKING</button>
+            <div class="coming-soon-wrapper disabled" style="margin-bottom:12px;">
+              <button class="action-btn btn-invest" aria-label="Swap coming soon" style="width:100%;">SWAP</button>
+              <div class="coming-soon-overlay">
+                <div class="coming-soon-badge" style="font-size:8px;padding:8px 16px;">COMING SOON</div>
+              </div>
+            </div>
+            <div class="coming-soon-wrapper disabled">
+              <button class="action-btn btn-invest" aria-label="Staking coming soon" style="width:100%;">STAKING</button>
+              <div class="coming-soon-overlay">
+                <div class="coming-soon-badge" style="font-size:8px;padding:8px 16px;">COMING SOON</div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -3375,54 +3563,50 @@
       <!-- PVE Adventures -->
       <div class="dashboard-cards-row">
         <!-- Loot Forest -->
-        <div class="dashboard-card">
+        <div class="dashboard-card coming-soon-wrapper disabled">
           <div class="card-title">🌲 LOOT FOREST</div>
-          <div class="card-content" style="position:relative;min-height:200px;">
-            <div class="recent-matches-content" style="filter:blur(2px);opacity:0.4;pointer-events:none;">
-              <div class="match-list">
-                <div class="match-item">
-                  <span>Goblin Camp</span>
-                  <span class="match-result win">CLEARED</span>
-                </div>
-                <div class="match-item">
-                  <span>Ancient Trees</span>
-                  <span class="match-result">EXPLORED</span>
-                </div>
-                <div class="match-item">
-                  <span>Hidden Grove</span>
-                  <span class="match-result win">LOOTED</span>
-                </div>
+          <div class="card-content" style="min-height:200px;">
+            <div class="match-list">
+              <div class="match-item">
+                <span>Goblin Camp</span>
+                <span class="match-result win">CLEARED</span>
+              </div>
+              <div class="match-item">
+                <span>Ancient Trees</span>
+                <span class="match-result">EXPLORED</span>
+              </div>
+              <div class="match-item">
+                <span>Hidden Grove</span>
+                <span class="match-result win">LOOTED</span>
               </div>
             </div>
-            <div class="coming-soon-overlay">
-              <div class="coming-soon-text blink">COMING SOON</div>
-            </div>
+          </div>
+          <div class="coming-soon-overlay">
+            <div class="coming-soon-badge">COMING SOON</div>
           </div>
         </div>
 
         <!-- Lava Dungeons -->
-        <div class="dashboard-card">
+        <div class="dashboard-card coming-soon-wrapper disabled">
           <div class="card-title">🔥 LAVA DUNGEONS</div>
-          <div class="card-content" style="position:relative;min-height:200px;">
-            <div class="recent-matches-content" style="filter:blur(2px);opacity:0.4;pointer-events:none;">
-              <div class="match-list">
-                <div class="match-item">
-                  <span>Fire Elementals</span>
-                  <span class="match-result loss">DEFEATED</span>
-                </div>
-                <div class="match-item">
-                  <span>Molten Core</span>
-                  <span class="match-result">ENTERED</span>
-                </div>
-                <div class="match-item">
-                  <span>Lava Dragon</span>
-                  <span class="match-result win">SLAIN</span>
-                </div>
+          <div class="card-content" style="min-height:200px;">
+            <div class="match-list">
+              <div class="match-item">
+                <span>Fire Elementals</span>
+                <span class="match-result loss">DEFEATED</span>
+              </div>
+              <div class="match-item">
+                <span>Molten Core</span>
+                <span class="match-result">ENTERED</span>
+              </div>
+              <div class="match-item">
+                <span>Lava Dragon</span>
+                <span class="match-result win">SLAIN</span>
               </div>
             </div>
-            <div class="coming-soon-overlay">
-              <div class="coming-soon-text blink">COMING SOON</div>
-            </div>
+          </div>
+          <div class="coming-soon-overlay">
+            <div class="coming-soon-badge">COMING SOON</div>
           </div>
         </div>
       </div>
@@ -3444,6 +3628,13 @@
       <div class="leaderboard-header">
         <div class="leaderboard-title">GLOBAL LEADERBOARD</div>
         <button class="back-btn" id="backFromLeaderboardBtn" aria-label="Back to dashboard">BACK</button>
+      </div>
+
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item active">Leaderboard</span>
       </div>
 
       <div class="your-best" id="yourBestSection" style="display:none;">
@@ -3473,6 +3664,13 @@
           <!-- Table rows will be generated here -->
         </div>
       </div>
+
+      <!-- Empty state for leaderboard -->
+      <div id="leaderboardEmpty" class="empty-state" style="display:none;">
+        <div class="empty-state-icon">🏆</div>
+        <div class="empty-state-title">No Records Yet</div>
+        <div class="empty-state-message">Be the first to appear on the leaderboard! Complete games to set your record.</div>
+      </div>
     </div>
 
     <!-- Quest content (hidden initially) -->
@@ -3480,6 +3678,13 @@
       <div class="quest-header">
         <div class="quest-title">QUEST LOG</div>
         <button class="back-btn" id="backFromQuestsBtn" aria-label="Back to dashboard">BACK</button>
+      </div>
+
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item active">Quests</span>
       </div>
 
       <div class="quest-tabs">
@@ -3494,6 +3699,13 @@
         <div id="questGrid" class="quest-grid">
           <!-- Quest cards will be generated here -->
         </div>
+
+        <!-- Empty state for quests -->
+        <div id="questsEmpty" class="empty-state" style="display:none;">
+          <div class="empty-state-icon">📋</div>
+          <div class="empty-state-title">No Quests Available</div>
+          <div class="empty-state-message">Check back later for new quests to complete and earn rewards!</div>
+        </div>
       </div>
     </div>
 
@@ -3507,8 +3719,22 @@
         </div>
       </div>
 
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item active">Inventory</span>
+      </div>
+
       <div class="inventory-grid" id="inventoryGrid">
         <!-- Inventory slots will be generated here -->
+      </div>
+
+      <!-- Empty state for inventory -->
+      <div id="inventoryEmpty" class="empty-state" style="display:none;">
+        <div class="empty-state-icon">🎒</div>
+        <div class="empty-state-title">Empty Inventory</div>
+        <div class="empty-state-message">Your inventory is empty. Visit the Market to purchase items and powerups!</div>
       </div>
     </div>
 
@@ -3522,62 +3748,67 @@
         </div>
       </div>
 
-      <div style="position:relative;">
-        <div style="filter:blur(2px);opacity:0.4;pointer-events:none;">
-          <div class="shop-grid" id="shopGrid">
-            <!-- Placeholder shop items for proper layout -->
-            <div class="shop-item">
-              <div class="item-icon">🗡️</div>
-              <div class="shop-item-name">BRONZE SWORD</div>
-              <div class="shop-item-desc">A sturdy starter weapon</div>
-              <div class="shop-item-price">💰 1,000 GP</div>
-            </div>
-            <div class="shop-item">
-              <div class="item-icon">🛡️</div>
-              <div class="shop-item-name">IRON SHIELD</div>
-              <div class="shop-item-desc">Basic defense equipment</div>
-              <div class="shop-item-price">💰 1,500 GP</div>
-            </div>
-            <div class="shop-item">
-              <div class="item-icon">⚔️</div>
-              <div class="shop-item-name">STEEL BLADE</div>
-              <div class="shop-item-desc">Improved attack power</div>
-              <div class="shop-item-price">💰 2,500 GP</div>
-            </div>
-            <div class="shop-item">
-              <div class="item-icon">🏹</div>
-              <div class="shop-item-name">HUNTER BOW</div>
-              <div class="shop-item-desc">Ranged weapon for distance</div>
-              <div class="shop-item-price">💰 3,000 GP</div>
-            </div>
-            <div class="shop-item">
-              <div class="item-icon">🪄</div>
-              <div class="shop-item-name">MAGIC STAFF</div>
-              <div class="shop-item-desc">Channel mystical energies</div>
-              <div class="shop-item-price">💰 4,000 GP</div>
-            </div>
-            <div class="shop-item">
-              <div class="item-icon">💎</div>
-              <div class="shop-item-name">RARE GEM</div>
-              <div class="shop-item-desc">Valuable collectible item</div>
-              <div class="shop-item-price">💰 5,000 GP</div>
-            </div>
-            <div class="shop-item">
-              <div class="item-icon">🎭</div>
-              <div class="shop-item-name">MYSTIC MASK</div>
-              <div class="shop-item-desc">Enhance your abilities</div>
-              <div class="shop-item-price">💰 6,000 GP</div>
-            </div>
-            <div class="shop-item">
-              <div class="item-icon">👑</div>
-              <div class="shop-item-name">ROYAL CROWN</div>
-              <div class="shop-item-desc">Ultimate prestige item</div>
-              <div class="shop-item-price">💰 10,000 GP</div>
-            </div>
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item active">Market</span>
+      </div>
+
+      <div class="coming-soon-wrapper disabled" style="position:relative;">
+        <div class="shop-grid" id="shopGrid">
+          <!-- Placeholder shop items for proper layout -->
+          <div class="shop-item">
+            <div class="item-icon">🗡️</div>
+            <div class="shop-item-name">BRONZE SWORD</div>
+            <div class="shop-item-desc">A sturdy starter weapon</div>
+            <div class="shop-item-price">💰 1,000 GP</div>
+          </div>
+          <div class="shop-item">
+            <div class="item-icon">🛡️</div>
+            <div class="shop-item-name">IRON SHIELD</div>
+            <div class="shop-item-desc">Basic defense equipment</div>
+            <div class="shop-item-price">💰 1,500 GP</div>
+          </div>
+          <div class="shop-item">
+            <div class="item-icon">⚔️</div>
+            <div class="shop-item-name">STEEL BLADE</div>
+            <div class="shop-item-desc">Improved attack power</div>
+            <div class="shop-item-price">💰 2,500 GP</div>
+          </div>
+          <div class="shop-item">
+            <div class="item-icon">🏹</div>
+            <div class="shop-item-name">HUNTER BOW</div>
+            <div class="shop-item-desc">Ranged weapon for distance</div>
+            <div class="shop-item-price">💰 3,000 GP</div>
+          </div>
+          <div class="shop-item">
+            <div class="item-icon">🪄</div>
+            <div class="shop-item-name">MAGIC STAFF</div>
+            <div class="shop-item-desc">Channel mystical energies</div>
+            <div class="shop-item-price">💰 4,000 GP</div>
+          </div>
+          <div class="shop-item">
+            <div class="item-icon">💎</div>
+            <div class="shop-item-name">RARE GEM</div>
+            <div class="shop-item-desc">Valuable collectible item</div>
+            <div class="shop-item-price">💰 5,000 GP</div>
+          </div>
+          <div class="shop-item">
+            <div class="item-icon">🎭</div>
+            <div class="shop-item-name">MYSTIC MASK</div>
+            <div class="shop-item-desc">Enhance your abilities</div>
+            <div class="shop-item-price">💰 6,000 GP</div>
+          </div>
+          <div class="shop-item">
+            <div class="item-icon">👑</div>
+            <div class="shop-item-name">ROYAL CROWN</div>
+            <div class="shop-item-desc">Ultimate prestige item</div>
+            <div class="shop-item-price">💰 10,000 GP</div>
           </div>
         </div>
         <div class="coming-soon-overlay">
-          <div class="coming-soon-text blink">COMING SOON</div>
+          <div class="coming-soon-badge">COMING SOON</div>
         </div>
       </div>
     </div>
@@ -3587,6 +3818,15 @@
       <div class="oven-header">
         <div class="oven-title">🔥 THE OVEN</div>
         <button class="back-btn" id="backFromOvenBtn" aria-label="Back to dashboard">BACK</button>
+      </div>
+
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item">Finance</span>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item active">Oven</span>
       </div>
 
       <!-- Main stats display -->
@@ -3632,6 +3872,11 @@
         <strong>10% Hourly Compound Interest</strong><br>
         Your investment grows automatically every hour. Withdraw anytime.
       </div>
+
+      <!-- Disclaimer for Oven -->
+      <div class="game-disclaimer success">
+        💡 <strong>Simulated Investment:</strong> This is a campaign feature with simulated returns. All GP earned counts toward your 1M GP goal for the special badge.
+      </div>
     </div>
 
     <!-- Airdrop Farm content (hidden initially) -->
@@ -3639,6 +3884,15 @@
       <div class="oven-header">
         <div class="oven-title">🪂 AIRDROP FARM</div>
         <button class="back-btn" id="backFromFarmBtn" aria-label="Back to dashboard">BACK</button>
+      </div>
+
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item">Finance</span>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item active">Farm</span>
       </div>
 
       <!-- Stats display -->
@@ -3678,6 +3932,11 @@
         <strong>Click to Farm Airdrops!</strong><br>
         Click every 5 seconds for a chance to earn GP. Keep farming for 3 days to maximize your rewards!
       </div>
+
+      <!-- Disclaimer for Farm -->
+      <div class="game-disclaimer info">
+        ⚠️ <strong>Campaign Event:</strong> 3-day farming challenge. Campaign tokens only • Not exchangeable • Counts toward 1M GP goal
+      </div>
     </div>
 
     <!-- Reaction Game content (hidden initially) -->
@@ -3685,6 +3944,15 @@
       <div class="game-header">
         <div class="game-title">REACTION TRADER</div>
         <button class="back-btn" id="backToDashBtn" aria-label="Back to dashboard">BACK</button>
+      </div>
+
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item">Gambling</span>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item active">Reaction Trader</span>
       </div>
 
       <div class="game-layout">
@@ -3725,6 +3993,11 @@
           </div>
         </div>
       </div>
+
+      <!-- Disclaimer for Reaction Game -->
+      <div class="game-disclaimer">
+        ⚠️ <strong>Campaign Only:</strong> Fake tokens for Millionaire campaign • Not exchangeable • Play responsibly
+      </div>
     </div>
 
     <!-- Crash Rocket Game content (hidden initially) -->
@@ -3732,6 +4005,15 @@
       <div class="game-header">
         <div class="game-title">ROCKET CRASH</div>
         <button class="back-btn" id="backFromCrashBtn" aria-label="Back to dashboard">BACK</button>
+      </div>
+
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item">Gambling</span>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item active">Rocket Crash</span>
       </div>
 
       <div class="game-layout">
@@ -3804,6 +4086,11 @@
           </div>
         </div>
       </div>
+
+      <!-- Disclaimer for Crash Game -->
+      <div class="game-disclaimer">
+        ⚠️ <strong>Campaign Only:</strong> Fake tokens for Millionaire campaign • Not exchangeable • Play responsibly
+      </div>
     </div>
 
     <!-- Mines Game content (hidden initially) -->
@@ -3811,6 +4098,15 @@
       <div class="game-header">
         <div class="game-title">💣 MINES</div>
         <button class="back-btn" id="backFromMinesBtn" aria-label="Back to dashboard">BACK</button>
+      </div>
+
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item">Gambling</span>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item active">Mines</span>
       </div>
 
       <div class="mines-game-area">
@@ -3861,6 +4157,11 @@
           Click tiles to reveal. Avoid the mines! Cash out anytime to secure your winnings.
         </div>
       </div>
+
+      <!-- Disclaimer for Mines Game -->
+      <div class="game-disclaimer">
+        ⚠️ <strong>Campaign Only:</strong> Fake tokens for Millionaire campaign • Not exchangeable • Play responsibly
+      </div>
     </div>
 
     <!-- Blackjack Game content (hidden initially) -->
@@ -3868,6 +4169,15 @@
       <div class="game-header">
         <div class="game-title">♠️ BLACKJACK</div>
         <button class="back-btn" id="backFromBlackjackBtn" aria-label="Back to dashboard">BACK</button>
+      </div>
+
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item">Gambling</span>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item active">Blackjack</span>
       </div>
 
       <div class="blackjack-game-area">
@@ -3927,6 +4237,11 @@
         <div class="blackjack-info" id="blackjackGameInfo">
           Place your bet and click DEAL to start. Get closer to 21 than the dealer without going over!
         </div>
+      </div>
+
+      <!-- Disclaimer for Blackjack Game -->
+      <div class="game-disclaimer">
+        ⚠️ <strong>Campaign Only:</strong> Fake tokens for Millionaire campaign • Not exchangeable • Play responsibly
       </div>
     </div>
   </main>
@@ -6801,11 +7116,38 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       const newGP = currentGP + amount;
       localStorage.setItem('duelpvp_gp', newGP.toString());
 
-      // Update dashboard display if visible
+      // Update dashboard display if visible with animation
       const dashboardGPEl = document.getElementById('dashboardGPBalance');
       if (dashboardGPEl) {
         const displayGP = newGP;
-        dashboardGPEl.textContent = displayGP >= 1000000 ? `${(displayGP/1000000).toFixed(1)}M` : displayGP >= 1000 ? `${(displayGP/1000).toFixed(1)}K` : displayGP;
+        const formattedGP = displayGP >= 1000000 ? `${(displayGP/1000000).toFixed(1)}M` : displayGP >= 1000 ? `${(displayGP/1000).toFixed(1)}K` : displayGP;
+
+        // Apply animation
+        dashboardGPEl.classList.remove('gp-change', 'gp-increase', 'gp-decrease');
+        void dashboardGPEl.offsetWidth; // Trigger reflow
+        dashboardGPEl.classList.add('gp-change');
+
+        if (amount > 0) {
+          dashboardGPEl.classList.add('gp-increase');
+        } else if (amount < 0) {
+          dashboardGPEl.classList.add('gp-decrease');
+        }
+
+        dashboardGPEl.textContent = formattedGP;
+
+        // Remove animation classes after animation completes
+        setTimeout(() => {
+          dashboardGPEl.classList.remove('gp-change', 'gp-increase', 'gp-decrease');
+        }, 300);
+      }
+
+      // Update campaign progress
+      const campaignCurrentGP = document.getElementById('campaignCurrentGP');
+      const campaignProgressFill = document.getElementById('campaignProgressFill');
+      if (campaignCurrentGP && campaignProgressFill) {
+        campaignCurrentGP.textContent = newGP.toLocaleString();
+        const progress = Math.min((newGP / 1000000) * 100, 100);
+        campaignProgressFill.style.width = progress + '%';
       }
 
       return newGP;
@@ -7122,16 +7464,16 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       // Show result with animation
       resultEl.className = 'farm-result';
       if (reward.tier === 'miss') {
-        resultEl.textContent = '0 GP';
+        resultEl.textContent = '✕ 0 GP';
         resultEl.classList.add('flash-red');
       } else if (reward.tier === 'common') {
-        resultEl.textContent = '+' + reward.amount + ' GP';
+        resultEl.textContent = '✓ +' + reward.amount + ' GP';
         resultEl.classList.add('flash-green');
       } else if (reward.tier === 'rare') {
-        resultEl.textContent = '+' + reward.amount + ' GP';
+        resultEl.textContent = '✓ +' + reward.amount + ' GP';
         resultEl.classList.add('flash-green');
       } else {
-        resultEl.textContent = '🎉 +' + reward.amount + ' GP 🎉';
+        resultEl.textContent = '🎉 ✓ +' + reward.amount + ' GP 🎉';
         resultEl.classList.add('flash-gold');
       }
 
