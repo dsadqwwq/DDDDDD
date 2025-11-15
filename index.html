@@ -3854,14 +3854,20 @@
           <div class="user-name" id="userName" aria-label="User name">Champion</div>
           <div class="user-stats" aria-label="User level and rank">Level 87 • Falafel Enjoyer</div>
         </div>
-        <button class="logout-btn" id="logoutBtn" aria-label="Logout from account">LOGOUT</button>
+        <div style="display:flex;align-items:center;gap:20px;">
+          <div class="stat-card" style="margin:0;padding:8px 16px;">
+            <div class="stat-label" style="font-size:10px;">RANK</div>
+            <div class="stat-value" style="font-size:16px;" id="dashboardRank">#127</div>
+          </div>
+          <div class="stat-card" style="margin:0;padding:8px 16px;">
+            <div class="stat-label" style="font-size:10px;">GP BALANCE</div>
+            <div class="stat-value" style="font-size:16px;" id="dashboardGPBalance">0</div>
+          </div>
+          <button class="logout-btn" id="logoutBtn" aria-label="Logout from account">LOGOUT</button>
+        </div>
       </div>
 
       <div class="stats-grid">
-        <div class="stat-card" style="cursor:pointer;" id="viewLeaderboardBtn">
-          <div class="stat-label">LEADERBOARD</div>
-          <div class="stat-value" style="font-size:20px;">🏆</div>
-        </div>
         <div class="stat-card" style="cursor:pointer;" id="viewQuestsBtn">
           <div class="stat-label">QUESTS</div>
           <div class="stat-value" style="font-size:20px;">📋</div>
@@ -3872,8 +3878,17 @@
         </div>
       </div>
 
-      <!-- Market Bar (hidden - kept for compatibility) -->
-      <div class="market-bar" id="viewShopBtn" style="display:none;"></div>
+      <!-- Market Bar -->
+      <div class="market-bar" id="viewShopBtn" style="cursor:pointer;background:linear-gradient(135deg, rgba(255,214,77,0.08) 0%, rgba(255,165,0,0.12) 100%);border:2px solid rgba(255,214,77,0.4);border-radius:12px;padding:20px 28px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;transition:all 0.3s ease;box-shadow:0 4px 20px rgba(255,214,77,0.15);">
+        <div style="display:flex;align-items:center;gap:20px;">
+          <div style="font-size:32px;">🏪</div>
+          <div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:var(--gold);margin-bottom:4px;">MARKET</div>
+            <div style="font-family:Inter,system-ui,Arial;font-size:12px;color:#a0a8b0;">Items • Powerups • Gear</div>
+          </div>
+        </div>
+        <div style="font-family:'Press Start 2P',monospace;font-size:10px;color:var(--gold);background:rgba(255,214,77,0.1);padding:8px 16px;border-radius:6px;border:1px solid rgba(255,214,77,0.3);">COMING SOON</div>
+      </div>
 
       <!-- Campaign Banner - Clickable to open campaign page -->
       <div class="campaign-banner" id="campaignBannerCard" style="cursor:pointer;">
@@ -3890,17 +3905,6 @@
             <div class="campaign-progress-fill" id="campaignProgressFillCard" style="width:0%"></div>
           </div>
           <div class="campaign-time-remaining" id="campaignTimeRemainingCard">Campaign in progress</div>
-        </div>
-      </div>
-
-      <!-- Market Section -->
-      <div class="dashboard-cards-row">
-        <div class="dashboard-card" style="background:linear-gradient(135deg, rgba(255,214,77,0.05) 0%, rgba(255,165,0,0.08) 100%); border-color:rgba(255,214,77,0.3);">
-          <div class="card-title">🏪 MARKET</div>
-          <div class="card-content">
-            <button class="action-btn" disabled style="width:100%;margin-bottom:12px;opacity:0.5;cursor:not-allowed;background:rgba(255,214,77,0.1);border-color:rgba(255,214,77,0.3);color:#FFD64D;">ITEMS</button>
-            <button class="action-btn" disabled style="width:100%;opacity:0.5;cursor:not-allowed;background:rgba(255,214,77,0.1);border-color:rgba(255,214,77,0.3);color:#FFD64D;">POWERUPS</button>
-          </div>
         </div>
       </div>
 
@@ -4112,41 +4116,6 @@
               * Campaign uses fake tokens not exchangeable for real value.
             </div>
           </div>
-        </div>
-      </div>
-
-      <!-- Leaderboard Section -->
-      <div style="margin-top:30px;">
-        <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:var(--gold);margin-bottom:20px;text-align:center;">CAMPAIGN LEADERBOARD</div>
-
-        <div class="leaderboard-filters" id="campaignLeaderboardFilters" role="group" aria-label="Filter leaderboard by time period">
-          <button class="filter-btn active" data-filter="all" aria-label="Show all time scores" aria-pressed="true">ALL TIME</button>
-          <button class="filter-btn" data-filter="today" aria-label="Show today's scores" aria-pressed="false">TODAY</button>
-          <button class="filter-btn" data-filter="week" aria-label="Show this week's scores" aria-pressed="false">THIS WEEK</button>
-          <button class="filter-btn" data-filter="month" aria-label="Show this month's scores" aria-pressed="false">THIS MONTH</button>
-        </div>
-
-        <div class="podium" id="campaignPodium">
-          <!-- Top 3 will be generated here -->
-        </div>
-
-        <div class="leaderboard-table">
-          <div class="table-header">
-            <div>RANK</div>
-            <div>PLAYER</div>
-            <div>GP</div>
-            <div class="entry-date">DATE</div>
-          </div>
-          <div id="campaignLeaderboardTableBody">
-            <!-- Table rows will be generated here -->
-          </div>
-        </div>
-
-        <!-- Empty state for leaderboard -->
-        <div id="campaignLeaderboardEmpty" class="empty-state" style="display:none;">
-          <div class="empty-state-icon">🏆</div>
-          <div class="empty-state-title">No Records Yet</div>
-          <div class="empty-state-message">Be the first to reach 1,000,000 GP!</div>
         </div>
       </div>
     </div>
@@ -6073,6 +6042,10 @@
         // Update GP from localStorage (for test mode) or database
         const localGP = parseInt(localStorage.getItem('duelpvp_gp')) || 0;
         const displayGP = localGP || totalGP;
+
+        // Update dashboard header
+        document.getElementById('dashboardGPBalance').textContent = displayGP >= 1000000 ? `${(displayGP/1000000).toFixed(1)}M` : displayGP >= 1000 ? `${(displayGP/1000).toFixed(1)}K` : displayGP;
+        document.getElementById('dashboardRank').textContent = userRank > 0 ? `#${userRank}` : '--';
 
         // Update campaign progress on dashboard card
         const campaignGP = displayGP;
