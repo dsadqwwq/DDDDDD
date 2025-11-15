@@ -8558,12 +8558,28 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       }
     });
 
+    // Helper function for breadcrumb navigation
+    function showDashboard() {
+      swapContent('dashboard');
+    }
+
+    // Make DUEL PVP logo clickable when logged in
+    const brandTitle = document.querySelector('.brand .title');
+    if (brandTitle) {
+      brandTitle.addEventListener('click', () => {
+        const savedEmail = localStorage.getItem('duelpvp_email');
+        if (savedEmail) {
+          swapContent('dashboard');
+        }
+      });
+    }
+
     // Check if user is already logged in
     try {
       const savedEmail = localStorage.getItem('duelpvp_email');
       if (savedEmail) {
         document.getElementById('userName').textContent = savedEmail.split('@')[0].toUpperCase();
-        // Optionally auto-login: swapContent('dashboard');
+        if (brandTitle) brandTitle.style.cursor = 'pointer';
       }
     } catch (e) {}
   </script>
