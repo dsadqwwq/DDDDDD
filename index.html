@@ -3885,8 +3885,8 @@
       <!-- Market Bar (hidden - kept for compatibility) -->
       <div class="market-bar" id="viewShopBtn" style="display:none;"></div>
 
-      <!-- Campaign Banner -->
-      <div class="campaign-banner" id="campaignBanner">
+      <!-- Campaign Banner - Clickable to open campaign page -->
+      <div class="campaign-banner" id="campaignBannerCard" style="cursor:pointer;">
         <div class="campaign-banner-header">
           <div class="campaign-banner-icon">🏆</div>
           <div class="campaign-banner-text">WHO WANTS TO BE A MILLIONAIRE</div>
@@ -3894,40 +3894,12 @@
         </div>
         <div class="campaign-progress">
           <div class="campaign-progress-text">
-            <span id="campaignCurrentGP">0</span> / 1,000,000 GP
+            <span id="campaignCurrentGPCard">0</span> / 1,000,000 GP
           </div>
           <div class="campaign-progress-bar">
-            <div class="campaign-progress-fill" id="campaignProgressFill" style="width:0%"></div>
+            <div class="campaign-progress-fill" id="campaignProgressFillCard" style="width:0%"></div>
           </div>
-          <div class="campaign-time-remaining" id="campaignTimeRemaining">Campaign in progress</div>
-        </div>
-      </div>
-
-      <!-- Two-column card layout -->
-      <div class="dashboard-cards-row">
-        <!-- Left: DeFi -->
-        <div class="dashboard-card invest">
-          <div class="card-title">💎 DEFI</div>
-          <div class="card-content">
-            <button class="action-btn btn-invest" id="openOvenBtn" aria-label="Open Staking" style="width:100%;margin-bottom:12px;">STAKING</button>
-            <button class="action-btn btn-invest" id="openFarmBtn" aria-label="Open Airdrop Farm" style="width:100%;margin-bottom:12px;">FARM</button>
-            <button class="action-btn btn-invest" disabled style="width:100%;margin-bottom:12px;opacity:0.5;cursor:not-allowed;">SWAP</button>
-            <button class="action-btn btn-invest" disabled style="width:100%;opacity:0.5;cursor:not-allowed;">YIELD FARMING</button>
-          </div>
-        </div>
-
-        <!-- Right: Gambling -->
-        <div class="dashboard-card gamble">
-          <div class="card-title">🎲 GAMBLING</div>
-          <div class="card-content">
-            <button class="action-btn btn-gamble" id="playReactionBtn" aria-label="Play trading simulator" style="width:100%;margin-bottom:12px;">TRADING SIM</button>
-            <button class="action-btn btn-gamble" id="playCrashBtn" aria-label="Play crash rocket game" style="width:100%;margin-bottom:12px;">CRASH</button>
-            <button class="action-btn btn-gamble" id="playMinesBtn" aria-label="Play mines game" style="width:100%;margin-bottom:12px;">MINES</button>
-            <button class="action-btn btn-gamble" id="playBlackjackBtn" aria-label="Play blackjack game" style="width:100%;">BLACKJACK</button>
-            <div style="background:rgba(244,67,54,0.08);border:1px solid rgba(244,67,54,0.2);border-radius:8px;padding:12px;margin-top:12px;font-size:11px;line-height:1.6;color:rgba(244,67,54,0.9);text-align:center;">
-              * Campaign uses fake tokens not exchangeable for real value.
-            </div>
-          </div>
+          <div class="campaign-time-remaining" id="campaignTimeRemainingCard">Campaign in progress</div>
         </div>
       </div>
 
@@ -4081,6 +4053,106 @@
           <div class="empty-state-icon">📋</div>
           <div class="empty-state-title">No Quests Available</div>
           <div class="empty-state-message">Check back later for new quests to complete and earn rewards!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campaign Page (hidden initially) -->
+    <div class="dashboard-content" id="campaignPageContent" role="region" aria-label="Campaign page" style="display:none;">
+      <div class="dashboard-header">
+        <div class="user-info">
+          <div class="user-name">🏆 WHO WANTS TO BE A MILLIONAIRE</div>
+          <div class="user-stats">Get over 1,000,000 GP to win</div>
+        </div>
+        <button class="back-btn" id="backFromCampaignBtn" aria-label="Back to dashboard">BACK</button>
+      </div>
+
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item active">Campaign</span>
+      </div>
+
+      <!-- Campaign Progress -->
+      <div class="campaign-banner" style="margin-bottom:20px;cursor:default;" id="campaignBanner">
+        <div class="campaign-progress">
+          <div class="campaign-progress-text">
+            <span id="campaignCurrentGP">0</span> / 1,000,000 GP
+          </div>
+          <div class="campaign-progress-bar">
+            <div class="campaign-progress-fill" id="campaignProgressFill" style="width:0%"></div>
+          </div>
+          <div class="campaign-time-remaining" id="campaignTimeRemaining">Campaign in progress</div>
+        </div>
+      </div>
+
+      <!-- Rank Display -->
+      <div class="stat-card" style="margin-bottom:20px;">
+        <div class="stat-label">YOUR CAMPAIGN RANK</div>
+        <div class="stat-value" style="font-size:32px;" id="campaignRank">#127</div>
+      </div>
+
+      <!-- Two-column card layout -->
+      <div class="dashboard-cards-row">
+        <!-- Left: DeFi -->
+        <div class="dashboard-card invest">
+          <div class="card-title">💎 DEFI</div>
+          <div class="card-content">
+            <button class="action-btn btn-invest" id="openOvenBtn" aria-label="Open Staking" style="width:100%;margin-bottom:12px;">STAKING</button>
+            <button class="action-btn btn-invest" id="openFarmBtn" aria-label="Open Airdrop Farm" style="width:100%;margin-bottom:12px;">FARM</button>
+            <button class="action-btn btn-invest" disabled style="width:100%;margin-bottom:12px;opacity:0.5;cursor:not-allowed;">SWAP</button>
+            <button class="action-btn btn-invest" disabled style="width:100%;opacity:0.5;cursor:not-allowed;">YIELD FARMING</button>
+          </div>
+        </div>
+
+        <!-- Right: Gambling -->
+        <div class="dashboard-card gamble">
+          <div class="card-title">🎲 GAMBLING</div>
+          <div class="card-content">
+            <button class="action-btn btn-gamble" id="playReactionBtn" aria-label="Play trading simulator" style="width:100%;margin-bottom:12px;">TRADING SIM</button>
+            <button class="action-btn btn-gamble" id="playCrashBtn" aria-label="Play crash rocket game" style="width:100%;margin-bottom:12px;">CRASH</button>
+            <button class="action-btn btn-gamble" id="playMinesBtn" aria-label="Play mines game" style="width:100%;margin-bottom:12px;">MINES</button>
+            <button class="action-btn btn-gamble" id="playBlackjackBtn" aria-label="Play blackjack game" style="width:100%;">BLACKJACK</button>
+            <div style="background:rgba(244,67,54,0.08);border:1px solid rgba(244,67,54,0.2);border-radius:8px;padding:12px;margin-top:12px;font-size:11px;line-height:1.6;color:rgba(244,67,54,0.9);text-align:center;">
+              * Campaign uses fake tokens not exchangeable for real value.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Leaderboard Section -->
+      <div style="margin-top:30px;">
+        <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:var(--gold);margin-bottom:20px;text-align:center;">CAMPAIGN LEADERBOARD</div>
+
+        <div class="leaderboard-filters" id="campaignLeaderboardFilters" role="group" aria-label="Filter leaderboard by time period">
+          <button class="filter-btn active" data-filter="all" aria-label="Show all time scores" aria-pressed="true">ALL TIME</button>
+          <button class="filter-btn" data-filter="today" aria-label="Show today's scores" aria-pressed="false">TODAY</button>
+          <button class="filter-btn" data-filter="week" aria-label="Show this week's scores" aria-pressed="false">THIS WEEK</button>
+          <button class="filter-btn" data-filter="month" aria-label="Show this month's scores" aria-pressed="false">THIS MONTH</button>
+        </div>
+
+        <div class="podium" id="campaignPodium">
+          <!-- Top 3 will be generated here -->
+        </div>
+
+        <div class="leaderboard-table">
+          <div class="table-header">
+            <div>RANK</div>
+            <div>PLAYER</div>
+            <div>GP</div>
+            <div class="entry-date">DATE</div>
+          </div>
+          <div id="campaignLeaderboardTableBody">
+            <!-- Table rows will be generated here -->
+          </div>
+        </div>
+
+        <!-- Empty state for leaderboard -->
+        <div id="campaignLeaderboardEmpty" class="empty-state" style="display:none;">
+          <div class="empty-state-icon">🏆</div>
+          <div class="empty-state-title">No Records Yet</div>
+          <div class="empty-state-message">Be the first to reach 1,000,000 GP!</div>
         </div>
       </div>
     </div>
@@ -5044,6 +5116,7 @@
     const pageContainer = document.getElementById('pageContainer');
     const panelContent = document.getElementById('panelContent');
     const dashboardContent = document.getElementById('dashboardContent');
+    const campaignPageContent = document.getElementById('campaignPageContent');
     const gameContent = document.getElementById('gameContent');
     const ovenContent = document.getElementById('ovenContent');
     const farmContent = document.getElementById('farmContent');
@@ -5088,7 +5161,7 @@
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
       // Find currently visible element
-      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent];
+      const allContainers = [panelContent, dashboardContent, campaignPageContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent];
       const currentVisible = allContainers.find(el => el.style.display !== 'none' && el.style.display !== '');
 
       // Add fade-out to current visible element
@@ -5320,12 +5393,31 @@
       } else if (newContent === 'dashboard') {
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'block';
+        campaignPageContent.style.display = 'none';
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
         shopContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        updateDashboardStats();
+
+      } else if (newContent === 'campaign') {
+        panelContent.style.display = 'none';
+        dashboardContent.style.display = 'none';
+        campaignPageContent.style.display = 'block';
+        gameContent.style.display = 'none';
+        leaderboardContent.style.display = 'none';
+        questContent.style.display = 'none';
+        inventoryContent.style.display = 'none';
+        shopContent.style.display = 'none';
+        ovenContent.style.display = 'none';
+        farmContent.style.display = 'none';
+        crashContent.style.display = 'none';
+        minesContent.style.display = 'none';
+        blackjackContent.style.display = 'none';
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        // Update campaign stats when opening
         updateDashboardStats();
 
       } else if (newContent === 'game') {
@@ -5988,6 +6080,17 @@
         const localGP = parseInt(localStorage.getItem('duelpvp_gp')) || 0;
         const displayGP = localGP || totalGP;
         document.getElementById('dashboardGPBalance').textContent = displayGP >= 1000000 ? `${(displayGP/1000000).toFixed(1)}M` : displayGP >= 1000 ? `${(displayGP/1000).toFixed(1)}K` : displayGP;
+
+        // Update campaign progress on dashboard card
+        const campaignGP = displayGP;
+        const campaignProgress = Math.min((campaignGP / 1000000) * 100, 100);
+        document.getElementById('campaignCurrentGPCard').textContent = campaignGP >= 1000000 ? `${(campaignGP/1000000).toFixed(2)}M` : campaignGP.toLocaleString();
+        document.getElementById('campaignProgressFillCard').style.width = `${campaignProgress}%`;
+
+        // Update campaign page progress
+        document.getElementById('campaignCurrentGP').textContent = campaignGP >= 1000000 ? `${(campaignGP/1000000).toFixed(2)}M` : campaignGP.toLocaleString();
+        document.getElementById('campaignProgressFill').style.width = `${campaignProgress}%`;
+        document.getElementById('campaignRank').textContent = userRank > 0 ? `#${userRank}` : '--';
 
       } catch (e) {
         console.error('Failed to update dashboard stats:', e);
@@ -8502,6 +8605,13 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     document.getElementById('backFromQuestsBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('backFromInventoryBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('backFromShopBtn').addEventListener('click', () => swapContent('dashboard'));
+
+    // Campaign page navigation
+    document.getElementById('campaignBannerCard').addEventListener('click', () => {
+      console.log('Campaign banner clicked');
+      swapContent('campaign');
+    });
+    document.getElementById('backFromCampaignBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('viewQuestsBtn').addEventListener('click', () => swapContent('quests'));
     document.getElementById('viewInventoryBtn').addEventListener('click', () => swapContent('inventory'));
     document.getElementById('viewShopBtn').addEventListener('click', () => swapContent('shop'));
