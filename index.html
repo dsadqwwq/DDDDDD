@@ -5378,6 +5378,9 @@
         shopContent.style.display = 'none';
         crashContent.style.display = 'block';
         minesContent.style.display = 'none';
+        ovenContent.style.display = 'none';
+        farmContent.style.display = 'none';
+        blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initCrashGame();
 
@@ -5391,7 +5394,9 @@
         shopContent.style.display = 'none';
         crashContent.style.display = 'none';
         ovenContent.style.display = 'none';
+        farmContent.style.display = 'none';
         minesContent.style.display = 'block';
+        blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initMinesGame();
 
@@ -5405,6 +5410,7 @@
         shopContent.style.display = 'none';
         crashContent.style.display = 'none';
         ovenContent.style.display = 'none';
+        farmContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
@@ -5419,6 +5425,11 @@
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
         shopContent.style.display = 'none';
+        ovenContent.style.display = 'none';
+        farmContent.style.display = 'none';
+        crashContent.style.display = 'none';
+        minesContent.style.display = 'none';
+        blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         console.log('Leaderboard display set to block');
         loadLeaderboard('all');
@@ -5432,6 +5443,11 @@
         questContent.style.display = 'block';
         inventoryContent.style.display = 'none';
         shopContent.style.display = 'none';
+        ovenContent.style.display = 'none';
+        farmContent.style.display = 'none';
+        crashContent.style.display = 'none';
+        minesContent.style.display = 'none';
+        blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadQuests('daily');
 
@@ -5443,6 +5459,11 @@
         questContent.style.display = 'none';
         inventoryContent.style.display = 'block';
         shopContent.style.display = 'none';
+        ovenContent.style.display = 'none';
+        farmContent.style.display = 'none';
+        crashContent.style.display = 'none';
+        minesContent.style.display = 'none';
+        blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadInventory();
 
@@ -5454,6 +5475,11 @@
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
         shopContent.style.display = 'block';
+        ovenContent.style.display = 'none';
+        farmContent.style.display = 'none';
+        crashContent.style.display = 'none';
+        minesContent.style.display = 'none';
+        blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadInventory(); // Load shop items
       }
@@ -5465,6 +5491,9 @@
           void newVisible.offsetWidth; // Force reflow
           newVisible.classList.add('fade-in');
         }
+
+        // Scroll to top when changing pages
+        window.scrollTo(0, 0);
       }, currentVisible ? 200 : 0); // 200ms matches fade-out animation duration
     }
     
