@@ -1,6 +1,5 @@
 # Duel PVP - Single Page Application
 
-A RuneScape-inspired PvP gaming platform with continuous animations and smooth page transitions.
 
 ## Features
 
