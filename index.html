@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#0b0f12">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Duel PVP – Enter the Arena</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2375,6 +2378,12 @@
 
   /* Responsive improvements */
   @media(max-width:600px){
+    /* Safe areas for notched devices */
+    body{
+      padding-top:env(safe-area-inset-top);
+      padding-bottom:env(safe-area-inset-bottom);
+    }
+
     /* Leaderboard table */
     .table-header, .table-row{
       grid-template-columns:50px 1fr 90px;
@@ -2396,7 +2405,7 @@
       order:3;
     }
     .quest-grid, .inventory-grid{
-      grid-template-columns:1fr;
+      grid-template-columns:repeat(2, 1fr);
     }
 
     /* Panel and container sizing */
@@ -2406,36 +2415,38 @@
       max-height:90vh;
       overflow-y:auto;
     }
-    .dashboard-container, .quest-container, .leaderboard-container, .game-container, .inventory-container{
+    .dashboard-container, .quest-container, .leaderboard-container, .game-container, .inventory-container, .oven-container{
       width:95vw;
       padding:16px;
       max-height:90vh;
       overflow-y:auto;
     }
 
-    /* Typography adjustments */
-    .panel-title, .dashboard-title, .quest-title, .leaderboard-title, .game-title, .inventory-title{
+    /* Typography adjustments - Improve readability */
+    .panel-title, .dashboard-title, .quest-title, .leaderboard-title, .game-title, .inventory-title, .oven-title{
       font-size:14px;
     }
     .warrior-subtitle{
       font-size:10px;
     }
     .input-label{
-      font-size:10px;
+      font-size:11px;
     }
     .warrior-input{
-      font-size:12px;
-      padding:10px 12px;
+      font-size:16px;
+      padding:12px 16px;
     }
 
-    /* Buttons */
+    /* Buttons - Increase tap targets to 44x44px minimum */
     .btn-submit, .back-btn, .action-btn{
       font-size:10px;
-      padding:12px 16px;
+      padding:14px 20px;
+      min-height:44px;
     }
     .sell-button{
       font-size:12px;
-      padding:16px;
+      padding:18px;
+      min-height:50px;
     }
 
     /* Dashboard stats grid */
@@ -2477,9 +2488,9 @@
       gap:16px;
     }
 
-    /* Chart game */
+    /* Chart game - Better mobile size */
     .chart-container{
-      height:200px;
+      height:180px;
     }
     .price-display{
       font-size:14px;
@@ -2493,10 +2504,59 @@
       font-size:11px;
     }
 
-    /* Footer */
+    /* Breadcrumb - Collapse to back button on mobile */
+    .breadcrumb{
+      font-size:8px;
+      padding:8px 0;
+    }
+    .breadcrumb-item:not(.active){
+      display:none;
+    }
+    .breadcrumb-item.active{
+      display:none;
+    }
+    .breadcrumb-item:first-child{
+      display:inline;
+    }
+    .breadcrumb-item:first-child::before{
+      content:'< ';
+    }
+    .breadcrumb-separator{
+      display:none;
+    }
+
+    /* Campaign Banner - Stack vertically */
+    .campaign-banner{
+      padding:16px;
+    }
+    .campaign-banner-header{
+      margin-bottom:12px;
+    }
+    .campaign-banner-text{
+      font-size:10px;
+      text-align:center;
+    }
+    .campaign-banner-icon{
+      font-size:20px;
+    }
+    .campaign-progress-text{
+      font-size:9px;
+    }
+    .campaign-time-remaining{
+      font-size:10px;
+    }
+
+    /* Input fields - Larger for better touch */
+    .input-field, input[type="number"]{
+      font-size:16px !important;
+      padding:14px 16px;
+      min-height:44px;
+    }
+
+    /* Footer - Smaller on mobile */
     .footer{
       right:10px;
-      bottom:10px;
+      bottom:calc(10px + env(safe-area-inset-bottom));
       font-size:10px;
       gap:8px;
     }
@@ -2505,17 +2565,29 @@
       height:14px;
     }
 
+    /* Brand - Smaller on mobile */
+    .brand{
+      left:16px;
+      top:calc(16px + env(safe-area-inset-top));
+    }
+    .brand .title{
+      font-size:20px;
+    }
+    .brand .motto{
+      font-size:7px;
+    }
+
     /* Page container */
     .page-container{
       padding:20px 10px;
     }
     .page-container.bottom-aligned{
-      padding-bottom:30px;
+      padding-bottom:calc(30px + env(safe-area-inset-bottom));
     }
 
-    /* Shop grid */
+    /* Shop grid - 2 columns on mobile */
     .shop-grid{
-      grid-template-columns:1fr;
+      grid-template-columns:repeat(2, 1fr);
     }
 
     /* Results grid */
@@ -3380,6 +3452,8 @@
     .modal-container{
       width:95%;
       max-width:unset;
+      max-height:85vh;
+      overflow-y:auto;
     }
 
     .modal-title{
@@ -3387,8 +3461,14 @@
     }
 
     .modal-btn{
-      font-size:9px;
-      padding:10px 16px;
+      font-size:10px;
+      padding:12px 20px;
+      min-height:44px;
+    }
+
+    .modal-body{
+      max-height:60vh;
+      overflow-y:auto;
     }
 
     .loading-spinner{
@@ -3398,6 +3478,128 @@
 
     .loading-text{
       font-size:10px;
+    }
+
+    /* Mines Game - Larger tiles for touch */
+    .mines-grid{
+      gap:8px;
+    }
+    .mines-tile{
+      min-width:60px;
+      min-height:60px;
+      font-size:20px;
+    }
+
+    /* Blackjack - Larger cards and buttons */
+    .blackjack-card{
+      width:70px;
+      height:98px;
+      font-size:18px;
+    }
+    .blackjack-actions .action-btn{
+      width:100%;
+      margin-bottom:12px;
+      min-height:50px;
+    }
+
+    /* Crash Game - Better mobile controls */
+    .crash-bet-section input{
+      font-size:16px;
+      padding:14px;
+    }
+    .crash-cashout-btn{
+      min-height:60px;
+      font-size:14px;
+    }
+
+    /* Oven/Farm - Larger inputs and buttons */
+    .oven-stat-value, .oven-stat-label{
+      font-size:14px;
+    }
+    .oven-input, .farm-input{
+      font-size:16px !important;
+      padding:14px;
+      min-height:48px;
+    }
+
+    /* Game disclaimers - More visible */
+    .game-disclaimer{
+      font-size:10px;
+      padding:10px 12px;
+    }
+
+    /* Coming soon text - Smaller on mobile */
+    .coming-soon-text, .coming-soon-badge{
+      font-size:14px;
+    }
+
+    /* Market bar - Better mobile layout */
+    .market-bar{
+      padding:16px 20px;
+    }
+
+    /* Inventory items - Larger for touch */
+    .item-slot{
+      min-height:80px;
+    }
+    .item-icon{
+      font-size:36px;
+    }
+  }
+
+  /* Additional breakpoints */
+  @media (max-width: 375px) {
+    /* Extra small phones */
+    .brand .title{
+      font-size:16px;
+    }
+    .campaign-banner-text{
+      font-size:8px;
+    }
+    .btn-submit, .action-btn{
+      font-size:9px;
+      padding:12px 16px;
+    }
+  }
+
+  @media (max-height: 500px) and (orientation: landscape) {
+    /* Landscape phones - Reduce vertical space */
+    .panel, .dashboard-container, .game-container{
+      max-height:95vh;
+      padding:12px;
+    }
+    .brand{
+      display:none;
+    }
+    .campaign-banner{
+      padding:12px;
+    }
+  }
+
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+    .particles-canvas{
+      display:none !important;
+    }
+    .scanlines{
+      display:none !important;
+    }
+    .bg::before, .bg::after{
+      animation:none !important;
+    }
+  }
+
+  /* Hide particle effects on mobile for performance */
+  @media (max-width: 600px) {
+    .particles-canvas{
+      display:none;
     }
   }
 </style>
@@ -3847,6 +4049,12 @@
       <!-- Deposit section -->
       <div class="oven-action-section">
         <div class="oven-section-title">DEPOSIT</div>
+        <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+          <button class="action-btn btn-secondary btn-small" onclick="document.getElementById('ovenDepositAmount').value = 100" style="flex:1;min-width:60px;">100</button>
+          <button class="action-btn btn-secondary btn-small" onclick="document.getElementById('ovenDepositAmount').value = 500" style="flex:1;min-width:60px;">500</button>
+          <button class="action-btn btn-secondary btn-small" onclick="document.getElementById('ovenDepositAmount').value = 1000" style="flex:1;min-width:60px;">1K</button>
+          <button class="action-btn btn-secondary btn-small" onclick="document.getElementById('ovenDepositAmount').value = getUserGP()" style="flex:1;min-width:60px;">MAX</button>
+        </div>
         <div class="oven-input-row">
           <input type="number" class="oven-input" id="ovenDepositAmount" placeholder="Amount" min="1" step="1">
           <button class="action-btn btn-invest" id="ovenDepositBtn">DEPOSIT</button>
@@ -4017,6 +4225,12 @@
             <div class="instructions-title">PLACE BET</div>
             <div style="margin-bottom:12px;">
               <label style="font-size:10px;color:#a0a8b0;display:block;margin-bottom:4px;">BET AMOUNT</label>
+              <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
+                <button class="action-btn btn-secondary btn-small" onclick="document.getElementById('crashBetAmount').value = 10" style="flex:1;min-width:45px;font-size:8px;">10</button>
+                <button class="action-btn btn-secondary btn-small" onclick="document.getElementById('crashBetAmount').value = 50" style="flex:1;min-width:45px;font-size:8px;">50</button>
+                <button class="action-btn btn-secondary btn-small" onclick="document.getElementById('crashBetAmount').value = 100" style="flex:1;min-width:45px;font-size:8px;">100</button>
+                <button class="action-btn btn-secondary btn-small" onclick="document.getElementById('crashBetAmount').value = 500" style="flex:1;min-width:45px;font-size:8px;">500</button>
+              </div>
               <input type="number" id="crashBetAmount" class="crash-input" placeholder="100" min="10" value="100">
               <div style="font-size:9px;color:#a0a8b0;margin-top:4px;">Min: 10 GP • Max: 10,000 GP</div>
             </div>
@@ -4109,6 +4323,12 @@
           <div class="mines-bet-row">
             <div class="mines-input-group">
               <label class="mines-label">BET AMOUNT</label>
+              <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
+                <button class="action-btn btn-secondary btn-small" onclick="document.getElementById('minesBetAmount').value = 10" style="flex:1;min-width:45px;font-size:8px;">10</button>
+                <button class="action-btn btn-secondary btn-small" onclick="document.getElementById('minesBetAmount').value = 50" style="flex:1;min-width:45px;font-size:8px;">50</button>
+                <button class="action-btn btn-secondary btn-small" onclick="document.getElementById('minesBetAmount').value = 100" style="flex:1;min-width:45px;font-size:8px;">100</button>
+                <button class="action-btn btn-secondary btn-small" onclick="document.getElementById('minesBetAmount').value = 500" style="flex:1;min-width:45px;font-size:8px;">500</button>
+              </div>
               <input type="number" class="mines-input" id="minesBetAmount" placeholder="10" min="10" max="10000" value="100">
             </div>
             <div class="mines-input-group">
@@ -4180,6 +4400,12 @@
           <div class="blackjack-bet-row">
             <div class="blackjack-input-group">
               <label class="blackjack-label">BET AMOUNT</label>
+              <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
+                <button class="action-btn btn-secondary btn-small" onclick="document.getElementById('blackjackBetAmount').value = 10" style="flex:1;min-width:45px;font-size:8px;">10</button>
+                <button class="action-btn btn-secondary btn-small" onclick="document.getElementById('blackjackBetAmount').value = 50" style="flex:1;min-width:45px;font-size:8px;">50</button>
+                <button class="action-btn btn-secondary btn-small" onclick="document.getElementById('blackjackBetAmount').value = 100" style="flex:1;min-width:45px;font-size:8px;">100</button>
+                <button class="action-btn btn-secondary btn-small" onclick="document.getElementById('blackjackBetAmount').value = 500" style="flex:1;min-width:45px;font-size:8px;">500</button>
+              </div>
               <input type="number" class="blackjack-input" id="blackjackBetAmount" placeholder="10" min="10" max="10000" value="100">
             </div>
             <button class="action-btn btn-invest" id="blackjackDealBtn" style="flex:1;">DEAL</button>
