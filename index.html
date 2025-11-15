@@ -1100,6 +1100,58 @@
     100%{transform:scale(1) rotate(0deg); opacity:1; filter:brightness(1);}
   }
 
+  /* Campaign Banner Styles */
+  .campaign-banner{
+    background:linear-gradient(135deg, rgba(255,215,0,0.15) 0%, rgba(255,165,0,0.2) 100%);
+    border:2px solid rgba(255,215,0,0.4);
+    border-radius:12px;
+    padding:16px 24px;
+    margin-bottom:24px;
+    cursor:pointer;
+    transition:all 0.3s ease;
+    box-shadow:0 4px 20px rgba(255,215,0,0.15);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+  }
+
+  .campaign-banner:hover{
+    border-color:rgba(255,215,0,0.6);
+    box-shadow:0 6px 30px rgba(255,215,0,0.25);
+    transform:translateY(-2px);
+  }
+
+  .campaign-banner-icon{
+    font-size:24px;
+  }
+
+  .campaign-banner-text{
+    font-family:'Press Start 2P', monospace;
+    font-size:14px;
+    color:#FFD700;
+    text-shadow:0 2px 4px rgba(0,0,0,0.4);
+    letter-spacing:1px;
+  }
+
+  .campaign-banner-info{
+    font-size:16px;
+    opacity:0.8;
+  }
+
+  .gambling-disclaimer{
+    background:rgba(244,67,54,0.08);
+    border:1px solid rgba(244,67,54,0.2);
+    border-radius:8px;
+    padding:12px;
+    margin-top:12px;
+    font-family:Inter, system-ui, Arial;
+    font-size:10px;
+    color:#f44336;
+    text-align:center;
+    line-height:1.5;
+  }
+
   /* Mines Game Styles */
   .mines-game-area{
     max-width:600px;
@@ -3285,6 +3337,13 @@
         <div style="font-family:Inter,system-ui,Arial; font-size:14px; color:rgba(255,214,77,0.8); font-weight:600;">ENTER →</div>
       </div>
 
+      <!-- Campaign Banner -->
+      <div class="campaign-banner" id="campaignBanner">
+        <div class="campaign-banner-icon">🏆</div>
+        <div class="campaign-banner-text">WHO WANTS TO BE A MILLIONAIRE</div>
+        <div class="campaign-banner-info">ℹ️</div>
+      </div>
+
       <!-- Two-column card layout -->
       <div class="dashboard-cards-row">
         <!-- Left: Finance -->
@@ -3306,6 +3365,9 @@
             <button class="action-btn btn-gamble" id="playCrashBtn" aria-label="Play crash rocket game" style="width:100%;margin-bottom:12px;">CRASH</button>
             <button class="action-btn btn-gamble" id="playMinesBtn" aria-label="Play mines game" style="width:100%;margin-bottom:12px;">MINES</button>
             <button class="action-btn btn-gamble" id="playBlackjackBtn" aria-label="Play blackjack game" style="width:100%;">BLACKJACK</button>
+            <div class="gambling-disclaimer">
+              * This feature is only available during the "Who Wants to be a Millionaire" campaign and is played with fake tokens that are not exchangeable.
+            </div>
           </div>
         </div>
       </div>
@@ -7666,6 +7728,19 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     document.getElementById('startGameBtn').addEventListener('click', startGame);
     document.getElementById('sellButton').addEventListener('click', handleSell);
     document.getElementById('resetGameBtn').addEventListener('click', resetGame);
+
+    // Campaign banner click handler
+    document.getElementById('campaignBanner').addEventListener('click', () => {
+      Modal.alert(
+        'Get over 1,000,000 GP during the campaign to qualify for the Whitelist!\n\n' +
+        '• Use OVEN for compound interest (10% hourly)\n' +
+        '• Click FARM every 5 seconds for random GP drops\n' +
+        '• Play gambling games: Reaction, Crash, Mines, Blackjack\n' +
+        '• All GP earned counts toward your total\n\n' +
+        'Note: These are fake tokens for the campaign only and cannot be exchanged.',
+        '🏆 Who Wants to be a Millionaire - Campaign Rules'
+      );
+    });
 
     // Leaderboard filter buttons
     document.querySelectorAll('.filter-btn').forEach(btn => {
