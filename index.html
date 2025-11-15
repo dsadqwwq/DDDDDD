@@ -3901,6 +3901,7 @@
           </div>
           <div class="campaign-time-remaining" id="campaignTimeRemaining">Campaign in progress</div>
         </div>
+        <button class="action-btn" id="buttBabyBtn" style="width:100%;margin-top:16px;background:rgba(255,214,77,0.2);border-color:#FFD64D;color:#FFD64D;">BUTTBABY</button>
       </div>
 
       <!-- Two-column card layout -->
@@ -4312,6 +4313,13 @@
       <!-- Disclaimer for Farm -->
       <div class="game-disclaimer info">
         ⚠️ <strong>Campaign Event:</strong> 3-day farming challenge. Campaign tokens only • Not exchangeable • Counts toward 1M GP goal
+      </div>
+    </div>
+
+    <!-- Buttbaby content (hidden initially) -->
+    <div class="oven-container" id="buttbabyContent" role="region" aria-label="Buttbaby">
+      <div style="display:flex;align-items:center;justify-content:center;min-height:400px;font-family:'Press Start 2P', monospace;font-size:32px;color:var(--gold);text-align:center;">
+        buttbaby
       </div>
     </div>
 
@@ -5054,6 +5062,7 @@
     const inventoryContent = document.getElementById('inventoryContent');
     const shopContent = document.getElementById('shopContent');
     const crashContent = document.getElementById('crashContent');
+    const buttbabyContent = document.getElementById('buttbabyContent');
 
     // Debug: Check if all elements exist
     console.log('Elements loaded:', {
@@ -5088,7 +5097,7 @@
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
       // Find currently visible element
-      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent];
+      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent, buttbabyContent];
       const currentVisible = allContainers.find(el => el.style.display !== 'none' && el.style.display !== '');
 
       // Add fade-out to current visible element
@@ -5369,6 +5378,22 @@
         farmContent.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initFarm();
+
+      } else if (newContent === 'buttbaby') {
+        panelContent.style.display = 'none';
+        dashboardContent.style.display = 'none';
+        gameContent.style.display = 'none';
+        leaderboardContent.style.display = 'none';
+        questContent.style.display = 'none';
+        inventoryContent.style.display = 'none';
+        shopContent.style.display = 'none';
+        crashContent.style.display = 'none';
+        ovenContent.style.display = 'none';
+        minesContent.style.display = 'none';
+        farmContent.style.display = 'none';
+        blackjackContent.style.display = 'none';
+        buttbabyContent.style.display = 'block';
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
 
       } else if (newContent === 'crash') {
         panelContent.style.display = 'none';
@@ -8484,6 +8509,10 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       swapContent('farm');
     });
     document.getElementById('backFromFarmBtn').addEventListener('click', () => swapContent('dashboard'));
+    document.getElementById('buttBabyBtn').addEventListener('click', () => {
+      console.log('Buttbaby clicked');
+      swapContent('buttbaby');
+    });
     document.getElementById('farmClickBtn').addEventListener('click', clickFarm);
     document.getElementById('viewLeaderboardBtn').addEventListener('click', () => {
       console.log('View Leaderboard clicked');
