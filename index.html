@@ -3916,8 +3916,8 @@
           <div class="card-content">
             <button class="action-btn btn-invest" id="openOvenBtn" aria-label="Open Oven investment" style="width:100%;margin-bottom:12px;">OVEN</button>
             <button class="action-btn btn-invest" id="openFarmBtn" aria-label="Open Airdrop Farm" style="width:100%;margin-bottom:12px;">FARM</button>
-            <button class="action-btn btn-invest" id="openSwapBtn" aria-label="Open Swap" style="width:100%;margin-bottom:12px;">SWAP</button>
-            <button class="action-btn btn-invest" id="openStakingBtn" aria-label="Open Staking" style="width:100%;">STAKING</button>
+            <button class="action-btn btn-invest" disabled style="width:100%;margin-bottom:12px;opacity:0.5;cursor:not-allowed;">SWAP</button>
+            <button class="action-btn btn-invest" disabled style="width:100%;opacity:0.5;cursor:not-allowed;">STAKING</button>
           </div>
         </div>
 
@@ -8423,14 +8423,6 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     });
     document.getElementById('backFromFarmBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('farmClickBtn').addEventListener('click', clickFarm);
-    document.getElementById('openSwapBtn').addEventListener('click', () => {
-      console.log('Open Swap clicked');
-      Modal.alert('Swap feature coming soon! Trade your GP tokens for other assets.', 'Swap');
-    });
-    document.getElementById('openStakingBtn').addEventListener('click', () => {
-      console.log('Open Staking clicked');
-      Modal.alert('Staking feature coming soon! Stake your GP to earn rewards.', 'Staking');
-    });
     document.getElementById('viewLeaderboardBtn').addEventListener('click', () => {
       console.log('View Leaderboard clicked');
       swapContent('leaderboard');
