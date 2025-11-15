@@ -7975,15 +7975,6 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
         return;
       }
 
-      // Confirm large bets
-      if (betAmount >= 500) {
-        const confirmed = await Modal.confirm(
-          `Place a bet of ${betAmount.toLocaleString()} GP with ${minesCount} mines?`,
-          'Confirm Bet'
-        );
-        if (!confirmed) return;
-      }
-
       // Deduct bet
       updateUserGP(-betAmount);
 
@@ -8227,15 +8218,6 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       if (betAmount > userGP) {
         Toast.error('Insufficient GP', 'INSUFFICIENT FUNDS');
         return;
-      }
-
-      // Confirm large bets
-      if (betAmount >= 500) {
-        const confirmed = await Modal.confirm(
-          `Place a bet of ${betAmount.toLocaleString()} GP?`,
-          'Confirm Bet'
-        );
-        if (!confirmed) return;
       }
 
       // Deduct bet
