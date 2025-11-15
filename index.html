@@ -3925,7 +3925,7 @@
         <div class="dashboard-card gamble">
           <div class="card-title">🎲 GAMBLING</div>
           <div class="card-content">
-            <button class="action-btn btn-gamble" id="playReactionBtn" aria-label="Play reaction game" style="width:100%;margin-bottom:12px;">REACTION</button>
+            <button class="action-btn btn-gamble" id="playReactionBtn" aria-label="Play trading simulator" style="width:100%;margin-bottom:12px;">TRADING SIM</button>
             <button class="action-btn btn-gamble" id="playCrashBtn" aria-label="Play crash rocket game" style="width:100%;margin-bottom:12px;">CRASH</button>
             <button class="action-btn btn-gamble" id="playMinesBtn" aria-label="Play mines game" style="width:100%;margin-bottom:12px;">MINES</button>
             <button class="action-btn btn-gamble" id="playBlackjackBtn" aria-label="Play blackjack game" style="width:100%;">BLACKJACK</button>
@@ -4316,9 +4316,9 @@
     </div>
 
     <!-- Reaction Game content (hidden initially) -->
-    <div class="game-container" id="gameContent" role="region" aria-label="Reaction game">
+    <div class="game-container" id="gameContent" role="region" aria-label="Memecoin trading simulator">
       <div class="game-header">
-        <div class="game-title">REACTION TRADER</div>
+        <div class="game-title">📈 MEMECOIN TRADING SIMULATOR</div>
         <button class="back-btn" id="backToDashBtn" aria-label="Back to dashboard">BACK</button>
       </div>
 
@@ -4326,9 +4326,9 @@
       <div class="breadcrumb">
         <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
         <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item">Gambling</span>
+        <span class="breadcrumb-item">Skills</span>
         <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item active">Reaction Trader</span>
+        <span class="breadcrumb-item active">Trading Simulator</span>
       </div>
 
       <div class="game-layout">
@@ -4337,14 +4337,14 @@
           <div class="instructions">
             <div class="instructions-title">HOW TO PLAY</div>
             <div class="instructions-text">
-              Watch the chart closely. When it turns RED and starts dropping, hit SELL as fast as you can!
-              You have 5 attempts. Your best time will be recorded on the leaderboard.
+              Watch the memecoin chart pump and dump! When it turns RED and starts crashing, hit SELL as fast as you can!
+              React under 1000ms to earn 300 GP. Free to play, unlimited attempts!
             </div>
           </div>
 
           <div class="attempts-counter">
-            <span class="attempts-label">ATTEMPTS</span>
-            <span class="attempts-value" id="attemptsLeft">5 / 5</span>
+            <span class="attempts-label">BEST TIME</span>
+            <span class="attempts-value" id="attemptsLeft">-- ms</span>
           </div>
 
           <div class="results-grid" id="resultsGrid">
@@ -4364,15 +4364,10 @@
           <button class="sell-button" id="sellButton" disabled>SELL</button>
 
           <div class="action-buttons" style="margin-top:16px;">
-            <button class="action-btn btn-primary" id="startGameBtn">START GAME</button>
-            <button class="action-btn btn-secondary" id="resetGameBtn">RESET</button>
+            <button class="action-btn btn-primary" id="startGameBtn">START TRADE</button>
+            <button class="action-btn btn-secondary" id="resetGameBtn">RESET STATS</button>
           </div>
         </div>
-      </div>
-
-      <!-- Disclaimer for Reaction Game -->
-      <div class="game-disclaimer">
-        ⚠️ <strong>Campaign Only:</strong> Fake tokens for Millionaire campaign • Not exchangeable • Play responsibly
       </div>
     </div>
 
@@ -4510,6 +4505,10 @@
         <!-- Stats Display -->
         <div class="mines-stats-display">
           <div class="mines-stat">
+            <div class="mines-stat-label">YOUR GP</div>
+            <div class="mines-stat-value" id="minesGPDisplay">0</div>
+          </div>
+          <div class="mines-stat">
             <div class="mines-stat-label">MULTIPLIER</div>
             <div class="mines-stat-value" id="minesMultiplier">0.00x</div>
           </div>
@@ -4570,6 +4569,10 @@
 
         <!-- Stats Display -->
         <div class="blackjack-stats-display">
+          <div class="blackjack-stat">
+            <div class="blackjack-stat-label">YOUR GP</div>
+            <div class="blackjack-stat-value" id="blackjackGPDisplay">0</div>
+          </div>
           <div class="blackjack-stat">
             <div class="blackjack-stat-label">YOUR HAND</div>
             <div class="blackjack-stat-value" id="blackjackPlayerValue">0</div>
@@ -5067,8 +5070,7 @@
     // Game variables
     let gameState = {
       attempts: [],
-      currentAttempt: 0,
-      maxAttempts: 5,
+      bestTime: null,
       isPlaying: false,
       startTime: null,
       reactionTimer: null,
@@ -6313,11 +6315,6 @@
     }
     
     function startGame() {
-      if (gameState.currentAttempt >= gameState.maxAttempts) {
-        Modal.alert('All attempts used! Click RESET to play again.', 'Game Over');
-        return;
-      }
-
       const chartContainer = document.getElementById('chartContainer');
       const sellButton = document.getElementById('sellButton');
       const gameStatus = document.getElementById('gameStatus');
@@ -6329,7 +6326,7 @@
       // Reset state
       chartContainer.className = 'chart-container green';
       sellButton.disabled = false; // Enable immediately
-      gameStatus.textContent = 'Watch the chart...';
+      gameStatus.textContent = 'Watch for the dump...';
       gameStatus.className = 'game-status status-ready';
       drawChart(ctx, null);
 
@@ -6430,11 +6427,10 @@
       // Check if clicked before peak - DISQUALIFIED
       if (now < gameState.peakTime) {
         gameState.isPlaying = false;
-        gameState.currentAttempt++;
         gameState.attempts.push(-1); // -1 indicates early click
 
         sellButton.disabled = true;
-        gameStatus.textContent = 'TOO EARLY! DISQUALIFIED';
+        gameStatus.textContent = 'TOO EARLY! Wait for the dump!';
         gameStatus.className = 'game-status status-go';
 
         // Cancel animation
@@ -6442,29 +6438,33 @@
           cancelAnimationFrame(gameState.chartAnimation);
         }
 
-        // Update attempts counter
-        const remaining = gameState.maxAttempts - gameState.currentAttempt;
-        document.getElementById('attemptsLeft').textContent = `${remaining} / ${gameState.maxAttempts}`;
-
-        // Update results grid
+        // Update best time display
+        updateBestTimeDisplay();
         updateResultsGrid();
-
-        // Check if game is over
-        if (gameState.currentAttempt >= gameState.maxAttempts) {
-          setTimeout(endGame, 1500);
-        }
         return;
       }
 
-      // Clicked after peak - calculate score
-      const timingScore = now - gameState.peakTime;
-      gameState.attempts.push(timingScore);
-      gameState.currentAttempt++;
+      // Clicked after peak - calculate reaction time
+      const reactionTime = now - gameState.peakTime;
+      gameState.attempts.push(reactionTime);
       gameState.isPlaying = false;
+
+      // Update best time
+      if (!gameState.bestTime || reactionTime < gameState.bestTime) {
+        gameState.bestTime = reactionTime;
+      }
+
+      // Award GP if under 1000ms
+      if (reactionTime < 1000) {
+        await updateUserGP(300);
+        Toast.success('Fast hands! +300 GP', 'PROFIT');
+        gameStatus.textContent = `${reactionTime.toFixed(0)}ms - +300 GP!`;
+      } else {
+        gameStatus.textContent = `${reactionTime.toFixed(0)}ms reaction time`;
+      }
 
       // Update UI
       sellButton.disabled = true;
-      gameStatus.textContent = `+${timingScore.toFixed(0)}ms after peak`;
       gameStatus.className = 'game-status';
 
       // Cancel animation
@@ -6472,41 +6472,47 @@
         cancelAnimationFrame(gameState.chartAnimation);
       }
 
-      // Update attempts counter
-      const remaining = gameState.maxAttempts - gameState.currentAttempt;
-      document.getElementById('attemptsLeft').textContent = `${remaining} / ${gameState.maxAttempts}`;
-
-      // Update results grid
+      // Update displays
+      updateBestTimeDisplay();
       updateResultsGrid();
-
-      // Check if game is over
-      if (gameState.currentAttempt >= gameState.maxAttempts) {
-        setTimeout(endGame, 1500);
-      }
     }
     
+    function updateBestTimeDisplay() {
+      const bestTimeEl = document.getElementById('attemptsLeft');
+      if (gameState.bestTime) {
+        bestTimeEl.textContent = `${gameState.bestTime.toFixed(0)} ms`;
+        bestTimeEl.style.color = gameState.bestTime < 1000 ? '#4CAF50' : '#a0a8b0';
+      } else {
+        bestTimeEl.textContent = '-- ms';
+        bestTimeEl.style.color = '#a0a8b0';
+      }
+    }
+
     function updateResultsGrid() {
       const grid = document.getElementById('resultsGrid');
       grid.innerHTML = '';
 
-      const validAttempts = gameState.attempts.filter(t => t >= 0);
+      // Show last 5 attempts
+      const recentAttempts = gameState.attempts.slice(-5);
+      const validAttempts = recentAttempts.filter(t => t >= 0);
       const bestTime = validAttempts.length > 0 ? Math.min(...validAttempts) : null;
 
-      gameState.attempts.forEach((time, index) => {
+      recentAttempts.forEach((time, index) => {
         const card = document.createElement('div');
         const isBest = time >= 0 && time === bestTime;
         card.className = isBest ? 'result-card best' : 'result-card';
 
         if (time === -1) {
-          // Disqualified
+          // Too early
           card.innerHTML = `
-            <div class="result-attempt">TRY ${index + 1}</div>
-            <div class="result-time" style="color:#F44336">DISQ</div>
+            <div class="result-attempt">ATTEMPT ${gameState.attempts.length - 4 + index}</div>
+            <div class="result-time" style="color:#F44336">TOO EARLY</div>
           `;
         } else {
+          const gpEarned = time < 1000 ? ' +300 GP' : '';
           card.innerHTML = `
-            <div class="result-attempt">TRY ${index + 1}</div>
-            <div class="result-time">+${time.toFixed(0)}ms</div>
+            <div class="result-attempt">ATTEMPT ${gameState.attempts.length - 4 + index}</div>
+            <div class="result-time" style="color:${time < 1000 ? '#4CAF50' : '#a0a8b0'}">${time.toFixed(0)}ms${gpEarned}</div>
           `;
         }
         grid.appendChild(card);
@@ -6575,28 +6581,29 @@
     function resetGame() {
       gameState = {
         attempts: [],
-        currentAttempt: 0,
-        maxAttempts: 5,
+        bestTime: null,
         isPlaying: false,
         startTime: null,
         reactionTimer: null,
         chartAnimation: null
       };
-      
+
       // Clear any running timers
       if (gameState.reactionTimer) clearTimeout(gameState.reactionTimer);
       if (gameState.chartAnimation) cancelAnimationFrame(gameState.chartAnimation);
-      
+
       // Reset UI
       document.getElementById('chartContainer').className = 'chart-container';
       document.getElementById('sellButton').disabled = true;
-      document.getElementById('gameStatus').textContent = 'Click START to begin';
-      document.getElementById('attemptsLeft').textContent = '5 / 5';
+      document.getElementById('gameStatus').textContent = 'Click START TRADE to begin';
+      updateBestTimeDisplay();
       document.getElementById('resultsGrid').innerHTML = '';
-      
+
       const canvas = document.getElementById('chartCanvas');
       const ctx = canvas.getContext('2d');
       drawChart(ctx, false);
+
+      Toast.info('Stats reset. Keep trading!', 'RESET');
     }
 
     // Crash Game Logic
@@ -7952,6 +7959,14 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
         tile.addEventListener('click', () => handleMinesTileClick(i));
         grid.appendChild(tile);
       }
+
+      // Update GP display
+      updateMinesGPDisplay();
+    }
+
+    function updateMinesGPDisplay() {
+      const gp = getUserGP();
+      document.getElementById('minesGPDisplay').textContent = gp;
     }
 
     async function startMinesGame() {
@@ -7977,6 +7992,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
 
       // Deduct bet
       updateUserGP(-betAmount);
+      updateMinesGPDisplay();
 
       // Initialize game
       minesGameState = {
@@ -8077,6 +8093,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
 
       const profit = Math.floor(minesGameState.betAmount * minesGameState.multiplier);
       updateUserGP(profit);
+      updateMinesGPDisplay();
 
       // Reveal all tiles
       for (let i = 0; i < 25; i++) {
@@ -8132,6 +8149,17 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       deck: [],
       dealerHiddenCard: null
     };
+
+    function initBlackjack() {
+      // Update GP display
+      updateBlackjackGPDisplay();
+    }
+
+    function updateBlackjackGPDisplay() {
+      const gp = getUserGP();
+      document.getElementById('blackjackGPDisplay').textContent = gp;
+      document.getElementById('blackjackCurrentBet').textContent = blackjackGameState.betAmount + ' GP';
+    }
 
     const suits = ['♠', '♥', '♣', '♦'];
     const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
@@ -8222,6 +8250,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
 
       // Deduct bet
       updateUserGP(-betAmount);
+      updateBlackjackGPDisplay();
 
       // Initialize game
       blackjackGameState = {
@@ -8326,12 +8355,14 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
           winAmount = blackjackGameState.betAmount * 2;
           message = `Dealer bust! Won ${winAmount} GP`;
           updateUserGP(winAmount);
+          updateBlackjackGPDisplay();
           Toast.success(message, 'WIN');
           break;
         case 'win':
           winAmount = blackjackGameState.betAmount * 2;
           message = `You win! Won ${winAmount} GP`;
           updateUserGP(winAmount);
+          updateBlackjackGPDisplay();
           Toast.success(message, 'WIN');
           break;
         case 'lose':
@@ -8342,6 +8373,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
           winAmount = blackjackGameState.betAmount;
           message = `Push! Bet returned`;
           updateUserGP(winAmount);
+          updateBlackjackGPDisplay();
           Toast.info(message, 'PUSH');
           break;
       }
