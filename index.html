@@ -23,7 +23,31 @@
     --glow-h: 366px;
   }
   *{box-sizing:border-box}
-  html,body{height:100%;margin:0;background:var(--bg);color:#e6ecf1;font-family:Inter,system-ui,Segoe UI,Roboto,Arial}
+  html{
+    height:100%;
+    margin:0;
+    /* Enable smooth scrolling */
+    scroll-behavior:smooth;
+    /* Optimize text rendering on mobile */
+    -webkit-text-size-adjust:100%;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+  body{
+    height:100%;
+    margin:0;
+    background:var(--bg);
+    color:#e6ecf1;
+    font-family:Inter,system-ui,Segoe UI,Roboto,Arial;
+    /* Enable momentum scrolling on iOS */
+    -webkit-overflow-scrolling:touch;
+    /* Prevent text selection on tap/hold on mobile */
+    -webkit-tap-highlight-color:transparent;
+  }
+  /* Better touch targets for interactive elements */
+  button, a, input, select, textarea{
+    -webkit-tap-highlight-color:transparent;
+  }
   
   /* Background with continuous animation */
   .bg{position:fixed;inset:0;overflow:hidden;z-index:0}
@@ -2363,22 +2387,39 @@
   /* Error message */
   .error-msg{
     color:#F44336;
-    font-size:11px;
+    font-size:12px;
     font-family:Inter, system-ui, Arial;
-    margin-top:4px;
+    margin-top:8px;
+    padding:8px 12px;
+    background:rgba(244, 67, 54, 0.1);
+    border-left:3px solid #F44336;
+    border-radius:4px;
     display:none;
+    line-height:1.4;
   }
 
   .error-msg.show{
     display:block;
+    animation:slideDown 0.2s ease-out;
+  }
+
+  @keyframes slideDown{
+    from{
+      opacity:0;
+      transform:translateY(-4px);
+    }
+    to{
+      opacity:1;
+      transform:translateY(0);
+    }
   }
 
   /* Responsive improvements */
   @media(max-width:600px){
-    /* Leaderboard table */
+    /* Leaderboard table - improved readability */
     .table-header, .table-row{
       grid-template-columns:50px 1fr 90px;
-      font-size:8px;
+      font-size:11px;
     }
     .entry-date{
       display:none;
@@ -2401,74 +2442,79 @@
 
     /* Panel and container sizing */
     .panel{
-      width:95vw;
+      width:96vw;
       padding:20px 16px;
-      max-height:90vh;
+      max-height:88vh;
       overflow-y:auto;
     }
     .dashboard-container, .quest-container, .leaderboard-container, .game-container, .inventory-container{
-      width:95vw;
-      padding:16px;
-      max-height:90vh;
+      width:96vw;
+      padding:16px 12px;
+      max-height:88vh;
       overflow-y:auto;
     }
 
-    /* Typography adjustments */
+    /* Typography adjustments - improved readability */
     .panel-title, .dashboard-title, .quest-title, .leaderboard-title, .game-title, .inventory-title{
-      font-size:14px;
+      font-size:16px;
     }
     .warrior-subtitle{
-      font-size:10px;
+      font-size:11px;
     }
     .input-label{
-      font-size:10px;
+      font-size:12px;
     }
     .warrior-input{
-      font-size:12px;
-      padding:10px 12px;
+      font-size:14px;
+      padding:14px 16px;
     }
 
-    /* Buttons */
+    /* Buttons - better touch targets (minimum 44px height) */
     .btn-submit, .back-btn, .action-btn{
-      font-size:10px;
-      padding:12px 16px;
+      font-size:12px;
+      padding:16px 20px;
+      min-height:48px;
     }
     .sell-button{
-      font-size:12px;
-      padding:16px;
+      font-size:14px;
+      padding:20px;
+      min-height:52px;
     }
 
     /* Dashboard stats grid */
     .stats-grid{
       grid-template-columns:1fr;
-      gap:12px;
+      gap:14px;
     }
     .stat-value{
-      font-size:18px;
+      font-size:20px;
     }
     .stat-label{
-      font-size:9px;
+      font-size:11px;
     }
 
-    /* Quest tabs */
+    /* Quest tabs - better touch targets */
     .quest-tabs{
       flex-wrap:wrap;
-      gap:8px;
+      gap:10px;
     }
     .quest-tab{
-      font-size:8px;
-      padding:8px 12px;
+      font-size:10px;
+      padding:12px 16px;
+      min-height:44px;
     }
 
     /* Quest cards */
     .quest-card{
-      padding:12px;
+      padding:16px;
     }
     .quest-name{
-      font-size:9px;
+      font-size:11px;
+      line-height:1.4;
     }
     .quest-desc{
-      font-size:11px;
+      font-size:13px;
+      line-height:1.5;
     }
 
     /* Game layout - stack vertically on mobile */
@@ -2479,35 +2525,36 @@
 
     /* Chart game */
     .chart-container{
-      height:200px;
+      height:250px;
     }
     .price-display{
-      font-size:14px;
-      top:10px;
-      right:10px;
+      font-size:16px;
+      top:12px;
+      right:12px;
     }
     .instructions-title{
-      font-size:10px;
+      font-size:12px;
     }
     .instructions-text{
-      font-size:11px;
+      font-size:13px;
+      line-height:1.5;
     }
 
     /* Footer */
     .footer{
       right:10px;
       bottom:10px;
-      font-size:10px;
-      gap:8px;
+      font-size:11px;
+      gap:10px;
     }
     .footer svg{
-      width:14px;
-      height:14px;
+      width:16px;
+      height:16px;
     }
 
     /* Page container */
     .page-container{
-      padding:20px 10px;
+      padding:20px 12px;
     }
     .page-container.bottom-aligned{
       padding-bottom:30px;
@@ -2516,21 +2563,60 @@
     /* Shop grid */
     .shop-grid{
       grid-template-columns:1fr;
+      gap:16px;
     }
 
     /* Results grid */
     .results-grid{
-      grid-template-columns:repeat(auto-fit, minmax(60px, 1fr));
-      gap:8px;
+      grid-template-columns:repeat(auto-fit, minmax(70px, 1fr));
+      gap:10px;
     }
     .result-item{
-      padding:8px;
-      font-size:10px;
+      padding:10px;
+      font-size:12px;
     }
 
     /* Coming soon overlay */
     .coming-soon-overlay{
-      font-size:16px;
+      font-size:18px;
+      padding:16px;
+    }
+
+    /* Dashboard header - stack on mobile */
+    .dashboard-header{
+      flex-direction:column;
+      align-items:flex-start;
+      gap:16px;
+    }
+    .dashboard-header > div:last-child{
+      width:100%;
+      justify-content:space-between;
+      gap:8px !important;
+      flex-wrap:wrap;
+    }
+
+    /* Game disclaimer - better mobile formatting */
+    .game-disclaimer{
+      font-size:11px;
+      padding:14px;
+      line-height:1.5;
+    }
+
+    /* Breadcrumb improvements */
+    .breadcrumb{
+      font-size:11px;
+      flex-wrap:wrap;
+    }
+
+    /* Attempts counter */
+    .attempts-counter{
+      font-size:12px;
+    }
+
+    /* Game status */
+    .game-status, .crash-game-status{
+      font-size:13px;
+      padding:12px;
     }
   }
 
@@ -3358,14 +3444,43 @@
     }
 
     .dashboard-card{
-      padding:16px;
+      padding:18px;
       margin-bottom:16px;
     }
 
     .card-title{
-      font-size:10px;
+      font-size:12px;
+      line-height:1.4;
     }
 
+    .card-subtitle{
+      font-size:11px;
+    }
+
+    .card-description{
+      font-size:12px;
+      line-height:1.5;
+    }
+
+    /* Market bar mobile optimization */
+    .market-bar{
+      padding:16px 20px !important;
+      flex-direction:column;
+      gap:12px;
+      text-align:center;
+    }
+
+    .market-bar > div:first-child{
+      flex-direction:column;
+      gap:8px;
+      width:100%;
+    }
+
+    .market-bar .action-btn{
+      width:100%;
+    }
+
+    /* Toast notifications */
     .toast-container{
       top:10px;
       right:10px;
@@ -3375,29 +3490,317 @@
     .toast{
       min-width:unset;
       width:100%;
+      font-size:12px;
     }
 
-    .modal-container{
-      width:95%;
-      max-width:unset;
-    }
-
-    .modal-title{
+    .toast-title{
       font-size:11px;
     }
 
-    .modal-btn{
-      font-size:9px;
-      padding:10px 16px;
+    /* Modals */
+    .modal-container{
+      width:94%;
+      max-width:unset;
+      padding:20px;
     }
 
+    .modal-title{
+      font-size:14px;
+      line-height:1.4;
+    }
+
+    .modal-message{
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .modal-btn{
+      font-size:12px;
+      padding:14px 20px;
+      min-height:48px;
+    }
+
+    /* Loading spinner */
     .loading-spinner{
       width:60px;
       height:60px;
     }
 
     .loading-text{
+      font-size:12px;
+    }
+
+    /* Crash game mobile optimizations */
+    .crash-rocket-container{
+      height:250px;
+    }
+
+    .crash-multiplier-value{
+      font-size:32px;
+    }
+
+    .crash-status-text{
+      font-size:13px;
+    }
+
+    .crash-cashout-btn{
+      font-size:14px;
+      padding:18px;
+      min-height:52px;
+    }
+
+    .crash-input{
+      font-size:14px;
+      padding:14px;
+    }
+
+    /* Mines game mobile */
+    .mines-grid{
+      gap:8px;
+    }
+
+    .mine-cell{
+      font-size:18px;
+      min-height:50px;
+    }
+
+    /* Blackjack mobile */
+    .bj-card{
+      width:50px;
+      height:70px;
+      font-size:18px;
+    }
+
+    .bj-hand-value{
+      font-size:14px;
+    }
+
+    /* Oven game mobile */
+    .oven-display{
+      font-size:40px;
+      padding:30px;
+    }
+
+    .oven-progress-bar{
+      height:16px;
+    }
+
+    .oven-stat-value{
+      font-size:16px;
+    }
+
+    .oven-stat-label{
       font-size:10px;
+    }
+
+    /* Farm game mobile */
+    .farm-btn{
+      width:140px;
+      height:140px;
+      font-size:16px;
+    }
+
+    .farm-result{
+      font-size:14px;
+    }
+
+    /* Inventory items */
+    .inventory-item{
+      padding:14px;
+    }
+
+    .item-name{
+      font-size:11px;
+    }
+
+    .item-description{
+      font-size:12px;
+    }
+
+    /* Shop items */
+    .shop-item{
+      padding:16px;
+    }
+
+    .shop-item-title{
+      font-size:12px;
+    }
+
+    .shop-item-desc{
+      font-size:12px;
+    }
+
+    .shop-item-price{
+      font-size:14px;
+    }
+
+    /* Stat cards in dashboard header */
+    .stat-card{
+      padding:10px 14px !important;
+    }
+
+    .stat-card .stat-value{
+      font-size:16px !important;
+    }
+
+    .stat-card .stat-label{
+      font-size:10px !important;
+    }
+
+    /* Logout button */
+    .logout-btn{
+      font-size:10px;
+      padding:10px 12px;
+      min-height:44px;
+    }
+
+    /* Input bar - stack vertically on mobile for better UX */
+    .bar{
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .btn-submit{
+      width:100%;
+      padding:14px 20px;
+      font-size:13px;
+    }
+
+    .input-field{
+      width:100%;
+    }
+
+    /* Input group spacing */
+    .input-group{
+      margin-bottom:20px;
+    }
+
+    .helper{
+      margin-top:16px;
+      font-size:12px;
+    }
+
+    /* Stat cards in header - reduce size to prevent overflow */
+    .dashboard-header .stat-card{
+      padding:6px 10px !important;
+    }
+
+    .dashboard-header .stat-label{
+      font-size:9px !important;
+    }
+
+    .dashboard-header .stat-value{
+      font-size:14px !important;
+    }
+
+    /* User info */
+    .user-name{
+      font-size:16px;
+    }
+
+    .user-stats{
+      font-size:11px;
+    }
+
+    /* Brand title adjustments */
+    .brand .title{
+      font-size:20px;
+    }
+
+    .brand .slogan{
+      font-size:9px;
+    }
+  }
+
+  /* Extra small mobile devices (iPhone SE, etc.) */
+  @media(max-width:375px){
+    .brand .title{
+      font-size:18px;
+    }
+
+    .panel-title, .dashboard-title, .quest-title, .leaderboard-title, .game-title, .inventory-title{
+      font-size:14px;
+    }
+
+    .dashboard-header{
+      gap:12px;
+    }
+
+    .stat-card{
+      padding:6px 10px !important;
+    }
+
+    .dashboard-header .stat-card{
+      padding:5px 8px !important;
+    }
+
+    .dashboard-header .stat-label{
+      font-size:8px !important;
+    }
+
+    .dashboard-header .stat-value{
+      font-size:13px !important;
+    }
+
+    .logout-btn{
+      font-size:9px;
+      padding:8px 10px;
+    }
+
+    .btn-submit{
+      padding:14px 18px;
+      font-size:12px;
+    }
+
+    .market-bar{
+      padding:14px 16px !important;
+    }
+
+    .game-disclaimer{
+      font-size:10px;
+      padding:12px;
+    }
+
+    /* Tighter panel padding */
+    .panel{
+      padding:16px 12px;
+    }
+
+    .dashboard-container{
+      padding:12px 10px;
+    }
+  }
+
+  /* Landscape orientation on mobile */
+  @media(max-width:900px) and (orientation:landscape){
+    .brand .title{
+      font-size:16px;
+    }
+
+    .brand .slogan{
+      font-size:8px;
+    }
+
+    .panel, .dashboard-container, .quest-container, .leaderboard-container, .game-container, .inventory-container{
+      max-height:85vh;
+    }
+
+    .chart-container{
+      height:200px;
+    }
+
+    .crash-rocket-container{
+      height:200px;
+    }
+
+    .oven-display{
+      font-size:32px;
+      padding:20px;
+    }
+
+    .farm-btn{
+      width:120px;
+      height:120px;
     }
   }
 </style>
@@ -3479,30 +3882,8 @@
         </div>
       </div>
 
-      <!-- Market Bar -->
-      <div class="market-bar" id="viewShopBtn" style="
-        width: 100%;
-        background: linear-gradient(135deg, rgba(255,214,77,0.1) 0%, rgba(255,165,0,0.15) 100%);
-        border: 2px solid rgba(255,214,77,0.3);
-        border-radius: 12px;
-        padding: 20px 32px;
-        margin-bottom: 24px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 20px rgba(255,214,77,0.1);
-      " onmouseover="this.style.borderColor='rgba(255,214,77,0.5)'; this.style.boxShadow='0 6px 30px rgba(255,214,77,0.2)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='rgba(255,214,77,0.3)'; this.style.boxShadow='0 4px 20px rgba(255,214,77,0.1)'; this.style.transform='translateY(0)';">
-        <div style="display:flex; align-items:center; gap:16px;">
-          <div style="font-size:32px;">🏪</div>
-          <div>
-            <div style="font-family:Inter,system-ui,Arial; font-size:18px; font-weight:700; color:#FFD64D; letter-spacing:1px; margin-bottom:4px;">MARKET</div>
-            <div style="font-family:Inter,system-ui,Arial; font-size:12px; color:rgba(255,214,77,0.7);">Buy & sell items and powerups</div>
-          </div>
-        </div>
-        <div style="font-family:Inter,system-ui,Arial; font-size:14px; color:rgba(255,214,77,0.8); font-weight:600;">ENTER →</div>
-      </div>
+      <!-- Market Bar (hidden - kept for compatibility) -->
+      <div class="market-bar" id="viewShopBtn" style="display:none;"></div>
 
       <!-- Campaign Banner -->
       <div class="campaign-banner" id="campaignBanner">
@@ -3524,24 +3905,14 @@
 
       <!-- Two-column card layout -->
       <div class="dashboard-cards-row">
-        <!-- Left: Finance -->
+        <!-- Left: DeFi -->
         <div class="dashboard-card invest">
-          <div class="card-title">💰 FINANCE</div>
+          <div class="card-title">💎 DEFI</div>
           <div class="card-content">
-            <button class="action-btn btn-invest" id="openOvenBtn" aria-label="Open Oven investment" style="width:100%;margin-bottom:12px;">OVEN</button>
+            <button class="action-btn btn-invest" id="openOvenBtn" aria-label="Open Staking" style="width:100%;margin-bottom:12px;">STAKING</button>
             <button class="action-btn btn-invest" id="openFarmBtn" aria-label="Open Airdrop Farm" style="width:100%;margin-bottom:12px;">FARM</button>
-            <div class="coming-soon-wrapper disabled" style="margin-bottom:12px;">
-              <button class="action-btn btn-invest" aria-label="Swap coming soon" style="width:100%;">SWAP</button>
-              <div class="coming-soon-overlay">
-                <div class="coming-soon-badge" style="font-size:8px;padding:8px 16px;">COMING SOON</div>
-              </div>
-            </div>
-            <div class="coming-soon-wrapper disabled">
-              <button class="action-btn btn-invest" aria-label="Staking coming soon" style="width:100%;">STAKING</button>
-              <div class="coming-soon-overlay">
-                <div class="coming-soon-badge" style="font-size:8px;padding:8px 16px;">COMING SOON</div>
-              </div>
-            </div>
+            <button class="action-btn btn-invest" disabled style="width:100%;margin-bottom:12px;opacity:0.5;cursor:not-allowed;">SWAP</button>
+            <button class="action-btn btn-invest" disabled style="width:100%;opacity:0.5;cursor:not-allowed;">YIELD FARMING</button>
           </div>
         </div>
 
@@ -3549,13 +3920,24 @@
         <div class="dashboard-card gamble">
           <div class="card-title">🎲 GAMBLING</div>
           <div class="card-content">
-            <button class="action-btn btn-gamble" id="playReactionBtn" aria-label="Play reaction game" style="width:100%;margin-bottom:12px;">REACTION</button>
+            <button class="action-btn btn-gamble" id="playReactionBtn" aria-label="Play trading simulator" style="width:100%;margin-bottom:12px;">TRADING SIM</button>
             <button class="action-btn btn-gamble" id="playCrashBtn" aria-label="Play crash rocket game" style="width:100%;margin-bottom:12px;">CRASH</button>
             <button class="action-btn btn-gamble" id="playMinesBtn" aria-label="Play mines game" style="width:100%;margin-bottom:12px;">MINES</button>
             <button class="action-btn btn-gamble" id="playBlackjackBtn" aria-label="Play blackjack game" style="width:100%;">BLACKJACK</button>
-            <div class="gambling-disclaimer">
-              * This feature is only available during the "Who Wants to be a Millionaire" campaign and is played with fake tokens that are not exchangeable.
+            <div style="background:rgba(244,67,54,0.08);border:1px solid rgba(244,67,54,0.2);border-radius:8px;padding:12px;margin-top:12px;font-size:11px;line-height:1.6;color:rgba(244,67,54,0.9);text-align:center;">
+              * Campaign uses fake tokens not exchangeable for real value.
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Market Section -->
+      <div class="dashboard-cards-row">
+        <div class="dashboard-card" style="background:linear-gradient(135deg, rgba(255,214,77,0.05) 0%, rgba(255,165,0,0.08) 100%); border-color:rgba(255,214,77,0.3);">
+          <div class="card-title">🏪 MARKET</div>
+          <div class="card-content">
+            <button class="action-btn" disabled style="width:100%;margin-bottom:12px;opacity:0.5;cursor:not-allowed;background:rgba(255,214,77,0.1);border-color:rgba(255,214,77,0.3);color:#FFD64D;">ITEMS</button>
+            <button class="action-btn" disabled style="width:100%;opacity:0.5;cursor:not-allowed;background:rgba(255,214,77,0.1);border-color:rgba(255,214,77,0.3);color:#FFD64D;">POWERUPS</button>
           </div>
         </div>
       </div>
@@ -3563,9 +3945,9 @@
       <!-- PVE Adventures -->
       <div class="dashboard-cards-row">
         <!-- Loot Forest -->
-        <div class="dashboard-card coming-soon-wrapper disabled">
+        <div class="dashboard-card" style="opacity:0.5;cursor:not-allowed;pointer-events:none;">
           <div class="card-title">🌲 LOOT FOREST</div>
-          <div class="card-content" style="min-height:200px;">
+          <div class="card-content" style="min-height:200px;opacity:0.3;">
             <div class="match-list">
               <div class="match-item">
                 <span>Goblin Camp</span>
@@ -3581,15 +3963,12 @@
               </div>
             </div>
           </div>
-          <div class="coming-soon-overlay">
-            <div class="coming-soon-badge">COMING SOON</div>
-          </div>
         </div>
 
         <!-- Lava Dungeons -->
-        <div class="dashboard-card coming-soon-wrapper disabled">
+        <div class="dashboard-card" style="opacity:0.5;cursor:not-allowed;pointer-events:none;">
           <div class="card-title">🔥 LAVA DUNGEONS</div>
-          <div class="card-content" style="min-height:200px;">
+          <div class="card-content" style="min-height:200px;opacity:0.3;">
             <div class="match-list">
               <div class="match-item">
                 <span>Fire Elementals</span>
@@ -3604,9 +3983,6 @@
                 <span class="match-result win">SLAIN</span>
               </div>
             </div>
-          </div>
-          <div class="coming-soon-overlay">
-            <div class="coming-soon-badge">COMING SOON</div>
           </div>
         </div>
       </div>
@@ -3813,10 +4189,10 @@
       </div>
     </div>
 
-    <!-- Oven Investment content (hidden initially) -->
-    <div class="oven-container" id="ovenContent" role="region" aria-label="Oven investment">
+    <!-- Staking Investment content (hidden initially) -->
+    <div class="oven-container" id="ovenContent" role="region" aria-label="Staking investment">
       <div class="oven-header">
-        <div class="oven-title">🔥 THE OVEN</div>
+        <div class="oven-title">🔥 STAKING</div>
         <button class="back-btn" id="backFromOvenBtn" aria-label="Back to dashboard">BACK</button>
       </div>
 
@@ -3824,9 +4200,9 @@
       <div class="breadcrumb">
         <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
         <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item">Finance</span>
+        <span class="breadcrumb-item">DeFi</span>
         <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item active">Oven</span>
+        <span class="breadcrumb-item active">Staking</span>
       </div>
 
       <!-- Main stats display -->
@@ -3890,7 +4266,7 @@
       <div class="breadcrumb">
         <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
         <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item">Finance</span>
+        <span class="breadcrumb-item">DeFi</span>
         <span class="breadcrumb-separator">›</span>
         <span class="breadcrumb-item active">Farm</span>
       </div>
@@ -3940,9 +4316,9 @@
     </div>
 
     <!-- Reaction Game content (hidden initially) -->
-    <div class="game-container" id="gameContent" role="region" aria-label="Reaction game">
+    <div class="game-container" id="gameContent" role="region" aria-label="Memecoin trading simulator">
       <div class="game-header">
-        <div class="game-title">REACTION TRADER</div>
+        <div class="game-title">📈 MEMECOIN TRADING SIMULATOR</div>
         <button class="back-btn" id="backToDashBtn" aria-label="Back to dashboard">BACK</button>
       </div>
 
@@ -3950,9 +4326,9 @@
       <div class="breadcrumb">
         <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
         <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item">Gambling</span>
+        <span class="breadcrumb-item">Skills</span>
         <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item active">Reaction Trader</span>
+        <span class="breadcrumb-item active">Memecoin Trading Simulator</span>
       </div>
 
       <div class="game-layout">
@@ -3961,14 +4337,14 @@
           <div class="instructions">
             <div class="instructions-title">HOW TO PLAY</div>
             <div class="instructions-text">
-              Watch the chart closely. When it turns RED and starts dropping, hit SELL as fast as you can!
-              You have 5 attempts. Your best time will be recorded on the leaderboard.
+              Watch the memecoin chart pump and dump! When it turns RED and starts crashing, hit SELL as fast as you can!
+              React under 1000ms to earn 300 GP. Free to play, unlimited attempts!
             </div>
           </div>
 
           <div class="attempts-counter">
-            <span class="attempts-label">ATTEMPTS</span>
-            <span class="attempts-value" id="attemptsLeft">5 / 5</span>
+            <span class="attempts-label">BEST TIME</span>
+            <span class="attempts-value" id="attemptsLeft">-- ms</span>
           </div>
 
           <div class="results-grid" id="resultsGrid">
@@ -3988,15 +4364,10 @@
           <button class="sell-button" id="sellButton" disabled>SELL</button>
 
           <div class="action-buttons" style="margin-top:16px;">
-            <button class="action-btn btn-primary" id="startGameBtn">START GAME</button>
-            <button class="action-btn btn-secondary" id="resetGameBtn">RESET</button>
+            <button class="action-btn btn-primary" id="startGameBtn">START TRADE</button>
+            <button class="action-btn btn-secondary" id="resetGameBtn">RESET STATS</button>
           </div>
         </div>
-      </div>
-
-      <!-- Disclaimer for Reaction Game -->
-      <div class="game-disclaimer">
-        ⚠️ <strong>Campaign Only:</strong> Fake tokens for Millionaire campaign • Not exchangeable • Play responsibly
       </div>
     </div>
 
@@ -4134,6 +4505,10 @@
         <!-- Stats Display -->
         <div class="mines-stats-display">
           <div class="mines-stat">
+            <div class="mines-stat-label">YOUR GP</div>
+            <div class="mines-stat-value" id="minesGPDisplay">0</div>
+          </div>
+          <div class="mines-stat">
             <div class="mines-stat-label">MULTIPLIER</div>
             <div class="mines-stat-value" id="minesMultiplier">0.00x</div>
           </div>
@@ -4194,6 +4569,10 @@
 
         <!-- Stats Display -->
         <div class="blackjack-stats-display">
+          <div class="blackjack-stat">
+            <div class="blackjack-stat-label">YOUR GP</div>
+            <div class="blackjack-stat-value" id="blackjackGPDisplay">0</div>
+          </div>
           <div class="blackjack-stat">
             <div class="blackjack-stat-label">YOUR HAND</div>
             <div class="blackjack-stat-value" id="blackjackPlayerValue">0</div>
@@ -4691,8 +5070,7 @@
     // Game variables
     let gameState = {
       attempts: [],
-      currentAttempt: 0,
-      maxAttempts: 5,
+      bestTime: null,
       isPlaying: false,
       startTime: null,
       reactionTimer: null,
@@ -4869,7 +5247,7 @@
           </div>
 
           <div class="input-group">
-            <input id="warriorName" class="warrior-input" type="text" placeholder="Enter warrior name" maxlength="16" autocomplete="off">
+            <input id="warriorName" class="warrior-input" type="text" placeholder="Your legend begins here..." maxlength="16" autocomplete="off">
             <div class="error-msg" id="warriorNameError"></div>
           </div>
 
@@ -5002,6 +5380,9 @@
         shopContent.style.display = 'none';
         crashContent.style.display = 'block';
         minesContent.style.display = 'none';
+        ovenContent.style.display = 'none';
+        farmContent.style.display = 'none';
+        blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initCrashGame();
 
@@ -5015,9 +5396,12 @@
         shopContent.style.display = 'none';
         crashContent.style.display = 'none';
         ovenContent.style.display = 'none';
+        farmContent.style.display = 'none';
         minesContent.style.display = 'block';
+        blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initMinesGame();
+        updateMinesGPDisplay();
 
       } else if (newContent === 'blackjack') {
         panelContent.style.display = 'none';
@@ -5029,6 +5413,7 @@
         shopContent.style.display = 'none';
         crashContent.style.display = 'none';
         ovenContent.style.display = 'none';
+        farmContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
@@ -5043,6 +5428,11 @@
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
         shopContent.style.display = 'none';
+        ovenContent.style.display = 'none';
+        farmContent.style.display = 'none';
+        crashContent.style.display = 'none';
+        minesContent.style.display = 'none';
+        blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         console.log('Leaderboard display set to block');
         loadLeaderboard('all');
@@ -5056,6 +5446,11 @@
         questContent.style.display = 'block';
         inventoryContent.style.display = 'none';
         shopContent.style.display = 'none';
+        ovenContent.style.display = 'none';
+        farmContent.style.display = 'none';
+        crashContent.style.display = 'none';
+        minesContent.style.display = 'none';
+        blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadQuests('daily');
 
@@ -5067,6 +5462,11 @@
         questContent.style.display = 'none';
         inventoryContent.style.display = 'block';
         shopContent.style.display = 'none';
+        ovenContent.style.display = 'none';
+        farmContent.style.display = 'none';
+        crashContent.style.display = 'none';
+        minesContent.style.display = 'none';
+        blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadInventory();
 
@@ -5078,6 +5478,11 @@
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
         shopContent.style.display = 'block';
+        ovenContent.style.display = 'none';
+        farmContent.style.display = 'none';
+        crashContent.style.display = 'none';
+        minesContent.style.display = 'none';
+        blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadInventory(); // Load shop items
       }
@@ -5089,6 +5494,9 @@
           void newVisible.offsetWidth; // Force reflow
           newVisible.classList.add('fade-in');
         }
+
+        // Scroll to top when changing pages
+        window.scrollTo(0, 0);
       }, currentVisible ? 200 : 0); // 200ms matches fade-out animation duration
     }
     
@@ -5908,11 +6316,6 @@
     }
     
     function startGame() {
-      if (gameState.currentAttempt >= gameState.maxAttempts) {
-        Modal.alert('All attempts used! Click RESET to play again.', 'Game Over');
-        return;
-      }
-
       const chartContainer = document.getElementById('chartContainer');
       const sellButton = document.getElementById('sellButton');
       const gameStatus = document.getElementById('gameStatus');
@@ -5924,13 +6327,27 @@
       // Reset state
       chartContainer.className = 'chart-container green';
       sellButton.disabled = false; // Enable immediately
-      gameStatus.textContent = 'Watch the chart...';
+      gameStatus.textContent = 'Watch for the dump...';
       gameStatus.className = 'game-status status-ready';
       drawChart(ctx, null);
 
-      // Game parameters - RANDOMIZED FOR VARIETY
-      const totalDuration = 3000 + Math.random() * 2000; // 3-5 seconds total
-      const peakTime = totalDuration * (0.5 + Math.random() * 0.3); // Peak at 50%-80% of duration
+      // Game parameters - HIGHLY RANDOMIZED FOR VARIETY
+      // Random duration with weighted distribution (favors longer but allows early crashes)
+      const durationRoll = Math.random();
+      let totalDuration;
+      if (durationRoll < 0.15) {
+        // 15% chance: Early crash (1-2.5 seconds)
+        totalDuration = 1000 + Math.random() * 1500;
+      } else if (durationRoll < 0.85) {
+        // 70% chance: Normal/Long (2.5-6 seconds) - more exciting
+        totalDuration = 2500 + Math.random() * 3500;
+      } else {
+        // 15% chance: Very long (6-9 seconds) - maximum suspense
+        totalDuration = 6000 + Math.random() * 3000;
+      }
+
+      // Peak time is more variable: sometimes early (20%), sometimes very late (90%)
+      const peakTime = totalDuration * (0.2 + Math.random() * 0.7); // Peak at 20%-90% of duration
       const startPrice = 38000 + Math.random() * 4000; // Random start 38k-42k
       const peakPrice = startPrice + 6000 + Math.random() * 8000; // Rise 6000-14000
       const crashPrice = startPrice - (2000 + Math.random() * 3000); // Random crash depth
@@ -6015,21 +6432,20 @@
       animateChart();
     }
     
-    function handleSell() {
+    async function handleSell() {
       if (!gameState.isPlaying) return;
 
       const now = performance.now();
       const sellButton = document.getElementById('sellButton');
       const gameStatus = document.getElementById('gameStatus');
 
-      // Check if clicked before peak - DISQUALIFIED
+      // Check if clicked before peak - TOO EARLY
       if (now < gameState.peakTime) {
         gameState.isPlaying = false;
-        gameState.currentAttempt++;
         gameState.attempts.push(-1); // -1 indicates early click
 
         sellButton.disabled = true;
-        gameStatus.textContent = 'TOO EARLY! DISQUALIFIED';
+        gameStatus.textContent = 'TOO EARLY! Wait for the dump!';
         gameStatus.className = 'game-status status-go';
 
         // Cancel animation
@@ -6037,71 +6453,87 @@
           cancelAnimationFrame(gameState.chartAnimation);
         }
 
-        // Update attempts counter
-        const remaining = gameState.maxAttempts - gameState.currentAttempt;
-        document.getElementById('attemptsLeft').textContent = `${remaining} / ${gameState.maxAttempts}`;
-
-        // Update results grid
+        // Update best time display
+        updateBestTimeDisplay();
         updateResultsGrid();
-
-        // Check if game is over
-        if (gameState.currentAttempt >= gameState.maxAttempts) {
-          setTimeout(endGame, 1500);
-        }
         return;
       }
 
-      // Clicked after peak - calculate score
-      const timingScore = now - gameState.peakTime;
-      gameState.attempts.push(timingScore);
-      gameState.currentAttempt++;
+      // Clicked after peak - calculate reaction time
+      const reactionTime = now - gameState.peakTime;
+      gameState.attempts.push(reactionTime);
       gameState.isPlaying = false;
+
+      // Update best time
+      if (gameState.bestTime === null || reactionTime < gameState.bestTime) {
+        gameState.bestTime = reactionTime;
+      }
+
+      // Award GP for fast reactions
+      if (reactionTime < 1000) {
+        await updateUserGP(300);
+        Toast.success('Fast hands! +300 GP', 'PROFIT');
+        gameStatus.textContent = `${reactionTime.toFixed(0)}ms - +300 GP!`;
+        gameStatus.className = 'game-status';
+        gameStatus.style.color = '#4CAF50';
+      } else {
+        gameStatus.textContent = `${reactionTime.toFixed(0)}ms - Too slow!`;
+        gameStatus.className = 'game-status';
+        gameStatus.style.color = '#a0a8b0';
+      }
 
       // Update UI
       sellButton.disabled = true;
-      gameStatus.textContent = `+${timingScore.toFixed(0)}ms after peak`;
-      gameStatus.className = 'game-status';
 
       // Cancel animation
       if (gameState.chartAnimation) {
         cancelAnimationFrame(gameState.chartAnimation);
       }
 
-      // Update attempts counter
-      const remaining = gameState.maxAttempts - gameState.currentAttempt;
-      document.getElementById('attemptsLeft').textContent = `${remaining} / ${gameState.maxAttempts}`;
-
-      // Update results grid
+      // Update displays
+      updateBestTimeDisplay();
       updateResultsGrid();
+    }
 
-      // Check if game is over
-      if (gameState.currentAttempt >= gameState.maxAttempts) {
-        setTimeout(endGame, 1500);
+    function updateBestTimeDisplay() {
+      const bestTimeEl = document.getElementById('attemptsLeft');
+      if (gameState.bestTime) {
+        bestTimeEl.textContent = `${gameState.bestTime.toFixed(0)} ms`;
+        bestTimeEl.style.color = gameState.bestTime < 1000 ? '#4CAF50' : '#a0a8b0';
+      } else {
+        bestTimeEl.textContent = '-- ms';
+        bestTimeEl.style.color = '#a0a8b0';
       }
     }
-    
+
     function updateResultsGrid() {
       const grid = document.getElementById('resultsGrid');
       grid.innerHTML = '';
 
-      const validAttempts = gameState.attempts.filter(t => t >= 0);
+      // Show last 5 attempts
+      const recentAttempts = gameState.attempts.slice(-5);
+      const validAttempts = recentAttempts.filter(t => t >= 0);
       const bestTime = validAttempts.length > 0 ? Math.min(...validAttempts) : null;
 
-      gameState.attempts.forEach((time, index) => {
+      recentAttempts.forEach((time, index) => {
+        const actualIndex = gameState.attempts.length - recentAttempts.length + index;
         const card = document.createElement('div');
         const isBest = time >= 0 && time === bestTime;
         card.className = isBest ? 'result-card best' : 'result-card';
 
         if (time === -1) {
-          // Disqualified
+          // Too early
           card.innerHTML = `
-            <div class="result-attempt">TRY ${index + 1}</div>
-            <div class="result-time" style="color:#F44336">DISQ</div>
+            <div class="result-attempt">TRY ${actualIndex + 1}</div>
+            <div class="result-time" style="color:#F44336">TOO EARLY</div>
           `;
         } else {
+          const gpEarned = time < 1000 ? '+300 GP' : '0 GP';
+          const color = time < 1000 ? '#4CAF50' : '#a0a8b0';
           card.innerHTML = `
-            <div class="result-attempt">TRY ${index + 1}</div>
-            <div class="result-time">+${time.toFixed(0)}ms</div>
+            <div class="result-attempt">TRY ${actualIndex + 1}</div>
+            <div class="result-time">${time.toFixed(0)}ms</div>
+            <div class="result-time" style="color:${color};font-size:11px;">${gpEarned}</div>
           `;
         }
         grid.appendChild(card);
@@ -6170,23 +6602,23 @@
     function resetGame() {
       gameState = {
         attempts: [],
-        currentAttempt: 0,
-        maxAttempts: 5,
+        bestTime: null,
         isPlaying: false,
         startTime: null,
         reactionTimer: null,
         chartAnimation: null
       };
-      
+
       // Clear any running timers
       if (gameState.reactionTimer) clearTimeout(gameState.reactionTimer);
       if (gameState.chartAnimation) cancelAnimationFrame(gameState.chartAnimation);
-      
+
       // Reset UI
       document.getElementById('chartContainer').className = 'chart-container';
       document.getElementById('sellButton').disabled = true;
-      document.getElementById('gameStatus').textContent = 'Click START to begin';
-      document.getElementById('attemptsLeft').textContent = '5 / 5';
+      document.getElementById('gameStatus').textContent = 'Click START TRADE to begin';
+      document.getElementById('gameStatus').style.color = '#a0a8b0';
+      updateBestTimeDisplay();
       document.getElementById('resultsGrid').innerHTML = '';
       
       const canvas = document.getElementById('chartCanvas');
@@ -7549,6 +7981,11 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       }
     }
 
+    function updateMinesGPDisplay() {
+      const gp = getUserGP();
+      document.getElementById('minesGPDisplay').textContent = gp;
+    }
+
     async function startMinesGame() {
       const betAmount = parseInt(document.getElementById('minesBetAmount').value);
       const minesCount = parseInt(document.getElementById('minesCount').value);
@@ -7570,17 +8007,9 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
         return;
       }
 
-      // Confirm large bets
-      if (betAmount >= 500) {
-        const confirmed = await Modal.confirm(
-          `Place a bet of ${betAmount.toLocaleString()} GP with ${minesCount} mines?`,
-          'Confirm Bet'
-        );
-        if (!confirmed) return;
-      }
-
       // Deduct bet
       updateUserGP(-betAmount);
+      updateMinesGPDisplay();
 
       // Initialize game
       minesGameState = {
@@ -7681,6 +8110,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
 
       const profit = Math.floor(minesGameState.betAmount * minesGameState.multiplier);
       updateUserGP(profit);
+      updateMinesGPDisplay();
 
       // Reveal all tiles
       for (let i = 0; i < 25; i++) {
@@ -7804,6 +8234,19 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       return cardDiv;
     }
 
+    function updateBlackjackGPDisplay() {
+      const gp = getUserGP();
+      document.getElementById('blackjackGPDisplay').textContent = gp;
+      if (blackjackGameState && blackjackGameState.betAmount) {
+        document.getElementById('blackjackCurrentBet').textContent = blackjackGameState.betAmount + ' GP';
+      }
+    }
+
+    function initBlackjack() {
+      const gp = getUserGP();
+      document.getElementById('blackjackGPDisplay').textContent = gp;
+    }
+
     async function dealBlackjack() {
       const betAmount = parseInt(document.getElementById('blackjackBetAmount').value);
       const userGP = getUserGP();
@@ -7822,15 +8265,6 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       if (betAmount > userGP) {
         Toast.error('Insufficient GP', 'INSUFFICIENT FUNDS');
         return;
-      }
-
-      // Confirm large bets
-      if (betAmount >= 500) {
-        const confirmed = await Modal.confirm(
-          `Place a bet of ${betAmount.toLocaleString()} GP?`,
-          'Confirm Bet'
-        );
-        if (!confirmed) return;
       }
 
       // Deduct bet
@@ -7854,6 +8288,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
 
       // Update UI
       updateBlackjackDisplay();
+      updateBlackjackGPDisplay();
       document.getElementById('blackjackActions').style.display = 'flex';
       document.getElementById('blackjackDealBtn').disabled = true;
       document.getElementById('blackjackBetAmount').disabled = true;
@@ -7939,12 +8374,14 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
           winAmount = blackjackGameState.betAmount * 2;
           message = `Dealer bust! Won ${winAmount} GP`;
           updateUserGP(winAmount);
+          updateBlackjackGPDisplay();
           Toast.success(message, 'WIN');
           break;
         case 'win':
           winAmount = blackjackGameState.betAmount * 2;
           message = `You win! Won ${winAmount} GP`;
           updateUserGP(winAmount);
+          updateBlackjackGPDisplay();
           Toast.success(message, 'WIN');
           break;
         case 'lose':
@@ -7955,6 +8392,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
           winAmount = blackjackGameState.betAmount;
           message = `Push! Bet returned`;
           updateUserGP(winAmount);
+          updateBlackjackGPDisplay();
           Toast.info(message, 'PUSH');
           break;
       }
@@ -8075,9 +8513,9 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     document.getElementById('campaignBanner').addEventListener('click', () => {
       Modal.alert(
         'Get over 1,000,000 GP during the campaign to qualify for a special badge!\n\n' +
-        '• Use OVEN for compound interest (10% hourly)\n' +
+        '• Use STAKING for compound interest (10% hourly)\n' +
         '• Click FARM every 5 seconds for random GP drops\n' +
-        '• Play gambling games: Reaction, Crash, Mines, Blackjack\n' +
+        '• Play gambling games: Trading Sim, Crash, Mines, Blackjack\n' +
         '• All GP earned counts toward your total\n\n' +
         'Note: These are fake tokens for the campaign only and cannot be exchanged.',
         '🏆 Who Wants to be a Millionaire - Campaign Rules'
@@ -8120,12 +8558,28 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       }
     });
 
+    // Helper function for breadcrumb navigation
+    function showDashboard() {
+      swapContent('dashboard');
+    }
+
+    // Make DUEL PVP logo clickable when logged in
+    const brandTitle = document.querySelector('.brand .title');
+    if (brandTitle) {
+      brandTitle.addEventListener('click', () => {
+        const savedEmail = localStorage.getItem('duelpvp_email');
+        if (savedEmail) {
+          swapContent('dashboard');
+        }
+      });
+    }
+
     // Check if user is already logged in
     try {
       const savedEmail = localStorage.getItem('duelpvp_email');
       if (savedEmail) {
         document.getElementById('userName').textContent = savedEmail.split('@')[0].toUpperCase();
-        // Optionally auto-login: swapContent('dashboard');
+        if (brandTitle) brandTitle.style.cursor = 'pointer';
       }
     } catch (e) {}
   </script>
