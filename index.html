@@ -2574,6 +2574,8 @@
     .dashboard-header > div:last-child{
       width:100%;
       justify-content:space-between;
+      gap:8px !important;
+      flex-wrap:wrap;
     }
 
     /* Game disclaimer - better mobile formatting */
@@ -3630,9 +3632,32 @@
 
     /* Logout button */
     .logout-btn{
-      font-size:11px;
-      padding:10px 16px;
+      font-size:10px;
+      padding:10px 12px;
       min-height:44px;
+    }
+
+    /* Input bar - fix join/login button overflow */
+    .bar{
+      gap:8px;
+    }
+
+    .btn-submit{
+      padding:12px 16px;
+      white-space:nowrap;
+    }
+
+    /* Stat cards in header - reduce size to prevent overflow */
+    .dashboard-header .stat-card{
+      padding:6px 10px !important;
+    }
+
+    .dashboard-header .stat-label{
+      font-size:9px !important;
+    }
+
+    .dashboard-header .stat-value{
+      font-size:14px !important;
     }
 
     /* User info */
@@ -3669,7 +3694,29 @@
     }
 
     .stat-card{
-      padding:8px 12px !important;
+      padding:6px 10px !important;
+    }
+
+    .dashboard-header .stat-card{
+      padding:5px 8px !important;
+    }
+
+    .dashboard-header .stat-label{
+      font-size:8px !important;
+    }
+
+    .dashboard-header .stat-value{
+      font-size:13px !important;
+    }
+
+    .logout-btn{
+      font-size:9px;
+      padding:8px 10px;
+    }
+
+    .btn-submit{
+      padding:12px 14px;
+      font-size:11px;
     }
 
     .market-bar{
@@ -3679,6 +3726,15 @@
     .game-disclaimer{
       font-size:10px;
       padding:12px;
+    }
+
+    /* Tighter panel padding */
+    .panel{
+      padding:16px 12px;
+    }
+
+    .dashboard-container{
+      padding:12px 10px;
     }
   }
 
