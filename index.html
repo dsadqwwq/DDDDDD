@@ -3854,17 +3854,7 @@
           <div class="user-name" id="userName" aria-label="User name">Champion</div>
           <div class="user-stats" aria-label="User level and rank">Level 87 • Falafel Enjoyer</div>
         </div>
-        <div style="display:flex;align-items:center;gap:20px;">
-          <div class="stat-card" style="margin:0;padding:8px 16px;">
-            <div class="stat-label" style="font-size:10px;">RANK</div>
-            <div class="stat-value" style="font-size:16px;">#127</div>
-          </div>
-          <div class="stat-card" style="margin:0;padding:8px 16px;">
-            <div class="stat-label" style="font-size:10px;">GP BALANCE</div>
-            <div class="stat-value" style="font-size:16px;" id="dashboardGPBalance">0</div>
-          </div>
-          <button class="logout-btn" id="logoutBtn" aria-label="Logout from account">LOGOUT</button>
-        </div>
+        <button class="logout-btn" id="logoutBtn" aria-label="Logout from account">LOGOUT</button>
       </div>
 
       <div class="stats-grid">
@@ -4064,7 +4054,17 @@
           <div class="user-name">🏆 WHO WANTS TO BE A MILLIONAIRE</div>
           <div class="user-stats">Get over 1,000,000 GP to win</div>
         </div>
-        <button class="back-btn" id="backFromCampaignBtn" aria-label="Back to dashboard">BACK</button>
+        <div style="display:flex;align-items:center;gap:20px;">
+          <div class="stat-card" style="margin:0;padding:8px 16px;cursor:pointer;" id="viewCampaignRankBtn">
+            <div class="stat-label" style="font-size:10px;">RANK</div>
+            <div class="stat-value" style="font-size:16px;" id="campaignRankHeader">#127</div>
+          </div>
+          <div class="stat-card" style="margin:0;padding:8px 16px;">
+            <div class="stat-label" style="font-size:10px;">GP BALANCE</div>
+            <div class="stat-value" style="font-size:16px;" id="campaignGPBalance">0</div>
+          </div>
+          <button class="back-btn" id="backFromCampaignBtn" aria-label="Back to dashboard">BACK</button>
+        </div>
       </div>
 
       <!-- Breadcrumb -->
@@ -4085,12 +4085,6 @@
           </div>
           <div class="campaign-time-remaining" id="campaignTimeRemaining">Campaign in progress</div>
         </div>
-      </div>
-
-      <!-- Rank Display -->
-      <div class="stat-card" style="margin-bottom:20px;">
-        <div class="stat-label">YOUR CAMPAIGN RANK</div>
-        <div class="stat-value" style="font-size:32px;" id="campaignRank">#127</div>
       </div>
 
       <!-- Two-column card layout -->
@@ -6079,7 +6073,6 @@
         // Update GP from localStorage (for test mode) or database
         const localGP = parseInt(localStorage.getItem('duelpvp_gp')) || 0;
         const displayGP = localGP || totalGP;
-        document.getElementById('dashboardGPBalance').textContent = displayGP >= 1000000 ? `${(displayGP/1000000).toFixed(1)}M` : displayGP >= 1000 ? `${(displayGP/1000).toFixed(1)}K` : displayGP;
 
         // Update campaign progress on dashboard card
         const campaignGP = displayGP;
@@ -6087,10 +6080,11 @@
         document.getElementById('campaignCurrentGPCard').textContent = campaignGP >= 1000000 ? `${(campaignGP/1000000).toFixed(2)}M` : campaignGP.toLocaleString();
         document.getElementById('campaignProgressFillCard').style.width = `${campaignProgress}%`;
 
-        // Update campaign page progress
+        // Update campaign page progress and header
         document.getElementById('campaignCurrentGP').textContent = campaignGP >= 1000000 ? `${(campaignGP/1000000).toFixed(2)}M` : campaignGP.toLocaleString();
         document.getElementById('campaignProgressFill').style.width = `${campaignProgress}%`;
-        document.getElementById('campaignRank').textContent = userRank > 0 ? `#${userRank}` : '--';
+        document.getElementById('campaignGPBalance').textContent = displayGP >= 1000000 ? `${(displayGP/1000000).toFixed(1)}M` : displayGP >= 1000 ? `${(displayGP/1000).toFixed(1)}K` : displayGP;
+        document.getElementById('campaignRankHeader').textContent = userRank > 0 ? `#${userRank}` : '--';
 
       } catch (e) {
         console.error('Failed to update dashboard stats:', e);
@@ -8612,6 +8606,10 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       swapContent('campaign');
     });
     document.getElementById('backFromCampaignBtn').addEventListener('click', () => swapContent('dashboard'));
+    document.getElementById('viewCampaignRankBtn').addEventListener('click', () => {
+      console.log('View campaign rank clicked');
+      swapContent('leaderboard');
+    });
     document.getElementById('viewQuestsBtn').addEventListener('click', () => swapContent('quests'));
     document.getElementById('viewInventoryBtn').addEventListener('click', () => swapContent('inventory'));
     document.getElementById('viewShopBtn').addEventListener('click', () => swapContent('shop'));
