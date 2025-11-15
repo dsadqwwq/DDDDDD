@@ -23,7 +23,31 @@
     --glow-h: 366px;
   }
   *{box-sizing:border-box}
-  html,body{height:100%;margin:0;background:var(--bg);color:#e6ecf1;font-family:Inter,system-ui,Segoe UI,Roboto,Arial}
+  html{
+    height:100%;
+    margin:0;
+    /* Enable smooth scrolling */
+    scroll-behavior:smooth;
+    /* Optimize text rendering on mobile */
+    -webkit-text-size-adjust:100%;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+  body{
+    height:100%;
+    margin:0;
+    background:var(--bg);
+    color:#e6ecf1;
+    font-family:Inter,system-ui,Segoe UI,Roboto,Arial;
+    /* Enable momentum scrolling on iOS */
+    -webkit-overflow-scrolling:touch;
+    /* Prevent text selection on tap/hold on mobile */
+    -webkit-tap-highlight-color:transparent;
+  }
+  /* Better touch targets for interactive elements */
+  button, a, input, select, textarea{
+    -webkit-tap-highlight-color:transparent;
+  }
   
   /* Background with continuous animation */
   .bg{position:fixed;inset:0;overflow:hidden;z-index:0}
@@ -2375,10 +2399,10 @@
 
   /* Responsive improvements */
   @media(max-width:600px){
-    /* Leaderboard table */
+    /* Leaderboard table - improved readability */
     .table-header, .table-row{
       grid-template-columns:50px 1fr 90px;
-      font-size:8px;
+      font-size:11px;
     }
     .entry-date{
       display:none;
@@ -2401,74 +2425,79 @@
 
     /* Panel and container sizing */
     .panel{
-      width:95vw;
+      width:96vw;
       padding:20px 16px;
-      max-height:90vh;
+      max-height:88vh;
       overflow-y:auto;
     }
     .dashboard-container, .quest-container, .leaderboard-container, .game-container, .inventory-container{
-      width:95vw;
-      padding:16px;
-      max-height:90vh;
+      width:96vw;
+      padding:16px 12px;
+      max-height:88vh;
       overflow-y:auto;
     }
 
-    /* Typography adjustments */
+    /* Typography adjustments - improved readability */
     .panel-title, .dashboard-title, .quest-title, .leaderboard-title, .game-title, .inventory-title{
-      font-size:14px;
+      font-size:16px;
     }
     .warrior-subtitle{
-      font-size:10px;
+      font-size:11px;
     }
     .input-label{
-      font-size:10px;
+      font-size:12px;
     }
     .warrior-input{
-      font-size:12px;
-      padding:10px 12px;
+      font-size:14px;
+      padding:14px 16px;
     }
 
-    /* Buttons */
+    /* Buttons - better touch targets (minimum 44px height) */
     .btn-submit, .back-btn, .action-btn{
-      font-size:10px;
-      padding:12px 16px;
+      font-size:12px;
+      padding:16px 20px;
+      min-height:48px;
     }
     .sell-button{
-      font-size:12px;
-      padding:16px;
+      font-size:14px;
+      padding:20px;
+      min-height:52px;
     }
 
     /* Dashboard stats grid */
     .stats-grid{
       grid-template-columns:1fr;
-      gap:12px;
+      gap:14px;
     }
     .stat-value{
-      font-size:18px;
+      font-size:20px;
     }
     .stat-label{
-      font-size:9px;
+      font-size:11px;
     }
 
-    /* Quest tabs */
+    /* Quest tabs - better touch targets */
     .quest-tabs{
       flex-wrap:wrap;
-      gap:8px;
+      gap:10px;
     }
     .quest-tab{
-      font-size:8px;
-      padding:8px 12px;
+      font-size:10px;
+      padding:12px 16px;
+      min-height:44px;
     }
 
     /* Quest cards */
     .quest-card{
-      padding:12px;
+      padding:16px;
     }
     .quest-name{
-      font-size:9px;
+      font-size:11px;
+      line-height:1.4;
     }
     .quest-desc{
-      font-size:11px;
+      font-size:13px;
+      line-height:1.5;
     }
 
     /* Game layout - stack vertically on mobile */
@@ -2479,35 +2508,36 @@
 
     /* Chart game */
     .chart-container{
-      height:200px;
+      height:250px;
     }
     .price-display{
-      font-size:14px;
-      top:10px;
-      right:10px;
+      font-size:16px;
+      top:12px;
+      right:12px;
     }
     .instructions-title{
-      font-size:10px;
+      font-size:12px;
     }
     .instructions-text{
-      font-size:11px;
+      font-size:13px;
+      line-height:1.5;
     }
 
     /* Footer */
     .footer{
       right:10px;
       bottom:10px;
-      font-size:10px;
-      gap:8px;
+      font-size:11px;
+      gap:10px;
     }
     .footer svg{
-      width:14px;
-      height:14px;
+      width:16px;
+      height:16px;
     }
 
     /* Page container */
     .page-container{
-      padding:20px 10px;
+      padding:20px 12px;
     }
     .page-container.bottom-aligned{
       padding-bottom:30px;
@@ -2516,21 +2546,58 @@
     /* Shop grid */
     .shop-grid{
       grid-template-columns:1fr;
+      gap:16px;
     }
 
     /* Results grid */
     .results-grid{
-      grid-template-columns:repeat(auto-fit, minmax(60px, 1fr));
-      gap:8px;
+      grid-template-columns:repeat(auto-fit, minmax(70px, 1fr));
+      gap:10px;
     }
     .result-item{
-      padding:8px;
-      font-size:10px;
+      padding:10px;
+      font-size:12px;
     }
 
     /* Coming soon overlay */
     .coming-soon-overlay{
-      font-size:16px;
+      font-size:18px;
+      padding:16px;
+    }
+
+    /* Dashboard header - stack on mobile */
+    .dashboard-header{
+      flex-direction:column;
+      align-items:flex-start;
+      gap:16px;
+    }
+    .dashboard-header > div:last-child{
+      width:100%;
+      justify-content:space-between;
+    }
+
+    /* Game disclaimer - better mobile formatting */
+    .game-disclaimer{
+      font-size:11px;
+      padding:14px;
+      line-height:1.5;
+    }
+
+    /* Breadcrumb improvements */
+    .breadcrumb{
+      font-size:11px;
+      flex-wrap:wrap;
+    }
+
+    /* Attempts counter */
+    .attempts-counter{
+      font-size:12px;
+    }
+
+    /* Game status */
+    .game-status, .crash-game-status{
+      font-size:13px;
+      padding:12px;
     }
   }
 
@@ -3358,14 +3425,43 @@
     }
 
     .dashboard-card{
-      padding:16px;
+      padding:18px;
       margin-bottom:16px;
     }
 
     .card-title{
-      font-size:10px;
+      font-size:12px;
+      line-height:1.4;
     }
 
+    .card-subtitle{
+      font-size:11px;
+    }
+
+    .card-description{
+      font-size:12px;
+      line-height:1.5;
+    }
+
+    /* Market bar mobile optimization */
+    .market-bar{
+      padding:16px 20px !important;
+      flex-direction:column;
+      gap:12px;
+      text-align:center;
+    }
+
+    .market-bar > div:first-child{
+      flex-direction:column;
+      gap:8px;
+      width:100%;
+    }
+
+    .market-bar .action-btn{
+      width:100%;
+    }
+
+    /* Toast notifications */
     .toast-container{
       top:10px;
       right:10px;
@@ -3375,29 +3471,247 @@
     .toast{
       min-width:unset;
       width:100%;
+      font-size:12px;
     }
 
-    .modal-container{
-      width:95%;
-      max-width:unset;
-    }
-
-    .modal-title{
+    .toast-title{
       font-size:11px;
     }
 
-    .modal-btn{
-      font-size:9px;
-      padding:10px 16px;
+    /* Modals */
+    .modal-container{
+      width:94%;
+      max-width:unset;
+      padding:20px;
     }
 
+    .modal-title{
+      font-size:14px;
+      line-height:1.4;
+    }
+
+    .modal-message{
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .modal-btn{
+      font-size:12px;
+      padding:14px 20px;
+      min-height:48px;
+    }
+
+    /* Loading spinner */
     .loading-spinner{
       width:60px;
       height:60px;
     }
 
     .loading-text{
+      font-size:12px;
+    }
+
+    /* Crash game mobile optimizations */
+    .crash-rocket-container{
+      height:250px;
+    }
+
+    .crash-multiplier-value{
+      font-size:32px;
+    }
+
+    .crash-status-text{
+      font-size:13px;
+    }
+
+    .crash-cashout-btn{
+      font-size:14px;
+      padding:18px;
+      min-height:52px;
+    }
+
+    .crash-input{
+      font-size:14px;
+      padding:14px;
+    }
+
+    /* Mines game mobile */
+    .mines-grid{
+      gap:8px;
+    }
+
+    .mine-cell{
+      font-size:18px;
+      min-height:50px;
+    }
+
+    /* Blackjack mobile */
+    .bj-card{
+      width:50px;
+      height:70px;
+      font-size:18px;
+    }
+
+    .bj-hand-value{
+      font-size:14px;
+    }
+
+    /* Oven game mobile */
+    .oven-display{
+      font-size:40px;
+      padding:30px;
+    }
+
+    .oven-progress-bar{
+      height:16px;
+    }
+
+    .oven-stat-value{
+      font-size:16px;
+    }
+
+    .oven-stat-label{
       font-size:10px;
+    }
+
+    /* Farm game mobile */
+    .farm-btn{
+      width:140px;
+      height:140px;
+      font-size:16px;
+    }
+
+    .farm-result{
+      font-size:14px;
+    }
+
+    /* Inventory items */
+    .inventory-item{
+      padding:14px;
+    }
+
+    .item-name{
+      font-size:11px;
+    }
+
+    .item-description{
+      font-size:12px;
+    }
+
+    /* Shop items */
+    .shop-item{
+      padding:16px;
+    }
+
+    .shop-item-title{
+      font-size:12px;
+    }
+
+    .shop-item-desc{
+      font-size:12px;
+    }
+
+    .shop-item-price{
+      font-size:14px;
+    }
+
+    /* Stat cards in dashboard header */
+    .stat-card{
+      padding:10px 14px !important;
+    }
+
+    .stat-card .stat-value{
+      font-size:16px !important;
+    }
+
+    .stat-card .stat-label{
+      font-size:10px !important;
+    }
+
+    /* Logout button */
+    .logout-btn{
+      font-size:11px;
+      padding:10px 16px;
+      min-height:44px;
+    }
+
+    /* User info */
+    .user-name{
+      font-size:16px;
+    }
+
+    .user-stats{
+      font-size:11px;
+    }
+
+    /* Brand title adjustments */
+    .brand .title{
+      font-size:20px;
+    }
+
+    .brand .slogan{
+      font-size:9px;
+    }
+  }
+
+  /* Extra small mobile devices (iPhone SE, etc.) */
+  @media(max-width:375px){
+    .brand .title{
+      font-size:18px;
+    }
+
+    .panel-title, .dashboard-title, .quest-title, .leaderboard-title, .game-title, .inventory-title{
+      font-size:14px;
+    }
+
+    .dashboard-header{
+      gap:12px;
+    }
+
+    .stat-card{
+      padding:8px 12px !important;
+    }
+
+    .market-bar{
+      padding:14px 16px !important;
+    }
+
+    .game-disclaimer{
+      font-size:10px;
+      padding:12px;
+    }
+  }
+
+  /* Landscape orientation on mobile */
+  @media(max-width:900px) and (orientation:landscape){
+    .brand .title{
+      font-size:16px;
+    }
+
+    .brand .slogan{
+      font-size:8px;
+    }
+
+    .panel, .dashboard-container, .quest-container, .leaderboard-container, .game-container, .inventory-container{
+      max-height:85vh;
+    }
+
+    .chart-container{
+      height:200px;
+    }
+
+    .crash-rocket-container{
+      height:200px;
+    }
+
+    .oven-display{
+      font-size:32px;
+      padding:20px;
+    }
+
+    .farm-btn{
+      width:120px;
+      height:120px;
     }
   }
 </style>
