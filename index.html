@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Duel PVP – Enter the Arena</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -8539,9 +8542,10 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     document.getElementById('sellButton').addEventListener('click', handleSell);
     document.getElementById('resetGameBtn').addEventListener('click', resetGame);
 
-    // Campaign banner click handler
+    // Campaign banner click handler - v2.0
+    console.log('Campaign click handler initialized v2.0');
     document.getElementById('campaignBanner').addEventListener('click', () => {
-      console.log('Campaign banner clicked');
+      console.log('Campaign banner clicked - navigating to campaign page');
       swapContent('campaign');
     });
 
