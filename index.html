@@ -5943,6 +5943,9 @@
         document.getElementById('userName').textContent = testWarriorName.toUpperCase();
 
         Toast.success('Logged in as ' + testWarriorName + ' • ' + localStorage.getItem('duelpvp_gp') + ' GP', 'TEST MODE');
+
+        // Initialize GP cache (will use localStorage for test mode)
+        await initializeGPCache();
       } catch (e) {
         console.error('Failed to save login:', e);
         showError('passError', 'Failed to save login. Check browser settings.');
@@ -6147,6 +6150,9 @@
 
         Loading.hide();
         Toast.success(`Welcome to the arena, ${warriorName}!`, 'WARRIOR REGISTERED');
+
+        // Initialize GP cache from database
+        await initializeGPCache();
 
         swapContent('dashboard');
       } catch (e) {
@@ -7912,22 +7918,114 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     // OVEN INVESTMENT SYSTEM
     // ===============================================
 
+    // ===============================================
+    // GP BALANCE SYSTEM (SECURE - DATABASE BACKED)
+    // ===============================================
+
+    // Cache for GP balance to reduce database queries
+    let gpCache = {
+      balance: 0,
+      lastFetch: 0,
+      cacheTime: 5000 // Cache for 5 seconds
+    };
+
     // Helper functions for GP
-    function getUserGP() {
-      return parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+    async function getUserGP() {
+      const userId = localStorage.getItem('duelpvp_user_id');
+
+      // Fallback to localStorage for test mode
+      if (!userId || userId.startsWith('test-')) {
+        return parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+      }
+
+      // Check cache first
+      const now = Date.now();
+      if (gpCache.lastFetch && (now - gpCache.lastFetch < gpCache.cacheTime)) {
+        return gpCache.balance;
+      }
+
+      try {
+        // Fetch from database
+        const { data, error } = await supabase
+          .rpc('get_user_gp', { p_user_id: userId });
+
+        if (error) {
+          console.error('Failed to fetch GP:', error);
+          // Fallback to localStorage
+          return parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+        }
+
+        // Update cache
+        gpCache.balance = data || 0;
+        gpCache.lastFetch = now;
+
+        return data || 0;
+      } catch (e) {
+        console.error('Error getting GP:', e);
+        return parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+      }
     }
 
     function getUserLevel() {
-      const gp = getUserGP();
+      const gp = gpCache.balance || parseInt(localStorage.getItem('duelpvp_gp')) || 0;
       // Calculate level based on GP (every 50,000 GP = 1 level)
       return Math.floor(gp / 50000) + 1;
     }
 
     async function updateUserGP(amount) {
-      const currentGP = getUserGP();
-      const newGP = currentGP + amount;
-      localStorage.setItem('duelpvp_gp', newGP.toString());
+      const userId = localStorage.getItem('duelpvp_user_id');
 
+      // Fallback to localStorage for test mode
+      if (!userId || userId.startsWith('test-')) {
+        const currentGP = parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+        const newGP = currentGP + amount;
+        localStorage.setItem('duelpvp_gp', newGP.toString());
+
+        // Update UI
+        updateGPDisplay(newGP, amount);
+        return newGP;
+      }
+
+      try {
+        // Update in database using secure RPC function
+        const { data, error } = await supabase
+          .rpc('update_user_gp', {
+            p_user_id: userId,
+            p_amount: amount
+          });
+
+        if (error) {
+          console.error('Failed to update GP:', error);
+          Toast.error('Failed to update balance', 'ERROR');
+          return gpCache.balance;
+        }
+
+        // Check if update was successful
+        if (!data || data.length === 0 || !data[0].success) {
+          const message = data && data[0] ? data[0].message : 'Update failed';
+          Toast.error(message, 'TRANSACTION FAILED');
+          return gpCache.balance;
+        }
+
+        const newBalance = data[0].new_balance;
+
+        // Update cache
+        gpCache.balance = newBalance;
+        gpCache.lastFetch = Date.now();
+
+        // Update UI
+        updateGPDisplay(newBalance, amount);
+
+        return newBalance;
+      } catch (e) {
+        console.error('Error updating GP:', e);
+        Toast.error('Connection error', 'ERROR');
+        return gpCache.balance;
+      }
+    }
+
+    // Helper function to update GP displays across the UI
+    function updateGPDisplay(newGP, changeAmount) {
       // Update dashboard display if visible with animation
       const dashboardGPEl = document.getElementById('dashboardGPBalance');
       if (dashboardGPEl) {
@@ -7939,9 +8037,9 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
         void dashboardGPEl.offsetWidth; // Trigger reflow
         dashboardGPEl.classList.add('gp-change');
 
-        if (amount > 0) {
+        if (changeAmount > 0) {
           dashboardGPEl.classList.add('gp-increase');
-        } else if (amount < 0) {
+        } else if (changeAmount < 0) {
           dashboardGPEl.classList.add('gp-decrease');
         }
 
@@ -7961,13 +8059,19 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
         const progress = Math.min((newGP / 1000000) * 100, 100);
         campaignProgressFill.style.width = progress + '%';
       }
+    }
 
-      return newGP;
+    // Initialize GP cache on login/page load
+    async function initializeGPCache() {
+      const userId = localStorage.getItem('duelpvp_user_id');
+      if (userId && !userId.startsWith('test-')) {
+        await getUserGP(); // This will populate the cache
+      }
     }
 
     // Update campaign page with current stats
-    function updateCampaignPage() {
-      const currentGP = getUserGP();
+    async function updateCampaignPage() {
+      const currentGP = await getUserGP();
       const level = getUserLevel();
 
       // Update player level
