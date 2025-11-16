@@ -3999,6 +3999,19 @@
       </div>
     </div>
 
+    <!-- Campaign Page (hidden initially) -->
+    <div class="dashboard-content" id="campaignPageContent" role="region" aria-label="Campaign page" style="display:none;">
+      <div class="dashboard-header">
+        <div class="user-info">
+          <div class="user-name">🏆 WHO WANTS TO BE A MILLIONAIRE</div>
+          <div class="user-stats">Campaign Page - Coming Soon</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:20px;">
+          <button class="back-btn" id="backFromCampaignBtn" aria-label="Back to dashboard">BACK</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Leaderboard content (hidden initially) -->
     <div class="leaderboard-container" id="leaderboardContent" role="region" aria-label="Global leaderboard">
       <div class="leaderboard-header">
@@ -5044,6 +5057,7 @@
     const pageContainer = document.getElementById('pageContainer');
     const panelContent = document.getElementById('panelContent');
     const dashboardContent = document.getElementById('dashboardContent');
+    const campaignPageContent = document.getElementById('campaignPageContent');
     const gameContent = document.getElementById('gameContent');
     const ovenContent = document.getElementById('ovenContent');
     const farmContent = document.getElementById('farmContent');
@@ -5088,7 +5102,7 @@
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
       // Find currently visible element
-      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent];
+      const allContainers = [panelContent, dashboardContent, campaignPageContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent];
       const currentVisible = allContainers.find(el => el.style.display !== 'none' && el.style.display !== '');
 
       // Add fade-out to current visible element
@@ -5327,6 +5341,22 @@
         shopContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         updateDashboardStats();
+
+      } else if (newContent === 'campaign') {
+        panelContent.style.display = 'none';
+        dashboardContent.style.display = 'none';
+        campaignPageContent.style.display = 'block';
+        gameContent.style.display = 'none';
+        leaderboardContent.style.display = 'none';
+        questContent.style.display = 'none';
+        inventoryContent.style.display = 'none';
+        shopContent.style.display = 'none';
+        ovenContent.style.display = 'none';
+        farmContent.style.display = 'none';
+        crashContent.style.display = 'none';
+        minesContent.style.display = 'none';
+        blackjackContent.style.display = 'none';
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
 
       } else if (newContent === 'game') {
         panelContent.style.display = 'none';
@@ -8511,16 +8541,12 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
 
     // Campaign banner click handler
     document.getElementById('campaignBanner').addEventListener('click', () => {
-      Modal.alert(
-        'Get over 1,000,000 GP during the campaign to qualify for a special badge!\n\n' +
-        '• Use STAKING for compound interest (10% hourly)\n' +
-        '• Click FARM every 5 seconds for random GP drops\n' +
-        '• Play gambling games: Trading Sim, Crash, Mines, Blackjack\n' +
-        '• All GP earned counts toward your total\n\n' +
-        'Note: These are fake tokens for the campaign only and cannot be exchanged.',
-        '🏆 Who Wants to be a Millionaire - Campaign Rules'
-      );
+      console.log('Campaign banner clicked');
+      swapContent('campaign');
     });
+
+    // Campaign page back button
+    document.getElementById('backFromCampaignBtn').addEventListener('click', () => swapContent('dashboard'));
 
     // Leaderboard filter buttons
     document.querySelectorAll('.filter-btn').forEach(btn => {
