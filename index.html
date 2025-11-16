@@ -4289,51 +4289,37 @@
       </div>
 
       <!-- About Section -->
-      <div class="about-section">
-        <div class="about-header" onclick="toggleAbout()">
-          <div class="about-title">
-            <span>⚔️</span>
-            <span>ABOUT DUEL PVP</span>
+      <div class="campaign-earn-section">
+        <div class="campaign-earn-title">⚔️ ABOUT DUEL PVP</div>
+
+        <!-- On-Chain Info -->
+        <div style="background:rgba(0,0,0,0.3);border:2px solid rgba(255,214,77,0.3);border-radius:12px;padding:20px;margin-bottom:20px;">
+          <div style="font-family:'Press Start 2P',monospace;font-size:10px;color:#FFD700;margin-bottom:12px;text-align:center;">🔗 FULLY ON-CHAIN</div>
+          <div style="font-family:'Courier New',monospace;font-size:13px;line-height:1.6;color:#e0e8f0;text-align:center;">
+            Every game state, transaction, and mechanic lives on the blockchain. <strong style="color:#FFD700;">No centralized servers. No hidden RNG.</strong> Trustless, transparent, verifiable by anyone.
           </div>
-          <div class="about-toggle" id="aboutToggle">▼</div>
         </div>
-        <div class="about-content" id="aboutContent">
-          <p class="about-intro">
-            <strong>DuelPVP</strong> is a fully on-chain MMORPG where <strong>strategic depth meets minimal time investment</strong>. Make critical decisions in minutes, contemplate your empire for hours.
-          </p>
 
-          <div class="about-grid">
-            <div class="about-card">
-              <span class="about-card-icon">🔗</span>
-              <div class="about-card-title">Trustless & Transparent</div>
-              <div class="about-card-text">
-                Every game state, every transaction, every mechanic lives on the blockchain. <strong>No centralized servers. No hidden RNG.</strong> Verify everything yourself—the code doesn't lie.
-              </div>
+        <!-- Two Paths -->
+        <div class="campaign-cards-row">
+          <!-- Left: Cultivator (green like DeFi) -->
+          <div class="campaign-card invest">
+            <div class="campaign-card-title">🌾 THE CULTIVATOR</div>
+            <div style="font-family:'Courier New',monospace;font-size:13px;line-height:1.6;color:#c0c8d0;text-align:center;margin-bottom:16px;">
+              <strong style="color:#4CAF50;">Low-risk, steady growth.</strong><br><br>
+              Farm resources, control markets, and compound profits. Build wealth through patience and strategic resource management.
             </div>
+            <div style="text-align:center;font-family:'Press Start 2P',monospace;font-size:8px;color:#4CAF50;">SAFE PATH TO RICHES</div>
+          </div>
 
-            <div class="about-card">
-              <span class="about-card-icon">⏱️</span>
-              <div class="about-card-title">Strategic Idle Play</div>
-              <div class="about-card-text">
-                Spend <strong>10-15 minutes per day</strong> making moves. Spend hours planning your next conquest. Your empire grows while you sleep—but only if you've played it smart.
-              </div>
+          <!-- Right: Warrior (red like Gambling) -->
+          <div class="campaign-card gamble">
+            <div class="campaign-card-title">⚔️ THE WARRIOR</div>
+            <div style="font-family:'Courier New',monospace;font-size:13px;line-height:1.6;color:#c0c8d0;text-align:center;margin-bottom:16px;">
+              <strong style="color:#F44336;">High-risk, high-reward.</strong><br><br>
+              Hunt legendary bosses, dominate PVP arenas, and raid enemy territories. Fast GP gains for those who live dangerously.
             </div>
-
-            <div class="about-card">
-              <span class="about-card-icon">⚔️</span>
-              <div class="about-card-title">The Warrior's Path</div>
-              <div class="about-card-text">
-                <strong>High-risk, high-reward.</strong> Hunt legendary bosses, dominate PVP arenas, and raid enemy territories. Fast GP gains for those who live dangerously.
-              </div>
-            </div>
-
-            <div class="about-card">
-              <span class="about-card-icon">🌾</span>
-              <div class="about-card-title">The Cultivator's Path</div>
-              <div class="about-card-text">
-                <strong>Low-risk, steady growth.</strong> Farm resources, control markets, compound profits. Build wealth through patience and strategic resource management.
-              </div>
-            </div>
+            <div style="text-align:center;font-family:'Press Start 2P',monospace;font-size:8px;color:#F44336;">GLORY THROUGH BLOODSHED</div>
           </div>
         </div>
       </div>
@@ -8266,15 +8252,6 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       if (progressPercentageEl) {
         progressPercentageEl.textContent = progress.toFixed(1) + '%';
       }
-    }
-
-    // Toggle About section
-    function toggleAbout() {
-      const content = document.getElementById('aboutContent');
-      const toggle = document.getElementById('aboutToggle');
-
-      content.classList.toggle('expanded');
-      toggle.classList.toggle('expanded');
     }
 
     let ovenState = {
