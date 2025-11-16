@@ -7996,6 +7996,13 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       if (!userId || userId.startsWith('test-')) {
         const currentGP = parseInt(localStorage.getItem('duelpvp_gp')) || 0;
         const newGP = currentGP + amount;
+
+        // Prevent negative balance even in test mode
+        if (newGP < 0) {
+          Toast.error('Insufficient balance', 'TRANSACTION FAILED');
+          return currentGP;
+        }
+
         localStorage.setItem('duelpvp_gp', newGP.toString());
 
         // Update UI
@@ -8013,6 +8020,27 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
 
         if (error) {
           console.error('Failed to update GP:', error);
+
+          // If database function doesn't exist, fall back to localStorage with validation
+          if (error.message && error.message.includes('function') && error.message.includes('does not exist')) {
+            Toast.error('Database not configured! Using localStorage fallback.', 'WARNING');
+
+            const currentGP = parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+            const newGP = currentGP + amount;
+
+            // Prevent negative balance
+            if (newGP < 0) {
+              Toast.error('Insufficient balance', 'TRANSACTION FAILED');
+              return currentGP;
+            }
+
+            localStorage.setItem('duelpvp_gp', newGP.toString());
+            gpCache.balance = newGP;
+            gpCache.lastFetch = Date.now();
+            updateGPDisplay(newGP, amount);
+            return newGP;
+          }
+
           Toast.error('Failed to update balance', 'ERROR');
           return gpCache.balance;
         }
