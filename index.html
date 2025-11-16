@@ -3903,34 +3903,6 @@
         </div>
       </div>
 
-      <!-- Two-column card layout -->
-      <div class="dashboard-cards-row">
-        <!-- Left: DeFi -->
-        <div class="dashboard-card invest">
-          <div class="card-title">💎 DEFI</div>
-          <div class="card-content">
-            <button class="action-btn btn-invest" id="openOvenBtn" aria-label="Open Staking" style="width:100%;margin-bottom:12px;">STAKING</button>
-            <button class="action-btn btn-invest" id="openFarmBtn" aria-label="Open Airdrop Farm" style="width:100%;margin-bottom:12px;">FARM</button>
-            <button class="action-btn btn-invest" disabled style="width:100%;margin-bottom:12px;opacity:0.5;cursor:not-allowed;">SWAP</button>
-            <button class="action-btn btn-invest" disabled style="width:100%;opacity:0.5;cursor:not-allowed;">YIELD FARMING</button>
-          </div>
-        </div>
-
-        <!-- Right: Gambling -->
-        <div class="dashboard-card gamble">
-          <div class="card-title">🎲 GAMBLING</div>
-          <div class="card-content">
-            <button class="action-btn btn-gamble" id="playReactionBtn" aria-label="Play trading simulator" style="width:100%;margin-bottom:12px;">TRADING SIM</button>
-            <button class="action-btn btn-gamble" id="playCrashBtn" aria-label="Play crash rocket game" style="width:100%;margin-bottom:12px;">CRASH</button>
-            <button class="action-btn btn-gamble" id="playMinesBtn" aria-label="Play mines game" style="width:100%;margin-bottom:12px;">MINES</button>
-            <button class="action-btn btn-gamble" id="playBlackjackBtn" aria-label="Play blackjack game" style="width:100%;">BLACKJACK</button>
-            <div style="background:rgba(244,67,54,0.08);border:1px solid rgba(244,67,54,0.2);border-radius:8px;padding:12px;margin-top:12px;font-size:11px;line-height:1.6;color:rgba(244,67,54,0.9);text-align:center;">
-              * Campaign uses fake tokens not exchangeable for real value.
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- Market Section -->
       <div class="dashboard-cards-row">
         <div class="dashboard-card" style="background:linear-gradient(135deg, rgba(255,214,77,0.05) 0%, rgba(255,165,0,0.08) 100%); border-color:rgba(255,214,77,0.3);">
@@ -4004,10 +3976,38 @@
       <div class="dashboard-header">
         <div class="user-info">
           <div class="user-name">🏆 WHO WANTS TO BE A MILLIONAIRE</div>
-          <div class="user-stats">Campaign Page - Coming Soon</div>
+          <div class="user-stats">Get over 1,000,000 GP to win</div>
         </div>
         <div style="display:flex;align-items:center;gap:20px;">
           <button class="back-btn" id="backFromCampaignBtn" aria-label="Back to dashboard">BACK</button>
+        </div>
+      </div>
+
+      <!-- Two-column card layout -->
+      <div class="dashboard-cards-row">
+        <!-- Left: DeFi -->
+        <div class="dashboard-card invest">
+          <div class="card-title">💎 DEFI</div>
+          <div class="card-content">
+            <button class="action-btn btn-invest" id="openOvenBtnCampaign" aria-label="Open Staking" style="width:100%;margin-bottom:12px;">STAKING</button>
+            <button class="action-btn btn-invest" id="openFarmBtnCampaign" aria-label="Open Airdrop Farm" style="width:100%;margin-bottom:12px;">FARM</button>
+            <button class="action-btn btn-invest" disabled style="width:100%;margin-bottom:12px;opacity:0.5;cursor:not-allowed;">SWAP</button>
+            <button class="action-btn btn-invest" disabled style="width:100%;opacity:0.5;cursor:not-allowed;">YIELD FARMING</button>
+          </div>
+        </div>
+
+        <!-- Right: Gambling -->
+        <div class="dashboard-card gamble">
+          <div class="card-title">🎲 GAMBLING</div>
+          <div class="card-content">
+            <button class="action-btn btn-gamble" id="playReactionBtnCampaign" aria-label="Play trading simulator" style="width:100%;margin-bottom:12px;">TRADING SIM</button>
+            <button class="action-btn btn-gamble" id="playCrashBtnCampaign" aria-label="Play crash rocket game" style="width:100%;margin-bottom:12px;">CRASH</button>
+            <button class="action-btn btn-gamble" id="playMinesBtnCampaign" aria-label="Play mines game" style="width:100%;margin-bottom:12px;">MINES</button>
+            <button class="action-btn btn-gamble" id="playBlackjackBtnCampaign" aria-label="Play blackjack game" style="width:100%;">BLACKJACK</button>
+            <div style="background:rgba(244,67,54,0.08);border:1px solid rgba(244,67,54,0.2);border-radius:8px;padding:12px;margin-top:12px;font-size:11px;line-height:1.6;color:rgba(244,67,54,0.9);text-align:center;">
+              * Campaign uses fake tokens not exchangeable for real value.
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -8547,6 +8547,32 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
 
     // Campaign page back button
     document.getElementById('backFromCampaignBtn').addEventListener('click', () => swapContent('dashboard'));
+
+    // Campaign page button event listeners
+    document.getElementById('openOvenBtnCampaign').addEventListener('click', () => {
+      console.log('Open Oven from Campaign clicked');
+      swapContent('oven');
+    });
+    document.getElementById('openFarmBtnCampaign').addEventListener('click', () => {
+      console.log('Open Farm from Campaign clicked');
+      swapContent('farm');
+    });
+    document.getElementById('playReactionBtnCampaign').addEventListener('click', () => {
+      console.log('Play Reaction from Campaign clicked');
+      swapContent('game');
+    });
+    document.getElementById('playCrashBtnCampaign').addEventListener('click', () => {
+      console.log('Play Crash from Campaign clicked');
+      swapContent('crash');
+    });
+    document.getElementById('playMinesBtnCampaign').addEventListener('click', () => {
+      console.log('Play Mines from Campaign clicked');
+      swapContent('mines');
+    });
+    document.getElementById('playBlackjackBtnCampaign').addEventListener('click', () => {
+      console.log('Play Blackjack from Campaign clicked');
+      swapContent('blackjack');
+    });
 
     // Leaderboard filter buttons
     document.querySelectorAll('.filter-btn').forEach(btn => {
