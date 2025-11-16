@@ -6079,10 +6079,12 @@
           newVisible.classList.add('fade-in');
         }
 
-        // Scroll to top AFTER content is swapped and rendered
-        setTimeout(() => {
-          window.scrollTo({ top: 0, behavior: 'instant' });
-        }, 0);
+        // Scroll to top AFTER content is fully laid out
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            window.scrollTo({ top: 0, behavior: 'instant' });
+          });
+        });
       }, currentVisible ? 200 : 0); // 200ms matches fade-out animation duration
     }
     
