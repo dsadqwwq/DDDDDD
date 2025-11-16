@@ -1201,6 +1201,198 @@
     margin-top:8px;
   }
 
+  /* Campaign Page Styles */
+  .campaign-container{
+    display:none;
+    width:min(720px,92vw);
+    background:rgba(12,16,20,.10);
+    border:2px solid rgba(255,214,77,.3);
+    border-radius:12px;
+    padding:24px;
+    backdrop-filter:blur(8px);
+  }
+
+  .campaign-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:16px;
+    padding-bottom:12px;
+    border-bottom:1px solid rgba(255,214,77,.2);
+  }
+
+  .campaign-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:14px;
+    color:#FFD700;
+    text-shadow:0 2px 4px rgba(0,0,0,0.4);
+  }
+
+  .campaign-stats-section{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:16px;
+    margin-bottom:24px;
+  }
+
+  .campaign-stat-card{
+    background:rgba(0,0,0,0.3);
+    border:1px solid rgba(255,214,77,0.3);
+    border-radius:8px;
+    padding:16px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    transition:all 0.3s ease;
+  }
+
+  .campaign-stat-card:hover{
+    border-color:rgba(255,214,77,0.5);
+    background:rgba(0,0,0,0.4);
+  }
+
+  .campaign-stat-icon{
+    font-size:32px;
+  }
+
+  .campaign-stat-info{
+    flex:1;
+  }
+
+  .campaign-stat-label{
+    font-family:'Press Start 2P', monospace;
+    font-size:8px;
+    color:#a0a8b0;
+    margin-bottom:4px;
+  }
+
+  .campaign-stat-value{
+    font-family:'Press Start 2P', monospace;
+    font-size:18px;
+    color:#FFD700;
+  }
+
+  .campaign-progress-section{
+    background:linear-gradient(135deg, rgba(255,215,0,0.08) 0%, rgba(255,165,0,0.12) 100%);
+    border:2px solid rgba(255,214,77,0.3);
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:24px;
+  }
+
+  .campaign-progress-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:12px;
+  }
+
+  .campaign-progress-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    color:#FFD700;
+  }
+
+  .campaign-progress-percentage{
+    font-family:'Press Start 2P', monospace;
+    font-size:12px;
+    color:#FFD700;
+  }
+
+  .campaign-progress-bar-large{
+    width:100%;
+    height:16px;
+    background:rgba(0,0,0,0.4);
+    border-radius:8px;
+    overflow:hidden;
+    position:relative;
+    margin-bottom:12px;
+  }
+
+  .campaign-progress-fill-large{
+    height:100%;
+    background:linear-gradient(90deg, #FFD700, #FFA500);
+    border-radius:8px;
+    transition:width 0.5s ease;
+    box-shadow:0 0 15px rgba(255,215,0,0.6);
+  }
+
+  .campaign-progress-info{
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    color:#FFD700;
+    text-align:center;
+  }
+
+  .campaign-info-section{
+    background:rgba(0,0,0,0.2);
+    border:1px solid rgba(255,214,77,0.2);
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:24px;
+  }
+
+  .campaign-info-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    color:#FFD700;
+    margin-bottom:16px;
+  }
+
+  .campaign-info-content{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .campaign-info-item{
+    display:flex;
+    gap:12px;
+    font-family:Inter, system-ui, Arial;
+    font-size:13px;
+    line-height:1.6;
+    color:#e0e0e0;
+  }
+
+  .campaign-info-bullet{
+    color:#FFD700;
+    font-weight:bold;
+  }
+
+  .campaign-disclaimer-section{
+    background:rgba(244,67,54,0.08);
+    border:1px solid rgba(244,67,54,0.2);
+    border-radius:8px;
+    padding:12px;
+    margin-top:16px;
+    font-family:Inter, system-ui, Arial;
+    font-size:11px;
+    color:rgba(244,67,54,0.9);
+    text-align:center;
+    line-height:1.6;
+  }
+
+  .campaign-time-section{
+    background:rgba(0,0,0,0.3);
+    border:1px solid rgba(255,214,77,0.3);
+    border-radius:8px;
+    padding:16px;
+    text-align:center;
+  }
+
+  .campaign-time-label{
+    font-family:'Press Start 2P', monospace;
+    font-size:9px;
+    color:#a0a8b0;
+    margin-bottom:8px;
+  }
+
+  .campaign-time-value{
+    font-family:Inter, system-ui, Arial;
+    font-size:14px;
+    color:#FFD700;
+  }
+
   .gambling-disclaimer{
     background:rgba(244,67,54,0.08);
     border:1px solid rgba(244,67,54,0.2);
@@ -2447,7 +2639,7 @@
       max-height:88vh;
       overflow-y:auto;
     }
-    .dashboard-container, .quest-container, .leaderboard-container, .game-container, .inventory-container{
+    .dashboard-container, .quest-container, .leaderboard-container, .game-container, .inventory-container, .campaign-container{
       width:96vw;
       padding:16px 12px;
       max-height:88vh;
@@ -3781,7 +3973,7 @@
       font-size:8px;
     }
 
-    .panel, .dashboard-container, .quest-container, .leaderboard-container, .game-container, .inventory-container{
+    .panel, .dashboard-container, .quest-container, .leaderboard-container, .game-container, .inventory-container, .campaign-container{
       max-height:85vh;
     }
 
@@ -3996,6 +4188,90 @@
             <button class="action-btn btn-secondary" id="connectWalletBtn" style="width:100%;margin-top:12px;">CONNECT WALLET</button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Campaign content (hidden initially) -->
+    <div class="campaign-container" id="campaignContent" role="region" aria-label="Millionaire campaign">
+      <div class="campaign-header">
+        <div class="campaign-title">🏆 WHO WANTS TO BE A MILLIONAIRE</div>
+        <button class="back-btn" id="backFromCampaignBtn" aria-label="Back to dashboard">BACK</button>
+      </div>
+
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item active">Campaign</span>
+      </div>
+
+      <!-- Player Stats Section -->
+      <div class="campaign-stats-section">
+        <div class="campaign-stat-card">
+          <div class="campaign-stat-icon">⭐</div>
+          <div class="campaign-stat-info">
+            <div class="campaign-stat-label">PLAYER LEVEL</div>
+            <div class="campaign-stat-value" id="campaignPlayerLevel">1</div>
+          </div>
+        </div>
+        <div class="campaign-stat-card">
+          <div class="campaign-stat-icon">💰</div>
+          <div class="campaign-stat-info">
+            <div class="campaign-stat-label">TOTAL GP</div>
+            <div class="campaign-stat-value" id="campaignTotalGP">0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress Section -->
+      <div class="campaign-progress-section">
+        <div class="campaign-progress-header">
+          <div class="campaign-progress-title">CAMPAIGN PROGRESS</div>
+          <div class="campaign-progress-percentage" id="campaignProgressPercentage">0%</div>
+        </div>
+        <div class="campaign-progress-bar-large">
+          <div class="campaign-progress-fill-large" id="campaignProgressFillLarge" style="width:0%"></div>
+        </div>
+        <div class="campaign-progress-info">
+          <span id="campaignCurrentGPPage">0</span> / 1,000,000 GP
+        </div>
+      </div>
+
+      <!-- Campaign Info -->
+      <div class="campaign-info-section">
+        <div class="campaign-info-title">📋 CAMPAIGN RULES</div>
+        <div class="campaign-info-content">
+          <div class="campaign-info-item">
+            <span class="campaign-info-bullet">•</span>
+            <span>Get over 1,000,000 GP to qualify for a special badge!</span>
+          </div>
+          <div class="campaign-info-item">
+            <span class="campaign-info-bullet">•</span>
+            <span>Use STAKING for compound interest (10% hourly)</span>
+          </div>
+          <div class="campaign-info-item">
+            <span class="campaign-info-bullet">•</span>
+            <span>Click FARM every 5 seconds for random GP drops</span>
+          </div>
+          <div class="campaign-info-item">
+            <span class="campaign-info-bullet">•</span>
+            <span>Play gambling games: Trading Sim, Crash, Mines, Blackjack</span>
+          </div>
+          <div class="campaign-info-item">
+            <span class="campaign-info-bullet">•</span>
+            <span>All GP earned counts toward your total</span>
+          </div>
+        </div>
+
+        <div class="campaign-disclaimer-section">
+          ⚠️ <strong>Important:</strong> These are fake tokens for the campaign only and cannot be exchanged for real value.
+        </div>
+      </div>
+
+      <!-- Time Remaining -->
+      <div class="campaign-time-section">
+        <div class="campaign-time-label">TIME REMAINING</div>
+        <div class="campaign-time-value" id="campaignTimeRemainingPage">Campaign in progress</div>
       </div>
     </div>
 
@@ -5054,6 +5330,7 @@
     const inventoryContent = document.getElementById('inventoryContent');
     const shopContent = document.getElementById('shopContent');
     const crashContent = document.getElementById('crashContent');
+    const campaignContent = document.getElementById('campaignContent');
     const campaignBanner = document.getElementById('campaignBanner');
 
     // Debug: Check if all elements exist
@@ -5089,7 +5366,7 @@
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
       // Find currently visible element
-      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent];
+      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent, campaignContent];
       const currentVisible = allContainers.find(el => el.style.display !== 'none' && el.style.display !== '');
 
       // Add fade-out to current visible element
@@ -5424,6 +5701,24 @@
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initBlackjack();
 
+      } else if (newContent === 'campaign') {
+        panelContent.style.display = 'none';
+        dashboardContent.style.display = 'none';
+        campaignBanner.style.display = 'none';
+        gameContent.style.display = 'none';
+        leaderboardContent.style.display = 'none';
+        questContent.style.display = 'none';
+        inventoryContent.style.display = 'none';
+        shopContent.style.display = 'none';
+        ovenContent.style.display = 'none';
+        farmContent.style.display = 'none';
+        crashContent.style.display = 'none';
+        minesContent.style.display = 'none';
+        blackjackContent.style.display = 'none';
+        campaignContent.style.display = 'block';
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        updateCampaignPage();
+
       } else if (newContent === 'leaderboard') {
         console.log('Switching to leaderboard...');
         panelContent.style.display = 'none';
@@ -5438,6 +5733,7 @@
         crashContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
+        campaignContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         console.log('Leaderboard display set to block');
         loadLeaderboard('all');
@@ -5456,6 +5752,7 @@
         crashContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
+        campaignContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadQuests('daily');
 
@@ -5472,6 +5769,7 @@
         crashContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
+        campaignContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadInventory();
 
@@ -5486,6 +5784,7 @@
         ovenContent.style.display = 'none';
         farmContent.style.display = 'none';
         crashContent.style.display = 'none';
+        campaignContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
@@ -7548,6 +7847,12 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       return parseInt(localStorage.getItem('duelpvp_gp')) || 0;
     }
 
+    function getUserLevel() {
+      const gp = getUserGP();
+      // Calculate level based on GP (every 50,000 GP = 1 level)
+      return Math.floor(gp / 50000) + 1;
+    }
+
     async function updateUserGP(amount) {
       const currentGP = getUserGP();
       const newGP = currentGP + amount;
@@ -7588,6 +7893,42 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       }
 
       return newGP;
+    }
+
+    // Update campaign page with current stats
+    function updateCampaignPage() {
+      const currentGP = getUserGP();
+      const level = getUserLevel();
+
+      // Update player level
+      const levelEl = document.getElementById('campaignPlayerLevel');
+      if (levelEl) {
+        levelEl.textContent = level;
+      }
+
+      // Update total GP
+      const totalGPEl = document.getElementById('campaignTotalGP');
+      if (totalGPEl) {
+        totalGPEl.textContent = currentGP.toLocaleString();
+      }
+
+      // Update current GP on page
+      const currentGPPageEl = document.getElementById('campaignCurrentGPPage');
+      if (currentGPPageEl) {
+        currentGPPageEl.textContent = currentGP.toLocaleString();
+      }
+
+      // Update progress bar and percentage
+      const progress = Math.min((currentGP / 1000000) * 100, 100);
+      const progressFillEl = document.getElementById('campaignProgressFillLarge');
+      if (progressFillEl) {
+        progressFillEl.style.width = progress + '%';
+      }
+
+      const progressPercentageEl = document.getElementById('campaignProgressPercentage');
+      if (progressPercentageEl) {
+        progressPercentageEl.textContent = progress.toFixed(1) + '%';
+      }
     }
 
     let ovenState = {
@@ -8514,18 +8855,9 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     document.getElementById('sellButton').addEventListener('click', handleSell);
     document.getElementById('resetGameBtn').addEventListener('click', resetGame);
 
-    // Campaign banner click handler
-    document.getElementById('campaignBanner').addEventListener('click', () => {
-      Modal.alert(
-        'Get over 1,000,000 GP during the campaign to qualify for a special badge!\n\n' +
-        '• Use STAKING for compound interest (10% hourly)\n' +
-        '• Click FARM every 5 seconds for random GP drops\n' +
-        '• Play gambling games: Trading Sim, Crash, Mines, Blackjack\n' +
-        '• All GP earned counts toward your total\n\n' +
-        'Note: These are fake tokens for the campaign only and cannot be exchanged.',
-        '🏆 Who Wants to be a Millionaire - Campaign Rules'
-      );
-    });
+    // Campaign banner and page handlers
+    document.getElementById('campaignBanner').addEventListener('click', () => swapContent('campaign'));
+    document.getElementById('backFromCampaignBtn').addEventListener('click', () => swapContent('dashboard'));
 
     // Leaderboard filter buttons
     document.querySelectorAll('.filter-btn').forEach(btn => {
