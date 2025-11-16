@@ -1201,6 +1201,131 @@
     margin-top:8px;
   }
 
+  /* About Section Styles */
+  .about-section{
+    width:min(720px,92vw);
+    background:linear-gradient(135deg, rgba(12,16,20,0.85) 0%, rgba(20,25,30,0.90) 100%);
+    border:2px solid rgba(255,214,77,0.4);
+    border-radius:12px;
+    margin-bottom:24px;
+    overflow:hidden;
+    backdrop-filter:blur(12px);
+    transition:all 0.3s ease;
+  }
+
+  .about-section:hover{
+    border-color:rgba(255,214,77,0.6);
+    box-shadow:0 4px 20px rgba(255,214,77,0.15);
+  }
+
+  .about-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 24px;
+    background:linear-gradient(90deg, rgba(255,215,0,0.1) 0%, rgba(255,165,0,0.05) 100%);
+    border-bottom:1px solid rgba(255,214,77,0.2);
+    cursor:pointer;
+    user-select:none;
+  }
+
+  .about-header:hover{
+    background:linear-gradient(90deg, rgba(255,215,0,0.15) 0%, rgba(255,165,0,0.08) 100%);
+  }
+
+  .about-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:12px;
+    color:#FFD700;
+    text-shadow:0 2px 4px rgba(0,0,0,0.5);
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+
+  .about-toggle{
+    font-size:14px;
+    color:#FFD700;
+    transition:transform 0.3s ease;
+  }
+
+  .about-toggle.expanded{
+    transform:rotate(180deg);
+  }
+
+  .about-content{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height 0.4s ease, padding 0.4s ease;
+    padding:0 24px;
+  }
+
+  .about-content.expanded{
+    max-height:800px;
+    padding:24px;
+  }
+
+  .about-intro{
+    font-family:'Courier New', monospace;
+    font-size:15px;
+    line-height:1.8;
+    color:#e0e8f0;
+    margin-bottom:20px;
+    text-align:center;
+    font-weight:500;
+  }
+
+  .about-intro strong{
+    color:#FFD700;
+    font-weight:700;
+  }
+
+  .about-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+    gap:16px;
+    margin-top:20px;
+  }
+
+  .about-card{
+    background:rgba(0,0,0,0.4);
+    border:1px solid rgba(255,214,77,0.25);
+    border-radius:8px;
+    padding:20px;
+    transition:all 0.3s ease;
+  }
+
+  .about-card:hover{
+    border-color:rgba(255,214,77,0.5);
+    background:rgba(0,0,0,0.5);
+    transform:translateY(-2px);
+  }
+
+  .about-card-icon{
+    font-size:36px;
+    margin-bottom:12px;
+    display:block;
+  }
+
+  .about-card-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    color:#FFD700;
+    margin-bottom:12px;
+    text-transform:uppercase;
+  }
+
+  .about-card-text{
+    font-family:'Courier New', monospace;
+    font-size:13px;
+    line-height:1.6;
+    color:#c0c8d0;
+  }
+
+  .about-card-text strong{
+    color:#FFD700;
+  }
+
   /* Campaign Page Styles */
   .campaign-container{
     display:none;
@@ -4144,6 +4269,56 @@
 
       <!-- Market Bar (hidden - kept for compatibility) -->
       <div class="market-bar" id="viewShopBtn" style="display:none;"></div>
+
+      <!-- About Section -->
+      <div class="about-section">
+        <div class="about-header" onclick="toggleAbout()">
+          <div class="about-title">
+            <span>⚔️</span>
+            <span>ABOUT DUEL PVP</span>
+          </div>
+          <div class="about-toggle" id="aboutToggle">▼</div>
+        </div>
+        <div class="about-content" id="aboutContent">
+          <p class="about-intro">
+            <strong>DuelPVP</strong> is a next-generation <strong>blockchain MMORPG</strong> combining intense PVP combat with strategic idle gameplay. Battle for glory, dominate the economy, or master both—the choice is yours.
+          </p>
+
+          <div class="about-grid">
+            <div class="about-card">
+              <span class="about-card-icon">🔗</span>
+              <div class="about-card-title">Fully On-Chain</div>
+              <div class="about-card-text">
+                Every action, every transaction, every reward is recorded on the blockchain. <strong>Trustless, transparent, and verifiable</strong> by anyone, anytime. No hidden mechanics, no central authority—pure player-owned economy.
+              </div>
+            </div>
+
+            <div class="about-card">
+              <span class="about-card-icon">⚔️</span>
+              <div class="about-card-title">The Warrior's Path</div>
+              <div class="about-card-text">
+                Sharpen your skills in the arena. Climb the leaderboards through <strong>lightning-fast reaction battles</strong>, strategic duels, and high-stakes tournaments. Earn glory, GP, and legendary rewards through combat mastery.
+              </div>
+            </div>
+
+            <div class="about-card">
+              <span class="about-card-icon">💰</span>
+              <div class="about-card-title">The Merchant's Path</div>
+              <div class="about-card-text">
+                Dominate the economy without drawing blood. <strong>Trade resources, manipulate markets, stake assets</strong>, and build your fortune through shrewd investments. Wealth is power—and power shapes the realm.
+              </div>
+            </div>
+
+            <div class="about-card">
+              <span class="about-card-icon">🎮</span>
+              <div class="about-card-title">Idle Meets Action</div>
+              <div class="about-card-text">
+                <strong>Play your way.</strong> Dive deep into intense PVP sessions, or let your investments compound while you're away. Perfect for both hardcore grinders and strategic planners alike.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- Campaign Banner -->
       <div class="campaign-banner" id="campaignBanner">
@@ -8147,6 +8322,15 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       if (progressPercentageEl) {
         progressPercentageEl.textContent = progress.toFixed(1) + '%';
       }
+    }
+
+    // Toggle About section
+    function toggleAbout() {
+      const content = document.getElementById('aboutContent');
+      const toggle = document.getElementById('aboutToggle');
+
+      content.classList.toggle('expanded');
+      toggle.classList.toggle('expanded');
     }
 
     let ovenState = {
