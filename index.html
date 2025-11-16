@@ -6381,9 +6381,8 @@
         document.querySelector('.stat-card:nth-child(2) .stat-value').textContent = streak;
         document.querySelector('.stat-card:nth-child(3) .stat-value').textContent = userRank > 0 ? `#${userRank}` : '--';
 
-        // Update GP from localStorage (for test mode) or database
-        const localGP = parseInt(localStorage.getItem('duelpvp_gp')) || 0;
-        const displayGP = localGP || totalGP;
+        // Update GP using secure getUserGP function (supports both database and localStorage)
+        const displayGP = await getUserGP();
         document.getElementById('dashboardGPBalance').textContent = displayGP >= 1000000 ? `${(displayGP/1000000).toFixed(1)}M` : displayGP >= 1000 ? `${(displayGP/1000).toFixed(1)}K` : displayGP;
 
       } catch (e) {
@@ -8295,14 +8294,21 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
         return;
       }
 
-      const userGP = getUserGP();
+      // Properly await getUserGP
+      const userGP = await getUserGP();
       if (amount > userGP) {
         Toast.error('Insufficient balance', 'INSUFFICIENT FUNDS');
         return;
       }
 
-      // Deduct from user balance
-      await updateUserGP(-amount);
+      // Deduct from user balance and CHECK if it succeeded
+      const newBalance = await updateUserGP(-amount);
+
+      // If balance didn't change (transaction failed), stop here
+      if (newBalance === userGP) {
+        // updateUserGP already showed an error toast
+        return;
+      }
 
       // Add to invested
       ovenState.invested += amount;
