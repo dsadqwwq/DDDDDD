@@ -6321,16 +6321,30 @@
 
         // Store wallet address linked to current email
         const email = localStorage.getItem('duelpvp_email');
-        if (email) {
+        const userId = localStorage.getItem('duelpvp_user_id');
+
+        if (email && userId) {
+          // Save to localStorage
           localStorage.setItem(`duelpvp_wallet_${email}`, walletAddress);
           localStorage.setItem(`duelpvp_wallet_verified_${email}`, signature);
-
-          // Also store reverse mapping (wallet -> email) for login
           localStorage.setItem(`duelpvp_email_${walletAddress.toLowerCase()}`, email);
 
-          updateWalletDisplay(walletAddress);
-          Loading.hide();
-          Toast.success(`Wallet ${walletAddress.substring(0, 6)}...${walletAddress.substring(38)} linked to your account`, 'WALLET CONNECTED');
+          // Save to Supabase database
+          const { error: updateError } = await supabase
+            .from('users')
+            .update({ wallet_address: walletAddress })
+            .eq('id', userId);
+
+          if (updateError) {
+            console.error('Failed to save wallet to database:', updateError);
+            Loading.hide();
+            Toast.warning('Wallet connected locally but not saved to database', 'PARTIAL SUCCESS');
+            updateWalletDisplay(walletAddress);
+          } else {
+            updateWalletDisplay(walletAddress);
+            Loading.hide();
+            Toast.success(`Wallet ${walletAddress.substring(0, 6)}...${walletAddress.substring(38)} linked to your account`, 'WALLET CONNECTED');
+          }
         } else {
           Loading.hide();
           Modal.alert('No email found. Please login first.', 'Login Required');
