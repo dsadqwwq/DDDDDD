@@ -1393,6 +1393,74 @@
     color:#FFD700;
   }
 
+  .campaign-earn-section{
+    margin-top:24px;
+  }
+
+  .campaign-earn-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    color:#FFD700;
+    margin-bottom:16px;
+    text-align:center;
+  }
+
+  .campaign-cards-row{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:16px;
+    margin-bottom:16px;
+  }
+
+  .campaign-card{
+    background:rgba(0,0,0,0.3);
+    border:2px solid rgba(255,214,77,0.3);
+    border-radius:12px;
+    padding:16px;
+    transition:all 0.3s ease;
+  }
+
+  .campaign-card:hover{
+    border-color:rgba(255,214,77,0.5);
+    transform:translateY(-2px);
+    box-shadow:0 4px 12px rgba(0,0,0,0.3);
+  }
+
+  .campaign-card.invest{
+    border-color:rgba(76,175,80,0.3);
+  }
+
+  .campaign-card.invest:hover{
+    border-color:rgba(76,175,80,0.5);
+  }
+
+  .campaign-card.gamble{
+    border-color:rgba(244,67,54,0.3);
+  }
+
+  .campaign-card.gamble:hover{
+    border-color:rgba(244,67,54,0.5);
+  }
+
+  .campaign-card-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    color:#FFD700;
+    margin-bottom:12px;
+    text-align:center;
+  }
+
+  .campaign-card-content{
+    display:flex;
+    flex-direction:column;
+  }
+
+  @media(max-width:600px){
+    .campaign-cards-row{
+      grid-template-columns:1fr;
+    }
+  }
+
   .gambling-disclaimer{
     background:rgba(244,67,54,0.08);
     border:1px solid rgba(244,67,54,0.2);
@@ -4095,34 +4163,6 @@
         </div>
       </div>
 
-      <!-- Two-column card layout -->
-      <div class="dashboard-cards-row">
-        <!-- Left: DeFi -->
-        <div class="dashboard-card invest">
-          <div class="card-title">💎 DEFI</div>
-          <div class="card-content">
-            <button class="action-btn btn-invest" id="openOvenBtn" aria-label="Open Staking" style="width:100%;margin-bottom:12px;">STAKING</button>
-            <button class="action-btn btn-invest" id="openFarmBtn" aria-label="Open Airdrop Farm" style="width:100%;margin-bottom:12px;">FARM</button>
-            <button class="action-btn btn-invest" disabled style="width:100%;margin-bottom:12px;opacity:0.5;cursor:not-allowed;">SWAP</button>
-            <button class="action-btn btn-invest" disabled style="width:100%;opacity:0.5;cursor:not-allowed;">YIELD FARMING</button>
-          </div>
-        </div>
-
-        <!-- Right: Gambling -->
-        <div class="dashboard-card gamble">
-          <div class="card-title">🎲 GAMBLING</div>
-          <div class="card-content">
-            <button class="action-btn btn-gamble" id="playReactionBtn" aria-label="Play trading simulator" style="width:100%;margin-bottom:12px;">TRADING SIM</button>
-            <button class="action-btn btn-gamble" id="playCrashBtn" aria-label="Play crash rocket game" style="width:100%;margin-bottom:12px;">CRASH</button>
-            <button class="action-btn btn-gamble" id="playMinesBtn" aria-label="Play mines game" style="width:100%;margin-bottom:12px;">MINES</button>
-            <button class="action-btn btn-gamble" id="playBlackjackBtn" aria-label="Play blackjack game" style="width:100%;">BLACKJACK</button>
-            <div style="background:rgba(244,67,54,0.08);border:1px solid rgba(244,67,54,0.2);border-radius:8px;padding:12px;margin-top:12px;font-size:11px;line-height:1.6;color:rgba(244,67,54,0.9);text-align:center;">
-              * Campaign uses fake tokens not exchangeable for real value.
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- Market Section -->
       <div class="dashboard-cards-row">
         <div class="dashboard-card" style="background:linear-gradient(135deg, rgba(255,214,77,0.05) 0%, rgba(255,165,0,0.08) 100%); border-color:rgba(255,214,77,0.3);">
@@ -4272,6 +4312,36 @@
       <div class="campaign-time-section">
         <div class="campaign-time-label">TIME REMAINING</div>
         <div class="campaign-time-value" id="campaignTimeRemainingPage">Campaign in progress</div>
+      </div>
+
+      <!-- Ways to Earn GP Section -->
+      <div class="campaign-earn-section">
+        <div class="campaign-earn-title">💰 WAYS TO EARN GP</div>
+
+        <!-- Two-column card layout -->
+        <div class="campaign-cards-row">
+          <!-- Left: DeFi -->
+          <div class="campaign-card invest">
+            <div class="campaign-card-title">💎 DEFI</div>
+            <div class="campaign-card-content">
+              <button class="action-btn btn-invest" id="openOvenBtn" aria-label="Open Staking" style="width:100%;margin-bottom:12px;">STAKING</button>
+              <button class="action-btn btn-invest" id="openFarmBtn" aria-label="Open Airdrop Farm" style="width:100%;margin-bottom:12px;">FARM</button>
+              <button class="action-btn btn-invest" disabled style="width:100%;margin-bottom:12px;opacity:0.5;cursor:not-allowed;">SWAP</button>
+              <button class="action-btn btn-invest" disabled style="width:100%;opacity:0.5;cursor:not-allowed;">YIELD FARMING</button>
+            </div>
+          </div>
+
+          <!-- Right: Gambling -->
+          <div class="campaign-card gamble">
+            <div class="campaign-card-title">🎲 GAMBLING</div>
+            <div class="campaign-card-content">
+              <button class="action-btn btn-gamble" id="playReactionBtn" aria-label="Play trading simulator" style="width:100%;margin-bottom:12px;">TRADING SIM</button>
+              <button class="action-btn btn-gamble" id="playCrashBtn" aria-label="Play crash rocket game" style="width:100%;margin-bottom:12px;">CRASH</button>
+              <button class="action-btn btn-gamble" id="playMinesBtn" aria-label="Play mines game" style="width:100%;margin-bottom:12px;">MINES</button>
+              <button class="action-btn btn-gamble" id="playBlackjackBtn" aria-label="Play blackjack game" style="width:100%;">BLACKJACK</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
