@@ -5645,9 +5645,6 @@
 
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
-      // Scroll to top smoothly when changing pages
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-
       // Find currently visible element
       const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent, campaignContent];
       const currentVisible = allContainers.find(el => el.style.display !== 'none' && el.style.display !== '');
@@ -6082,8 +6079,10 @@
           newVisible.classList.add('fade-in');
         }
 
-        // Scroll to top when changing pages
-        window.scrollTo(0, 0);
+        // Scroll to top AFTER content is swapped and rendered
+        setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: 'instant' });
+        }, 0);
       }, currentVisible ? 200 : 0); // 200ms matches fade-out animation duration
     }
     
