@@ -5922,10 +5922,25 @@
       clearError('emailError');
       clearError('passError');
 
-      // Generate random user ID
-      const testUserId = 'test-' + Math.random().toString(36).substring(7);
-      const testEmail = 'test@demo.com';
-      const testWarriorName = '1337';
+      // Check if user wants to test with database user
+      const emailInput = document.getElementById('loginEmail');
+      const inputEmail = emailInput ? emailInput.value.trim().toLowerCase() : '';
+
+      let testUserId, testEmail, testWarriorName, mode;
+
+      // If email is "test@duelpvp.com" or "db", use database test user
+      if (inputEmail === 'test@duelpvp.com' || inputEmail === 'db') {
+        testUserId = '00000000-0000-0000-0000-000000000001';
+        testEmail = 'test@duelpvp.com';
+        testWarriorName = 'TestWarrior';
+        mode = 'DATABASE';
+      } else {
+        // Default: random test user (localStorage mode)
+        testUserId = 'test-' + Math.random().toString(36).substring(7);
+        testEmail = 'test@demo.com';
+        testWarriorName = '1337';
+        mode = 'LOCALSTORAGE';
+      }
 
       // Store test user info
       try {
@@ -5935,17 +5950,19 @@
         localStorage.setItem('duelpvp_warrior', testWarriorName);
 
         // Initialize GP - 1000 for testing (normally 10 for new accounts)
-        if (!localStorage.getItem('duelpvp_gp')) {
+        if (mode === 'LOCALSTORAGE' && !localStorage.getItem('duelpvp_gp')) {
           localStorage.setItem('duelpvp_gp', '1000');
         }
 
         // Set username in dashboard
         document.getElementById('userName').textContent = testWarriorName.toUpperCase();
 
-        Toast.success('Logged in as ' + testWarriorName + ' • ' + localStorage.getItem('duelpvp_gp') + ' GP', 'TEST MODE');
-
-        // Initialize GP cache (will use localStorage for test mode)
+        // Initialize GP cache (will fetch from DB if using database mode)
         await initializeGPCache();
+
+        const gp = await getUserGP();
+        Toast.success(`Logged in as ${testWarriorName} • ${gp} GP`, mode + ' MODE');
+
       } catch (e) {
         console.error('Failed to save login:', e);
         showError('passError', 'Failed to save login. Check browser settings.');
