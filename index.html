@@ -5637,10 +5637,9 @@
 
     // Temporary registration data
     let tempRegistrationData = {
-      email: '',
-      warriorName: '',
-      password: '',
-      inviteCode: ''
+      walletAddress: '',
+      inviteCode: '',
+      signature: ''
     };
 
     // Helper function to swap content with fade animation
@@ -5828,6 +5827,45 @@
         setTimeout(() => {
           document.getElementById('warriorName').focus();
         }, 500);
+
+      } else if (newContent === 'walletConnect') {
+        panelContent.style.display = 'block';
+        dashboardContent.style.display = 'none';
+        pageContainer.classList.add('bottom-aligned');
+        pageContainer.classList.remove('center-aligned');
+
+        panelContent.innerHTML = `
+          <div class="panel-header">
+            <div class="warrior-title">CONNECT WALLET</div>
+            <div class="sub-text">Sign to verify ownership • No gas fees</div>
+          </div>
+
+          <div class="wallet-connect-container" style="text-align:center;padding:40px 20px;">
+            <div style="font-size:64px;margin-bottom:20px;">🔐</div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:12px;color:var(--gold);margin-bottom:12px;">
+              SECURE AUTHENTICATION
+            </div>
+            <div style="font-family:Inter,system-ui,Arial;font-size:14px;color:#a0a8b0;margin-bottom:30px;line-height:1.6;">
+              Connect your wallet to continue.<br>
+              You'll be asked to sign a message to prove ownership.<br>
+              <strong style="color:var(--gold);">No transaction, no gas fees.</strong>
+            </div>
+            <button class="btn-submit" id="connectWalletForRegBtn" style="width:100%;max-width:300px;">
+              CONNECT WALLET
+            </button>
+            <div style="margin-top:20px;">
+              <a id="backToCodeLink" style="color:#6b7280;font-size:12px;cursor:pointer;text-decoration:underline;">
+                ← Back to code entry
+              </a>
+            </div>
+          </div>
+        `;
+
+        // Store the code for later use
+        tempRegistrationData.inviteCode = data;
+
+        document.getElementById('connectWalletForRegBtn').addEventListener('click', handleWalletConnectForRegistration);
+        document.getElementById('backToCodeLink').addEventListener('click', () => swapContent('home'));
 
       } else if (newContent === 'home') {
         panelContent.style.display = 'block';
@@ -6166,8 +6204,67 @@
         return;
       }
 
-      // Code is valid, proceed to registration
-      swapContent('register', code);
+      // Code is valid, proceed to wallet connect
+      swapContent('walletConnect', code);
+    }
+
+    async function handleWalletConnectForRegistration() {
+      try {
+        // Check if MetaMask/wallet is installed
+        if (typeof window.ethereum === 'undefined') {
+          Modal.alert('No Web3 wallet detected! Please install MetaMask or another Ethereum wallet.', 'Wallet Not Found');
+          return;
+        }
+
+        Loading.show('Connecting wallet...');
+
+        // Request account access
+        const accounts = await window.ethereum.request({
+          method: 'eth_requestAccounts'
+        });
+
+        const walletAddress = accounts[0];
+
+        // Check if wallet already registered
+        const { data: existingUser } = await supabase
+          .from('users')
+          .select('id')
+          .eq('wallet_address', walletAddress)
+          .single();
+
+        if (existingUser) {
+          Loading.hide();
+          Modal.alert('This wallet is already registered. Please login instead.', 'Wallet Already Registered');
+          return;
+        }
+
+        // Request signature to verify ownership
+        const message = `Sign to register on Duel PVP\nWallet: ${walletAddress}\nCode: ${tempRegistrationData.inviteCode}\nTimestamp: ${Date.now()}`;
+
+        const signature = await window.ethereum.request({
+          method: 'personal_sign',
+          params: [message, walletAddress]
+        });
+
+        // Store wallet and signature
+        tempRegistrationData.walletAddress = walletAddress;
+        tempRegistrationData.signature = signature;
+
+        Loading.hide();
+        Toast.success('Wallet verified!', 'SUCCESS');
+
+        // Proceed to warrior naming
+        swapContent('nameWarrior');
+
+      } catch (error) {
+        Loading.hide();
+        console.error('Wallet connection error:', error);
+        if (error.code === 4001) {
+          Toast.warning('You cancelled the wallet connection', 'Connection Cancelled');
+        } else {
+          Modal.alert('Failed to connect wallet: ' + error.message, 'Connection Error');
+        }
+      }
     }
 
     async function handleLogin() {
@@ -6358,103 +6455,53 @@
       Loading.show('Creating your account...');
 
       try {
-        // Check if display name already exists (case-insensitive)
-        console.log('Checking if username is available...');
-        const { data: existingNames, error: checkError } = await supabase
-          .from('users')
-          .select('display_name')
-          .ilike('display_name', warriorName);
+        // Call server-side registration function
+        const { data, error } = await supabase.rpc('register_with_wallet', {
+          p_wallet_address: tempRegistrationData.walletAddress,
+          p_display_name: warriorName,
+          p_invite_code: tempRegistrationData.inviteCode
+        });
 
-        if (checkError) {
+        if (error || !data || data.length === 0 || !data[0].success) {
           Loading.hide();
-          console.error('Name check failed:', checkError);
-          showError('warriorNameError', 'Failed to check username availability');
-          return;
-        }
+          const errorCode = data && data[0]?.error_code;
+          const message = data && data[0]?.message;
 
-        if (existingNames && existingNames.length > 0) {
-          Loading.hide();
-          showError('warriorNameError', 'Display name already taken');
-          return;
-        }
-
-        // 1. Create user in database
-        console.log('Step 1: Creating user in database...');
-        const { data: newUser, error: userError } = await supabase
-          .from('users')
-          .insert({
-            email: tempRegistrationData.email,
-            display_name: warriorName,
-            points: 0
-          })
-          .select()
-          .single();
-
-        if (userError) {
-          Loading.hide();
-          console.error('User creation failed:', userError);
-          if (userError.code === '23505') { // Unique constraint violation
+          if (errorCode === 'NAME_TAKEN') {
             showError('warriorNameError', 'Display name already taken');
-          } else if (userError.code === '42P01') {
-            Modal.alert('Database not set up. Please run minimal_setup.sql in Supabase first.', 'Setup Required');
+          } else if (errorCode === 'WALLET_EXISTS') {
+            Modal.alert('This wallet is already registered', 'Registration Failed');
           } else {
-            Modal.alert('Registration failed: ' + userError.message, 'Error');
+            Modal.alert(message || 'Registration failed', 'Error');
           }
           return;
         }
 
-        console.log('Step 1 complete: User created', newUser.id);
+        const userId = data[0].user_id;
 
-        // 2. Mark invite code as used (atomic operation prevents race condition)
-        console.log('Step 2: Marking code as used...');
-        const { error: codeError } = await supabase
-          .from('codes')
-          .update({
-            used_by: newUser.id,
-            used_at: new Date().toISOString()
-          })
-          .eq('code', tempRegistrationData.inviteCode)
-          .is('used_by', null); // Only update if still unused!
-
-        if (codeError) {
-          // Code was used by someone else in the meantime - rollback
-          console.error('Code update failed:', codeError);
-          await supabase.from('users').delete().eq('id', newUser.id);
-          Loading.hide();
-          showError('codeError', 'Code update failed: ' + codeError.message);
-          swapContent('register', tempRegistrationData.inviteCode);
-          return;
-        }
-
-        console.log('Step 2 complete: Code marked as used');
-
-        // 3. Generate 3 invite codes for new user
-        console.log('Step 3: Generating 3 invite codes...');
-        const { error: rpcError } = await supabase.rpc('create_user_codes', { user_id: newUser.id });
-
-        if (rpcError) {
-          console.error('Code generation failed (non-critical):', rpcError);
-          // Don't fail registration if code generation fails
-          Toast.info('Registration successful, but invite code generation failed', 'PARTIAL SUCCESS');
-        } else {
-          console.log('Step 3 complete: 3 codes generated');
-        }
-
-        // 4. Store session in localStorage
-        localStorage.setItem('duelpvp_user_id', newUser.id);
-        localStorage.setItem('duelpvp_email', newUser.email);
+        // Store session info
+        localStorage.setItem('duelpvp_user_id', userId);
+        localStorage.setItem('duelpvp_wallet', tempRegistrationData.walletAddress);
         localStorage.setItem('duelpvp_display_name', warriorName);
+        localStorage.setItem('duelpvp_warrior', warriorName);
 
-        // Update UI
+        // Set username in dashboard
         document.getElementById('userName').textContent = warriorName.toUpperCase();
 
-        Loading.hide();
-        Toast.success(`Welcome to the arena, ${warriorName}!`, 'WARRIOR REGISTERED');
-
-        // Initialize GP cache from database
+        // Initialize GP cache
         await initializeGPCache();
+        const gp = await getUserGP();
 
+        Loading.hide();
+        Toast.success(`Welcome, ${warriorName}!`, `${gp} GP`);
         swapContent('dashboard');
+
+        // Clear temp data
+        tempRegistrationData = {
+          walletAddress: '',
+          inviteCode: '',
+          signature: ''
+        };
       } catch (e) {
         Loading.hide();
         console.error('Registration error:', e);
