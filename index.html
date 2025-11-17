@@ -5383,10 +5383,13 @@
     };
 
     // Initialize systems on DOM ready
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       Modal.init();
       Toast.init();
       Loading.init();
+
+      // Initialize app - check for existing session (Blur-style auto-reconnect)
+      await initializeApp();
     });
 
     // Particle System
@@ -6374,11 +6377,8 @@
 
         const userId = data[0].user_id;
 
-        // Store session info
-        localStorage.setItem('duelpvp_user_id', userId);
-        localStorage.setItem('duelpvp_wallet', tempRegistrationData.walletAddress);
-        localStorage.setItem('duelpvp_display_name', warriorName);
-        localStorage.setItem('duelpvp_warrior', warriorName);
+        // Create session (Blur-style)
+        createSession(userId, tempRegistrationData.walletAddress, warriorName);
 
         // Set username in dashboard
         document.getElementById('userName').textContent = warriorName.toUpperCase();
@@ -6408,9 +6408,15 @@
       const confirmed = await Modal.confirm('Are you sure you want to logout?', 'Confirm Logout');
       if (!confirmed) return;
 
+      // Clear session (Blur-style)
+      clearSession();
+
+      // Reset UI
       dashboardContent.style.display = 'none';
       panelContent.style.display = 'block';
       swapContent('home');
+
+      Toast.info('Logged out successfully', 'GOODBYE');
     }
 
     // Wallet connection functions
@@ -6500,6 +6506,157 @@
       }
     }
 
+    // =====================================================
+    // SESSION MANAGEMENT (Blur-style)
+    // =====================================================
+
+    const SESSION_KEY = 'duelpvp.auth';
+    const SESSION_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 days
+
+    function createSession(userId, walletAddress, displayName) {
+      const session = {
+        version: "1",
+        userId: userId,
+        walletAddress: walletAddress.toLowerCase(),
+        displayName: displayName,
+        issuedAt: Date.now(),
+        expiresAt: Date.now() + SESSION_DURATION
+      };
+
+      localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+
+      // Also cache GP for navbar (Blur-style)
+      const gpCacheKey = `duelpvp.cache.gp`;
+      localStorage.setItem(gpCacheKey, JSON.stringify({
+        [walletAddress.toLowerCase()]: 0 // Will be updated by initializeGPCache
+      }));
+
+      console.log('Session created for', displayName);
+    }
+
+    function getSession() {
+      try {
+        const sessionData = localStorage.getItem(SESSION_KEY);
+        if (!sessionData) return null;
+        return JSON.parse(sessionData);
+      } catch (e) {
+        console.error('Failed to parse session:', e);
+        return null;
+      }
+    }
+
+    function clearSession() {
+      // Clear all duelpvp.* keys (Blur-style namespacing)
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith('duelpvp.') || key.startsWith('duelpvp_')) {
+          localStorage.removeItem(key);
+        }
+      });
+      console.log('Session cleared');
+    }
+
+    function isSessionValid(session) {
+      if (!session) return false;
+      if (!session.userId || !session.walletAddress) return false;
+      if (Date.now() > session.expiresAt) {
+        console.log('Session expired');
+        return false;
+      }
+      return true;
+    }
+
+    // Helper to get current user ID from session
+    function getCurrentUserId() {
+      const session = getSession();
+      if (session?.userId) return session.userId;
+
+      // Backwards compatibility - check old localStorage key
+      return localStorage.getItem('duelpvp_user_id') || null;
+    }
+
+    // Helper to get current wallet address from session
+    function getCurrentWalletAddress() {
+      const session = getSession();
+      if (session?.walletAddress) return session.walletAddress;
+
+      // Backwards compatibility - check old localStorage key
+      return localStorage.getItem('duelpvp_wallet') || null;
+    }
+
+    async function checkWalletConnection(expectedAddress) {
+      try {
+        if (typeof window.ethereum === 'undefined') return false;
+
+        // Use eth_accounts (no popup!) to check current connection
+        const accounts = await window.ethereum.request({
+          method: 'eth_accounts'
+        });
+
+        if (accounts.length === 0) return false;
+
+        // Check if expected wallet is still connected
+        const connectedAddresses = accounts.map(a => a.toLowerCase());
+        return connectedAddresses.includes(expectedAddress.toLowerCase());
+      } catch (e) {
+        console.error('Failed to check wallet connection:', e);
+        return false;
+      }
+    }
+
+    async function initializeApp() {
+      console.log('Initializing app...');
+
+      const session = getSession();
+
+      if (!session) {
+        console.log('No session found, showing home screen');
+        return; // Show home screen by default
+      }
+
+      if (!isSessionValid(session)) {
+        console.log('Session invalid or expired, clearing');
+        clearSession();
+        return; // Show home screen
+      }
+
+      // Check if wallet is still connected (Blur-style verification)
+      const walletConnected = await checkWalletConnection(session.walletAddress);
+
+      if (!walletConnected) {
+        console.log('Wallet no longer connected, session invalid');
+        clearSession();
+        Toast.info('Please reconnect your wallet', 'SESSION EXPIRED');
+        return;
+      }
+
+      // Verify user still exists in database
+      const { data: userData, error } = await supabase
+        .from('users')
+        .select('id, display_name, gp_balance')
+        .eq('id', session.userId)
+        .single();
+
+      if (error || !userData) {
+        console.log('User not found in database, clearing session');
+        clearSession();
+        return;
+      }
+
+      // Session is valid! Auto-login
+      console.log('Valid session found, auto-logging in as', session.displayName);
+
+      // Set UI
+      document.getElementById('userName').textContent = session.displayName.toUpperCase();
+
+      // Initialize GP cache
+      await initializeGPCache();
+      const gp = await getUserGP();
+
+      // Auto-redirect to dashboard
+      swapContent('dashboard');
+      Toast.success(`Welcome back, ${session.displayName}!`, `${gp} GP`);
+    }
+
     async function handleWalletLogin() {
       try {
         if (typeof window.ethereum === 'undefined') {
@@ -6536,16 +6693,8 @@
           params: [message, accounts[0]]
         });
 
-        // Login successful - store user info
-        localStorage.setItem('duelpvp_user_id', userData.id);
-        localStorage.setItem('duelpvp_wallet', walletAddress);
-        localStorage.setItem('duelpvp_display_name', userData.display_name);
-        localStorage.setItem('duelpvp_warrior', userData.display_name);
-
-        // Store email if it exists (for backwards compatibility with old accounts)
-        if (userData.email) {
-          localStorage.setItem('duelpvp_email', userData.email);
-        }
+        // Login successful - create session (Blur-style)
+        createSession(userData.id, walletAddress, userData.display_name);
 
         document.getElementById('userName').textContent = userData.display_name.toUpperCase();
 
