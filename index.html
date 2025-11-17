@@ -6116,9 +6116,9 @@
     }
 
     // Event handlers
-    function handleJoin() {
+    async function handleJoin() {
       const codeInput = document.getElementById('code');
-      const code = codeInput.value.trim();
+      const code = codeInput.value.trim().toUpperCase();
 
       clearError('codeError');
 
@@ -6127,62 +6127,89 @@
         return;
       }
 
-      // Accept any code - no validation required
+      // Validate code exists in database and is unused
+      Loading.show('Validating access code...');
+
+      const { data: codeData, error: codeError } = await supabase
+        .from('codes')
+        .select('*')
+        .eq('code', code)
+        .is('used_by', null)
+        .single();
+
+      Loading.hide();
+
+      if (codeError || !codeData) {
+        showError('codeError', 'Invalid or already used access code');
+        return;
+      }
+
+      // Code is valid, proceed to registration
       swapContent('register', code);
     }
 
     async function handleLogin() {
-      // Skip all validation - instant login for testing
       clearError('emailError');
       clearError('passError');
 
-      // Check if user wants to test with database user
-      const emailInput = document.getElementById('loginEmail');
-      const inputEmail = emailInput ? emailInput.value.trim().toLowerCase() : '';
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPass').value.trim();
 
-      let testUserId, testEmail, testWarriorName, mode;
-
-      // If email is "test@duelpvp.com" or "db", use database test user
-      if (inputEmail === 'test@duelpvp.com' || inputEmail === 'db') {
-        testUserId = '00000000-0000-0000-0000-000000000001';
-        testEmail = 'test@duelpvp.com';
-        testWarriorName = 'TestWarrior';
-        mode = 'DATABASE';
-      } else {
-        // Default: random test user (localStorage mode)
-        testUserId = 'test-' + Math.random().toString(36).substring(7);
-        testEmail = 'test@demo.com';
-        testWarriorName = '1337';
-        mode = 'LOCALSTORAGE';
-      }
-
-      // Store test user info
-      try {
-        localStorage.setItem('duelpvp_user_id', testUserId);
-        localStorage.setItem('duelpvp_email', testEmail);
-        localStorage.setItem('duelpvp_display_name', testWarriorName);
-        localStorage.setItem('duelpvp_warrior', testWarriorName);
-
-        // Initialize GP - 1000 for testing (normally 10 for new accounts)
-        if (mode === 'LOCALSTORAGE' && !localStorage.getItem('duelpvp_gp')) {
-          localStorage.setItem('duelpvp_gp', '1000');
-        }
-
-        // Set username in dashboard
-        document.getElementById('userName').textContent = testWarriorName.toUpperCase();
-
-        // Initialize GP cache (will fetch from DB if using database mode)
-        await initializeGPCache();
-
-        const gp = await getUserGP();
-        Toast.success(`Logged in as ${testWarriorName} • ${gp} GP`, mode + ' MODE');
-
-      } catch (e) {
-        console.error('Failed to save login:', e);
-        showError('passError', 'Failed to save login. Check browser settings.');
+      // Validate input
+      if (!email) {
+        showError('emailError', 'Email is required');
         return;
       }
 
+      if (!password) {
+        showError('passError', 'Password is required');
+        return;
+      }
+
+      // Attempt Supabase authentication
+      Loading.show('Signing in...');
+
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+      if (authError) {
+        Loading.hide();
+        showError('passError', 'Invalid email or password');
+        console.error('Login error:', authError);
+        return;
+      }
+
+      // Get user data from database
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('email', email)
+        .single();
+
+      Loading.hide();
+
+      if (userError || !userData) {
+        showError('passError', 'User data not found');
+        console.error('User lookup error:', userError);
+        return;
+      }
+
+      // Store user info in localStorage
+      localStorage.setItem('duelpvp_user_id', userData.id);
+      localStorage.setItem('duelpvp_email', userData.email);
+      localStorage.setItem('duelpvp_display_name', userData.display_name);
+      localStorage.setItem('duelpvp_warrior', userData.display_name);
+
+      // Set username in dashboard
+      document.getElementById('userName').textContent = userData.display_name.toUpperCase();
+
+      // Initialize GP cache
+      await initializeGPCache();
+      const gp = await getUserGP();
+
+      Toast.success(`Welcome back, ${userData.display_name}!`, `${gp} GP`);
       swapContent('dashboard');
     }
 
