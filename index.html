@@ -6115,6 +6115,28 @@
       }
     }
 
+    // Copy text to clipboard
+    async function copyToClipboard(text) {
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          // Fallback for older browsers
+          const textArea = document.createElement('textarea');
+          textArea.value = text;
+          textArea.style.position = 'fixed';
+          textArea.style.left = '-999999px';
+          document.body.appendChild(textArea);
+          textArea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textArea);
+        }
+      } catch (err) {
+        console.error('Failed to copy:', err);
+        Toast.error('Failed to copy code', 'TRY AGAIN');
+      }
+    }
+
     // Event handlers
     async function handleJoin() {
       const codeInput = document.getElementById('code');
@@ -6735,6 +6757,15 @@
               ${item.code ? `<div class="tooltip-desc" style="margin-top:4px;color:var(--gold);font-family:'Press Start 2P';font-size:9px;">${item.code}</div>` : ''}
             </div>
           `;
+
+          // Add click-to-copy for unused invite codes
+          if (item.type === 'invite_code' && !item.used) {
+            slot.style.cursor = 'pointer';
+            slot.addEventListener('click', () => {
+              copyToClipboard(item.code);
+              Toast.success(`Code ${item.code} copied!`, 'SHARE WITH FRIENDS');
+            });
+          }
         }
 
         dashboardItemsGrid.appendChild(slot);
@@ -8103,7 +8134,16 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
           // Tooltip
           slot.title = item.used
             ? `Invite Code (USED)\nCode: ${item.code}\nUsed on: ${new Date(item.used_at).toLocaleDateString()}`
-            : `Invite Code (UNUSED)\nShare this code with friends!\nOne-time use only`;
+            : `Invite Code (UNUSED)\nClick to copy!\nShare this code with friends!`;
+
+          // Add click-to-copy for unused codes
+          if (!item.used) {
+            slot.style.cursor = 'pointer';
+            slot.addEventListener('click', () => {
+              copyToClipboard(item.code);
+              Toast.success(`Code ${item.code} copied!`, 'SHARE WITH FRIENDS');
+            });
+          }
         } else if (item && item.type === 'shop_item') {
           // Regular shop item
           const shopItem = SHOP_ITEMS.find(si => si.id === item.id);
