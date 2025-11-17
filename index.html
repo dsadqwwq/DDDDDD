@@ -505,6 +505,15 @@
     border-radius:8px;
     padding:16px;
     text-align:center;
+    transition:all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position:relative;
+  }
+
+  .stat-card:hover{
+    transform:translateY(-3px) scale(1.02);
+    border-color:rgba(255,214,77,0.5);
+    background:rgba(255,214,77,.08);
+    box-shadow:0 8px 24px rgba(255,214,77,0.15), 0 0 0 1px rgba(255,214,77,0.1);
   }
 
   .stat-label{
@@ -534,6 +543,15 @@
     border-radius:8px;
     padding:20px;
     margin-bottom:20px;
+    transition:all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position:relative;
+  }
+
+  .dashboard-card:hover{
+    transform:translateY(-2px);
+    border-color:rgba(255,214,77,0.4);
+    background:rgba(0,0,0,.4);
+    box-shadow:0 6px 20px rgba(0,0,0,0.4);
   }
 
   /* Themed cards */
@@ -835,30 +853,110 @@
       inset 0 1px 3px rgba(0,0,0,.2);
   }
 
+  /* Gold Particle Effects */
+  @keyframes goldParticle{
+    0%{
+      transform:translate(0, 0) scale(1);
+      opacity:1;
+    }
+    100%{
+      transform:translate(var(--tx), var(--ty)) scale(0);
+      opacity:0;
+    }
+  }
+
+  .gold-particle{
+    position:fixed;
+    width:8px;
+    height:8px;
+    background:radial-gradient(circle, #FFD700 0%, #FFA500 100%);
+    border-radius:50%;
+    pointer-events:none;
+    z-index:9999;
+    animation:goldParticle 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    box-shadow:0 0 10px rgba(255,215,0,0.8), 0 0 20px rgba(255,215,0,0.4);
+  }
+
+  /* Loading Skeletons */
+  @keyframes shimmer{
+    0%{background-position:-1000px 0;}
+    100%{background-position:1000px 0;}
+  }
+
+  .skeleton{
+    background:linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.05) 75%);
+    background-size:1000px 100%;
+    animation:shimmer 2s infinite;
+    border-radius:8px;
+  }
+
+  .skeleton-text{
+    height:14px;
+    margin-bottom:8px;
+    border-radius:4px;
+  }
+
+  .skeleton-title{
+    height:24px;
+    width:60%;
+    margin-bottom:16px;
+    border-radius:6px;
+  }
+
+  .skeleton-card{
+    height:120px;
+    border-radius:12px;
+    margin-bottom:16px;
+  }
+
   /* Page transitions */
   .fade-in{
-    animation: fadeIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
   @keyframes fadeIn{
-    from{opacity:0;transform:translateY(10px) scale(0.98);}
-    to{opacity:1;transform:translateY(0) scale(1);}
+    from{
+      opacity:0;
+      transform:translateY(20px) translateX(-5px) scale(0.96);
+      filter:blur(4px);
+    }
+    to{
+      opacity:1;
+      transform:translateY(0) translateX(0) scale(1);
+      filter:blur(0);
+    }
   }
 
   .fade-in-delayed{
     opacity: 0;
-    animation: fadeInDelayed 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 1s forwards;
+    animation: fadeInDelayed 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
   }
   @keyframes fadeInDelayed{
-    from{opacity:0;transform:translateY(20px) scale(0.98);}
-    to{opacity:1;transform:translateY(0) scale(1);}
+    from{
+      opacity:0;
+      transform:translateY(30px) translateX(-8px) scale(0.95);
+      filter:blur(6px);
+    }
+    to{
+      opacity:1;
+      transform:translateY(0) translateX(0) scale(1);
+      filter:blur(0);
+    }
   }
 
   .fade-out{
-    animation: fadeOut 0.25s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+    animation: fadeOut 0.3s cubic-bezier(0.4, 0, 1, 1) forwards;
   }
   @keyframes fadeOut{
-    from{opacity:1;transform:translateY(0) scale(1);}
-    to{opacity:0;transform:translateY(-10px) scale(0.98);}
+    from{
+      opacity:1;
+      transform:translateY(0) translateX(0) scale(1);
+      filter:blur(0);
+    }
+    to{
+      opacity:0;
+      transform:translateY(-15px) translateX(5px) scale(0.97);
+      filter:blur(3px);
+    }
   }
 
   /* Oven Investment Styles */
@@ -1199,6 +1297,398 @@
     color:rgba(255,215,0,0.8);
     text-align:center;
     margin-top:8px;
+  }
+
+  /* About Section Styles */
+  .about-section{
+    width:min(720px,92vw);
+    background:linear-gradient(135deg, rgba(12,16,20,0.85) 0%, rgba(20,25,30,0.90) 100%);
+    border:2px solid rgba(255,214,77,0.4);
+    border-radius:12px;
+    margin-bottom:24px;
+    overflow:hidden;
+    backdrop-filter:blur(12px);
+    transition:all 0.3s ease;
+  }
+
+  .about-section:hover{
+    border-color:rgba(255,214,77,0.6);
+    box-shadow:0 4px 20px rgba(255,214,77,0.15);
+  }
+
+  .about-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 24px;
+    background:linear-gradient(90deg, rgba(255,215,0,0.1) 0%, rgba(255,165,0,0.05) 100%);
+    border-bottom:1px solid rgba(255,214,77,0.2);
+    cursor:pointer;
+    user-select:none;
+  }
+
+  .about-header:hover{
+    background:linear-gradient(90deg, rgba(255,215,0,0.15) 0%, rgba(255,165,0,0.08) 100%);
+  }
+
+  .about-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:12px;
+    color:#FFD700;
+    text-shadow:0 2px 4px rgba(0,0,0,0.5);
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+
+  .about-toggle{
+    font-size:14px;
+    color:#FFD700;
+    transition:transform 0.3s ease;
+  }
+
+  .about-toggle.expanded{
+    transform:rotate(180deg);
+  }
+
+  .about-content{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height 0.4s ease, padding 0.4s ease;
+    padding:0 24px;
+  }
+
+  .about-content.expanded{
+    max-height:800px;
+    padding:24px;
+  }
+
+  .about-intro{
+    font-family:'Courier New', monospace;
+    font-size:15px;
+    line-height:1.8;
+    color:#e0e8f0;
+    margin-bottom:20px;
+    text-align:center;
+    font-weight:500;
+  }
+
+  .about-intro strong{
+    color:#FFD700;
+    font-weight:700;
+  }
+
+  .about-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+    gap:16px;
+    margin-top:20px;
+  }
+
+  .about-card{
+    background:rgba(0,0,0,0.4);
+    border:1px solid rgba(255,214,77,0.25);
+    border-radius:8px;
+    padding:20px;
+    transition:all 0.3s ease;
+  }
+
+  .about-card:hover{
+    border-color:rgba(255,214,77,0.5);
+    background:rgba(0,0,0,0.5);
+    transform:translateY(-2px);
+  }
+
+  .about-card-icon{
+    font-size:36px;
+    margin-bottom:12px;
+    display:block;
+  }
+
+  .about-card-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    color:#FFD700;
+    margin-bottom:12px;
+    text-transform:uppercase;
+  }
+
+  .about-card-text{
+    font-family:'Courier New', monospace;
+    font-size:13px;
+    line-height:1.6;
+    color:#c0c8d0;
+  }
+
+  .about-card-text strong{
+    color:#FFD700;
+  }
+
+  /* Campaign Page Styles */
+  .campaign-container{
+    display:none;
+    width:min(720px,92vw);
+    background:rgba(12,16,20,.10);
+    border:2px solid rgba(255,214,77,.3);
+    border-radius:12px;
+    padding:24px;
+    backdrop-filter:blur(8px);
+  }
+
+  .campaign-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:16px;
+    padding-bottom:12px;
+    border-bottom:1px solid rgba(255,214,77,.2);
+  }
+
+  .campaign-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:14px;
+    color:#FFD700;
+    text-shadow:0 2px 4px rgba(0,0,0,0.4);
+  }
+
+  .campaign-stats-section{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:16px;
+    margin-bottom:24px;
+  }
+
+  .campaign-stat-card{
+    background:rgba(0,0,0,0.3);
+    border:1px solid rgba(255,214,77,0.3);
+    border-radius:8px;
+    padding:16px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    transition:all 0.3s ease;
+  }
+
+  .campaign-stat-card:hover{
+    border-color:rgba(255,214,77,0.5);
+    background:rgba(0,0,0,0.4);
+  }
+
+  .campaign-stat-icon{
+    font-size:32px;
+  }
+
+  .campaign-stat-info{
+    flex:1;
+  }
+
+  .campaign-stat-label{
+    font-family:'Press Start 2P', monospace;
+    font-size:8px;
+    color:#a0a8b0;
+    margin-bottom:4px;
+  }
+
+  .campaign-stat-value{
+    font-family:'Press Start 2P', monospace;
+    font-size:18px;
+    color:#FFD700;
+  }
+
+  .campaign-progress-section{
+    background:linear-gradient(135deg, rgba(255,215,0,0.08) 0%, rgba(255,165,0,0.12) 100%);
+    border:2px solid rgba(255,214,77,0.3);
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:24px;
+  }
+
+  .campaign-progress-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:12px;
+  }
+
+  .campaign-progress-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    color:#FFD700;
+  }
+
+  .campaign-progress-percentage{
+    font-family:'Press Start 2P', monospace;
+    font-size:12px;
+    color:#FFD700;
+  }
+
+  .campaign-progress-bar-large{
+    width:100%;
+    height:16px;
+    background:rgba(0,0,0,0.4);
+    border-radius:8px;
+    overflow:hidden;
+    position:relative;
+    margin-bottom:12px;
+  }
+
+  .campaign-progress-fill-large{
+    height:100%;
+    background:linear-gradient(90deg, #FFD700, #FFA500);
+    border-radius:8px;
+    transition:width 0.5s ease;
+    box-shadow:0 0 15px rgba(255,215,0,0.6);
+  }
+
+  .campaign-progress-info{
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    color:#FFD700;
+    text-align:center;
+  }
+
+  .campaign-info-section{
+    background:rgba(0,0,0,0.2);
+    border:1px solid rgba(255,214,77,0.2);
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:24px;
+  }
+
+  .campaign-info-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    color:#FFD700;
+    margin-bottom:16px;
+  }
+
+  .campaign-info-content{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .campaign-info-item{
+    display:flex;
+    gap:12px;
+    font-family:Inter, system-ui, Arial;
+    font-size:13px;
+    line-height:1.6;
+    color:#e0e0e0;
+  }
+
+  .campaign-info-bullet{
+    color:#FFD700;
+    font-weight:bold;
+  }
+
+  .campaign-disclaimer-section{
+    background:rgba(244,67,54,0.08);
+    border:1px solid rgba(244,67,54,0.2);
+    border-radius:8px;
+    padding:12px;
+    margin-top:16px;
+    font-family:Inter, system-ui, Arial;
+    font-size:11px;
+    color:rgba(244,67,54,0.9);
+    text-align:center;
+    line-height:1.6;
+  }
+
+  .campaign-time-section{
+    background:rgba(0,0,0,0.3);
+    border:1px solid rgba(255,214,77,0.3);
+    border-radius:8px;
+    padding:16px;
+    text-align:center;
+  }
+
+  .campaign-time-label{
+    font-family:'Press Start 2P', monospace;
+    font-size:9px;
+    color:#a0a8b0;
+    margin-bottom:8px;
+  }
+
+  .campaign-time-value{
+    font-family:Inter, system-ui, Arial;
+    font-size:14px;
+    color:#FFD700;
+  }
+
+  .campaign-earn-section{
+    margin-top:24px;
+  }
+
+  .campaign-earn-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    color:#FFD700;
+    margin-bottom:16px;
+    text-align:center;
+  }
+
+  .campaign-cards-row{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:16px;
+    margin-bottom:16px;
+  }
+
+  .campaign-card{
+    background:rgba(0,0,0,0.3);
+    border:2px solid rgba(255,214,77,0.3);
+    border-radius:12px;
+    padding:16px;
+    transition:all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    position:relative;
+    overflow:hidden;
+  }
+
+  .campaign-card:hover{
+    border-color:rgba(255,214,77,0.6);
+    transform:translateY(-4px) scale(1.01);
+    box-shadow:0 8px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,214,77,0.1);
+    background:rgba(0,0,0,0.4);
+  }
+
+  .campaign-card.invest{
+    border-color:rgba(76,175,80,0.3);
+  }
+
+  .campaign-card.invest:hover{
+    border-color:rgba(76,175,80,0.7);
+    box-shadow:0 8px 28px rgba(76,175,80,0.2), 0 0 40px rgba(76,175,80,0.1);
+    background:rgba(16,24,16,0.3);
+  }
+
+  .campaign-card.gamble{
+    border-color:rgba(244,67,54,0.3);
+  }
+
+  .campaign-card.gamble:hover{
+    border-color:rgba(244,67,54,0.7);
+    box-shadow:0 8px 28px rgba(244,67,54,0.2), 0 0 40px rgba(244,67,54,0.1);
+    background:rgba(24,16,16,0.3);
+  }
+
+  .campaign-card-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    color:#FFD700;
+    margin-bottom:12px;
+    text-align:center;
+  }
+
+  .campaign-card-content{
+    display:flex;
+    flex-direction:column;
+  }
+
+  @media(max-width:600px){
+    .campaign-cards-row{
+      grid-template-columns:1fr;
+    }
   }
 
   .gambling-disclaimer{
@@ -2447,7 +2937,7 @@
       max-height:88vh;
       overflow-y:auto;
     }
-    .dashboard-container, .quest-container, .leaderboard-container, .game-container, .inventory-container{
+    .dashboard-container, .quest-container, .leaderboard-container, .game-container, .inventory-container, .campaign-container{
       width:96vw;
       padding:16px 12px;
       max-height:88vh;
@@ -3781,7 +4271,7 @@
       font-size:8px;
     }
 
-    .panel, .dashboard-container, .quest-container, .leaderboard-container, .game-container, .inventory-container{
+    .panel, .dashboard-container, .quest-container, .leaderboard-container, .game-container, .inventory-container, .campaign-container{
       max-height:85vh;
     }
 
@@ -3903,86 +4393,38 @@
         </div>
       </div>
 
-      <!-- Two-column card layout -->
-      <div class="dashboard-cards-row">
-        <!-- Left: DeFi -->
-        <div class="dashboard-card invest">
-          <div class="card-title">💎 DEFI</div>
-          <div class="card-content">
-            <button class="action-btn btn-invest" id="openOvenBtn" aria-label="Open Staking" style="width:100%;margin-bottom:12px;">STAKING</button>
-            <button class="action-btn btn-invest" id="openFarmBtn" aria-label="Open Airdrop Farm" style="width:100%;margin-bottom:12px;">FARM</button>
-            <button class="action-btn btn-invest" disabled style="width:100%;margin-bottom:12px;opacity:0.5;cursor:not-allowed;">SWAP</button>
-            <button class="action-btn btn-invest" disabled style="width:100%;opacity:0.5;cursor:not-allowed;">YIELD FARMING</button>
+      <!-- About Section -->
+      <div class="campaign-earn-section">
+        <div class="campaign-earn-title">⚔️ ABOUT DUEL PVP</div>
+
+        <!-- On-Chain Info -->
+        <div style="background:rgba(0,0,0,0.3);border:2px solid rgba(255,214,77,0.3);border-radius:12px;padding:20px;margin-bottom:20px;">
+          <div style="font-family:'Press Start 2P',monospace;font-size:10px;color:#FFD700;margin-bottom:12px;text-align:center;">🔗 FULLY ON-CHAIN</div>
+          <div style="font-family:'Courier New',monospace;font-size:13px;line-height:1.6;color:#e0e8f0;text-align:center;">
+            Every game state, transaction, and mechanic lives on the blockchain. <strong style="color:#FFD700;">No centralized servers. No hidden RNG.</strong> Trustless, transparent, verifiable by anyone.
           </div>
         </div>
 
-        <!-- Right: Gambling -->
-        <div class="dashboard-card gamble">
-          <div class="card-title">🎲 GAMBLING</div>
-          <div class="card-content">
-            <button class="action-btn btn-gamble" id="playReactionBtn" aria-label="Play trading simulator" style="width:100%;margin-bottom:12px;">TRADING SIM</button>
-            <button class="action-btn btn-gamble" id="playCrashBtn" aria-label="Play crash rocket game" style="width:100%;margin-bottom:12px;">CRASH</button>
-            <button class="action-btn btn-gamble" id="playMinesBtn" aria-label="Play mines game" style="width:100%;margin-bottom:12px;">MINES</button>
-            <button class="action-btn btn-gamble" id="playBlackjackBtn" aria-label="Play blackjack game" style="width:100%;">BLACKJACK</button>
-            <div style="background:rgba(244,67,54,0.08);border:1px solid rgba(244,67,54,0.2);border-radius:8px;padding:12px;margin-top:12px;font-size:11px;line-height:1.6;color:rgba(244,67,54,0.9);text-align:center;">
-              * Campaign uses fake tokens not exchangeable for real value.
+        <!-- Two Paths -->
+        <div class="campaign-cards-row">
+          <!-- Left: Cultivator (green like DeFi) -->
+          <div class="campaign-card invest">
+            <div class="campaign-card-title">🌾 THE CULTIVATOR</div>
+            <div style="font-family:'Courier New',monospace;font-size:14px;line-height:1.7;color:#f0f4f8;text-align:center;margin-bottom:16px;text-shadow:0 1px 2px rgba(0,0,0,0.5);">
+              <strong style="color:#4CAF50;">Low-risk, steady growth.</strong><br><br>
+              Farm resources, control markets, hire warriors.
             </div>
+            <div style="text-align:center;font-family:'Press Start 2P',monospace;font-size:8px;color:#4CAF50;">SAFE'ISH PATH TO RICHES</div>
           </div>
-        </div>
-      </div>
 
-      <!-- Market Section -->
-      <div class="dashboard-cards-row">
-        <div class="dashboard-card" style="background:linear-gradient(135deg, rgba(255,214,77,0.05) 0%, rgba(255,165,0,0.08) 100%); border-color:rgba(255,214,77,0.3);">
-          <div class="card-title">🏪 MARKET</div>
-          <div class="card-content">
-            <button class="action-btn" disabled style="width:100%;margin-bottom:12px;opacity:0.5;cursor:not-allowed;background:rgba(255,214,77,0.1);border-color:rgba(255,214,77,0.3);color:#FFD64D;">ITEMS</button>
-            <button class="action-btn" disabled style="width:100%;opacity:0.5;cursor:not-allowed;background:rgba(255,214,77,0.1);border-color:rgba(255,214,77,0.3);color:#FFD64D;">POWERUPS</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- PVE Adventures -->
-      <div class="dashboard-cards-row">
-        <!-- Loot Forest -->
-        <div class="dashboard-card" style="opacity:0.5;cursor:not-allowed;pointer-events:none;">
-          <div class="card-title">🌲 LOOT FOREST</div>
-          <div class="card-content" style="min-height:200px;opacity:0.3;">
-            <div class="match-list">
-              <div class="match-item">
-                <span>Goblin Camp</span>
-                <span class="match-result win">CLEARED</span>
-              </div>
-              <div class="match-item">
-                <span>Ancient Trees</span>
-                <span class="match-result">EXPLORED</span>
-              </div>
-              <div class="match-item">
-                <span>Hidden Grove</span>
-                <span class="match-result win">LOOTED</span>
-              </div>
+          <!-- Right: Warrior (red like Gambling) -->
+          <div class="campaign-card gamble">
+            <div class="campaign-card-title">⚔️ THE WARRIOR</div>
+            <div style="font-family:'Courier New',monospace;font-size:14px;line-height:1.7;color:#f0f4f8;text-align:center;margin-bottom:16px;text-shadow:0 1px 2px rgba(0,0,0,0.5);">
+              <strong style="color:#F44336;">High-risk, high-reward.</strong><br><br>
+              Raid dungeons, slay legendary bosses, dominate the PVP arena.
             </div>
-          </div>
-        </div>
-
-        <!-- Lava Dungeons -->
-        <div class="dashboard-card" style="opacity:0.5;cursor:not-allowed;pointer-events:none;">
-          <div class="card-title">🔥 LAVA DUNGEONS</div>
-          <div class="card-content" style="min-height:200px;opacity:0.3;">
-            <div class="match-list">
-              <div class="match-item">
-                <span>Fire Elementals</span>
-                <span class="match-result loss">DEFEATED</span>
-              </div>
-              <div class="match-item">
-                <span>Molten Core</span>
-                <span class="match-result">ENTERED</span>
-              </div>
-              <div class="match-item">
-                <span>Lava Dragon</span>
-                <span class="match-result win">SLAIN</span>
-              </div>
-            </div>
+            <div style="text-align:center;font-family:'Press Start 2P',monospace;font-size:8px;color:#F44336;">GLORY THROUGH BLOODSHED</div>
           </div>
         </div>
       </div>
@@ -3994,6 +4436,120 @@
           <div class="wallet-info" id="walletInfo">
             <div class="wallet-status" id="walletStatus">No wallet connected</div>
             <button class="action-btn btn-secondary" id="connectWalletBtn" style="width:100%;margin-top:12px;">CONNECT WALLET</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campaign content (hidden initially) -->
+    <div class="campaign-container" id="campaignContent" role="region" aria-label="Millionaire campaign">
+      <div class="campaign-header">
+        <div class="campaign-title">🏆 WHO WANTS TO BE A MILLIONAIRE</div>
+        <button class="back-btn" id="backFromCampaignBtn" aria-label="Back to dashboard">BACK</button>
+      </div>
+
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item active">Campaign</span>
+      </div>
+
+      <!-- Player Stats Section -->
+      <div class="campaign-stats-section">
+        <div class="campaign-stat-card">
+          <div class="campaign-stat-icon">⭐</div>
+          <div class="campaign-stat-info">
+            <div class="campaign-stat-label">PLAYER LEVEL</div>
+            <div class="campaign-stat-value" id="campaignPlayerLevel">1</div>
+          </div>
+        </div>
+        <div class="campaign-stat-card">
+          <div class="campaign-stat-icon">💰</div>
+          <div class="campaign-stat-info">
+            <div class="campaign-stat-label">TOTAL GP</div>
+            <div class="campaign-stat-value" id="campaignTotalGP">0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress Section -->
+      <div class="campaign-progress-section">
+        <div class="campaign-progress-header">
+          <div class="campaign-progress-title">CAMPAIGN PROGRESS</div>
+          <div class="campaign-progress-percentage" id="campaignProgressPercentage">0%</div>
+        </div>
+        <div class="campaign-progress-bar-large">
+          <div class="campaign-progress-fill-large" id="campaignProgressFillLarge" style="width:0%"></div>
+        </div>
+        <div class="campaign-progress-info">
+          <span id="campaignCurrentGPPage">0</span> / 1,000,000 GP
+        </div>
+      </div>
+
+      <!-- Campaign Info -->
+      <div class="campaign-info-section">
+        <div class="campaign-info-title">📋 CAMPAIGN RULES</div>
+        <div class="campaign-info-content">
+          <div class="campaign-info-item">
+            <span class="campaign-info-bullet">•</span>
+            <span>Get over 1,000,000 GP to qualify for a special badge!</span>
+          </div>
+          <div class="campaign-info-item">
+            <span class="campaign-info-bullet">•</span>
+            <span>Use STAKING for compound interest (10% hourly)</span>
+          </div>
+          <div class="campaign-info-item">
+            <span class="campaign-info-bullet">•</span>
+            <span>Click FARM every 5 seconds for random GP drops</span>
+          </div>
+          <div class="campaign-info-item">
+            <span class="campaign-info-bullet">•</span>
+            <span>Play gambling games: Trading Sim, Crash, Mines, Blackjack</span>
+          </div>
+          <div class="campaign-info-item">
+            <span class="campaign-info-bullet">•</span>
+            <span>All GP earned counts toward your total</span>
+          </div>
+        </div>
+
+        <div class="campaign-disclaimer-section">
+          ⚠️ <strong>Important:</strong> These are fake tokens for the campaign only and cannot be exchanged for real value.
+        </div>
+      </div>
+
+      <!-- Time Remaining -->
+      <div class="campaign-time-section">
+        <div class="campaign-time-label">TIME REMAINING</div>
+        <div class="campaign-time-value" id="campaignTimeRemainingPage">Campaign in progress</div>
+      </div>
+
+      <!-- Ways to Earn GP Section -->
+      <div class="campaign-earn-section">
+        <div class="campaign-earn-title">💰 WAYS TO EARN GP</div>
+
+        <!-- Two-column card layout -->
+        <div class="campaign-cards-row">
+          <!-- Left: DeFi -->
+          <div class="campaign-card invest">
+            <div class="campaign-card-title">💎 DEFI</div>
+            <div class="campaign-card-content">
+              <button class="action-btn btn-invest" id="openOvenBtn" aria-label="Open Staking" style="width:100%;margin-bottom:12px;">STAKING</button>
+              <button class="action-btn btn-invest" id="openFarmBtn" aria-label="Open Airdrop Farm" style="width:100%;margin-bottom:12px;">FARM</button>
+              <button class="action-btn btn-invest" disabled style="width:100%;margin-bottom:12px;opacity:0.5;cursor:not-allowed;">SWAP</button>
+              <button class="action-btn btn-invest" disabled style="width:100%;opacity:0.5;cursor:not-allowed;">YIELD FARMING</button>
+            </div>
+          </div>
+
+          <!-- Right: Gambling -->
+          <div class="campaign-card gamble">
+            <div class="campaign-card-title">🎲 GAMBLING</div>
+            <div class="campaign-card-content">
+              <button class="action-btn btn-gamble" id="playReactionBtn" aria-label="Play trading simulator" style="width:100%;margin-bottom:12px;">TRADING SIM</button>
+              <button class="action-btn btn-gamble" id="playCrashBtn" aria-label="Play crash rocket game" style="width:100%;margin-bottom:12px;">CRASH</button>
+              <button class="action-btn btn-gamble" id="playMinesBtn" aria-label="Play mines game" style="width:100%;margin-bottom:12px;">MINES</button>
+              <button class="action-btn btn-gamble" id="playBlackjackBtn" aria-label="Play blackjack game" style="width:100%;">BLACKJACK</button>
+            </div>
           </div>
         </div>
       </div>
@@ -5054,6 +5610,8 @@
     const inventoryContent = document.getElementById('inventoryContent');
     const shopContent = document.getElementById('shopContent');
     const crashContent = document.getElementById('crashContent');
+    const campaignContent = document.getElementById('campaignContent');
+    const campaignBanner = document.getElementById('campaignBanner');
 
     // Debug: Check if all elements exist
     console.log('Elements loaded:', {
@@ -5088,7 +5646,7 @@
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
       // Find currently visible element
-      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent];
+      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent, campaignContent];
       const currentVisible = allContainers.find(el => el.style.display !== 'none' && el.style.display !== '');
 
       // Add fade-out to current visible element
@@ -5320,6 +5878,7 @@
       } else if (newContent === 'dashboard') {
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'block';
+        campaignBanner.style.display = 'block';
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
@@ -5373,6 +5932,7 @@
       } else if (newContent === 'crash') {
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'none';
+        campaignBanner.style.display = 'none';
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
@@ -5389,6 +5949,7 @@
       } else if (newContent === 'mines') {
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'none';
+        campaignBanner.style.display = 'none';
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
@@ -5406,6 +5967,7 @@
       } else if (newContent === 'blackjack') {
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'none';
+        campaignBanner.style.display = 'none';
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
@@ -5418,6 +5980,24 @@
         blackjackContent.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initBlackjack();
+
+      } else if (newContent === 'campaign') {
+        panelContent.style.display = 'none';
+        dashboardContent.style.display = 'none';
+        campaignBanner.style.display = 'none';
+        gameContent.style.display = 'none';
+        leaderboardContent.style.display = 'none';
+        questContent.style.display = 'none';
+        inventoryContent.style.display = 'none';
+        shopContent.style.display = 'none';
+        ovenContent.style.display = 'none';
+        farmContent.style.display = 'none';
+        crashContent.style.display = 'none';
+        minesContent.style.display = 'none';
+        blackjackContent.style.display = 'none';
+        campaignContent.style.display = 'block';
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        updateCampaignPage();
 
       } else if (newContent === 'leaderboard') {
         console.log('Switching to leaderboard...');
@@ -5433,6 +6013,7 @@
         crashContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
+        campaignContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         console.log('Leaderboard display set to block');
         loadLeaderboard('all');
@@ -5451,6 +6032,7 @@
         crashContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
+        campaignContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadQuests('daily');
 
@@ -5467,6 +6049,7 @@
         crashContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
+        campaignContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadInventory();
 
@@ -5481,6 +6064,7 @@
         ovenContent.style.display = 'none';
         farmContent.style.display = 'none';
         crashContent.style.display = 'none';
+        campaignContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
@@ -5495,8 +6079,12 @@
           newVisible.classList.add('fade-in');
         }
 
-        // Scroll to top when changing pages
-        window.scrollTo(0, 0);
+        // Scroll to top AFTER content is fully laid out
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            window.scrollTo({ top: 0, behavior: 'instant' });
+          });
+        });
       }, currentVisible ? 200 : 0); // 200ms matches fade-out animation duration
     }
     
@@ -5543,15 +6131,30 @@
       swapContent('register', code);
     }
 
-    function handleLogin() {
+    async function handleLogin() {
       // Skip all validation - instant login for testing
       clearError('emailError');
       clearError('passError');
 
-      // Generate random user ID
-      const testUserId = 'test-' + Math.random().toString(36).substring(7);
-      const testEmail = 'test@demo.com';
-      const testWarriorName = '1337';
+      // Check if user wants to test with database user
+      const emailInput = document.getElementById('loginEmail');
+      const inputEmail = emailInput ? emailInput.value.trim().toLowerCase() : '';
+
+      let testUserId, testEmail, testWarriorName, mode;
+
+      // If email is "test@duelpvp.com" or "db", use database test user
+      if (inputEmail === 'test@duelpvp.com' || inputEmail === 'db') {
+        testUserId = '00000000-0000-0000-0000-000000000001';
+        testEmail = 'test@duelpvp.com';
+        testWarriorName = 'TestWarrior';
+        mode = 'DATABASE';
+      } else {
+        // Default: random test user (localStorage mode)
+        testUserId = 'test-' + Math.random().toString(36).substring(7);
+        testEmail = 'test@demo.com';
+        testWarriorName = '1337';
+        mode = 'LOCALSTORAGE';
+      }
 
       // Store test user info
       try {
@@ -5561,14 +6164,19 @@
         localStorage.setItem('duelpvp_warrior', testWarriorName);
 
         // Initialize GP - 1000 for testing (normally 10 for new accounts)
-        if (!localStorage.getItem('duelpvp_gp')) {
+        if (mode === 'LOCALSTORAGE' && !localStorage.getItem('duelpvp_gp')) {
           localStorage.setItem('duelpvp_gp', '1000');
         }
 
         // Set username in dashboard
         document.getElementById('userName').textContent = testWarriorName.toUpperCase();
 
-        Toast.success('Logged in as ' + testWarriorName + ' • ' + localStorage.getItem('duelpvp_gp') + ' GP', 'TEST MODE');
+        // Initialize GP cache (will fetch from DB if using database mode)
+        await initializeGPCache();
+
+        const gp = await getUserGP();
+        Toast.success(`Logged in as ${testWarriorName} • ${gp} GP`, mode + ' MODE');
+
       } catch (e) {
         console.error('Failed to save login:', e);
         showError('passError', 'Failed to save login. Check browser settings.');
@@ -5774,6 +6382,9 @@
         Loading.hide();
         Toast.success(`Welcome to the arena, ${warriorName}!`, 'WARRIOR REGISTERED');
 
+        // Initialize GP cache from database
+        await initializeGPCache();
+
         swapContent('dashboard');
       } catch (e) {
         Loading.hide();
@@ -5819,16 +6430,30 @@
 
         // Store wallet address linked to current email
         const email = localStorage.getItem('duelpvp_email');
-        if (email) {
+        const userId = localStorage.getItem('duelpvp_user_id');
+
+        if (email && userId) {
+          // Save to localStorage
           localStorage.setItem(`duelpvp_wallet_${email}`, walletAddress);
           localStorage.setItem(`duelpvp_wallet_verified_${email}`, signature);
-
-          // Also store reverse mapping (wallet -> email) for login
           localStorage.setItem(`duelpvp_email_${walletAddress.toLowerCase()}`, email);
 
-          updateWalletDisplay(walletAddress);
-          Loading.hide();
-          Toast.success(`Wallet ${walletAddress.substring(0, 6)}...${walletAddress.substring(38)} linked to your account`, 'WALLET CONNECTED');
+          // Save to Supabase database
+          const { error: updateError } = await supabase
+            .from('users')
+            .update({ wallet_address: walletAddress })
+            .eq('id', userId);
+
+          if (updateError) {
+            console.error('Failed to save wallet to database:', updateError);
+            Loading.hide();
+            Toast.warning('Wallet connected locally but not saved to database', 'PARTIAL SUCCESS');
+            updateWalletDisplay(walletAddress);
+          } else {
+            updateWalletDisplay(walletAddress);
+            Loading.hide();
+            Toast.success(`Wallet ${walletAddress.substring(0, 6)}...${walletAddress.substring(38)} linked to your account`, 'WALLET CONNECTED');
+          }
         } else {
           Loading.hide();
           Modal.alert('No email found. Please login first.', 'Login Required');
@@ -5984,9 +6609,8 @@
         document.querySelector('.stat-card:nth-child(2) .stat-value').textContent = streak;
         document.querySelector('.stat-card:nth-child(3) .stat-value').textContent = userRank > 0 ? `#${userRank}` : '--';
 
-        // Update GP from localStorage (for test mode) or database
-        const localGP = parseInt(localStorage.getItem('duelpvp_gp')) || 0;
-        const displayGP = localGP || totalGP;
+        // Update GP using secure getUserGP function (supports both database and localStorage)
+        const displayGP = await getUserGP();
         document.getElementById('dashboardGPBalance').textContent = displayGP >= 1000000 ? `${(displayGP/1000000).toFixed(1)}M` : displayGP >= 1000 ? `${(displayGP/1000).toFixed(1)}K` : displayGP;
 
       } catch (e) {
@@ -7538,16 +8162,172 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     // OVEN INVESTMENT SYSTEM
     // ===============================================
 
+    // ===============================================
+    // GP BALANCE SYSTEM (SECURE - DATABASE BACKED)
+    // ===============================================
+
+    // Cache for GP balance to reduce database queries
+    let gpCache = {
+      balance: 0,
+      lastFetch: 0,
+      cacheTime: 5000 // Cache for 5 seconds
+    };
+
     // Helper functions for GP
-    function getUserGP() {
-      return parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+    async function getUserGP() {
+      const userId = localStorage.getItem('duelpvp_user_id');
+
+      // Fallback to localStorage for test mode
+      if (!userId || userId.startsWith('test-')) {
+        return parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+      }
+
+      // Check cache first
+      const now = Date.now();
+      if (gpCache.lastFetch && (now - gpCache.lastFetch < gpCache.cacheTime)) {
+        return gpCache.balance;
+      }
+
+      try {
+        // Fetch from database
+        const { data, error } = await supabase
+          .rpc('get_user_gp', { p_user_id: userId });
+
+        if (error) {
+          console.error('Failed to fetch GP:', error);
+          // Fallback to localStorage
+          return parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+        }
+
+        // Update cache
+        gpCache.balance = data || 0;
+        gpCache.lastFetch = now;
+
+        return data || 0;
+      } catch (e) {
+        console.error('Error getting GP:', e);
+        return parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+      }
+    }
+
+    function getUserLevel() {
+      const gp = gpCache.balance || parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+      // Calculate level based on GP (every 50,000 GP = 1 level)
+      return Math.floor(gp / 50000) + 1;
     }
 
     async function updateUserGP(amount) {
-      const currentGP = getUserGP();
-      const newGP = currentGP + amount;
-      localStorage.setItem('duelpvp_gp', newGP.toString());
+      const userId = localStorage.getItem('duelpvp_user_id');
 
+      // Fallback to localStorage for test mode
+      if (!userId || userId.startsWith('test-')) {
+        const currentGP = parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+        const newGP = currentGP + amount;
+
+        // Prevent negative balance even in test mode
+        if (newGP < 0) {
+          Toast.error('Insufficient balance', 'TRANSACTION FAILED');
+          return currentGP;
+        }
+
+        localStorage.setItem('duelpvp_gp', newGP.toString());
+
+        // Update UI
+        updateGPDisplay(newGP, amount);
+        return newGP;
+      }
+
+      try {
+        // Update in database using secure RPC function
+        const { data, error } = await supabase
+          .rpc('update_user_gp', {
+            p_user_id: userId,
+            p_amount: amount
+          });
+
+        if (error) {
+          console.error('Failed to update GP:', error);
+
+          // If database function doesn't exist, fall back to localStorage with validation
+          if (error.message && error.message.includes('function') && error.message.includes('does not exist')) {
+            Toast.error('Database not configured! Using localStorage fallback.', 'WARNING');
+
+            const currentGP = parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+            const newGP = currentGP + amount;
+
+            // Prevent negative balance
+            if (newGP < 0) {
+              Toast.error('Insufficient balance', 'TRANSACTION FAILED');
+              return currentGP;
+            }
+
+            localStorage.setItem('duelpvp_gp', newGP.toString());
+            gpCache.balance = newGP;
+            gpCache.lastFetch = Date.now();
+            updateGPDisplay(newGP, amount);
+            return newGP;
+          }
+
+          Toast.error('Failed to update balance', 'ERROR');
+          return gpCache.balance;
+        }
+
+        // Check if update was successful
+        if (!data || data.length === 0 || !data[0].success) {
+          const message = data && data[0] ? data[0].message : 'Update failed';
+          Toast.error(message, 'TRANSACTION FAILED');
+          return gpCache.balance;
+        }
+
+        const newBalance = data[0].new_balance;
+
+        // Update cache
+        gpCache.balance = newBalance;
+        gpCache.lastFetch = Date.now();
+
+        // Update UI
+        updateGPDisplay(newBalance, amount);
+
+        return newBalance;
+      } catch (e) {
+        console.error('Error updating GP:', e);
+        Toast.error('Connection error', 'ERROR');
+        return gpCache.balance;
+      }
+    }
+
+    // Create gold particle effect
+    function createGoldParticles(element, count = 12) {
+      if (!element) return;
+
+      const rect = element.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      for (let i = 0; i < count; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'gold-particle';
+        particle.style.left = centerX + 'px';
+        particle.style.top = centerY + 'px';
+
+        // Random direction
+        const angle = (Math.PI * 2 * i) / count;
+        const distance = 60 + Math.random() * 40;
+        const tx = Math.cos(angle) * distance;
+        const ty = Math.sin(angle) * distance - 20; // Slight upward bias
+
+        particle.style.setProperty('--tx', tx + 'px');
+        particle.style.setProperty('--ty', ty + 'px');
+
+        document.body.appendChild(particle);
+
+        // Remove after animation
+        setTimeout(() => particle.remove(), 800);
+      }
+    }
+
+    // Helper function to update GP displays across the UI
+    function updateGPDisplay(newGP, changeAmount) {
       // Update dashboard display if visible with animation
       const dashboardGPEl = document.getElementById('dashboardGPBalance');
       if (dashboardGPEl) {
@@ -7559,9 +8339,11 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
         void dashboardGPEl.offsetWidth; // Trigger reflow
         dashboardGPEl.classList.add('gp-change');
 
-        if (amount > 0) {
+        if (changeAmount > 0) {
           dashboardGPEl.classList.add('gp-increase');
-        } else if (amount < 0) {
+          // Trigger gold particles on GP gain
+          createGoldParticles(dashboardGPEl);
+        } else if (changeAmount < 0) {
           dashboardGPEl.classList.add('gp-decrease');
         }
 
@@ -7581,8 +8363,50 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
         const progress = Math.min((newGP / 1000000) * 100, 100);
         campaignProgressFill.style.width = progress + '%';
       }
+    }
 
-      return newGP;
+    // Initialize GP cache on login/page load
+    async function initializeGPCache() {
+      const userId = localStorage.getItem('duelpvp_user_id');
+      if (userId && !userId.startsWith('test-')) {
+        await getUserGP(); // This will populate the cache
+      }
+    }
+
+    // Update campaign page with current stats
+    async function updateCampaignPage() {
+      const currentGP = await getUserGP();
+      const level = getUserLevel();
+
+      // Update player level
+      const levelEl = document.getElementById('campaignPlayerLevel');
+      if (levelEl) {
+        levelEl.textContent = level;
+      }
+
+      // Update total GP
+      const totalGPEl = document.getElementById('campaignTotalGP');
+      if (totalGPEl) {
+        totalGPEl.textContent = currentGP.toLocaleString();
+      }
+
+      // Update current GP on page
+      const currentGPPageEl = document.getElementById('campaignCurrentGPPage');
+      if (currentGPPageEl) {
+        currentGPPageEl.textContent = currentGP.toLocaleString();
+      }
+
+      // Update progress bar and percentage
+      const progress = Math.min((currentGP / 1000000) * 100, 100);
+      const progressFillEl = document.getElementById('campaignProgressFillLarge');
+      if (progressFillEl) {
+        progressFillEl.style.width = progress + '%';
+      }
+
+      const progressPercentageEl = document.getElementById('campaignProgressPercentage');
+      if (progressPercentageEl) {
+        progressPercentageEl.textContent = progress.toFixed(1) + '%';
+      }
     }
 
     let ovenState = {
@@ -7730,14 +8554,21 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
         return;
       }
 
-      const userGP = getUserGP();
+      // Properly await getUserGP
+      const userGP = await getUserGP();
       if (amount > userGP) {
         Toast.error('Insufficient balance', 'INSUFFICIENT FUNDS');
         return;
       }
 
-      // Deduct from user balance
-      await updateUserGP(-amount);
+      // Deduct from user balance and CHECK if it succeeded
+      const newBalance = await updateUserGP(-amount);
+
+      // If balance didn't change (transaction failed), stop here
+      if (newBalance === userGP) {
+        // updateUserGP already showed an error toast
+        return;
+      }
 
       // Add to invested
       ovenState.invested += amount;
@@ -8509,18 +9340,9 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     document.getElementById('sellButton').addEventListener('click', handleSell);
     document.getElementById('resetGameBtn').addEventListener('click', resetGame);
 
-    // Campaign banner click handler
-    document.getElementById('campaignBanner').addEventListener('click', () => {
-      Modal.alert(
-        'Get over 1,000,000 GP during the campaign to qualify for a special badge!\n\n' +
-        '• Use STAKING for compound interest (10% hourly)\n' +
-        '• Click FARM every 5 seconds for random GP drops\n' +
-        '• Play gambling games: Trading Sim, Crash, Mines, Blackjack\n' +
-        '• All GP earned counts toward your total\n\n' +
-        'Note: These are fake tokens for the campaign only and cannot be exchanged.',
-        '🏆 Who Wants to be a Millionaire - Campaign Rules'
-      );
-    });
+    // Campaign banner and page handlers
+    document.getElementById('campaignBanner').addEventListener('click', () => swapContent('campaign'));
+    document.getElementById('backFromCampaignBtn').addEventListener('click', () => swapContent('dashboard'));
 
     // Leaderboard filter buttons
     document.querySelectorAll('.filter-btn').forEach(btn => {
