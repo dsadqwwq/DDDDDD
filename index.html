@@ -6358,6 +6358,26 @@
       Loading.show('Creating your account...');
 
       try {
+        // Check if display name already exists (case-insensitive)
+        console.log('Checking if username is available...');
+        const { data: existingNames, error: checkError } = await supabase
+          .from('users')
+          .select('display_name')
+          .ilike('display_name', warriorName);
+
+        if (checkError) {
+          Loading.hide();
+          console.error('Name check failed:', checkError);
+          showError('warriorNameError', 'Failed to check username availability');
+          return;
+        }
+
+        if (existingNames && existingNames.length > 0) {
+          Loading.hide();
+          showError('warriorNameError', 'Display name already taken');
+          return;
+        }
+
         // 1. Create user in database
         console.log('Step 1: Creating user in database...');
         const { data: newUser, error: userError } = await supabase
