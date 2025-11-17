@@ -130,23 +130,37 @@
   }
   
   .brand .title{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    position: relative;
+  }
+
+  .brand-logo{
+    filter: drop-shadow(2px 2px 0px #000)
+            drop-shadow(0 0 20px rgba(255,214,77,.4))
+            drop-shadow(0 0 40px rgba(255,214,77,.2));
+    flex-shrink: 0;
+  }
+
+  .brand-text{
     font-family:'Press Start 2P', monospace;
     font-size:32px;
     letter-spacing:.08em;
-    margin-bottom:12px;
     /* Multi-layer text effects */
     background: linear-gradient(180deg, var(--gold-hi) 0%, var(--gold) 50%, #D4A033 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(2px 2px 0px #000) 
+    filter: drop-shadow(2px 2px 0px #000)
             drop-shadow(0 0 20px rgba(255,214,77,.4))
             drop-shadow(0 0 40px rgba(255,214,77,.2));
     position: relative;
   }
-  
-  /* 3D effect for title */
-  .brand .title::before{
+
+  /* 3D effect for title text */
+  .brand-text::before{
     content: 'DUEL PVP';
     position: absolute;
     left: 3px;
@@ -4309,7 +4323,24 @@
 
   <!-- Brand always visible with continuous animation -->
   <div class="brand">
-    <div class="title">DUEL PVP</div>
+    <div class="title">
+      <svg class="brand-logo" width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5"
+                 fill="none"
+                 stroke="url(#logoGradient)"
+                 stroke-width="4"/>
+        <circle cx="40" cy="50" r="10" fill="#ef4444"/>
+        <circle cx="60" cy="50" r="10" fill="#22c55e"/>
+        <defs>
+          <linearGradient id="logoGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#FFD64D;stop-opacity:1" />
+            <stop offset="50%" style="stop-color:#D4AF37;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#D4A033;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <span class="brand-text">DUEL PVP</span>
+    </div>
     <div class="slogan">
       Real Time<span class="slogan-divider"></span>Real Skill<span class="slogan-divider"></span>Real Rewards
     </div>
