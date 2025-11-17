@@ -5686,7 +5686,16 @@
           </div>
 
           <div style="text-align:center;padding:40px 20px;">
-            <div style="font-size:64px;margin-bottom:20px;color:var(--gold);">⬡</div>
+            <div style="margin-bottom:20px;">
+              <svg width="64" height="64" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5"
+                         fill="none"
+                         stroke="#d4af37"
+                         stroke-width="3"/>
+                <circle cx="40" cy="50" r="8" fill="#ef4444"/>
+                <circle cx="60" cy="50" r="8" fill="#22c55e"/>
+              </svg>
+            </div>
             <div style="font-family:'Press Start 2P',monospace;font-size:12px;color:var(--gold);margin-bottom:12px;">
               WALLET AUTHENTICATION
             </div>
@@ -5770,7 +5779,16 @@
           </div>
 
           <div class="wallet-connect-container" style="text-align:center;padding:40px 20px;">
-            <div style="font-size:64px;margin-bottom:20px;color:var(--gold);">⬡</div>
+            <div style="margin-bottom:20px;">
+              <svg width="64" height="64" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5"
+                         fill="none"
+                         stroke="#d4af37"
+                         stroke-width="3"/>
+                <circle cx="40" cy="50" r="8" fill="#ef4444"/>
+                <circle cx="60" cy="50" r="8" fill="#22c55e"/>
+              </svg>
+            </div>
             <div style="font-family:'Press Start 2P',monospace;font-size:12px;color:var(--gold);margin-bottom:12px;">
               SECURE AUTHENTICATION
             </div>
@@ -6846,7 +6864,11 @@
       inviteCodes.slice(0, 4).forEach(code => {
         allItems.push({
           type: 'invite_code',
-          icon: '⬡',
+          icon: `<svg width="24" height="24" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
+            <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5" fill="none" stroke="#d4af37" stroke-width="3"/>
+            <circle cx="40" cy="50" r="8" fill="#ef4444"/>
+            <circle cx="60" cy="50" r="8" fill="#22c55e"/>
+          </svg>`,
           name: code.used_by ? 'USED CODE' : 'INVITE CODE',
           desc: code.used_by
             ? `This code was used on ${new Date(code.used_at).toLocaleDateString()}`
@@ -8235,7 +8257,16 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
           // Invite code item
           slot.className = item.used ? 'inventory-slot used-code' : 'inventory-slot';
           slot.innerHTML = `
-            <div class="item-icon">⬡</div>
+            <div class="item-icon">
+              <svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;">
+                <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5"
+                         fill="none"
+                         stroke="#d4af37"
+                         stroke-width="3"/>
+                <circle cx="40" cy="50" r="8" fill="#ef4444"/>
+                <circle cx="60" cy="50" r="8" fill="#22c55e"/>
+              </svg>
+            </div>
             <div class="item-name">${item.code}</div>
           `;
           // Tooltip
