@@ -4560,27 +4560,16 @@
       </div>
 
       <div class="your-best" id="yourBestSection" style="display:none;">
-        <div class="your-best-label">YOUR BEST TIME</div>
-        <div class="your-best-time" id="yourBestTime">-- ms</div>
-      </div>
-
-      <div class="leaderboard-filters" id="leaderboardFilters" role="group" aria-label="Filter leaderboard by time period">
-        <button class="filter-btn active" data-filter="all" aria-label="Show all time scores" aria-pressed="true">ALL TIME</button>
-        <button class="filter-btn" data-filter="today" aria-label="Show today's scores" aria-pressed="false">TODAY</button>
-        <button class="filter-btn" data-filter="week" aria-label="Show this week's scores" aria-pressed="false">THIS WEEK</button>
-        <button class="filter-btn" data-filter="month" aria-label="Show this month's scores" aria-pressed="false">THIS MONTH</button>
-      </div>
-
-      <div class="podium" id="podium">
-        <!-- Top 3 will be generated here -->
+        <div class="your-best-label">YOUR RANK</div>
+        <div class="your-best-time" id="yourBestTime">#-- | -- GP</div>
       </div>
 
       <div class="leaderboard-table">
         <div class="table-header">
           <div>RANK</div>
           <div>PLAYER</div>
-          <div>TIME</div>
-          <div class="entry-date">DATE</div>
+          <div>GP BALANCE</div>
+          <div class="entry-date">WALLET</div>
         </div>
         <div id="leaderboardTableBody">
           <!-- Table rows will be generated here -->
@@ -6747,20 +6736,19 @@
     }
 
     // Leaderboard functions
-    async function loadLeaderboard(filter) {
-      console.log('loadLeaderboard called with filter:', filter);
+    async function loadLeaderboard(filter = 'all') {
+      console.log('loadLeaderboard called');
       try {
-        const email = localStorage.getItem('duelpvp_email') || 'anonymous';
         const userId = localStorage.getItem('duelpvp_user_id');
 
         Loading.show('Loading leaderboard...');
 
-        // Call Supabase RPC function to get leaderboard
+        // Get top 500 users by GP balance
         const { data: leaderboard, error } = await supabase
-          .rpc('get_leaderboard', {
-            time_filter: filter,
-            limit_count: 100
-          });
+          .from('users')
+          .select('id, display_name, wallet_address, gp_balance, created_at')
+          .order('gp_balance', { ascending: false })
+          .limit(500);
 
         Loading.hide();
 
@@ -6771,24 +6759,36 @@
 
         console.log('Loaded leaderboard:', leaderboard?.length || 0, 'entries');
 
-        // Show user's best time
+        // Add rank to each entry
+        const rankedLeaderboard = leaderboard?.map((entry, index) => ({
+          ...entry,
+          rank: index + 1
+        })) || [];
+
+        // Show user's rank if they're logged in
         if (userId) {
-          const userEntry = leaderboard?.find(entry => entry.user_id === userId);
+          const userEntry = rankedLeaderboard.find(entry => entry.id === userId);
           if (userEntry) {
             document.getElementById('yourBestSection').style.display = 'block';
-            document.getElementById('yourBestTime').textContent = `${userEntry.time_ms}ms`;
+            document.getElementById('yourBestTime').textContent = `#${userEntry.rank} | ${userEntry.gp_balance?.toLocaleString() || 0} GP`;
           } else {
-            document.getElementById('yourBestSection').style.display = 'none';
+            // User is not in top 500, get their actual rank
+            const { data: userRankData } = await supabase
+              .rpc('get_user_rank', { p_user_id: userId });
+
+            if (userRankData && userRankData[0]) {
+              document.getElementById('yourBestSection').style.display = 'block';
+              document.getElementById('yourBestTime').textContent = `#${userRankData[0].rank} | ${userRankData[0].gp_balance?.toLocaleString() || 0} GP`;
+            } else {
+              document.getElementById('yourBestSection').style.display = 'none';
+            }
           }
         } else {
           document.getElementById('yourBestSection').style.display = 'none';
         }
 
-        // Render podium (top 3)
-        renderPodium(leaderboard?.slice(0, 3) || []);
-
         // Render table
-        renderLeaderboardTable(leaderboard || [], userId);
+        renderLeaderboardTable(rankedLeaderboard, userId);
 
       } catch (e) {
         Loading.hide();
@@ -6797,89 +6797,42 @@
       }
     }
 
-    function renderPodium(topThree) {
-      const podium = document.getElementById('podium');
-      podium.innerHTML = '';
-
-      if (topThree.length === 0) {
-        podium.innerHTML = '<div class="no-data" style="grid-column: 1/-1;">No scores yet. Be the first!</div>';
-        return;
-      }
-
-      topThree.forEach((entry, index) => {
-        const rank = index + 1;
-        const playerName = entry.display_name || entry.email?.split('@')[0] || 'Unknown';
-        const date = new Date(entry.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-
-        const podiumItem = document.createElement('div');
-        podiumItem.className = `podium-item rank-${rank}`;
-        podiumItem.innerHTML = `
-          <div class="podium-rank">${rank}</div>
-          <div class="podium-player">${playerName.toUpperCase()}</div>
-          <div class="podium-time">${entry.time_ms}ms</div>
-          <div class="podium-date">${date}</div>
-        `;
-        podium.appendChild(podiumItem);
-      });
-
-      // Add empty slots if less than 3
-      for (let i = topThree.length; i < 3; i++) {
-        const podiumItem = document.createElement('div');
-        podiumItem.className = `podium-item rank-${i + 1}`;
-        podiumItem.innerHTML = `
-          <div class="podium-rank">${i + 1}</div>
-          <div class="podium-player">---</div>
-          <div class="podium-time">--ms</div>
-          <div class="podium-date">No entry</div>
-        `;
-        podium.appendChild(podiumItem);
-      }
-    }
-
     function renderLeaderboardTable(leaderboard, currentUserId) {
       const tbody = document.getElementById('leaderboardTableBody');
       tbody.innerHTML = '';
 
       if (leaderboard.length === 0) {
-        tbody.innerHTML = '<div class="no-data">No scores recorded yet</div>';
+        tbody.innerHTML = '<div class="no-data">No warriors yet. Be the first!</div>';
         return;
       }
 
       leaderboard.forEach((entry) => {
         const rank = entry.rank || '?';
-        const playerName = entry.display_name || entry.email?.split('@')[0] || 'Unknown';
-        const date = new Date(entry.created_at).toLocaleDateString('en-US', {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric'
-        });
-        const isCurrentUser = entry.user_id === currentUserId;
+        const playerName = entry.display_name || 'Unknown';
+        const gpBalance = entry.gp_balance?.toLocaleString() || '0';
+        const walletShort = entry.wallet_address ?
+          `${entry.wallet_address.substring(0, 6)}...${entry.wallet_address.substring(entry.wallet_address.length - 4)}` :
+          'No wallet';
+        const isCurrentUser = entry.id === currentUserId;
+
+        // Highlight top 3 differently
+        let rankBadgeClass = 'rank-badge';
+        if (rank === 1) rankBadgeClass += ' rank-gold';
+        else if (rank === 2) rankBadgeClass += ' rank-silver';
+        else if (rank === 3) rankBadgeClass += ' rank-bronze';
 
         const row = document.createElement('div');
         row.className = isCurrentUser ? 'table-row user-row' : 'table-row';
         row.innerHTML = `
-          <div class="rank-badge">#${rank}</div>
+          <div class="${rankBadgeClass}">#${rank}</div>
           <div class="player-name">${playerName.toUpperCase()}${isCurrentUser ? ' (YOU)' : ''}</div>
-          <div class="reaction-time">${entry.time_ms}ms</div>
-          <div class="entry-date">${date}</div>
+          <div class="reaction-time" style="color:var(--gold);font-weight:700;">${gpBalance} GP</div>
+          <div class="entry-date" style="font-family:monospace;font-size:11px;">${walletShort}</div>
         `;
         tbody.appendChild(row);
       });
     }
 
-    function handleFilterChange(filter) {
-      // Update active button
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.remove('active');
-        btn.setAttribute('aria-pressed', 'false');
-      });
-      event.target.classList.add('active');
-      event.target.setAttribute('aria-pressed', 'true');
-
-      // Reload leaderboard
-      loadLeaderboard(filter);
-    }
-    
     // Game functions
     function initChart() {
       const canvas = document.getElementById('chartCanvas');
