@@ -1,20 +1,15 @@
 <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background transparent -->
-  <rect width="512" height="512" fill="none"/>
-
-  <!-- Hexagon with gold gradient -->
-  <polygon points="256,51 461,179 461,435 256,563 51,435 51,179"
+  <!-- Hexagon with gold gradient (scaled from website logo) -->
+  <polygon points="256,25.6 460.8,140.8 460.8,371.2 256,486.4 51.2,371.2 51.2,140.8"
            fill="none"
            stroke="url(#logoGradient)"
-           stroke-width="20"
-           stroke-linecap="round"
-           stroke-linejoin="round"/>
+           stroke-width="20"/>
 
-  <!-- Red dot (left) -->
-  <circle cx="205" cy="256" r="50" fill="#ef4444"/>
+  <!-- Red dot (left) - player 1 -->
+  <circle cx="204.8" cy="256" r="51.2" fill="#ef4444"/>
 
-  <!-- Green dot (right) -->
-  <circle cx="307" cy="256" r="50" fill="#22c55e"/>
+  <!-- Green dot (right) - player 2 -->
+  <circle cx="307.2" cy="256" r="51.2" fill="#22c55e"/>
 
   <!-- Gold gradient definition -->
   <defs>
