@@ -6593,10 +6593,38 @@
 
         const walletAddress = accounts[0].toLowerCase();
 
-        // Check if this wallet is linked to an account
-        const email = localStorage.getItem(`duelpvp_email_${walletAddress}`);
+        // Check localStorage first (faster)
+        let email = localStorage.getItem(`duelpvp_email_${walletAddress}`);
+        let userData = null;
 
-        if (email) {
+        // If not in localStorage, check database
+        if (!email) {
+          const { data, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('wallet_address', walletAddress)
+            .single();
+
+          if (data && !error) {
+            email = data.email;
+            userData = data;
+            // Cache it in localStorage for next time
+            localStorage.setItem(`duelpvp_email_${walletAddress}`, email);
+          }
+        } else {
+          // Get user data from database
+          const { data, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('email', email)
+            .single();
+
+          if (data && !error) {
+            userData = data;
+          }
+        }
+
+        if (email && userData) {
           // Verify ownership with signature
           const message = `Sign in to Duel PVP\nWallet: ${walletAddress}\nTimestamp: ${Date.now()}`;
 
@@ -6605,14 +6633,20 @@
             params: [message, accounts[0]]
           });
 
-          // Login successful
-          localStorage.setItem('duelpvp_email', email);
-          const warriorName = localStorage.getItem('duelpvp_warrior');
-          if (warriorName) {
-            document.getElementById('userName').textContent = warriorName.toUpperCase();
-          }
+          // Login successful - store user info
+          localStorage.setItem('duelpvp_user_id', userData.id);
+          localStorage.setItem('duelpvp_email', userData.email);
+          localStorage.setItem('duelpvp_display_name', userData.display_name);
+          localStorage.setItem('duelpvp_warrior', userData.display_name);
+
+          document.getElementById('userName').textContent = userData.display_name.toUpperCase();
+
+          // Initialize GP cache
+          await initializeGPCache();
+          const gp = await getUserGP();
+
           Loading.hide();
-          Toast.success('Signed in successfully!', 'WELCOME BACK');
+          Toast.success(`Welcome back, ${userData.display_name}!`, `${gp} GP`);
           swapContent('dashboard');
         } else {
           Loading.hide();
@@ -6621,7 +6655,11 @@
       } catch (error) {
         Loading.hide();
         console.error('Wallet login error:', error);
-        Modal.alert('Failed to login with wallet: ' + error.message, 'Login Failed');
+        if (error.code === 4001) {
+          Toast.warning('You cancelled the signature request', 'Signature Cancelled');
+        } else {
+          Modal.alert('Failed to login with wallet: ' + error.message, 'Login Failed');
+        }
       }
     }
 
