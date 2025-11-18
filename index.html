@@ -5801,12 +5801,6 @@
           </div>
 
           <div class="input-group">
-            <label class="input-label" for="inviteCodeConfirm">Invite Code</label>
-            <input id="inviteCodeConfirm" class="input-field" type="text" placeholder="XXXX-XXXX-XXXX" value="${tempRegistrationData.inviteCode || ''}" autocomplete="off" style="text-transform:uppercase;">
-            <div class="error-msg" id="inviteCodeError"></div>
-          </div>
-
-          <div class="input-group">
             <button class="btn-submit" id="confirmNameBtn" style="width:100%;">ENTER THE ARENA</button>
           </div>
         `;
@@ -5819,10 +5813,6 @@
         document.getElementById('confirmNameBtn').addEventListener('click', handleNameWarrior);
         document.getElementById('warriorName').addEventListener('input', () => clearError('warriorNameError'));
         document.getElementById('warriorName').addEventListener('keypress', (e) => {
-          if (e.key === 'Enter') handleNameWarrior();
-        });
-        document.getElementById('inviteCodeConfirm').addEventListener('input', () => clearError('inviteCodeError'));
-        document.getElementById('inviteCodeConfirm').addEventListener('keypress', (e) => {
           if (e.key === 'Enter') handleNameWarrior();
         });
         // Auto-focus the input
@@ -6499,11 +6489,9 @@
 
     async function handleNameWarrior() {
       const warriorName = document.getElementById('warriorName').value.trim();
-      const inviteCode = document.getElementById('inviteCodeConfirm').value.trim().toUpperCase();
 
       // Clear previous errors
       clearError('warriorNameError');
-      clearError('inviteCodeError');
 
       if (!warriorName) {
         showError('warriorNameError', 'Warrior name is required');
@@ -6519,14 +6507,6 @@
         showError('warriorNameError', 'Must be 16 characters or less');
         return;
       }
-
-      if (!inviteCode) {
-        showError('inviteCodeError', 'Invite code is required');
-        return;
-      }
-
-      // Update temp registration data (code was already validated in handleJoin)
-      tempRegistrationData.inviteCode = inviteCode;
 
       Loading.show('Creating your account...');
 
