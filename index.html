@@ -4408,6 +4408,16 @@
         </div>
       </div>
 
+      <!-- Invite Code Section -->
+      <div class="campaign-earn-section" style="margin-bottom:24px;">
+        <div class="campaign-earn-title">YOUR INVITE CODE</div>
+        <div style="background:rgba(0,0,0,0.5);border:2px solid rgba(255,214,77,0.4);border-radius:12px;padding:20px;text-align:center;">
+          <div style="font-family:'Courier New',monospace;font-size:24px;color:#FFD700;letter-spacing:4px;margin-bottom:12px;" id="userInviteCode">Loading...</div>
+          <div style="font-family:'Courier New',monospace;font-size:12px;color:#aaa;margin-bottom:16px;">Share this code to invite friends (Earn 1000 GP per invite)</div>
+          <button class="action-btn" id="copyInviteCodeBtn" style="padding:12px 24px;">COPY CODE</button>
+        </div>
+      </div>
+
       <!-- About Section -->
       <div class="campaign-earn-section">
         <div class="campaign-earn-title">ABOUT</div>
@@ -5791,6 +5801,12 @@
           </div>
 
           <div class="input-group">
+            <label class="input-label" for="inviteCodeConfirm">Invite Code</label>
+            <input id="inviteCodeConfirm" class="input-field" type="text" placeholder="XXXX-XXXX-XXXX" value="${tempRegistrationData.inviteCode || ''}" autocomplete="off" style="text-transform:uppercase;">
+            <div class="error-msg" id="inviteCodeError"></div>
+          </div>
+
+          <div class="input-group">
             <button class="btn-submit" id="confirmNameBtn" style="width:100%;">ENTER THE ARENA</button>
           </div>
         `;
@@ -5803,6 +5819,10 @@
         document.getElementById('confirmNameBtn').addEventListener('click', handleNameWarrior);
         document.getElementById('warriorName').addEventListener('input', () => clearError('warriorNameError'));
         document.getElementById('warriorName').addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') handleNameWarrior();
+        });
+        document.getElementById('inviteCodeConfirm').addEventListener('input', () => clearError('inviteCodeError'));
+        document.getElementById('inviteCodeConfirm').addEventListener('keypress', (e) => {
           if (e.key === 'Enter') handleNameWarrior();
         });
         // Auto-focus the input
@@ -5924,6 +5944,8 @@
         // Force refresh GP cache and display when loading dashboard
         gpCache.lastFetch = 0;
         updateDashboardStats();
+        // Load user's invite code
+        loadUserInviteCode();
         // Also directly update GP display to ensure it shows
         (async () => {
           const gp = await getUserGP();
@@ -6458,9 +6480,11 @@
 
     async function handleNameWarrior() {
       const warriorName = document.getElementById('warriorName').value.trim();
+      const inviteCode = document.getElementById('inviteCodeConfirm').value.trim().toUpperCase();
 
       // Clear previous errors
       clearError('warriorNameError');
+      clearError('inviteCodeError');
 
       if (!warriorName) {
         showError('warriorNameError', 'Warrior name is required');
@@ -6474,6 +6498,43 @@
 
       if (warriorName.length > 16) {
         showError('warriorNameError', 'Must be 16 characters or less');
+        return;
+      }
+
+      if (!inviteCode) {
+        showError('inviteCodeError', 'Invite code is required');
+        return;
+      }
+
+      Loading.show('Validating invite code...');
+
+      // Validate invite code first
+      try {
+        const { data: validationData, error: validationError } = await supabase.rpc('validate_invite_code', {
+          p_code: inviteCode
+        });
+
+        if (validationError || !validationData || validationData.length === 0) {
+          Loading.hide();
+          showError('inviteCodeError', 'Failed to validate invite code');
+          return;
+        }
+
+        const validation = validationData[0];
+        if (!validation.valid) {
+          Loading.hide();
+          showError('inviteCodeError', validation.message || 'Invalid invite code');
+          Modal.alert(validation.message || 'This invite code is invalid or has already been used', 'Invalid Code');
+          return;
+        }
+
+        // Update temp registration data with validated code
+        tempRegistrationData.inviteCode = inviteCode;
+
+      } catch (err) {
+        Loading.hide();
+        console.error('Invite code validation error:', err);
+        showError('inviteCodeError', 'Failed to validate invite code');
         return;
       }
 
@@ -6562,6 +6623,35 @@
 
         // Set username in dashboard
         document.getElementById('userName').textContent = warriorName.toUpperCase();
+
+        // Mark invite code as used and create new user's invite code
+        try {
+          // Mark the code they used as consumed
+          const { data: markData, error: markError } = await supabase.rpc('mark_invite_code_used', {
+            p_code: tempRegistrationData.inviteCode,
+            p_used_by_user_id: userId
+          });
+
+          if (markData && markData[0]?.success) {
+            console.log('Invite code marked as used. Inviter:', markData[0].inviter_user_id);
+          }
+
+          // Generate this user's own invite code
+          const { data: codeData, error: codeError } = await supabase.rpc('create_user_invite_code', {
+            p_user_id: userId
+          });
+
+          if (codeData && codeData[0]?.success) {
+            console.log('Created invite code for new user:', codeData[0].invite_code);
+          }
+
+          // Complete first login quest
+          await updateQuestProgress('first_login');
+
+        } catch (inviteErr) {
+          console.error('Error with invite code processing:', inviteErr);
+          // Don't block registration if invite code processing fails
+        }
 
         // Initialize GP cache
         await initializeGPCache();
@@ -8854,6 +8944,31 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       }
     }
 
+    // Load and display user's invite code
+    async function loadUserInviteCode() {
+      const inviteCodeEl = document.getElementById('userInviteCode');
+      if (!inviteCodeEl) return;
+
+      try {
+        const { data, error } = await supabase.rpc('get_my_invite_code');
+
+        if (error) {
+          console.error('Error loading invite code:', error);
+          inviteCodeEl.textContent = 'Error loading';
+          return;
+        }
+
+        if (data && data.length > 0 && data[0].code) {
+          inviteCodeEl.textContent = data[0].code;
+        } else {
+          inviteCodeEl.textContent = 'No code yet';
+        }
+      } catch (err) {
+        console.error('Failed to load invite code:', err);
+        inviteCodeEl.textContent = 'Error';
+      }
+    }
+
     // Update campaign page with current stats
     async function updateCampaignPage() {
       const currentGP = await getUserGP();
@@ -9813,6 +9928,26 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     document.getElementById('startGameBtn').addEventListener('click', startGame);
     document.getElementById('sellButton').addEventListener('click', handleSell);
     document.getElementById('resetGameBtn').addEventListener('click', resetGame);
+
+    // Invite code handlers
+    document.getElementById('copyInviteCodeBtn').addEventListener('click', async () => {
+      const codeText = document.getElementById('userInviteCode').textContent;
+      if (codeText && codeText !== 'Loading...' && codeText !== 'No code') {
+        try {
+          await navigator.clipboard.writeText(codeText);
+          Toast.success('Invite code copied!', 'Share it with friends');
+        } catch (err) {
+          // Fallback for older browsers
+          const textArea = document.createElement('textarea');
+          textArea.value = codeText;
+          document.body.appendChild(textArea);
+          textArea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textArea);
+          Toast.success('Invite code copied!', 'Share it with friends');
+        }
+      }
+    });
 
     // Campaign banner and page handlers
     // DISABLED: Campaign starts 19th November
