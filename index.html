@@ -6545,10 +6545,10 @@
         // Link anonymous auth user to new user record
         if (authResult.data?.user) {
           console.log('Linking new user to auth...');
-          const linkResult = await supabase
-            .from('users')
-            .update({ auth_user_id: authResult.data.user.id })
-            .eq('id', userId);
+          const linkResult = await supabase.rpc('link_auth_to_user', {
+            p_user_id: userId,
+            p_auth_user_id: authResult.data.user.id
+          });
           console.log('Link result:', linkResult);
         }
 
@@ -6912,11 +6912,11 @@
           // Link anonymous auth user to existing user record
           if (authResult.data?.user) {
             console.log('Linking auth user to database user...');
-            const updateResult = await supabase
-              .from('users')
-              .update({ auth_user_id: authResult.data.user.id })
-              .eq('id', userData.id);
-            console.log('Link result:', updateResult);
+            const linkResult = await supabase.rpc('link_auth_to_user', {
+              p_user_id: userData.id,
+              p_auth_user_id: authResult.data.user.id
+            });
+            console.log('Link result:', linkResult);
           }
         }
 
