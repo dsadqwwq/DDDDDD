@@ -29,10 +29,10 @@ BEGIN
   END IF;
 
   -- Look up user by wallet address (bypasses RLS)
-  SELECT id, display_name, gp_balance, auth_user_id
+  SELECT u.id, u.display_name, u.gp_balance, u.auth_user_id
   INTO v_user
-  FROM users
-  WHERE wallet_address = LOWER(p_wallet_address);
+  FROM users u
+  WHERE u.wallet_address = LOWER(p_wallet_address);
 
   IF NOT FOUND THEN
     RETURN QUERY SELECT false, 'Wallet not registered', null::uuid, null::text, null::bigint, null::uuid;
