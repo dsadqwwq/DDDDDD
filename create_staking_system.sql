@@ -87,8 +87,8 @@ BEGIN
   WHERE id = v_user_id;
 
   -- Log transaction
-  INSERT INTO gp_transactions (user_id, amount, transaction_type, game_type)
-  VALUES (v_user_id, -p_amount, 'stake_deposit', 'staking');
+  INSERT INTO gp_transactions (user_id, amount, balance_before, balance_after, transaction_type, game_type)
+  VALUES (v_user_id, -p_amount, v_user_balance, v_user_balance - p_amount, 'stake_deposit', 'staking');
 
   -- Get existing stake and compound it first
   SELECT principal, last_compound_time
@@ -139,6 +139,7 @@ DECLARE
   v_principal bigint;
   v_last_compound timestamptz;
   v_current_value bigint;
+  v_balance_before bigint;
 BEGIN
   -- Get authenticated user
   v_auth_user_id := auth.uid();
@@ -147,8 +148,8 @@ BEGIN
     RETURN;
   END IF;
 
-  -- Get user ID
-  SELECT id INTO v_user_id
+  -- Get user ID and current balance
+  SELECT id, gp_balance INTO v_user_id, v_balance_before
   FROM users
   WHERE auth_user_id = v_auth_user_id;
 
@@ -178,8 +179,8 @@ BEGIN
   WHERE id = v_user_id;
 
   -- Log transaction
-  INSERT INTO gp_transactions (user_id, amount, transaction_type, game_type)
-  VALUES (v_user_id, v_current_value, 'stake_withdraw', 'staking');
+  INSERT INTO gp_transactions (user_id, amount, balance_before, balance_after, transaction_type, game_type)
+  VALUES (v_user_id, v_current_value, v_balance_before, v_balance_before + v_current_value, 'stake_withdraw', 'staking');
 
   -- Delete stake
   DELETE FROM staking WHERE user_id = v_user_id;
