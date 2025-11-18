@@ -6540,6 +6540,15 @@
         });
         console.log('Registration auth result:', authResult);
 
+        // Explicitly set the session to ensure client uses it immediately for all requests
+        if (authResult.data?.session) {
+          await supabase.auth.setSession({
+            access_token: authResult.data.session.access_token,
+            refresh_token: authResult.data.session.refresh_token
+          });
+          console.log('Registration session explicitly set on Supabase client');
+        }
+
         if (authResult.error) {
           console.error('Failed to create auth session:', authResult.error);
           Loading.hide();
@@ -6950,6 +6959,15 @@
             }
           });
           console.log('Anonymous auth result:', authResult);
+
+          // Explicitly set the session to ensure client uses it immediately for all requests
+          if (authResult.data?.session) {
+            await supabase.auth.setSession({
+              access_token: authResult.data.session.access_token,
+              refresh_token: authResult.data.session.refresh_token
+            });
+            console.log('Session explicitly set on Supabase client');
+          }
 
           // Link anonymous auth user to existing user record
           if (authResult.data?.user) {
