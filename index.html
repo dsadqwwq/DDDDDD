@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Duel PVP – Enter the Arena</title>
-<link rel="icon" type="image/png" href="assets/logo-pvp.png">
-<link rel="apple-touch-icon" href="assets/logo-pvp.png">
+<link rel="icon" type="image/svg+xml" href="duelpvp-logo.svg">
+<link rel="apple-touch-icon" href="duelpvp-logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -4487,16 +4487,6 @@
         <span class="breadcrumb-item active">Campaign</span>
       </div>
 
-      <!-- Player Stats Section -->
-      <div class="campaign-stats-section">
-        <div class="campaign-stat-card" style="max-width:400px;margin:0 auto;">
-          <div class="campaign-stat-info">
-            <div class="campaign-stat-label">TOTAL GP</div>
-            <div class="campaign-stat-value" id="campaignTotalGP">0</div>
-          </div>
-        </div>
-      </div>
-
       <!-- Progress Section -->
       <div class="campaign-progress-section">
         <div class="campaign-progress-header">
@@ -8884,12 +8874,6 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     // Update campaign page with current stats
     async function updateCampaignPage() {
       const currentGP = await getUserGP();
-
-      // Update total GP
-      const totalGPEl = document.getElementById('campaignTotalGP');
-      if (totalGPEl) {
-        totalGPEl.textContent = currentGP.toLocaleString();
-      }
 
       // Update current GP on page
       const currentGPPageEl = document.getElementById('campaignCurrentGPPage');
