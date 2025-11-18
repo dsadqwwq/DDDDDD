@@ -8408,7 +8408,9 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
 
     // Helper functions for GP
     async function getUserGP() {
-      const userId = localStorage.getItem('duelpvp_user_id');
+      // Get user ID from session or old localStorage format
+      const session = getSession();
+      const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
 
       // Fallback to localStorage for test mode
       if (!userId || userId.startsWith('test-')) {
@@ -8600,7 +8602,9 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
 
     // Initialize GP cache on login/page load
     async function initializeGPCache() {
-      const userId = localStorage.getItem('duelpvp_user_id');
+      // Get user ID from session or old localStorage format
+      const session = getSession();
+      const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
       if (userId && !userId.startsWith('test-')) {
         await getUserGP(); // This will populate the cache
       }
