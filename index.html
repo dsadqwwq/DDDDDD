@@ -6793,7 +6793,9 @@
     // Dashboard stats update
     async function updateDashboardStats() {
       try {
-        const userId = localStorage.getItem('duelpvp_user_id');
+        // Get user ID from session or old localStorage format
+        const session = getSession();
+        const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
 
         if (!userId) return;
 
@@ -7500,8 +7502,8 @@
       startCrashRound();
     }
 
-    function updateCrashGPDisplay() {
-      const gp = parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+    async function updateCrashGPDisplay() {
+      const gp = await getUserGP();
       document.getElementById('crashGPDisplay').textContent = gp;
       document.getElementById('crashCurrentBet').textContent = crashGameState.betAmount;
 
@@ -7705,7 +7707,7 @@
       }, 2000); // Reduced from 3000ms to 2000ms
     }
 
-    function placeCrashBet() {
+    async function placeCrashBet() {
       if (crashGameState.phase !== 'waiting') {
         Toast.error('Wait for next round', 'TOO LATE');
         return;
@@ -7716,7 +7718,7 @@
       const autoCashoutInput = document.getElementById('crashAutoCashout');
       const autoCashout = parseFloat(autoCashoutInput.value) || 0;
 
-      const gp = parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+      const gp = await getUserGP();
 
       if (isNaN(betAmount) || betAmount < 10) {
         Toast.error('Minimum bet is 10 GP', 'INVALID BET');
@@ -7734,7 +7736,7 @@
       }
 
       // Deduct bet from balance
-      localStorage.setItem('duelpvp_gp', (gp - betAmount).toString());
+      await updateUserGP(-betAmount);
       crashGameState.betAmount = betAmount;
       crashGameState.autoCashout = autoCashout;
       crashGameState.hashedIn = true;
@@ -9049,15 +9051,15 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       }
     }
 
-    function updateMinesGPDisplay() {
-      const gp = getUserGP();
+    async function updateMinesGPDisplay() {
+      const gp = await getUserGP();
       document.getElementById('minesGPDisplay').textContent = gp;
     }
 
     async function startMinesGame() {
       const betAmount = parseInt(document.getElementById('minesBetAmount').value);
       const minesCount = parseInt(document.getElementById('minesCount').value);
-      const userGP = getUserGP();
+      const userGP = await getUserGP();
 
       // Validation
       if (isNaN(betAmount) || betAmount < 10) {
@@ -9302,22 +9304,22 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       return cardDiv;
     }
 
-    function updateBlackjackGPDisplay() {
-      const gp = getUserGP();
+    async function updateBlackjackGPDisplay() {
+      const gp = await getUserGP();
       document.getElementById('blackjackGPDisplay').textContent = gp;
       if (blackjackGameState && blackjackGameState.betAmount) {
         document.getElementById('blackjackCurrentBet').textContent = blackjackGameState.betAmount + ' GP';
       }
     }
 
-    function initBlackjack() {
-      const gp = getUserGP();
+    async function initBlackjack() {
+      const gp = await getUserGP();
       document.getElementById('blackjackGPDisplay').textContent = gp;
     }
 
     async function dealBlackjack() {
       const betAmount = parseInt(document.getElementById('blackjackBetAmount').value);
-      const userGP = getUserGP();
+      const userGP = await getUserGP();
 
       // Validation
       if (isNaN(betAmount) || betAmount < 10) {
