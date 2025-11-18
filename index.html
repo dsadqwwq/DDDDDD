@@ -1227,15 +1227,15 @@
     border-radius:12px;
     padding:20px 24px;
     margin-bottom:24px;
-    cursor:pointer;
+    cursor:not-allowed;
+    opacity:0.7;
     transition:all 0.3s ease;
     box-shadow:0 4px 20px rgba(255,215,0,0.15);
   }
 
+  /* Disabled - campaign not started yet */
   .campaign-banner:hover{
-    border-color:rgba(255,215,0,0.6);
-    box-shadow:0 6px 30px rgba(255,215,0,0.25);
-    transform:translateY(-2px);
+    /* No hover effect */
   }
 
   .campaign-banner-header{
@@ -9822,7 +9822,8 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     document.getElementById('resetGameBtn').addEventListener('click', resetGame);
 
     // Campaign banner and page handlers
-    document.getElementById('campaignBanner').addEventListener('click', () => swapContent('campaign'));
+    // DISABLED: Campaign starts 19th November
+    // document.getElementById('campaignBanner').addEventListener('click', () => swapContent('campaign'));
     document.getElementById('backFromCampaignBtn').addEventListener('click', () => swapContent('dashboard'));
 
     // Leaderboard filter buttons
