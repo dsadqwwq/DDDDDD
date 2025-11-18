@@ -6222,22 +6222,31 @@
       // Validate code exists in database and is unused
       Loading.show('Validating access code...');
 
-      const { data: codeData, error: codeError } = await supabase
-        .from('codes')
-        .select('*')
-        .eq('code', code)
-        .is('used_by', null)
-        .single();
+      try {
+        const { data: validationData, error: validationError } = await supabase.rpc('validate_invite_code', {
+          p_code: code
+        });
 
-      Loading.hide();
+        Loading.hide();
 
-      if (codeError || !codeData) {
-        showError('codeError', 'Invalid or already used access code');
-        return;
+        if (validationError || !validationData || validationData.length === 0) {
+          showError('codeError', 'Failed to validate code');
+          return;
+        }
+
+        const validation = validationData[0];
+        if (!validation.valid) {
+          showError('codeError', validation.message || 'Invalid or already used code');
+          return;
+        }
+
+        // Code is valid, proceed to wallet connect
+        swapContent('walletConnect', code);
+      } catch (err) {
+        Loading.hide();
+        console.error('Code validation error:', err);
+        showError('codeError', 'Failed to validate code');
       }
-
-      // Code is valid, proceed to wallet connect
-      swapContent('walletConnect', code);
     }
 
     async function handleWalletConnectForRegistration() {
@@ -6428,17 +6437,27 @@
       // Check if invite code exists and is unused
       Loading.show('Validating invite code...');
 
-      const { data: codeData, error: codeError } = await supabase
-        .from('codes')
-        .select('*')
-        .eq('code', code)
-        .is('used_by', null)
-        .single();
+      try {
+        const { data: validationData, error: validationError } = await supabase.rpc('validate_invite_code', {
+          p_code: code
+        });
 
-      Loading.hide();
+        Loading.hide();
 
-      if (codeError || !codeData) {
-        showError('codeError', 'Invalid or already used invite code');
+        if (validationError || !validationData || validationData.length === 0) {
+          showError('codeError', 'Failed to validate code');
+          return;
+        }
+
+        const validation = validationData[0];
+        if (!validation.valid) {
+          showError('codeError', validation.message || 'Invalid or already used code');
+          return;
+        }
+      } catch (err) {
+        Loading.hide();
+        console.error('Code validation error:', err);
+        showError('codeError', 'Failed to validate code');
         return;
       }
 
@@ -7178,17 +7197,18 @@
       // Get inventory from localStorage (for now - can be migrated to Supabase later)
       const inventory = JSON.parse(localStorage.getItem(`duelpvp_inventory_${email}`) || '[]');
 
-      // Get user's invite codes from Supabase
+      // Get user's invite code from Supabase (now only one code per user)
       let inviteCodes = [];
       if (userId) {
-        const { data } = await supabase
-          .from('codes')
-          .select('*')
-          .eq('created_by', userId)
-          .order('created_at', { ascending: false })
-          .limit(4);
-
-        inviteCodes = data || [];
+        const { data } = await supabase.rpc('get_my_invite_code');
+        // Convert to array format for compatibility with existing display code
+        if (data && data.length > 0 && data[0].code) {
+          inviteCodes = [{
+            code: data[0].code,
+            used: data[0].used,
+            uses_remaining: data[0].uses_remaining
+          }];
+        }
       }
 
       // Combine inventory items and codes
@@ -8539,12 +8559,15 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       // Get inventory from localStorage (for now)
       const inventory = JSON.parse(localStorage.getItem(`duelpvp_inventory_${email}`) || '[]');
 
-      // Get invite codes from Supabase
-      const { data: inviteCodes } = await supabase
-        .from('codes')
-        .select('*')
-        .eq('created_by', userId)
-        .order('used_at', { ascending: true, nullsFirst: false });
+      // Get user's invite code from Supabase (now only one code per user)
+      const { data: inviteCodeData } = await supabase.rpc('get_my_invite_code');
+      const inviteCodes = inviteCodeData && inviteCodeData.length > 0 && inviteCodeData[0].code
+        ? [{
+            code: inviteCodeData[0].code,
+            used_by: inviteCodeData[0].used ? 'Used' : null,
+            used_at: null
+          }]
+        : [];
 
       // Update GP display
       document.getElementById('gpDisplay').textContent = `GP: ${gp.toLocaleString()}`;
