@@ -9516,10 +9516,16 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     document.getElementById('joinBtn').addEventListener('click', handleJoin);
     document.getElementById('loginLink').addEventListener('click', () => swapContent('login'));
     document.getElementById('logoutBtn').addEventListener('click', handleLogout);
-    document.getElementById('playReactionBtn').addEventListener('click', () => {
-      console.log('Play Reaction clicked');
-      swapContent('game');
-    });
+
+    // Only add listener if button exists (Trading Sim is disabled)
+    const playReactionBtn = document.getElementById('playReactionBtn');
+    if (playReactionBtn) {
+      playReactionBtn.addEventListener('click', () => {
+        console.log('Play Reaction clicked');
+        swapContent('game');
+      });
+    }
+
     document.getElementById('playCrashBtn').addEventListener('click', () => {
       console.log('Play Crash clicked');
       swapContent('crash');
