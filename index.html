@@ -6558,6 +6558,18 @@
           console.log('Link result:', linkResult);
         }
 
+        // Verify session is active
+        console.log('Verifying registration session...');
+        const { data: { session: verifySession } } = await supabase.auth.getSession();
+        console.log('Registration session:', verifySession ? 'Active' : 'None');
+
+        if (!verifySession) {
+          Loading.hide();
+          Modal.alert('Registration complete but session failed. Please login with your wallet.', 'Warning');
+          swapContent('home');
+          return;
+        }
+
         // Create session (Blur-style)
         createSession(userId, tempRegistrationData.walletAddress, warriorName);
 
@@ -6961,6 +6973,18 @@
           console.error('No auth user created');
           Loading.hide();
           Modal.alert('Failed to create auth session. Please check browser console.', 'Authentication Error');
+          return;
+        }
+
+        // Verify session is active and client is using it
+        console.log('Verifying session is active...');
+        const { data: { session: verifySession } } = await supabase.auth.getSession();
+        console.log('Session verification:', verifySession ? 'Active' : 'None');
+
+        if (!verifySession) {
+          console.error('Session not active after creation');
+          Loading.hide();
+          Modal.alert('Session creation failed. Please try again.', 'Authentication Error');
           return;
         }
 
