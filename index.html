@@ -4644,7 +4644,10 @@
     <div class="inventory-container" id="inventoryContent" role="region" aria-label="Inventory">
       <div class="inventory-header">
         <div class="inventory-title">INVENTORY</div>
-        <button class="back-btn" id="backFromInventoryBtn" aria-label="Back to dashboard">BACK</button>
+        <div>
+          <div class="gp-display" id="gpDisplay">GP: 0</div>
+          <button class="back-btn" id="backFromInventoryBtn" aria-label="Back to dashboard" style="margin-top:8px;">BACK</button>
+        </div>
       </div>
 
       <!-- Breadcrumb -->
@@ -8520,6 +8523,11 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     async function loadInventory() {
       const userId = localStorage.getItem('duelpvp_user_id');
       const email = localStorage.getItem('duelpvp_email') || 'anonymous';
+
+      if (!userId) {
+        console.warn('No user ID found, skipping inventory load');
+        return;
+      }
 
       // Get user data from Supabase
       const { data: userData } = await supabase
