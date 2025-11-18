@@ -6450,6 +6450,25 @@
 
         const userId = data[0].user_id;
 
+        // Create anonymous Supabase Auth session
+        const authResult = await supabase.auth.signInAnonymously({
+          options: {
+            data: {
+              wallet_address: tempRegistrationData.walletAddress,
+              display_name: warriorName,
+              user_id: userId
+            }
+          }
+        });
+
+        // Link anonymous auth user to new user record
+        if (authResult.data.user) {
+          await supabase
+            .from('users')
+            .update({ auth_user_id: authResult.data.user.id })
+            .eq('id', userId);
+        }
+
         // Create session (Blur-style)
         createSession(userId, tempRegistrationData.walletAddress, warriorName);
 
@@ -6773,25 +6792,22 @@
           params: [message, accounts[0]]
         });
 
-        // Create Supabase Auth session using wallet address as identifier
-        // Use first 16 chars of wallet address (without 0x) for shorter email
-        const walletHash = walletAddress.substring(2, 18);
-        const walletEmail = `w-${walletHash}@duelpvp.app`;
-        const walletPassword = signature.substring(0, 32); // Use part of signature as password
-
+        // Create Supabase Auth session using anonymous authentication
         Loading.show('Creating secure session...');
 
-        // Try to sign in with existing auth account
-        let authResult = await supabase.auth.signInWithPassword({
-          email: walletEmail,
-          password: walletPassword
-        });
+        // Check if user already has an auth session linked
+        let authResult;
+        if (userData.auth_user_id) {
+          // Try to get existing session (may have been created before)
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session && session.user.id === userData.auth_user_id) {
+            authResult = { data: { user: session.user }, error: null };
+          }
+        }
 
-        // If no auth account exists, create one
-        if (authResult.error && authResult.error.message.includes('Invalid')) {
-          authResult = await supabase.auth.signUp({
-            email: walletEmail,
-            password: walletPassword,
+        // If no existing session, create new anonymous auth session
+        if (!authResult || authResult.error) {
+          authResult = await supabase.auth.signInAnonymously({
             options: {
               data: {
                 wallet_address: walletAddress,
@@ -6801,7 +6817,7 @@
             }
           });
 
-          // Link auth user to existing user record
+          // Link anonymous auth user to existing user record
           if (authResult.data.user) {
             await supabase
               .from('users')
