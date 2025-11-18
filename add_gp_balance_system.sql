@@ -21,7 +21,10 @@ UPDATE users SET gp_balance = 1000 WHERE gp_balance IS NULL OR gp_balance = 0;
 
 CREATE OR REPLACE FUNCTION update_user_gp(
   p_user_id uuid,
-  p_amount bigint
+  p_amount bigint,
+  p_transaction_type text DEFAULT 'general',
+  p_game_type text DEFAULT null,
+  p_reference_id uuid DEFAULT null
 )
 RETURNS TABLE(new_balance bigint, success boolean, message text)
 LANGUAGE plpgsql
@@ -57,6 +60,28 @@ BEGIN
   SET gp_balance = v_new_balance,
       updated_at = now()
   WHERE id = p_user_id;
+
+  -- Log transaction if gp_transactions table exists
+  -- This ensures backwards compatibility if table hasn't been created yet
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'gp_transactions') THEN
+    INSERT INTO gp_transactions (
+      user_id,
+      amount,
+      balance_before,
+      balance_after,
+      transaction_type,
+      game_type,
+      reference_id
+    ) VALUES (
+      p_user_id,
+      p_amount,
+      v_current_balance,
+      v_new_balance,
+      p_transaction_type,
+      p_game_type,
+      p_reference_id
+    );
+  END IF;
 
   -- Return success
   RETURN QUERY SELECT v_new_balance, true, 'Balance updated';
@@ -139,7 +164,7 @@ BEGIN
 
   -- Deduct bet amount (this prevents cheating - server validates balance)
   SELECT * INTO v_update_result
-  FROM update_user_gp(p_user_id, -p_bet_amount);
+  FROM update_user_gp(p_user_id, -p_bet_amount, 'game_bet', 'mines');
 
   IF NOT v_update_result.success THEN
     RETURN QUERY SELECT null::uuid, false, v_update_result.message, 0::bigint;
@@ -293,7 +318,7 @@ BEGIN
 
   -- Add winnings to user balance
   SELECT * INTO v_update_result
-  FROM update_user_gp(v_game.user_id, v_payout);
+  FROM update_user_gp(v_game.user_id, v_payout, 'game_win', 'mines', p_game_id);
 
   -- Update game status
   UPDATE mines_games

@@ -48,7 +48,7 @@ BEGIN
 
   -- Deduct from user balance
   SELECT * INTO v_update_result
-  FROM update_user_gp(p_user_id, -p_amount);
+  FROM update_user_gp(p_user_id, -p_amount, 'staking_deposit');
 
   IF NOT v_update_result.success THEN
     RETURN QUERY SELECT false, v_update_result.message, 0::bigint, 0::bigint;
@@ -260,7 +260,7 @@ BEGIN
 
   -- Add to user balance
   SELECT * INTO v_update_result
-  FROM update_user_gp(p_user_id, v_final_value);
+  FROM update_user_gp(p_user_id, v_final_value, 'staking_withdrawal');
 
   IF NOT v_update_result.success THEN
     RETURN QUERY SELECT false, 'Failed to credit GP', 0::bigint, 0::bigint;
