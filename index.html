@@ -4787,8 +4787,8 @@
 
       <!-- Info box -->
       <div class="oven-info">
-        <strong>10% Hourly Compound Interest</strong><br>
-        Your investment grows automatically every hour. Withdraw anytime.
+        <strong>10% Hourly Compound Interest (Continuous)</strong><br>
+        Your investment compounds every second at 10% per hour. Watch it grow in real-time! Withdraw anytime.
       </div>
 
       <!-- Disclaimer for Oven -->
@@ -8884,140 +8884,64 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       }
     }
 
-    let ovenState = {
-      invested: 0,
-      lastCompoundTime: null,
-      timerInterval: null
-    };
+    // ===============================================
+    // SERVER-SIDE STAKING SYSTEM (OVEN)
+    // ===============================================
+    let ovenUpdateInterval = null;
 
-    function loadOvenState() {
-      try {
-        const saved = localStorage.getItem('duelpvp_oven');
-        if (saved) {
-          const data = JSON.parse(saved);
-          ovenState.invested = data.invested || 0;
-          ovenState.lastCompoundTime = data.lastCompoundTime ? new Date(data.lastCompoundTime) : null;
-
-          // Calculate missed compounds
-          if (ovenState.lastCompoundTime && ovenState.invested > 0) {
-            const now = new Date();
-            const hoursPassed = (now - new Date(ovenState.lastCompoundTime)) / (1000 * 60 * 60);
-            const fullHours = Math.floor(hoursPassed);
-
-            if (fullHours > 0) {
-              // Apply missed compounds (10% per hour)
-              for (let i = 0; i < fullHours; i++) {
-                ovenState.invested *= 1.10;
-              }
-              ovenState.lastCompoundTime = new Date(ovenState.lastCompoundTime.getTime() + fullHours * 60 * 60 * 1000);
-              saveOvenState();
-            }
-          }
-        }
-      } catch (e) {
-        console.error('Error loading oven state:', e);
-      }
+    async function initOven() {
+      await updateOvenDisplay();
+      startOvenAutoUpdate();
     }
 
-    function saveOvenState() {
+    async function updateOvenDisplay() {
       try {
-        localStorage.setItem('duelpvp_oven', JSON.stringify({
-          invested: ovenState.invested,
-          lastCompoundTime: ovenState.lastCompoundTime
-        }));
-      } catch (e) {
-        console.error('Error saving oven state:', e);
-      }
-    }
-
-    function initOven() {
-      loadOvenState();
-      updateOvenDisplay();
-      startOvenTimer();
-    }
-
-    function updateOvenDisplay() {
-      try {
-        const userGP = getUserGP();
+        // Get user balance
+        const userGP = await getUserGP();
         const balanceEl = document.getElementById('ovenUserBalance');
-        const investedEl = document.getElementById('ovenInvested');
-        const valueEl = document.getElementById('ovenCurrentValue');
+        if (balanceEl) balanceEl.textContent = Math.floor(userGP).toLocaleString() + ' GP';
 
-        if (balanceEl) balanceEl.textContent = Math.floor(userGP) + ' GP';
-        if (investedEl) investedEl.textContent = Math.floor(ovenState.invested) + ' GP';
-        if (valueEl) valueEl.textContent = Math.floor(ovenState.invested) + ' GP';
+        // Get staking info from server
+        const { data, error } = await supabase.rpc('get_stake_value');
+
+        if (error) {
+          console.error('Failed to get stake value:', error);
+          document.getElementById('ovenInvested').textContent = '0 GP';
+          document.getElementById('ovenCurrentValue').textContent = '0 GP';
+          document.getElementById('ovenTimer').textContent = 'No active investment';
+          return;
+        }
+
+        const principal = data?.principal || 0;
+        const currentValue = data?.current_value || 0;
+        const profit = data?.profit || 0;
+        const apy = data?.apy || 0;
+
+        // Update display
+        document.getElementById('ovenInvested').textContent = principal.toLocaleString() + ' GP';
+        document.getElementById('ovenCurrentValue').textContent = currentValue.toLocaleString() + ' GP';
+
+        if (principal > 0) {
+          // Show APY and profit
+          document.getElementById('ovenTimer').textContent =
+            `Profit: +${profit.toLocaleString()} GP | APY: ${apy > 1000000 ? '>1,000,000' : apy.toLocaleString()}%`;
+        } else {
+          document.getElementById('ovenTimer').textContent = 'No active investment';
+        }
       } catch (e) {
         console.error('Error updating oven display:', e);
       }
     }
 
-    function startOvenTimer() {
-      // Clear existing timer
-      if (ovenState.timerInterval) {
-        clearInterval(ovenState.timerInterval);
+    function startOvenAutoUpdate() {
+      // Clear existing interval
+      if (ovenUpdateInterval) {
+        clearInterval(ovenUpdateInterval);
       }
 
-      const timerEl = document.getElementById('ovenTimer');
-      if (!timerEl) {
-        console.error('Timer element not found');
-        return;
-      }
-
-      if (ovenState.invested <= 0) {
-        timerEl.textContent = 'No active investment';
-        return;
-      }
-
-      // Set initial compound time if not set
-      if (!ovenState.lastCompoundTime) {
-        ovenState.lastCompoundTime = new Date();
-        saveOvenState();
-      }
-
-      // Update timer every second
-      ovenState.timerInterval = setInterval(() => {
-        const now = new Date();
-        const nextCompound = new Date(ovenState.lastCompoundTime.getTime() + 60 * 60 * 1000);
-        const timeLeft = nextCompound - now;
-
-        if (timeLeft <= 0) {
-          // Time to compound!
-          applyCompound();
-        } else {
-          const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-          const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-          const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-
-          const timer = document.getElementById('ovenTimer');
-          if (timer) {
-            timer.textContent = `Next compound in: ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-          }
-        }
-      }, 1000);
-    }
-
-    function applyCompound() {
-      if (ovenState.invested <= 0) return;
-
-      // Apply 10% compound
-      const oldValue = ovenState.invested;
-      ovenState.invested *= 1.10;
-      const profit = ovenState.invested - oldValue;
-      ovenState.lastCompoundTime = new Date();
-
-      saveOvenState();
-      updateOvenDisplay();
-
-      // Show notification
-      const timer = document.getElementById('ovenTimer');
-      if (timer) {
-        timer.textContent = ` COMPOUNDED! +${Math.floor(profit)} GP`;
-      }
-
-      Toast.success(`Oven compounded! +${Math.floor(profit)} GP`, 'COMPOUND');
-
-      setTimeout(() => {
-        startOvenTimer();
+      // Update display every 2 seconds to show live compounding
+      ovenUpdateInterval = setInterval(async () => {
+        await updateOvenDisplay();
       }, 2000);
     }
 
@@ -9029,70 +8953,96 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
         return;
       }
 
-      // Properly await getUserGP
-      const userGP = await getUserGP();
-      if (amount > userGP) {
-        Toast.error('Insufficient balance', 'INSUFFICIENT FUNDS');
-        return;
+      Loading.show();
+
+      try {
+        // Call server-side deposit function
+        const { data, error } = await supabase.rpc('stake_deposit', {
+          p_amount: amount
+        });
+
+        Loading.hide();
+
+        if (error) {
+          console.error('Deposit error:', error);
+          Toast.error('Failed to deposit: ' + error.message, 'ERROR');
+          return;
+        }
+
+        if (!data.success) {
+          Toast.error(data.message, 'DEPOSIT FAILED');
+          return;
+        }
+
+        // Success!
+        document.getElementById('ovenDepositAmount').value = '';
+        Toast.success(`Deposited ${amount.toLocaleString()} GP to staking!`, 'DEPOSIT');
+
+        // Refresh display and GP cache
+        gpCache.lastFetch = 0;
+        await updateOvenDisplay();
+
+      } catch (e) {
+        Loading.hide();
+        console.error('Deposit exception:', e);
+        Toast.error('An error occurred during deposit', 'ERROR');
       }
-
-      // Deduct from user balance and CHECK if it succeeded
-      const newBalance = await updateUserGP(-amount, 'staking');
-
-      // If balance didn't change (transaction failed), stop here
-      if (newBalance === userGP) {
-        // updateUserGP already showed an error toast
-        return;
-      }
-
-      // Add to invested
-      ovenState.invested += amount;
-
-      // Set compound time if first deposit
-      if (!ovenState.lastCompoundTime) {
-        ovenState.lastCompoundTime = new Date();
-      }
-
-      saveOvenState();
-      updateOvenDisplay();
-      startOvenTimer();
-
-      document.getElementById('ovenDepositAmount').value = '';
-      Toast.success(`Deposited ${amount} GP to the Oven!`, 'DEPOSIT');
     }
 
     async function withdrawFromOven() {
-      if (ovenState.invested <= 0) {
-        Toast.error('No investment to withdraw', 'NO INVESTMENT');
-        return;
+      Loading.show();
+
+      try {
+        // Get current value first
+        const { data: valueData } = await supabase.rpc('get_stake_value');
+
+        const currentValue = valueData?.current_value || 0;
+
+        if (currentValue <= 0) {
+          Loading.hide();
+          Toast.error('No investment to withdraw', 'NO INVESTMENT');
+          return;
+        }
+
+        Loading.hide();
+
+        // Confirm withdrawal
+        const confirmed = await Modal.confirm(
+          `Withdraw ${currentValue.toLocaleString()} GP from staking?`,
+          'Confirm Withdrawal'
+        );
+        if (!confirmed) return;
+
+        Loading.show();
+
+        // Call server-side withdraw function
+        const { data, error } = await supabase.rpc('stake_withdraw');
+
+        Loading.hide();
+
+        if (error) {
+          console.error('Withdraw error:', error);
+          Toast.error('Failed to withdraw: ' + error.message, 'ERROR');
+          return;
+        }
+
+        if (!data.success) {
+          Toast.error(data.message, 'WITHDRAW FAILED');
+          return;
+        }
+
+        // Success!
+        Toast.success(`Withdrawn ${data.amount_withdrawn.toLocaleString()} GP!`, 'WITHDRAW');
+
+        // Refresh display and GP cache
+        gpCache.lastFetch = 0;
+        await updateOvenDisplay();
+
+      } catch (e) {
+        Loading.hide();
+        console.error('Withdraw exception:', e);
+        Toast.error('An error occurred during withdrawal', 'ERROR');
       }
-
-      const amount = Math.floor(ovenState.invested);
-
-      // Confirm withdrawal
-      const confirmed = await Modal.confirm(
-        `Withdraw ${amount.toLocaleString()} GP from the Oven?`,
-        'Confirm Withdrawal'
-      );
-      if (!confirmed) return;
-
-      // Add to user balance
-      await updateUserGP(amount, 'farm');
-
-      // Reset oven
-      ovenState.invested = 0;
-      ovenState.lastCompoundTime = null;
-
-      // Clear timer
-      if (ovenState.timerInterval) clearInterval(ovenState.timerInterval);
-
-      saveOvenState();
-      updateOvenDisplay();
-
-      const timer = document.getElementById('ovenTimer');
-      if (timer) timer.textContent = 'No active investment';
-
-      Toast.success(`Withdrawn ${amount} GP from the Oven!`, 'WITHDRAW');
     }
 
     // ===============================================
