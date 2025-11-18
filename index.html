@@ -6031,7 +6031,10 @@
         minesContent.style.display = 'block';
         blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
-        initMinesGame();
+        // Only init grid if not currently playing
+        if (!minesGameState.isPlaying) {
+          initMinesGame();
+        }
         updateMinesGPDisplay();
 
       } else if (newContent === 'blackjack') {
