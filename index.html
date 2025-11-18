@@ -4365,7 +4365,7 @@
         <div style="display:flex;align-items:center;gap:20px;">
           <div class="stat-card" style="margin:0;padding:8px 16px;">
             <div class="stat-label" style="font-size:10px;">RANK</div>
-            <div class="stat-value" style="font-size:16px;">#127</div>
+            <div class="stat-value" style="font-size:16px;" id="dashboardRank">--</div>
           </div>
           <div class="stat-card" style="margin:0;padding:8px 16px;">
             <div class="stat-label" style="font-size:10px;">GP BALANCE</div>
@@ -7119,9 +7119,7 @@
         const totalGP = userData?.points || 0;
 
         // Update UI
-        document.querySelector('.stat-card:nth-child(1) .stat-value').textContent = totalWins;
-        document.querySelector('.stat-card:nth-child(2) .stat-value').textContent = streak;
-        document.querySelector('.stat-card:nth-child(3) .stat-value').textContent = userRank > 0 ? `#${userRank}` : '--';
+        document.getElementById('dashboardRank').textContent = userRank > 0 ? `#${userRank}` : '--';
 
         // Update GP using secure getUserGP function (supports both database and localStorage)
         const displayGP = await getUserGP();
@@ -8626,7 +8624,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
 
     function buyItem(item) {
       const email = localStorage.getItem('duelpvp_email') || 'anonymous';
-      let gp = parseInt(localStorage.getItem(`duelpvp_gp_${email}`) || '0');
+      let gp = parseInt(localStorage.getItem('duelpvp_gp') || '0');
       let inventory = JSON.parse(localStorage.getItem(`duelpvp_inventory_${email}`) || '[]');
 
       if (gp < item.price) {
@@ -8642,7 +8640,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
 
       // Deduct GP
       gp -= item.price;
-      localStorage.setItem(`duelpvp_gp_${email}`, gp.toString());
+      localStorage.setItem('duelpvp_gp', gp.toString());
 
       // Add to inventory
       if (item.type === 'consumable') {
