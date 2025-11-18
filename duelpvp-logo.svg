@@ -5,11 +5,11 @@
            stroke="url(#logoGradient)"
            stroke-width="20"/>
 
-  <!-- Red dot (left) - player 1 -->
-  <circle cx="204.8" cy="256" r="51.2" fill="#ef4444"/>
+  <!-- Green dot (left) - player 1 -->
+  <circle cx="204.8" cy="256" r="51.2" fill="#22c55e"/>
 
-  <!-- Green dot (right) - player 2 -->
-  <circle cx="307.2" cy="256" r="51.2" fill="#22c55e"/>
+  <!-- Red dot (right) - player 2 -->
+  <circle cx="307.2" cy="256" r="51.2" fill="#ef4444"/>
 
   <!-- Gold gradient definition -->
   <defs>
