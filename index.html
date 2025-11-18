@@ -6213,20 +6213,21 @@
       Loading.show('Validating access code...');
 
       try {
-        const { data: validationData, error: validationError } = await supabase.rpc('validate_invite_code', {
-          p_code: code
-        });
+        const { data: codeData, error: codeError } = await supabase
+          .from('codes')
+          .select('code, used_by')
+          .eq('code', code.toUpperCase().trim())
+          .single();
 
         Loading.hide();
 
-        if (validationError || !validationData || validationData.length === 0) {
-          showError('codeError', 'Failed to validate code');
+        if (codeError || !codeData) {
+          showError('codeError', 'Invalid invite code');
           return;
         }
 
-        const validation = validationData[0];
-        if (!validation.valid) {
-          showError('codeError', validation.message || 'Invalid or already used code');
+        if (codeData.used_by) {
+          showError('codeError', 'Code already used');
           return;
         }
 
@@ -6428,20 +6429,21 @@
       Loading.show('Validating invite code...');
 
       try {
-        const { data: validationData, error: validationError } = await supabase.rpc('validate_invite_code', {
-          p_code: code
-        });
+        const { data: codeData, error: codeError } = await supabase
+          .from('codes')
+          .select('code, used_by')
+          .eq('code', code.toUpperCase().trim())
+          .single();
 
         Loading.hide();
 
-        if (validationError || !validationData || validationData.length === 0) {
-          showError('codeError', 'Failed to validate code');
+        if (codeError || !codeData) {
+          showError('codeError', 'Invalid invite code');
           return;
         }
 
-        const validation = validationData[0];
-        if (!validation.valid) {
-          showError('codeError', validation.message || 'Invalid or already used code');
+        if (codeData.used_by) {
+          showError('codeError', 'Code already used');
           return;
         }
       } catch (err) {
@@ -6594,27 +6596,36 @@
         // Set username in dashboard
         document.getElementById('userName').textContent = warriorName.toUpperCase();
 
-        // Mark invite code as used and create new user's invite code
+        // Mark invite code as used and create new user's codes
         try {
           // Mark the code they used as consumed
-          const { data: markData, error: markError } = await supabase.rpc('mark_invite_code_used', {
-            p_code: tempRegistrationData.inviteCode,
-            p_used_by_user_id: userId
-          });
+          const { error: markError } = await supabase
+            .from('codes')
+            .update({ used_by: userId, used_at: new Date().toISOString() })
+            .eq('code', tempRegistrationData.inviteCode)
+            .is('used_by', null);
 
-          if (markData && markData[0]?.success) {
-            console.log('Invite code marked as used. Inviter:', markData[0].inviter_user_id);
+          if (!markError) {
+            console.log('Invite code marked as used');
           }
 
           // Generate 3 invite codes for this user
+          const newCodes = [];
           for (let i = 0; i < 3; i++) {
-            const { data: codeData, error: codeError } = await supabase.rpc('create_user_invite_code', {
-              p_user_id: userId
+            const code = Math.random().toString(36).substring(2, 6).toUpperCase() +
+                        Math.random().toString(36).substring(2, 6).toUpperCase();
+            newCodes.push({
+              code: code,
+              created_by: userId
             });
+          }
 
-            if (codeData && codeData[0]?.success) {
-              console.log(`Created invite code ${i + 1} for new user:`, codeData[0].invite_code);
-            }
+          const { error: insertError } = await supabase
+            .from('codes')
+            .insert(newCodes);
+
+          if (!insertError) {
+            console.log('Created 3 invite codes for new user');
           }
 
           // Complete first login quest
@@ -7153,17 +7164,20 @@
       // Get inventory from localStorage (for now - can be migrated to Supabase later)
       const inventory = JSON.parse(localStorage.getItem(`duelpvp_inventory_${email}`) || '[]');
 
-      // Get user's invite code from Supabase (now only one code per user)
+      // Get user's invite codes from Supabase codes table
       let inviteCodes = [];
       if (userId) {
-        const { data } = await supabase.rpc('get_my_invite_code');
-        // Convert to array format for compatibility with existing display code
-        if (data && data.length > 0 && data[0].code) {
-          inviteCodes = [{
-            code: data[0].code,
-            used: data[0].used,
-            uses_remaining: data[0].uses_remaining
-          }];
+        const { data } = await supabase
+          .from('codes')
+          .select('code, used_by, used_at')
+          .eq('created_by', userId);
+
+        if (data && data.length > 0) {
+          inviteCodes = data.map(c => ({
+            code: c.code,
+            used: c.used_by !== null,
+            used_at: c.used_at
+          }));
         }
       }
 
@@ -8515,13 +8529,17 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       // Get inventory from localStorage (for now)
       const inventory = JSON.parse(localStorage.getItem(`duelpvp_inventory_${email}`) || '[]');
 
-      // Get user's invite codes from Supabase (3 codes per user)
-      const { data: inviteCodeData } = await supabase.rpc('get_my_invite_code');
-      const inviteCodes = inviteCodeData && inviteCodeData.length > 0
-        ? inviteCodeData.filter(c => c.code).map(c => ({
+      // Get user's invite codes from Supabase codes table (3 codes per user)
+      const { data: codesData } = await supabase
+        .from('codes')
+        .select('code, used_by, used_at')
+        .eq('created_by', userId);
+
+      const inviteCodes = codesData && codesData.length > 0
+        ? codesData.map(c => ({
             code: c.code,
-            used_by: c.used ? 'Used' : null,
-            used_at: null
+            used_by: c.used_by,
+            used_at: c.used_at
           }))
         : [];
 
@@ -8928,8 +8946,19 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       const inviteCodeEl = document.getElementById('userInviteCode');
       if (!inviteCodeEl) return;
 
+      const userId = localStorage.getItem('duelpvp_user_id');
+      if (!userId) {
+        inviteCodeEl.textContent = 'No code yet';
+        return;
+      }
+
       try {
-        const { data, error } = await supabase.rpc('get_my_invite_code');
+        const { data, error } = await supabase
+          .from('codes')
+          .select('code, used_by')
+          .eq('created_by', userId)
+          .is('used_by', null)
+          .limit(1);
 
         if (error) {
           console.error('Error loading invite code:', error);
@@ -8937,10 +8966,10 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
           return;
         }
 
-        if (data && data.length > 0 && data[0].code) {
+        if (data && data.length > 0) {
           inviteCodeEl.textContent = data[0].code;
         } else {
-          inviteCodeEl.textContent = 'No code yet';
+          inviteCodeEl.textContent = 'All codes used';
         }
       } catch (err) {
         console.error('Failed to load invite code:', err);
