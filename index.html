@@ -6522,6 +6522,7 @@
         const userId = data[0].user_id;
 
         // Create anonymous Supabase Auth session
+        console.log('Creating anonymous auth for new user...');
         const authResult = await supabase.auth.signInAnonymously({
           options: {
             data: {
@@ -6531,13 +6532,24 @@
             }
           }
         });
+        console.log('Registration auth result:', authResult);
+
+        if (authResult.error) {
+          console.error('Failed to create auth session:', authResult.error);
+          Loading.hide();
+          Modal.alert('Account created but auth session failed: ' + authResult.error.message + '\n\nPlease try logging in with your wallet.', 'Warning');
+          swapContent('home');
+          return;
+        }
 
         // Link anonymous auth user to new user record
-        if (authResult.data.user) {
-          await supabase
+        if (authResult.data?.user) {
+          console.log('Linking new user to auth...');
+          const linkResult = await supabase
             .from('users')
             .update({ auth_user_id: authResult.data.user.id })
             .eq('id', userId);
+          console.log('Link result:', linkResult);
         }
 
         // Create session (Blur-style)
@@ -6885,6 +6897,7 @@
 
         // If no existing session, create new anonymous auth session
         if (!authResult || authResult.error) {
+          console.log('Creating new anonymous auth session...');
           authResult = await supabase.auth.signInAnonymously({
             options: {
               data: {
@@ -6894,18 +6907,31 @@
               }
             }
           });
+          console.log('Anonymous auth result:', authResult);
 
           // Link anonymous auth user to existing user record
-          if (authResult.data.user) {
-            await supabase
+          if (authResult.data?.user) {
+            console.log('Linking auth user to database user...');
+            const updateResult = await supabase
               .from('users')
               .update({ auth_user_id: authResult.data.user.id })
               .eq('id', userData.id);
+            console.log('Link result:', updateResult);
           }
         }
 
         if (authResult.error) {
-          throw new Error('Failed to create auth session: ' + authResult.error.message);
+          console.error('Auth session error:', authResult.error);
+          Loading.hide();
+          Modal.alert('Failed to create auth session: ' + authResult.error.message + '\n\nPlease ensure anonymous authentication is enabled in Supabase dashboard.', 'Authentication Error');
+          return;
+        }
+
+        if (!authResult.data?.user) {
+          console.error('No auth user created');
+          Loading.hide();
+          Modal.alert('Failed to create auth session. Please check browser console.', 'Authentication Error');
+          return;
         }
 
         // Store user info in localStorage (legacy support)
