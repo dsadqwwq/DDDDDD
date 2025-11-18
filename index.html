@@ -5698,6 +5698,14 @@
         return;
       }
 
+      if (!inviteCode) {
+        showError('inviteCodeError', 'Invite code is required');
+        return;
+      }
+
+      // Update temp registration data (code was already validated in handleJoin)
+      tempRegistrationData.inviteCode = inviteCode;
+
       Loading.show('Creating your account...');
 
       try {
