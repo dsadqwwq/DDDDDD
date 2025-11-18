@@ -8724,13 +8724,23 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       }
 
       try {
+        // Debug: Check session state before RPC call
+        const { data: { session: currentSession } } = await supabase.auth.getSession();
+        console.log('[GP Update] Session check before RPC:', {
+          hasSession: !!currentSession,
+          userId: currentSession?.user?.id,
+          tokenPreview: currentSession?.access_token?.substring(0, 20) + '...'
+        });
+
         // Try secure JWT-based function first
         const transactionType = amount > 0 ? 'game_win' : 'game_loss';
+        console.log('[GP Update] Calling secure_update_gp with:', { amount, transactionType, gameType });
         let result = await supabase.rpc('secure_update_gp', {
           p_amount: amount,
           p_transaction_type: transactionType,
           p_game_type: gameType
         });
+        console.log('[GP Update] RPC result:', result);
 
         // If secure function fails, fallback to old function
         if (result.error) {
