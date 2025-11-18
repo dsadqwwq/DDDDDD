@@ -8425,13 +8425,13 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       }
 
       try {
-        // SECURE: Fetch from database using JWT-authenticated function (no user_id parameter!)
+        // SECURE: Use JWT-authenticated function (secure functions now deployed!)
         const { data, error } = await supabase.rpc('secure_get_gp');
 
         if (error) {
-          console.error('Failed to fetch GP:', error);
+          console.error('Failed to fetch GP with secure function, trying old function:', error);
 
-          // Try old function as fallback for migration period
+          // Fallback to old function for compatibility
           const { data: oldData, error: oldError } = await supabase
             .rpc('get_user_gp', { p_user_id: userId });
 
