@@ -8425,23 +8425,13 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       }
 
       try {
-        // SECURE: Use JWT-authenticated function (secure functions now deployed!)
-        const { data, error } = await supabase.rpc('secure_get_gp');
+        // Use user_id based function (works with your custom session system)
+        const { data, error } = await supabase
+          .rpc('get_user_gp', { p_user_id: userId });
 
         if (error) {
-          console.error('Failed to fetch GP with secure function, trying old function:', error);
-
-          // Fallback to old function for compatibility
-          const { data: oldData, error: oldError } = await supabase
-            .rpc('get_user_gp', { p_user_id: userId });
-
-          if (!oldError && oldData !== null) {
-            gpCache.balance = oldData;
-            gpCache.lastFetch = now;
-            return oldData;
-          }
-
-          // Final fallback to localStorage
+          console.error('Failed to fetch GP:', error);
+          // Fallback to localStorage
           return parseInt(localStorage.getItem('duelpvp_gp')) || 0;
         }
 
@@ -8486,32 +8476,15 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       }
 
       try {
-        // SECURE: Update in database using JWT-authenticated function (no user_id parameter!)
-        const transactionType = amount > 0 ? 'game_win' : 'game_loss';
+        // Use user_id based function (works with your custom session system)
         const { data, error } = await supabase
-          .rpc('secure_update_gp', {
-            p_amount: amount,
-            p_transaction_type: transactionType,
-            p_game_type: gameType
+          .rpc('update_user_gp', {
+            p_user_id: userId,
+            p_amount: amount
           });
 
         if (error) {
           console.error('Failed to update GP:', error);
-
-          // Try old function as fallback for migration period
-          const { data: oldData, error: oldError } = await supabase
-            .rpc('update_user_gp', {
-              p_user_id: userId,
-              p_amount: amount
-            });
-
-          if (!oldError && oldData && oldData[0] && oldData[0].success) {
-            const newBalance = oldData[0].new_balance;
-            gpCache.balance = newBalance;
-            gpCache.lastFetch = Date.now();
-            updateGPDisplay(newBalance, amount);
-            return newBalance;
-          }
 
           // If database function doesn't exist, fall back to localStorage with validation
           if (error.message && error.message.includes('function') && error.message.includes('does not exist')) {
