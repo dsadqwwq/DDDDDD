@@ -7308,7 +7308,7 @@
 
       // Award GP for fast reactions
       if (reactionTime < 1000) {
-        await updateUserGP(300);
+        await updateUserGP(300, 'reaction');
         Toast.success('Fast hands! +300 GP', 'PROFIT');
         gameStatus.textContent = `${reactionTime.toFixed(0)}ms - +300 GP!`;
         gameStatus.className = 'game-status';
@@ -7736,7 +7736,7 @@
       }
 
       // Deduct bet from balance
-      await updateUserGP(-betAmount);
+      await updateUserGP(-betAmount, 'crash');
       crashGameState.betAmount = betAmount;
       crashGameState.autoCashout = autoCashout;
       crashGameState.hashedIn = true;
@@ -7749,7 +7749,7 @@
       document.getElementById('crashPlaceBetBtn').textContent = 'BET PLACED';
     }
 
-    function crashCashout() {
+    async function crashCashout() {
       if (crashGameState.phase !== 'flying' || crashGameState.betAmount <= 0) {
         return;
       }
@@ -7758,8 +7758,7 @@
       const profit = winAmount - crashGameState.betAmount;
 
       // Add winnings to balance
-      const gp = parseInt(localStorage.getItem('duelpvp_gp')) || 0;
-      localStorage.setItem('duelpvp_gp', (gp + winAmount).toString());
+      await updateUserGP(winAmount, 'crash');
 
       Toast.success(`Cashed out at ${crashGameState.currentMultiplier.toFixed(2)}x! Won ${winAmount} GP (+${profit})`, 'CASHED OUT');
 
@@ -8426,13 +8425,23 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       }
 
       try {
-        // Fetch from database
-        const { data, error } = await supabase
-          .rpc('get_user_gp', { p_user_id: userId });
+        // SECURE: Fetch from database using JWT-authenticated function (no user_id parameter!)
+        const { data, error } = await supabase.rpc('secure_get_gp');
 
         if (error) {
           console.error('Failed to fetch GP:', error);
-          // Fallback to localStorage
+
+          // Try old function as fallback for migration period
+          const { data: oldData, error: oldError } = await supabase
+            .rpc('get_user_gp', { p_user_id: userId });
+
+          if (!oldError && oldData !== null) {
+            gpCache.balance = oldData;
+            gpCache.lastFetch = now;
+            return oldData;
+          }
+
+          // Final fallback to localStorage
           return parseInt(localStorage.getItem('duelpvp_gp')) || 0;
         }
 
@@ -8453,7 +8462,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       return Math.floor(gp / 50000) + 1;
     }
 
-    async function updateUserGP(amount) {
+    async function updateUserGP(amount, gameType = null) {
       // Get user ID from session or old localStorage format
       const session = getSession();
       const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
@@ -8477,15 +8486,32 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       }
 
       try {
-        // Update in database using secure RPC function
+        // SECURE: Update in database using JWT-authenticated function (no user_id parameter!)
+        const transactionType = amount > 0 ? 'game_win' : 'game_loss';
         const { data, error } = await supabase
-          .rpc('update_user_gp', {
-            p_user_id: userId,
-            p_amount: amount
+          .rpc('secure_update_gp', {
+            p_amount: amount,
+            p_transaction_type: transactionType,
+            p_game_type: gameType
           });
 
         if (error) {
           console.error('Failed to update GP:', error);
+
+          // Try old function as fallback for migration period
+          const { data: oldData, error: oldError } = await supabase
+            .rpc('update_user_gp', {
+              p_user_id: userId,
+              p_amount: amount
+            });
+
+          if (!oldError && oldData && oldData[0] && oldData[0].success) {
+            const newBalance = oldData[0].new_balance;
+            gpCache.balance = newBalance;
+            gpCache.lastFetch = Date.now();
+            updateGPDisplay(newBalance, amount);
+            return newBalance;
+          }
 
           // If database function doesn't exist, fall back to localStorage with validation
           if (error.message && error.message.includes('function') && error.message.includes('does not exist')) {
@@ -8803,7 +8829,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       }
 
       // Deduct from user balance and CHECK if it succeeded
-      const newBalance = await updateUserGP(-amount);
+      const newBalance = await updateUserGP(-amount, 'staking');
 
       // If balance didn't change (transaction failed), stop here
       if (newBalance === userGP) {
@@ -8843,7 +8869,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       if (!confirmed) return;
 
       // Add to user balance
-      await updateUserGP(amount);
+      await updateUserGP(amount, 'farm');
 
       // Reset oven
       ovenState.invested = 0;
@@ -8959,7 +8985,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       if (reward.amount > 0) {
         farmState.totalEarned += reward.amount;
         farmState.todayEarned += reward.amount;
-        updateUserGP(reward.amount);
+        updateUserGP(reward.amount, 'farm');
       }
       farmState.lastClickTime = Date.now();
       saveFarmState();
@@ -9080,7 +9106,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       }
 
       // Deduct bet
-      updateUserGP(-betAmount);
+      updateUserGP(-betAmount, 'mines');
       updateMinesGPDisplay();
 
       // Initialize game
@@ -9181,7 +9207,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       if (!minesGameState.isPlaying) return;
 
       const profit = Math.floor(minesGameState.betAmount * minesGameState.multiplier);
-      updateUserGP(profit);
+      updateUserGP(profit, 'mines');
       updateMinesGPDisplay();
 
       // Reveal all tiles
@@ -9340,7 +9366,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       }
 
       // Deduct bet
-      updateUserGP(-betAmount);
+      updateUserGP(-betAmount, 'blackjack');
 
       // Initialize game
       blackjackGameState = {
@@ -9445,14 +9471,14 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
         case 'dealerBust':
           winAmount = blackjackGameState.betAmount * 2;
           message = `Dealer bust! Won ${winAmount} GP`;
-          updateUserGP(winAmount);
+          updateUserGP(winAmount, 'blackjack');
           updateBlackjackGPDisplay();
           Toast.success(message, 'WIN');
           break;
         case 'win':
           winAmount = blackjackGameState.betAmount * 2;
           message = `You win! Won ${winAmount} GP`;
-          updateUserGP(winAmount);
+          updateUserGP(winAmount, 'blackjack');
           updateBlackjackGPDisplay();
           Toast.success(message, 'WIN');
           break;
@@ -9463,7 +9489,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
         case 'push':
           winAmount = blackjackGameState.betAmount;
           message = `Push! Bet returned`;
-          updateUserGP(winAmount);
+          updateUserGP(winAmount, 'blackjack');
           updateBlackjackGPDisplay();
           Toast.info(message, 'PUSH');
           break;
