@@ -9274,6 +9274,12 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     };
 
     function initMinesGame() {
+      // Prevent re-initialization during active game
+      if (minesGameState.isPlaying) {
+        console.log('[Mines] Cannot reinitialize grid during active game');
+        return;
+      }
+
       const grid = document.getElementById('minesGrid');
       grid.innerHTML = '';
 
@@ -9282,7 +9288,12 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
         const tile = document.createElement('div');
         tile.className = 'mines-tile';
         tile.dataset.index = i;
-        tile.addEventListener('click', () => handleMinesTileClick(i));
+        tile.dataset.clicked = 'false'; // Track if tile has been clicked
+        tile.addEventListener('click', function handleClick() {
+          // Immediately remove listener to prevent double-firing
+          tile.removeEventListener('click', handleClick);
+          handleMinesTileClick(i);
+        }, { once: true }); // Use 'once' option as additional safety
         grid.appendChild(tile);
       }
     }
@@ -9317,7 +9328,10 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       updateUserGP(-betAmount, 'mines');
       updateMinesGPDisplay();
 
-      // Initialize game
+      // Reset grid BEFORE setting isPlaying to true
+      initMinesGame();
+
+      // Initialize game state
       minesGameState = {
         isPlaying: true,
         betAmount: betAmount,
@@ -9334,8 +9348,6 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       document.getElementById('minesBetAmount').disabled = true;
       document.getElementById('minesCount').disabled = true;
 
-      // Reset grid
-      initMinesGame();
       updateMinesStats();
 
       Toast.success(`Game started with ${minesCount} mines!`, 'MINES');
@@ -9356,10 +9368,17 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       if (!minesGameState.isPlaying) return;
       if (minesGameState.grid[index]) return; // Already revealed
 
-      // Mark as revealed IMMEDIATELY to prevent double-click race conditions
-      minesGameState.grid[index] = true;
-
       const tile = document.querySelector(`.mines-tile[data-index="${index}"]`);
+
+      // Additional safety: check if tile was already clicked
+      if (tile.dataset.clicked === 'true') {
+        console.log('[Mines] Tile already clicked, ignoring');
+        return;
+      }
+
+      // Mark as clicked and revealed IMMEDIATELY
+      tile.dataset.clicked = 'true';
+      minesGameState.grid[index] = true;
 
       // Check if mine
       if (minesGameState.minePositions.includes(index)) {
