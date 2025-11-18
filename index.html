@@ -6599,71 +6599,12 @@
         // Set username in dashboard
         document.getElementById('userName').textContent = warriorName.toUpperCase();
 
-        // Mark invite code as used and create new user's codes
-        try {
-          // Mark the code they used as consumed
-          const { error: markError } = await supabase
-            .from('codes')
-            .update({ used_by: userId, used_at: new Date().toISOString() })
-            .eq('code', tempRegistrationData.inviteCode)
-            .is('used_by', null);
-
-          if (markError) {
-            console.error('Failed to mark invite code as used:', markError);
-          } else {
-            console.log('Invite code marked as used');
-          }
-
-          // Check if user already has codes (prevent duplicates)
-          const { data: existingCodes } = await supabase
-            .from('codes')
-            .select('code')
-            .eq('created_by', userId);
-
-          if (existingCodes && existingCodes.length > 0) {
-            console.log('User already has invite codes, skipping creation');
-          } else {
-            // Generate 3 invite codes for this user
-            const newCodes = [];
-            for (let i = 0; i < 3; i++) {
-              const code = Math.random().toString(36).substring(2, 6).toUpperCase() +
-                          Math.random().toString(36).substring(2, 6).toUpperCase();
-              newCodes.push({
-                code: code,
-                created_by: userId
-              });
-            }
-
-            const { error: insertError } = await supabase
-              .from('codes')
-              .insert(newCodes);
-
-            if (insertError) {
-              console.error('Failed to create invite codes:', insertError);
-            } else {
-              console.log('Created 3 invite codes for new user:', newCodes.map(c => c.code));
-            }
-          }
-
-          // Complete first login quest
-          await updateQuestProgress('first_login');
-
-        } catch (inviteErr) {
-          console.error('Error with invite code processing:', inviteErr);
-          // Don't block registration if invite code processing fails
-        }
-
         // Initialize GP cache
         await initializeGPCache();
         const gp = await getUserGP();
 
         Loading.hide();
         Toast.success(`Welcome, ${warriorName}!`, `${gp} GP`);
-
-        // Show First Steps quest completion toast
-        setTimeout(() => {
-          Toast.success('First Steps quest complete! +1000 GP', 'QUEST COMPLETE');
-        }, 1500);
         swapContent('dashboard');
 
         // Clear temp data
