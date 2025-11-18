@@ -6614,25 +6614,35 @@
             console.log('Invite code marked as used');
           }
 
-          // Generate 3 invite codes for this user
-          const newCodes = [];
-          for (let i = 0; i < 3; i++) {
-            const code = Math.random().toString(36).substring(2, 6).toUpperCase() +
-                        Math.random().toString(36).substring(2, 6).toUpperCase();
-            newCodes.push({
-              code: code,
-              created_by: userId
-            });
-          }
-
-          const { error: insertError } = await supabase
+          // Check if user already has codes (prevent duplicates)
+          const { data: existingCodes } = await supabase
             .from('codes')
-            .insert(newCodes);
+            .select('code')
+            .eq('created_by', userId);
 
-          if (insertError) {
-            console.error('Failed to create invite codes:', insertError);
+          if (existingCodes && existingCodes.length > 0) {
+            console.log('User already has invite codes, skipping creation');
           } else {
-            console.log('Created 3 invite codes for new user:', newCodes.map(c => c.code));
+            // Generate 3 invite codes for this user
+            const newCodes = [];
+            for (let i = 0; i < 3; i++) {
+              const code = Math.random().toString(36).substring(2, 6).toUpperCase() +
+                          Math.random().toString(36).substring(2, 6).toUpperCase();
+              newCodes.push({
+                code: code,
+                created_by: userId
+              });
+            }
+
+            const { error: insertError } = await supabase
+              .from('codes')
+              .insert(newCodes);
+
+            if (insertError) {
+              console.error('Failed to create invite codes:', insertError);
+            } else {
+              console.log('Created 3 invite codes for new user:', newCodes.map(c => c.code));
+            }
           }
 
           // Complete first login quest
