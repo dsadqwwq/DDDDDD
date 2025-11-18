@@ -6605,7 +6605,9 @@
             .eq('code', tempRegistrationData.inviteCode)
             .is('used_by', null);
 
-          if (!markError) {
+          if (markError) {
+            console.error('Failed to mark invite code as used:', markError);
+          } else {
             console.log('Invite code marked as used');
           }
 
@@ -6624,8 +6626,10 @@
             .from('codes')
             .insert(newCodes);
 
-          if (!insertError) {
-            console.log('Created 3 invite codes for new user');
+          if (insertError) {
+            console.error('Failed to create invite codes:', insertError);
+          } else {
+            console.log('Created 3 invite codes for new user:', newCodes.map(c => c.code));
           }
 
           // Complete first login quest
