@@ -6525,37 +6525,8 @@
         return;
       }
 
-      Loading.show('Validating invite code...');
-
-      // Validate invite code first
-      try {
-        const { data: validationData, error: validationError } = await supabase.rpc('validate_invite_code', {
-          p_code: inviteCode
-        });
-
-        if (validationError || !validationData || validationData.length === 0) {
-          Loading.hide();
-          showError('inviteCodeError', 'Failed to validate invite code');
-          return;
-        }
-
-        const validation = validationData[0];
-        if (!validation.valid) {
-          Loading.hide();
-          showError('inviteCodeError', validation.message || 'Invalid invite code');
-          Modal.alert(validation.message || 'This invite code is invalid or has already been used', 'Invalid Code');
-          return;
-        }
-
-        // Update temp registration data with validated code
-        tempRegistrationData.inviteCode = inviteCode;
-
-      } catch (err) {
-        Loading.hide();
-        console.error('Invite code validation error:', err);
-        showError('inviteCodeError', 'Failed to validate invite code');
-        return;
-      }
+      // Update temp registration data (code was already validated in handleJoin)
+      tempRegistrationData.inviteCode = inviteCode;
 
       Loading.show('Creating your account...');
 
