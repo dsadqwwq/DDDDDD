@@ -6606,13 +6606,15 @@
             console.log('Invite code marked as used. Inviter:', markData[0].inviter_user_id);
           }
 
-          // Generate this user's own invite code
-          const { data: codeData, error: codeError } = await supabase.rpc('create_user_invite_code', {
-            p_user_id: userId
-          });
+          // Generate 3 invite codes for this user
+          for (let i = 0; i < 3; i++) {
+            const { data: codeData, error: codeError } = await supabase.rpc('create_user_invite_code', {
+              p_user_id: userId
+            });
 
-          if (codeData && codeData[0]?.success) {
-            console.log('Created invite code for new user:', codeData[0].invite_code);
+            if (codeData && codeData[0]?.success) {
+              console.log(`Created invite code ${i + 1} for new user:`, codeData[0].invite_code);
+            }
           }
 
           // Complete first login quest
@@ -6629,6 +6631,11 @@
 
         Loading.hide();
         Toast.success(`Welcome, ${warriorName}!`, `${gp} GP`);
+
+        // Show First Steps quest completion toast
+        setTimeout(() => {
+          Toast.success('First Steps quest complete! +1000 GP', 'QUEST COMPLETE');
+        }, 1500);
         swapContent('dashboard');
 
         // Clear temp data
@@ -8079,7 +8086,7 @@
     // Quest System Data and Functions
     const QUESTS = {
       daily: [
-        {id: 'first_login', name: 'First Steps', desc: 'Log in for the first time', target: 1, reward: 300, icon: '🗡️'},
+        {id: 'first_login', name: 'First Steps', desc: 'Log in for the first time', target: 1, reward: 1000, icon: '🗡️'},
         {id: 'invite_friends', name: 'Recruit Warriors', desc: 'Invite 3 friends', target: 3, reward: 1000, icon: '👥'}
       ],
       weekly: [
@@ -8508,14 +8515,14 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       // Get inventory from localStorage (for now)
       const inventory = JSON.parse(localStorage.getItem(`duelpvp_inventory_${email}`) || '[]');
 
-      // Get user's invite code from Supabase (now only one code per user)
+      // Get user's invite codes from Supabase (3 codes per user)
       const { data: inviteCodeData } = await supabase.rpc('get_my_invite_code');
-      const inviteCodes = inviteCodeData && inviteCodeData.length > 0 && inviteCodeData[0].code
-        ? [{
-            code: inviteCodeData[0].code,
-            used_by: inviteCodeData[0].used ? 'Used' : null,
+      const inviteCodes = inviteCodeData && inviteCodeData.length > 0
+        ? inviteCodeData.filter(c => c.code).map(c => ({
+            code: c.code,
+            used_by: c.used ? 'Used' : null,
             used_at: null
-          }]
+          }))
         : [];
 
       // Update GP display
