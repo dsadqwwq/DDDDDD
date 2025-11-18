@@ -4425,7 +4425,7 @@
 
         <!-- Launch Date -->
         <div style="font-family:'Press Start 2P',monospace;font-size:11px;color:#FFD700;margin-bottom:32px;text-align:center;">
-          LAUNCHING 2026
+          COMING 2026
         </div>
 
         <!-- Two Paths -->
@@ -7841,7 +7841,10 @@
     async function loadQuests(type) {
       const questGrid = document.getElementById('questGrid');
       const comingSoonOverlay = document.getElementById('comingSoonOverlay');
-      const userId = localStorage.getItem('duelpvp_user_id');
+
+      // Get user ID from session or old localStorage format
+      const session = getSession();
+      const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
 
       if (!userId) {
         questGrid.innerHTML = '<div class="no-data">Please log in to view quests</div>';
