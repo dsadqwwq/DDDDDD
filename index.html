@@ -6774,8 +6774,9 @@
         });
 
         // Create Supabase Auth session using wallet address as identifier
-        // Remove 0x prefix and use proper email format
-        const walletEmail = `wallet-${walletAddress.substring(2)}@duelpvp.app`;
+        // Use first 16 chars of wallet address (without 0x) for shorter email
+        const walletHash = walletAddress.substring(2, 18);
+        const walletEmail = `w-${walletHash}@duelpvp.app`;
         const walletPassword = signature.substring(0, 32); // Use part of signature as password
 
         Loading.show('Creating secure session...');
