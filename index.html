@@ -9394,6 +9394,9 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       if (!minesGameState.isPlaying) return;
       if (minesGameState.grid[index]) return; // Already revealed
 
+      // Mark as revealed IMMEDIATELY to prevent double-click race conditions
+      minesGameState.grid[index] = true;
+
       const tile = document.querySelector(`.mines-tile[data-index="${index}"]`);
 
       // Check if mine
@@ -9421,7 +9424,6 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
         // Safe tile!
         tile.classList.add('revealed');
         tile.textContent = '💎';
-        minesGameState.grid[index] = true;
         minesGameState.revealedCount++;
 
         // Calculate multiplier
