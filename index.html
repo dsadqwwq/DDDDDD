@@ -5938,9 +5938,16 @@
         inventoryContent.style.display = 'none';
         shopContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
-        // Force refresh GP cache when loading dashboard
+        // Force refresh GP cache and display when loading dashboard
         gpCache.lastFetch = 0;
         updateDashboardStats();
+        // Also directly update GP display to ensure it shows
+        (async () => {
+          const gp = await getUserGP();
+          const displayGP = gp >= 1000000 ? `${(gp/1000000).toFixed(1)}M` : gp >= 1000 ? `${(gp/1000).toFixed(1)}K` : gp;
+          document.getElementById('dashboardGPBalance').textContent = displayGP;
+          console.log('[Dashboard] GP display updated:', gp);
+        })();
 
       } else if (newContent === 'game') {
         panelContent.style.display = 'none';
