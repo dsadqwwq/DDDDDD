@@ -9635,14 +9635,15 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       document.getElementById('blackjackDealBtn').disabled = true;
       document.getElementById('blackjackBetAmount').disabled = true;
 
-      // Check for instant blackjack
+      // Check for natural blackjack (player has 21 with 2 cards)
       const playerValue = calculateHandValue(blackjackGameState.playerCards);
-      if (playerValue === 21) {
-        setTimeout(() => blackjackStand(), 500);
+      if (playerValue === 21 && blackjackGameState.playerCards.length === 2) {
+        // Player has blackjack! Peek at dealer's hidden card
+        setTimeout(() => checkDealerBlackjack(), 500);
       }
     }
 
-    function blackjackHit() {
+    async function blackjackHit() {
       if (!blackjackGameState.isPlaying) return;
 
       // Deal card to player
@@ -9653,8 +9654,29 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
 
       // Check for bust
       if (playerValue > 21) {
-        endBlackjack('bust');
+        await endBlackjack('bust');
       }
+    }
+
+    function checkDealerBlackjack() {
+      if (!blackjackGameState.isPlaying) return;
+
+      // Reveal dealer's hidden card to check for blackjack
+      blackjackGameState.dealerCards.push(blackjackGameState.dealerHiddenCard);
+      blackjackGameState.dealerHiddenCard = null;
+      updateBlackjackDisplay();
+
+      const dealerValue = calculateHandValue(blackjackGameState.dealerCards);
+
+      setTimeout(async () => {
+        if (dealerValue === 21) {
+          // Both have blackjack - push
+          await endBlackjack('push');
+        } else {
+          // Player has blackjack, dealer doesn't - player wins 3:2
+          await endBlackjack('blackjack');
+        }
+      }, 800);
     }
 
     function blackjackStand() {
@@ -9677,8 +9699,8 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
           }, 800);
         } else {
           // Determine winner
-          setTimeout(() => {
-            determineBlackjackWinner();
+          setTimeout(async () => {
+            await determineBlackjackWinner();
           }, 500);
         }
       };
@@ -9686,22 +9708,22 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       dealerPlay();
     }
 
-    function determineBlackjackWinner() {
+    async function determineBlackjackWinner() {
       const playerValue = calculateHandValue(blackjackGameState.playerCards);
       const dealerValue = calculateHandValue(blackjackGameState.dealerCards);
 
       if (dealerValue > 21) {
-        endBlackjack('dealerBust');
+        await endBlackjack('dealerBust');
       } else if (playerValue > dealerValue) {
-        endBlackjack('win');
+        await endBlackjack('win');
       } else if (playerValue < dealerValue) {
-        endBlackjack('lose');
+        await endBlackjack('lose');
       } else {
-        endBlackjack('push');
+        await endBlackjack('push');
       }
     }
 
-    function endBlackjack(result) {
+    async function endBlackjack(result) {
       blackjackGameState.isPlaying = false;
 
       let message = '';
@@ -9712,18 +9734,26 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
           message = `Bust! Lost ${blackjackGameState.betAmount} GP`;
           Toast.error(message, 'BUST');
           break;
+        case 'blackjack':
+          // Natural blackjack pays 3:2 (1.5x the bet, plus original bet returned = 2.5x total)
+          winAmount = Math.floor(blackjackGameState.betAmount * 2.5);
+          message = `BLACKJACK! Won ${winAmount} GP`;
+          await updateUserGP(winAmount, 'blackjack');
+          await updateBlackjackGPDisplay();
+          Toast.success(message, 'BLACKJACK');
+          break;
         case 'dealerBust':
           winAmount = blackjackGameState.betAmount * 2;
           message = `Dealer bust! Won ${winAmount} GP`;
-          updateUserGP(winAmount, 'blackjack');
-          updateBlackjackGPDisplay();
+          await updateUserGP(winAmount, 'blackjack');
+          await updateBlackjackGPDisplay();
           Toast.success(message, 'WIN');
           break;
         case 'win':
           winAmount = blackjackGameState.betAmount * 2;
           message = `You win! Won ${winAmount} GP`;
-          updateUserGP(winAmount, 'blackjack');
-          updateBlackjackGPDisplay();
+          await updateUserGP(winAmount, 'blackjack');
+          await updateBlackjackGPDisplay();
           Toast.success(message, 'WIN');
           break;
         case 'lose':
@@ -9733,8 +9763,8 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
         case 'push':
           winAmount = blackjackGameState.betAmount;
           message = `Push! Bet returned`;
-          updateUserGP(winAmount, 'blackjack');
-          updateBlackjackGPDisplay();
+          await updateUserGP(winAmount, 'blackjack');
+          await updateBlackjackGPDisplay();
           Toast.info(message, 'PUSH');
           break;
       }
