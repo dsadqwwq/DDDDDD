@@ -6196,14 +6196,12 @@
 
         const walletAddress = accounts[0];
 
-        // Check if wallet already registered
-        const { data: existingUser } = await supabase
-          .from('users')
-          .select('id')
-          .eq('wallet_address', walletAddress)
-          .single();
+        // Check if wallet already registered using RPC function (bypasses RLS)
+        const { data: checkData } = await supabase.rpc('login_with_wallet', {
+          p_wallet_address: walletAddress.toLowerCase()
+        });
 
-        if (existingUser) {
+        if (checkData && checkData.length > 0 && checkData[0].success) {
           Loading.hide();
           Modal.alert('This wallet is already registered. Please login instead.', 'Wallet Already Registered');
           return;
@@ -6771,18 +6769,24 @@
 
         const walletAddress = accounts[0].toLowerCase();
 
-        // Check if wallet exists in database
-        const { data: userData, error } = await supabase
-          .from('users')
-          .select('*')
-          .eq('wallet_address', walletAddress)
-          .single();
+        // Check if wallet exists in database using RPC function (bypasses RLS)
+        const { data: loginData, error: loginError } = await supabase.rpc('login_with_wallet', {
+          p_wallet_address: walletAddress
+        });
 
-        if (!userData || error) {
+        if (loginError || !loginData || loginData.length === 0 || !loginData[0].success) {
           Loading.hide();
           Modal.alert('This wallet is not registered. Please sign up with an invite code first.', 'Wallet Not Found');
           return;
         }
+
+        // Extract user data from RPC response
+        const userData = {
+          id: loginData[0].user_id,
+          display_name: loginData[0].display_name,
+          gp_balance: loginData[0].gp_balance,
+          auth_user_id: loginData[0].auth_user_id
+        };
 
         // Verify ownership with signature
         const message = `Sign in to Duel PVP\nWallet: ${walletAddress}\nTimestamp: ${Date.now()}`;
