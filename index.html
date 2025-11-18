@@ -6481,8 +6481,15 @@
       const confirmed = await Modal.confirm('Are you sure you want to logout?', 'Confirm Logout');
       if (!confirmed) return;
 
-      // Clear session (Blur-style)
+      // Sign out from Supabase Auth
+      await supabase.auth.signOut();
+
+      // Clear custom session (legacy support)
       clearSession();
+
+      // Clear GP cache
+      gpCache.balance = 0;
+      gpCache.lastFetch = 0;
 
       // Reset UI
       dashboardContent.style.display = 'none';
@@ -6761,12 +6768,51 @@
         // Verify ownership with signature
         const message = `Sign in to Duel PVP\nWallet: ${walletAddress}\nTimestamp: ${Date.now()}`;
 
-        await window.ethereum.request({
+        const signature = await window.ethereum.request({
           method: 'personal_sign',
           params: [message, accounts[0]]
         });
 
-        // Login successful - create session (Blur-style)
+        // Create Supabase Auth session using wallet address as identifier
+        const walletEmail = `${walletAddress}@wallet.duelpvp.local`;
+        const walletPassword = signature.substring(0, 32); // Use part of signature as password
+
+        Loading.show('Creating secure session...');
+
+        // Try to sign in with existing auth account
+        let authResult = await supabase.auth.signInWithPassword({
+          email: walletEmail,
+          password: walletPassword
+        });
+
+        // If no auth account exists, create one
+        if (authResult.error && authResult.error.message.includes('Invalid')) {
+          authResult = await supabase.auth.signUp({
+            email: walletEmail,
+            password: walletPassword,
+            options: {
+              data: {
+                wallet_address: walletAddress,
+                display_name: userData.display_name,
+                user_id: userData.id
+              }
+            }
+          });
+
+          // Link auth user to existing user record
+          if (authResult.data.user) {
+            await supabase
+              .from('users')
+              .update({ auth_user_id: authResult.data.user.id })
+              .eq('id', userData.id);
+          }
+        }
+
+        if (authResult.error) {
+          throw new Error('Failed to create auth session: ' + authResult.error.message);
+        }
+
+        // Store user info in localStorage (legacy support)
         createSession(userData.id, walletAddress, userData.display_name);
 
         document.getElementById('userName').textContent = userData.display_name.toUpperCase();
@@ -8425,20 +8471,28 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       }
 
       try {
-        // Use user_id based function (works with your custom session system)
+        // Try secure JWT-based function first
+        const { data: secureData, error: secureError } = await supabase.rpc('secure_get_gp');
+
+        if (!secureError && secureData !== null) {
+          gpCache.balance = secureData;
+          gpCache.lastFetch = now;
+          return secureData;
+        }
+
+        console.log('Secure GP function failed, using fallback:', secureError);
+
+        // Fallback to old function for users not yet migrated
         const { data, error } = await supabase
           .rpc('get_user_gp', { p_user_id: userId });
 
         if (error) {
           console.error('Failed to fetch GP:', error);
-          // Fallback to localStorage
           return parseInt(localStorage.getItem('duelpvp_gp')) || 0;
         }
 
-        // Update cache
         gpCache.balance = data || 0;
         gpCache.lastFetch = now;
-
         return data || 0;
       } catch (e) {
         console.error('Error getting GP:', e);
@@ -8476,12 +8530,24 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       }
 
       try {
-        // Use user_id based function (works with your custom session system)
-        const { data, error } = await supabase
-          .rpc('update_user_gp', {
+        // Try secure JWT-based function first
+        const transactionType = amount > 0 ? 'game_win' : 'game_loss';
+        let result = await supabase.rpc('secure_update_gp', {
+          p_amount: amount,
+          p_transaction_type: transactionType,
+          p_game_type: gameType
+        });
+
+        // If secure function fails, fallback to old function
+        if (result.error) {
+          console.log('Secure update failed, using fallback:', result.error);
+          result = await supabase.rpc('update_user_gp', {
             p_user_id: userId,
             p_amount: amount
           });
+        }
+
+        const { data, error } = result;
 
         if (error) {
           console.error('Failed to update GP:', error);
