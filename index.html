@@ -5662,7 +5662,8 @@
     let tempRegistrationData = {
       walletAddress: '',
       inviteCode: '',
-      signature: ''
+      signature: '',
+      termsAccepted: false
     };
 
     // Helper function to swap content with fade animation
@@ -5740,6 +5741,60 @@
             swapContent('home');
           }
         });
+
+      } else if (newContent === 'termsAcceptance') {
+        panelContent.style.display = 'block';
+        dashboardContent.style.display = 'none';
+        gameContent.style.display = 'none';
+        leaderboardContent.style.display = 'none';
+        questContent.style.display = 'none';
+        inventoryContent.style.display = 'none';
+        pageContainer.classList.add('center-aligned');
+        pageContainer.classList.remove('bottom-aligned');
+        panelContent.classList.remove('panel-transparent');
+
+        panelContent.innerHTML = `
+          <div class="panel-header">
+            <div class="warrior-title">TERMS & DISCLAIMER</div>
+            <div class="sub-text">Please read and accept to continue</div>
+          </div>
+
+          <div style="max-width:500px;margin:0 auto;padding:20px;">
+            <div style="background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:20px;margin-bottom:20px;max-height:300px;overflow-y:auto;text-align:left;font-size:13px;line-height:1.6;color:#a0a8b0;">
+              <p style="color:var(--gold);font-weight:bold;margin-bottom:10px;">⚠️ IMPORTANT - READ CAREFULLY</p>
+              <p style="margin-bottom:10px;">By connecting your wallet and using this service, you acknowledge and agree that:</p>
+              <ul style="margin-left:20px;margin-bottom:15px;">
+                <li style="margin-bottom:8px;">This is <strong>experimental alpha software</strong> provided "AS IS" without warranties of any kind</li>
+                <li style="margin-bottom:8px;">Virtual items (NFTs, GP, tokens) have <strong>NO monetary value</strong> and are <strong>NOT investment vehicles</strong></li>
+                <li style="margin-bottom:8px;">This project <strong>may never fully launch</strong>, be completed, or continue development</li>
+                <li style="margin-bottom:8px;">The service may be modified, suspended, or <strong>discontinued at any time</strong> without notice</li>
+                <li style="margin-bottom:8px;">You are using this platform for <strong>entertainment purposes only</strong> at your own risk</li>
+                <li style="margin-bottom:8px;"><strong>No promises or guarantees</strong> are made about future features, updates, or token launches</li>
+                <li style="margin-bottom:8px;">All blockchain transactions are <strong>irreversible</strong> and you are solely responsible for your wallet security</li>
+                <li style="margin-bottom:8px;">You must be <strong>18 years or older</strong> to use this service</li>
+              </ul>
+              <p style="font-size:11px;color:#666;">For full terms, see our <a href="#" style="color:var(--gold);">Terms of Service</a> and <a href="#" style="color:var(--gold);">Privacy Policy</a></p>
+            </div>
+
+            <div class="input-group" style="margin-bottom:20px;">
+              <label style="display:flex;align-items:start;cursor:pointer;font-size:14px;color:#e5e7eb;">
+                <input type="checkbox" id="termsCheckbox" style="margin-right:12px;margin-top:4px;width:18px;height:18px;cursor:pointer;">
+                <span>I have read and agree to the Terms of Service. I understand this is experimental software, virtual items have no value, and the project may never launch.</span>
+              </label>
+              <div class="error-msg" id="termsError"></div>
+            </div>
+
+            <div style="display:flex;gap:10px;">
+              <button class="btn-cancel" id="backToWalletBtn" style="flex:1;">← BACK</button>
+              <button class="btn-submit" id="acceptTermsBtn" style="flex:2;">ACCEPT & CONTINUE</button>
+            </div>
+          </div>
+        `;
+
+        // Re-attach event listeners
+        document.getElementById('acceptTermsBtn').addEventListener('click', handleTermsAcceptance);
+        document.getElementById('backToWalletBtn').addEventListener('click', () => swapContent('home'));
+        document.getElementById('termsCheckbox').addEventListener('change', () => clearError('termsError'));
 
       } else if (newContent === 'nameWarrior') {
         panelContent.style.display = 'block';
@@ -6222,8 +6277,8 @@
         Loading.hide();
         Toast.success('Wallet verified!', 'SUCCESS');
 
-        // Proceed to warrior naming
-        swapContent('nameWarrior');
+        // Proceed to terms acceptance
+        swapContent('termsAcceptance');
 
       } catch (error) {
         Loading.hide();
@@ -6400,6 +6455,23 @@
       swapContent('nameWarrior');
     }
 
+    function handleTermsAcceptance() {
+      const termsCheckbox = document.getElementById('termsCheckbox');
+
+      clearError('termsError');
+
+      if (!termsCheckbox.checked) {
+        showError('termsError', 'You must accept the Terms of Service to continue');
+        return;
+      }
+
+      // Store terms acceptance
+      tempRegistrationData.termsAccepted = true;
+
+      // Proceed to warrior naming
+      swapContent('nameWarrior');
+    }
+
     async function handleNameWarrior() {
       const warriorName = document.getElementById('warriorName').value.trim();
 
@@ -6428,7 +6500,8 @@
         const { data, error } = await supabase.rpc('register_with_wallet', {
           p_wallet_address: tempRegistrationData.walletAddress,
           p_display_name: warriorName,
-          p_invite_code: tempRegistrationData.inviteCode
+          p_invite_code: tempRegistrationData.inviteCode,
+          p_terms_accepted: tempRegistrationData.termsAccepted
         });
 
         if (error || !data || data.length === 0 || !data[0].success) {
@@ -6485,7 +6558,8 @@
         tempRegistrationData = {
           walletAddress: '',
           inviteCode: '',
-          signature: ''
+          signature: '',
+          termsAccepted: false
         };
       } catch (e) {
         Loading.hide();
