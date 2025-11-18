@@ -6789,16 +6789,21 @@
     async function initializeApp() {
       console.log('Initializing app...');
 
+      // Check for existing Supabase auth session first
+      const { data: { session: supabaseSession } } = await supabase.auth.getSession();
+      console.log('Supabase session:', supabaseSession ? 'Found' : 'None');
+
       const session = getSession();
 
       if (!session) {
-        console.log('No session found, showing home screen');
+        console.log('No localStorage session found, showing home screen');
         return; // Show home screen by default
       }
 
       if (!isSessionValid(session)) {
         console.log('Session invalid or expired, clearing');
         clearSession();
+        await supabase.auth.signOut();
         return; // Show home screen
       }
 
@@ -6808,20 +6813,39 @@
       if (!walletConnected) {
         console.log('Wallet no longer connected, session invalid');
         clearSession();
+        await supabase.auth.signOut();
         Toast.info('Please reconnect your wallet', 'SESSION EXPIRED');
         return;
       }
 
-      // Verify user still exists in database
+      // Verify user still exists in database and get auth_user_id
       const { data: userData, error } = await supabase
         .from('users')
-        .select('id, display_name, gp_balance')
+        .select('id, display_name, gp_balance, auth_user_id')
         .eq('id', session.userId)
         .single();
 
       if (error || !userData) {
         console.log('User not found in database, clearing session');
         clearSession();
+        await supabase.auth.signOut();
+        return;
+      }
+
+      // Restore Supabase auth session if missing
+      if (!supabaseSession && userData.auth_user_id) {
+        console.log('No Supabase session, but user has auth_user_id - session expired, please re-login');
+        clearSession();
+        await supabase.auth.signOut();
+        Toast.info('Session expired. Please login again.', 'SESSION EXPIRED');
+        return;
+      }
+
+      // Verify Supabase session matches user
+      if (supabaseSession && userData.auth_user_id && supabaseSession.user.id !== userData.auth_user_id) {
+        console.log('Supabase session mismatch, clearing');
+        clearSession();
+        await supabase.auth.signOut();
         return;
       }
 
