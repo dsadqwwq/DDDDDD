@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Duel PVP – Enter the Arena</title>
+<link rel="icon" type="image/png" href="assets/logo-pvp.png">
+<link rel="apple-touch-icon" href="assets/logo-pvp.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -4487,15 +4489,7 @@
 
       <!-- Player Stats Section -->
       <div class="campaign-stats-section">
-        <div class="campaign-stat-card">
-          <div class="campaign-stat-icon">LVL</div>
-          <div class="campaign-stat-info">
-            <div class="campaign-stat-label">PLAYER LEVEL</div>
-            <div class="campaign-stat-value" id="campaignPlayerLevel">1</div>
-          </div>
-        </div>
-        <div class="campaign-stat-card">
-          <div class="campaign-stat-icon">GP</div>
+        <div class="campaign-stat-card" style="max-width:400px;margin:0 auto;">
           <div class="campaign-stat-info">
             <div class="campaign-stat-label">TOTAL GP</div>
             <div class="campaign-stat-value" id="campaignTotalGP">0</div>
@@ -4519,32 +4513,35 @@
 
       <!-- Campaign Info -->
       <div class="campaign-info-section">
-        <div class="campaign-info-title">📋 CAMPAIGN RULES</div>
+        <div class="campaign-info-title">CAMPAIGN RULES</div>
         <div class="campaign-info-content">
           <div class="campaign-info-item">
             <span class="campaign-info-bullet">•</span>
-            <span>Get over 1,000,000 GP to qualify for a special badge!</span>
+            <span>Reach 1,000,000 GP to qualify for Founder's Sword mint eligibility</span>
           </div>
           <div class="campaign-info-item">
             <span class="campaign-info-bullet">•</span>
-            <span>Use STAKING for compound interest (10% hourly)</span>
+            <span>Earn GP through gambling, farming, and staking</span>
           </div>
           <div class="campaign-info-item">
             <span class="campaign-info-bullet">•</span>
-            <span>Click FARM every 5 seconds for random GP drops</span>
+            <span>All GP accumulates toward your campaign total</span>
           </div>
           <div class="campaign-info-item">
             <span class="campaign-info-bullet">•</span>
-            <span>Play gambling games: Crash, Mines, Blackjack</span>
-          </div>
-          <div class="campaign-info-item">
-            <span class="campaign-info-bullet">•</span>
-            <span>All GP earned counts toward your total</span>
+            <span>Campaign ends when all Founder's Swords are distributed</span>
           </div>
         </div>
 
-        <div class="campaign-disclaimer-section">
-          ⚠️ <strong>Important:</strong> These are fake tokens for the campaign only and cannot be exchanged for real value.
+        <div class="campaign-disclaimer-section" style="background:rgba(255,69,0,0.1);border:2px solid rgba(255,69,0,0.3);border-radius:8px;padding:16px;margin-top:16px;">
+          <div style="font-family:'Press Start 2P',monospace;font-size:10px;color:#FF4500;margin-bottom:12px;text-align:center;">IMPORTANT DISCLAIMER</div>
+          <div style="font-family:'Courier New',monospace;font-size:12px;line-height:1.7;color:#e0e8f0;">
+            <strong>This pre-launch campaign is NOT the main game.</strong> Campaign GP is temporary and has no monetary value. These mechanics are for testing only.
+            <br><br>
+            <strong>The actual Duel PVP game launching in 2026 will be a fully on-chain MMORPG</strong> with completely different mechanics, progression systems, and gameplay. Think RuneScape meets blockchain - not a casino.
+            <br><br>
+            Campaign GP does not carry over to the main game.
+          </div>
         </div>
       </div>
 
@@ -4562,7 +4559,7 @@
         <div class="campaign-cards-row">
           <!-- Left: DeFi -->
           <div class="campaign-card invest">
-            <div class="campaign-card-title">💎 DEFI</div>
+            <div class="campaign-card-title">DEFI</div>
             <div class="campaign-card-content">
               <button class="action-btn btn-invest" id="openOvenBtn" aria-label="Open Staking" style="width:100%;margin-bottom:12px;">STAKING</button>
               <button class="action-btn btn-invest" id="openFarmBtn" aria-label="Open Airdrop Farm" style="width:100%;margin-bottom:12px;">FARM</button>
@@ -4573,7 +4570,7 @@
 
           <!-- Right: Gambling -->
           <div class="campaign-card gamble">
-            <div class="campaign-card-title">🎲 GAMBLING</div>
+            <div class="campaign-card-title">GAMBLING</div>
             <div class="campaign-card-content">
               <button class="action-btn btn-gamble" id="playCrashBtn" aria-label="Play crash rocket game" style="width:100%;margin-bottom:12px;">CRASH</button>
               <button class="action-btn btn-gamble" id="playMinesBtn" aria-label="Play mines game" style="width:100%;margin-bottom:12px;">MINES</button>
@@ -5951,6 +5948,8 @@
         inventoryContent.style.display = 'none';
         shopContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        // Force refresh GP cache when loading dashboard
+        gpCache.lastFetch = 0;
         updateDashboardStats();
 
       } else if (newContent === 'game') {
@@ -8885,13 +8884,6 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     // Update campaign page with current stats
     async function updateCampaignPage() {
       const currentGP = await getUserGP();
-      const level = getUserLevel();
-
-      // Update player level
-      const levelEl = document.getElementById('campaignPlayerLevel');
-      if (levelEl) {
-        levelEl.textContent = level;
-      }
 
       // Update total GP
       const totalGPEl = document.getElementById('campaignTotalGP');
