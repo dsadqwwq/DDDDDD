@@ -8191,7 +8191,6 @@
             if (quest.type === 'nft') {
               // NFT holder quest
               if (isComplete) {
-                html += `<div style="text-align:center;padding:8px;color:#4CAF50;">✓ HOLDER VERIFIED</div>`;
                 html += `<button class="action-btn btn-primary" style="width:100%;margin-top:8px;" onclick="claimQuestReward('${quest.id}', ${quest.reward})">CLAIM ${quest.reward} GP</button>`;
               } else {
                 html += `<div style="text-align:center;padding:8px;color:#888;">Not a holder</div>`;
