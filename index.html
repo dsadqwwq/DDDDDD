@@ -6748,6 +6748,8 @@
       };
 
       localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+      // Also store userId directly for backward compatibility
+      localStorage.setItem('duelpvp_user_id', userId);
 
       // Also cache GP for navbar (Blur-style)
       const gpCacheKey = `duelpvp.cache.gp`;
@@ -8470,7 +8472,8 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     ];
 
     async function loadInventory() {
-      const userId = localStorage.getItem('duelpvp_user_id');
+      const session = getSession();
+      const userId = session?.userId;
       const email = localStorage.getItem('duelpvp_email') || 'anonymous';
 
       if (!userId) {
@@ -8909,7 +8912,8 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       const inviteCodeEl = document.getElementById('userInviteCode');
       if (!inviteCodeEl) return;
 
-      const userId = localStorage.getItem('duelpvp_user_id');
+      const session = getSession();
+      const userId = session?.userId;
       if (!userId) {
         inviteCodeEl.textContent = 'No code yet';
         return;
