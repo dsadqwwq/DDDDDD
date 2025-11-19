@@ -3501,6 +3501,9 @@
     border-radius:16px;
     max-width:420px;
     width:90%;
+    max-height:90vh;
+    display:flex;
+    flex-direction:column;
     box-shadow:
       0 24px 80px rgba(0,0,0,0.8),
       0 0 60px rgba(255,214,77,0.15),
@@ -3593,6 +3596,8 @@
     color:#e6ecf1;
     white-space:pre-wrap;
     text-align:center;
+    overflow-y:auto;
+    flex:1;
   }
 
   .modal-actions{
@@ -4539,7 +4544,7 @@
         </div>
 
         <div style="text-align:center;margin-top:20px;">
-          <span style="color:#FFD700;font-size:13px;font-family:'Courier New',monospace;">Launch planned for first half of 2026 (subject to change).</span>
+          <span style="color:#FFD700;font-size:13px;font-family:'Courier New',monospace;">Launch planned 2026 (subject to change)</span>
         </div>
       </div>
 
@@ -4659,7 +4664,7 @@
       </div>
 
       <div style="text-align:center;padding:16px 20px;margin-bottom:16px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);border-radius:8px;">
-        <span style="color:#FFD700;font-family:'Courier New',monospace;font-size:13px;">Complete quests and climb the leaderboard for a chance to mint one of 1,500 Founder's Swords</span>
+        <span style="color:#FFD700;font-family:'Courier New',monospace;font-size:13px;">Climb the leaderboard for a chance to mint one of 1,500 Founder's Swords</span>
       </div>
 
       <div class="your-best" id="yourBestSection" style="display:none;">
@@ -4702,7 +4707,7 @@
       </div>
 
       <div style="text-align:center;padding:16px 20px;margin-bottom:16px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);border-radius:8px;">
-        <span style="color:#FFD700;font-family:'Courier New',monospace;font-size:13px;">Complete quests and climb the leaderboard for a chance to mint one of 1,500 Founder's Swords</span>
+        <span style="color:#FFD700;font-family:'Courier New',monospace;font-size:13px;">Climb the leaderboard for a chance to mint one of 1,500 Founder's Swords</span>
       </div>
 
       <div class="quest-tabs">
@@ -8601,7 +8606,7 @@
       daily: [
         {id: 'first_login', name: 'First Steps', desc: 'Log in for the first time', target: 1, reward: 500, icon: '🗡️', type: 'regular'},
         {id: 'invite_used', name: 'Recruit Warriors', desc: 'Have 3 friends use your invite codes', target: 3, reward: 1500, icon: '👥', type: 'regular', action: 'openInventory'},
-        {id: 'share_post', name: 'Spread the Word', desc: 'Retweet our post on X', target: 1, reward: 500, icon: '🐦', type: 'manual'},
+        {id: 'like_retweet', name: 'Like & Retweet', desc: 'Like and retweet our post on X', target: 1, reward: 500, icon: '❤️', type: 'manual'},
         {id: 'bunnz_holder', name: 'BAD BUNNZ Holder', desc: 'Own a BAD BUNNZ NFT', target: 1, reward: 500, icon: '🐰', type: 'nft'},
         {id: 'fluffle_holder', name: 'FLUFFLE Holder', desc: 'Own a FLUFFLE NFT', target: 1, reward: 2500, icon: '🐇', type: 'nft'}
       ],
@@ -8730,6 +8735,8 @@
               html += `<button class="action-btn btn-primary" style="width:100%;margin-top:8px;" onclick="claimQuestReward('${quest.id}')">CLAIM ${quest.gc_reward} GC</button>`;
             } else if (quest.id === 'invite_3_friends') {
               html += `<button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="showInventory()">VIEW INVITE CODES</button>`;
+            } else if (quest.id === 'like_retweet') {
+              html += `<button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="openLikeRetweetQuest()">START QUEST</button>`;
             }
 
             html += `</div>`;
@@ -8817,8 +8824,8 @@
 
     // X post sharing quest
     async function openSharePostQuest() {
-      // Open the X post to retweet
-      const postUrl = 'https://x.com/Duelpvp';
+      // Open the specific X post to retweet
+      const postUrl = 'https://x.com/Duelpvp/status/1991218122548752600';
       window.open(postUrl, '_blank');
 
       // Show modal to submit retweet link
@@ -8839,59 +8846,134 @@
         </div>
       `;
 
-      Modal.confirm(modalHtml, 'Retweet Quest', async (confirmed) => {
-        if (!confirmed) return;
+      const confirmed = await Modal.show({ html: modalHtml, title: 'Retweet Quest', type: 'confirm' });
+      if (!confirmed) return;
 
-        const retweetLink = document.getElementById('retweetLinkInput')?.value?.trim();
-        if (!retweetLink) {
-          Toast.error('Please paste your retweet link', 'ERROR');
-          return;
+      const retweetLink = document.getElementById('retweetLinkInput')?.value?.trim();
+      if (!retweetLink) {
+        Toast.error('Please paste your retweet link', 'ERROR');
+        return;
+      }
+
+      // Validate it looks like an X/Twitter link
+      if (!retweetLink.includes('x.com/') && !retweetLink.includes('twitter.com/')) {
+        Toast.error('Please paste a valid X/Twitter link', 'ERROR');
+        return;
+      }
+
+      Loading.show('Submitting...');
+
+      try {
+        const session = getSession();
+        const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
+
+        // Store the submission for manual review
+        const { error: submitError } = await supabase
+          .from('quest_submissions')
+          .insert({
+            user_id: userId,
+            quest_id: 'share_post',
+            submission_data: { retweet_url: retweetLink },
+            status: 'pending'
+          });
+
+        if (submitError) {
+          console.error('Submission error:', submitError);
+          // Continue anyway - we'll still grant the GC
         }
 
-        // Validate it looks like an X/Twitter link
-        if (!retweetLink.includes('x.com/') && !retweetLink.includes('twitter.com/')) {
-          Toast.error('Please paste a valid X/Twitter link', 'ERROR');
-          return;
+        // Update quest progress
+        await updateQuestProgress('share_post', 1);
+
+        Loading.hide();
+        Toast.success('+500 GC earned! (Subject to verification)', 'QUEST SUBMITTED');
+
+        // Reload quests
+        const activeTab = document.querySelector('.quest-tab.active');
+        const tabType = activeTab ? activeTab.getAttribute('data-quest-tab') : 'daily';
+        loadQuests(tabType);
+
+      } catch (err) {
+        Loading.hide();
+        console.error('Quest submission error:', err);
+        Toast.error('Failed to submit', 'ERROR');
+      }
+    }
+
+    // Like & Retweet quest
+    async function openLikeRetweetQuest() {
+      // Open the specific X post to like and retweet
+      const postUrl = 'https://x.com/Duelpvp/status/1991218122548752600';
+      window.open(postUrl, '_blank');
+
+      // Show modal to submit link
+      const modalHtml = `
+        <div style="text-align:center;">
+          <p style="margin-bottom:16px;color:#e6ecf1;font-size:12px;">
+            1. Like and retweet our post on X<br>
+            2. Copy the link to your retweet<br>
+            3. Paste it below to complete the quest
+          </p>
+          <input type="text" id="likeRetweetLinkInput" placeholder="Paste your retweet link here..."
+            style="width:100%;padding:12px;background:rgba(0,0,0,.4);border:2px solid rgba(255,214,77,.3);border-radius:8px;color:#e6ecf1;font-family:monospace;font-size:12px;margin-bottom:16px;">
+          <div style="background:rgba(255,193,7,.1);border:1px solid rgba(255,193,7,.3);border-radius:8px;padding:12px;margin-bottom:16px;">
+            <p style="color:#ffc107;font-size:10px;margin:0;">
+              Note: Your submission will be manually verified. GC will be granted immediately but may be revoked if the like/retweet is not valid.
+            </p>
+          </div>
+        </div>
+      `;
+
+      const confirmed = await Modal.show({ html: modalHtml, title: 'Like & Retweet Quest', type: 'confirm' });
+      if (!confirmed) return;
+
+      const likeRetweetLink = document.getElementById('likeRetweetLinkInput')?.value?.trim();
+      if (!likeRetweetLink) {
+        Toast.error('Please paste your retweet link', 'ERROR');
+        return;
+      }
+
+      // Validate it looks like an X/Twitter link
+      if (!likeRetweetLink.includes('x.com/') && !likeRetweetLink.includes('twitter.com/')) {
+        Toast.error('Please paste a valid X/Twitter link', 'ERROR');
+        return;
+      }
+
+      Loading.show('Submitting...');
+
+      try {
+        const session = getSession();
+        const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
+
+        // Complete and claim the quest in one call
+        const { data, error } = await supabase.rpc('complete_manual_quest', {
+          p_quest_id: 'like_retweet',
+          p_user_id: userId
+        });
+
+        Loading.hide();
+
+        if (error || !data?.success) {
+          console.error('Quest error:', error || data?.error);
+          Toast.error(data?.error || 'Failed to complete quest', 'ERROR');
+        } else {
+          // Clear GC cache and update display
+          gcCache.lastFetch = 0;
+          const newGC = await getUserGC();
+          updateGCDisplay(newGC, data.reward);
+          Toast.success(`+${data.reward} GC earned!`, 'QUEST COMPLETED');
         }
 
-        Loading.show('Submitting...');
+        // Reload quests
+        const activeTab = document.querySelector('.quest-tab.active');
+        const tabType = activeTab ? activeTab.getAttribute('data-quest-tab') : 'daily';
+        loadQuests(tabType);
 
-        try {
-          const session = getSession();
-          const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
-
-          // Store the submission for manual review
-          const { error: submitError } = await supabase
-            .from('quest_submissions')
-            .insert({
-              user_id: userId,
-              quest_id: 'share_post',
-              submission_data: { retweet_url: retweetLink },
-              status: 'pending'
-            });
-
-          if (submitError) {
-            console.error('Submission error:', submitError);
-            // Continue anyway - we'll still grant the GC
-          }
-
-          // Update quest progress
-          await updateQuestProgress('share_post', 1);
-
-          Loading.hide();
-          Toast.success('+500 GC earned! (Subject to verification)', 'QUEST SUBMITTED');
-
-          // Reload quests
-          const activeTab = document.querySelector('.quest-tab.active');
-          const tabType = activeTab ? activeTab.getAttribute('data-quest-tab') : 'daily';
-          loadQuests(tabType);
-
-        } catch (err) {
-          Loading.hide();
-          console.error('Quest submission error:', err);
-          Toast.error('Failed to submit', 'ERROR');
-        }
-      });
+      } catch (err) {
+        Loading.hide();
+        console.error('Quest submission error:', err);
+        Toast.error('Failed to submit', 'ERROR');
+      }
     }
 
     // Inventory and Shop System
