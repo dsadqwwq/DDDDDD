@@ -4509,7 +4509,7 @@
             <br>
             No centralized servers. No hidden RNG. Trustless, transparent, verifiable by anyone.
             <br><br>
-            <span style="color:#FFD700;font-size:13px;">Launch planned for first half of 2026.</span>
+            <span style="color:#FFD700;font-size:13px;">Launch planned for first half of 2026 (subject to change).</span>
           </div>
         </div>
 
@@ -7651,11 +7651,7 @@
       inviteCodes.slice(0, 4).forEach(code => {
         allItems.push({
           type: 'invite_code',
-          icon: `<svg width="24" height="24" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
-            <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5" fill="none" stroke="#d4af37" stroke-width="3"/>
-            <circle cx="40" cy="50" r="8" fill="#22c55e"/>
-            <circle cx="60" cy="50" r="8" fill="#ef4444"/>
-          </svg>`,
+          icon: `<img src="duelpvp-logo.svg" alt="Invite Code" style="width:24px;height:24px;display:inline-block;vertical-align:middle;">`,
           name: code.used_by ? 'USED CODE' : 'INVITE CODE',
           desc: code.used_by
             ? `This code was used on ${new Date(code.used_at).toLocaleDateString()}`
@@ -8637,10 +8633,10 @@
           return;
         }
 
-        // Quest icons
+        // Quest icons - use logo for invite codes
         const questIcons = {
           'first_steps': '🎯',
-          'invite_3_friends': '👥',
+          'invite_3_friends': '<img src="duelpvp-logo.svg" alt="Invite" style="width:20px;height:20px;vertical-align:middle;">',
           'fluffle_holder': '🐰',
           'bunnz_holder': '🔥'
         };
@@ -8916,13 +8912,7 @@
           slot.className = 'inventory-slot invite-code';
           slot.innerHTML = `
             <div class="item-icon">
-              <svg width="28" height="28" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;">
-                <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5"
-                         fill="none"
-                         stroke="#22c55e"
-                         stroke-width="4"/>
-                <text x="50" y="58" text-anchor="middle" fill="#22c55e" font-size="24" font-family="monospace">?</text>
-              </svg>
+              <img src="duelpvp-logo.svg" alt="Invite Code" style="width:28px;height:28px;">
             </div>
             <div class="item-name">${item.code}</div>
           `;
@@ -9051,26 +9041,27 @@
       }
 
       try {
-        // Check if we have a Supabase Auth session
-        const { data: { session: authSession } } = await supabase.auth.getSession();
+        // Fetch GC directly from users table (most reliable method)
+        const { data: userData, error: userError } = await supabase
+          .from('users')
+          .select('gc_balance')
+          .eq('id', userId)
+          .single();
 
-        if (authSession) {
-          // Try secure JWT-based function first
-          const { data: secureData, error: secureError } = await supabase.rpc('secure_get_gc');
+        console.log('getUserGC result:', { userData, userError, userId });
 
-          if (!secureError && secureData !== null) {
-            gcCache.balance = secureData;
-            gcCache.lastFetch = now;
-            return secureData;
-          }
-          console.log('Secure GC function failed, using fallback:', secureError);
+        if (!userError && userData) {
+          const balance = userData.gc_balance || 0;
+          gcCache.balance = balance;
+          gcCache.lastFetch = now;
+          return balance;
         }
 
-        // Use direct user ID lookup (for users without Supabase Auth or as fallback)
+        // If direct fetch failed, try RPC as fallback
         const { data, error } = await supabase
           .rpc('get_user_gc', { p_user_id: userId });
 
-        console.log('get_user_gc result:', { data, error, userId });
+        console.log('get_user_gc RPC result:', { data, error });
 
         if (error) {
           console.error('Failed to fetch GC:', error);
