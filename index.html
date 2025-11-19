@@ -8945,26 +8945,27 @@
         const session = getSession();
         const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
 
-        // Store the submission for manual review
-        const { error: submitError } = await supabase
-          .from('quest_submissions')
-          .insert({
-            user_id: userId,
-            quest_id: 'like_retweet',
-            submission_data: { retweet_url: likeRetweetLink },
-            status: 'pending'
-          });
-
-        if (submitError) {
-          console.error('Submission error:', submitError);
-          // Continue anyway - we'll still grant the GC
-        }
-
         // Update quest progress
         await updateQuestProgress('like_retweet', 1);
 
+        // Immediately claim the reward
+        const { data, error } = await supabase.rpc('claim_quest_reward', {
+          p_quest_id: 'like_retweet',
+          p_user_id: userId
+        });
+
         Loading.hide();
-        Toast.success('+500 GC earned! (Subject to verification)', 'QUEST SUBMITTED');
+
+        if (error || !data?.success) {
+          console.error('Claim error:', error || data?.error);
+          Toast.error(data?.error || 'Quest completed but failed to claim reward. Try claiming manually.', 'ERROR');
+        } else {
+          // Clear GC cache and update display
+          gcCache.lastFetch = 0;
+          const newGC = await getUserGC();
+          updateGCDisplay(newGC, data.reward);
+          Toast.success(`+${data.reward} GC earned!`, 'QUEST COMPLETED');
+        }
 
         // Reload quests
         const activeTab = document.querySelector('.quest-tab.active');
