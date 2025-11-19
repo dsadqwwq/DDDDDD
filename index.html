@@ -8822,8 +8822,8 @@
 
     // X post sharing quest
     async function openSharePostQuest() {
-      // Open the X post to retweet
-      const postUrl = 'https://x.com/Duelpvp';
+      // Open the specific X post to retweet
+      const postUrl = 'https://x.com/Duelpvp/status/1991218122548752600';
       window.open(postUrl, '_blank');
 
       // Show modal to submit retweet link
@@ -8844,65 +8844,64 @@
         </div>
       `;
 
-      Modal.confirm(modalHtml, 'Retweet Quest', async (confirmed) => {
-        if (!confirmed) return;
+      const confirmed = await Modal.show({ html: modalHtml, title: 'Retweet Quest', type: 'confirm' });
+      if (!confirmed) return;
 
-        const retweetLink = document.getElementById('retweetLinkInput')?.value?.trim();
-        if (!retweetLink) {
-          Toast.error('Please paste your retweet link', 'ERROR');
-          return;
+      const retweetLink = document.getElementById('retweetLinkInput')?.value?.trim();
+      if (!retweetLink) {
+        Toast.error('Please paste your retweet link', 'ERROR');
+        return;
+      }
+
+      // Validate it looks like an X/Twitter link
+      if (!retweetLink.includes('x.com/') && !retweetLink.includes('twitter.com/')) {
+        Toast.error('Please paste a valid X/Twitter link', 'ERROR');
+        return;
+      }
+
+      Loading.show('Submitting...');
+
+      try {
+        const session = getSession();
+        const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
+
+        // Store the submission for manual review
+        const { error: submitError } = await supabase
+          .from('quest_submissions')
+          .insert({
+            user_id: userId,
+            quest_id: 'share_post',
+            submission_data: { retweet_url: retweetLink },
+            status: 'pending'
+          });
+
+        if (submitError) {
+          console.error('Submission error:', submitError);
+          // Continue anyway - we'll still grant the GC
         }
 
-        // Validate it looks like an X/Twitter link
-        if (!retweetLink.includes('x.com/') && !retweetLink.includes('twitter.com/')) {
-          Toast.error('Please paste a valid X/Twitter link', 'ERROR');
-          return;
-        }
+        // Update quest progress
+        await updateQuestProgress('share_post', 1);
 
-        Loading.show('Submitting...');
+        Loading.hide();
+        Toast.success('+500 GC earned! (Subject to verification)', 'QUEST SUBMITTED');
 
-        try {
-          const session = getSession();
-          const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
+        // Reload quests
+        const activeTab = document.querySelector('.quest-tab.active');
+        const tabType = activeTab ? activeTab.getAttribute('data-quest-tab') : 'daily';
+        loadQuests(tabType);
 
-          // Store the submission for manual review
-          const { error: submitError } = await supabase
-            .from('quest_submissions')
-            .insert({
-              user_id: userId,
-              quest_id: 'share_post',
-              submission_data: { retweet_url: retweetLink },
-              status: 'pending'
-            });
-
-          if (submitError) {
-            console.error('Submission error:', submitError);
-            // Continue anyway - we'll still grant the GC
-          }
-
-          // Update quest progress
-          await updateQuestProgress('share_post', 1);
-
-          Loading.hide();
-          Toast.success('+500 GC earned! (Subject to verification)', 'QUEST SUBMITTED');
-
-          // Reload quests
-          const activeTab = document.querySelector('.quest-tab.active');
-          const tabType = activeTab ? activeTab.getAttribute('data-quest-tab') : 'daily';
-          loadQuests(tabType);
-
-        } catch (err) {
-          Loading.hide();
-          console.error('Quest submission error:', err);
-          Toast.error('Failed to submit', 'ERROR');
-        }
-      });
+      } catch (err) {
+        Loading.hide();
+        console.error('Quest submission error:', err);
+        Toast.error('Failed to submit', 'ERROR');
+      }
     }
 
     // Like & Retweet quest
     async function openLikeRetweetQuest() {
-      // Open the X post to like and retweet
-      const postUrl = 'https://x.com/Duelpvp';
+      // Open the specific X post to like and retweet
+      const postUrl = 'https://x.com/Duelpvp/status/1991218122548752600';
       window.open(postUrl, '_blank');
 
       // Show modal to submit link
@@ -8923,59 +8922,58 @@
         </div>
       `;
 
-      Modal.confirm(modalHtml, 'Like & Retweet Quest', async (confirmed) => {
-        if (!confirmed) return;
+      const confirmed = await Modal.show({ html: modalHtml, title: 'Like & Retweet Quest', type: 'confirm' });
+      if (!confirmed) return;
 
-        const likeRetweetLink = document.getElementById('likeRetweetLinkInput')?.value?.trim();
-        if (!likeRetweetLink) {
-          Toast.error('Please paste your retweet link', 'ERROR');
-          return;
+      const likeRetweetLink = document.getElementById('likeRetweetLinkInput')?.value?.trim();
+      if (!likeRetweetLink) {
+        Toast.error('Please paste your retweet link', 'ERROR');
+        return;
+      }
+
+      // Validate it looks like an X/Twitter link
+      if (!likeRetweetLink.includes('x.com/') && !likeRetweetLink.includes('twitter.com/')) {
+        Toast.error('Please paste a valid X/Twitter link', 'ERROR');
+        return;
+      }
+
+      Loading.show('Submitting...');
+
+      try {
+        const session = getSession();
+        const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
+
+        // Store the submission for manual review
+        const { error: submitError } = await supabase
+          .from('quest_submissions')
+          .insert({
+            user_id: userId,
+            quest_id: 'like_retweet',
+            submission_data: { retweet_url: likeRetweetLink },
+            status: 'pending'
+          });
+
+        if (submitError) {
+          console.error('Submission error:', submitError);
+          // Continue anyway - we'll still grant the GC
         }
 
-        // Validate it looks like an X/Twitter link
-        if (!likeRetweetLink.includes('x.com/') && !likeRetweetLink.includes('twitter.com/')) {
-          Toast.error('Please paste a valid X/Twitter link', 'ERROR');
-          return;
-        }
+        // Update quest progress
+        await updateQuestProgress('like_retweet', 1);
 
-        Loading.show('Submitting...');
+        Loading.hide();
+        Toast.success('+500 GC earned! (Subject to verification)', 'QUEST SUBMITTED');
 
-        try {
-          const session = getSession();
-          const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
+        // Reload quests
+        const activeTab = document.querySelector('.quest-tab.active');
+        const tabType = activeTab ? activeTab.getAttribute('data-quest-tab') : 'daily';
+        loadQuests(tabType);
 
-          // Store the submission for manual review
-          const { error: submitError } = await supabase
-            .from('quest_submissions')
-            .insert({
-              user_id: userId,
-              quest_id: 'like_retweet',
-              submission_data: { retweet_url: likeRetweetLink },
-              status: 'pending'
-            });
-
-          if (submitError) {
-            console.error('Submission error:', submitError);
-            // Continue anyway - we'll still grant the GC
-          }
-
-          // Update quest progress
-          await updateQuestProgress('like_retweet', 1);
-
-          Loading.hide();
-          Toast.success('+500 GC earned! (Subject to verification)', 'QUEST SUBMITTED');
-
-          // Reload quests
-          const activeTab = document.querySelector('.quest-tab.active');
-          const tabType = activeTab ? activeTab.getAttribute('data-quest-tab') : 'daily';
-          loadQuests(tabType);
-
-        } catch (err) {
-          Loading.hide();
-          console.error('Quest submission error:', err);
-          Toast.error('Failed to submit', 'ERROR');
-        }
-      });
+      } catch (err) {
+        Loading.hide();
+        console.error('Quest submission error:', err);
+        Toast.error('Failed to submit', 'ERROR');
+      }
     }
 
     // Inventory and Shop System
