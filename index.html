@@ -6612,8 +6612,7 @@
         if (authResult.data?.user) {
           console.log('Linking new user to auth...');
           const linkResult = await supabase.rpc('link_auth_to_user', {
-            p_user_id: userId,
-            p_auth_user_id: authResult.data.user.id
+            p_user_id: userId
           });
           console.log('Link result:', linkResult);
         }
@@ -7026,8 +7025,7 @@
           if (authResult.data?.user) {
             console.log('Linking auth user to database user...');
             const linkResult = await supabase.rpc('link_auth_to_user', {
-              p_user_id: userData.id,
-              p_auth_user_id: authResult.data.user.id
+              p_user_id: userData.id
             });
             console.log('Link result:', linkResult);
           }
@@ -7065,7 +7063,7 @@
         document.getElementById('userName').textContent = userData.display_name.toUpperCase();
 
         // Check NFT holder status and auto-complete quests
-        await checkNFTHolderQuests(userData.id, walletAddress);
+        await checkNFTHolderQuests(walletAddress);
 
         // Initialize GP cache
         await initializeGPCache();
@@ -7168,7 +7166,7 @@
       let inviteCodes = [];
       if (userId) {
         const { data } = await supabase
-          .rpc('get_my_codes', { p_user_id: userId });
+          .rpc('get_my_codes');
 
         if (data && data.length > 0) {
           inviteCodes = data.map(c => ({
@@ -8237,7 +8235,7 @@
             if (quest.type === 'nft') {
               // NFT holder quest
               if (isComplete) {
-                html += `<button class="action-btn btn-primary" style="width:100%;margin-top:8px;" onclick="claimQuestReward('${quest.id}', ${quest.reward})">CLAIM ${quest.reward} GP</button>`;
+                html += `<button class="action-btn btn-primary" style="width:100%;margin-top:8px;" onclick="claimQuestReward('${quest.id}')">CLAIM ${quest.reward} GP</button>`;
               } else {
                 html += `<div style="text-align:center;padding:8px;color:#888;">Not a holder</div>`;
               }
@@ -8249,7 +8247,7 @@
                 <div class="progress-text">${p.value} / ${quest.target}</div>
               `;
               if (isComplete) {
-                html += `<button class="action-btn btn-primary" style="width:100%;margin-top:8px;" onclick="claimQuestReward('${quest.id}', ${quest.reward})">CLAIM ${quest.reward} GP</button>`;
+                html += `<button class="action-btn btn-primary" style="width:100%;margin-top:8px;" onclick="claimQuestReward('${quest.id}')">CLAIM ${quest.reward} GP</button>`;
               } else {
                 html += `<button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="openSharePostQuest()">COMPLETE QUEST</button>`;
               }
@@ -8261,7 +8259,7 @@
                 <div class="progress-text">${p.value} / ${quest.target}</div>
               `;
               if (isComplete) {
-                html += `<button class="action-btn btn-primary" style="width:100%;margin-top:8px;" onclick="claimQuestReward('${quest.id}', ${quest.reward})">CLAIM ${quest.reward} GP</button>`;
+                html += `<button class="action-btn btn-primary" style="width:100%;margin-top:8px;" onclick="claimQuestReward('${quest.id}')">CLAIM ${quest.reward} GP</button>`;
               } else if (quest.action === 'openInventory') {
                 html += `<button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="showInventory()">VIEW INVITE CODES</button>`;
               }
@@ -8282,29 +8280,23 @@
     }
 
     // Claim quest reward
-    async function claimQuestReward(questId, reward) {
-      const session = getSession();
-      const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
-      if (!userId) return;
-
+    async function claimQuestReward(questId) {
       Loading.show('Claiming reward...');
 
       try {
         const { data, error } = await supabase.rpc('claim_quest_reward', {
-          p_user_id: userId,
-          p_quest_id: questId,
-          p_reward_points: reward
+          p_quest_id: questId
         });
 
         Loading.hide();
 
-        if (error) {
-          console.error('Claim error:', error);
-          Toast.error('Failed to claim reward', 'ERROR');
+        if (error || !data?.success) {
+          console.error('Claim error:', error || data?.error);
+          Toast.error(data?.error || 'Failed to claim reward', 'ERROR');
           return;
         }
 
-        Toast.success(`+${reward} GP earned!`, 'QUEST COMPLETED');
+        Toast.success(`+${data.reward} GP earned!`, 'QUEST COMPLETED');
 
         // Reload current tab
         const activeTab = document.querySelector('.quest-tab.active');
@@ -8319,10 +8311,9 @@
     }
 
     // Check NFT holder status on login
-    async function checkNFTHolderQuests(userId, walletAddress) {
+    async function checkNFTHolderQuests(walletAddress) {
       try {
         const { error } = await supabase.rpc('check_nft_holder_quests', {
-          p_user_id: userId,
           p_wallet_address: walletAddress.toLowerCase()
         });
         if (error) console.error('NFT check error:', error);
@@ -8333,12 +8324,8 @@
 
     // Update quest progress
     async function updateQuestProgress(questId, amount = 1) {
-      const userId = localStorage.getItem('duelpvp_user_id');
-      if (!userId) return;
-
       try {
         const { error } = await supabase.rpc('update_quest_progress', {
-          p_user_id: userId,
           p_quest_id: questId,
           p_increment: amount
         });
@@ -8455,7 +8442,7 @@
 
       // Get user's invite codes using RPC function
       const { data: codesData, error: codesError } = await supabase
-        .rpc('get_my_codes', { p_user_id: userId });
+        .rpc('get_my_codes');
 
       if (codesError) {
         console.error('Failed to get codes:', codesError);
@@ -8872,7 +8859,7 @@
 
       try {
         const { data, error } = await supabase
-          .rpc('get_my_codes', { p_user_id: userId });
+          .rpc('get_my_codes');
 
         if (error) {
           console.error('Error loading invite code:', error);
