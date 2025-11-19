@@ -379,7 +379,7 @@
     opacity:0.8;
   }
 
-  .footer{position:fixed;right:20px;bottom:16px;font-size:12px;opacity:.85; z-index:3; display:flex; align-items:center; gap:12px;}
+  .footer{position:fixed;right:20px;bottom:16px;font-size:12px;opacity:.85; z-index:5; display:flex; align-items:center; gap:12px;}
   .footer a{color:var(--gold); text-decoration:none; transition:all 0.2s; display:flex; align-items:center; gap:4px;}
   .footer a:hover{opacity:1; text-shadow:0 0 8px var(--gold);}
 
@@ -4477,8 +4477,8 @@
       <!-- Market Bar (hidden - kept for compatibility) -->
       <div class="market-bar" id="viewShopBtn" style="display:none;"></div>
 
-      <!-- Campaign Banner -->
-      <div class="campaign-banner" id="campaignBanner">
+      <!-- Campaign Banner (hidden for now) -->
+      <!-- <div class="campaign-banner" id="campaignBanner">
         <div class="campaign-banner-header">
           <div class="campaign-banner-icon"></div>
           <div class="campaign-banner-text">WHO WANTS TO BE A MILLIONAIRE</div>
@@ -4493,7 +4493,7 @@
           </div>
           <div class="campaign-time-remaining" id="campaignTimeRemaining">Starting tomorrow</div>
         </div>
-      </div>
+      </div> -->
 
       <!-- About Section -->
       <div class="campaign-earn-section">
@@ -6429,7 +6429,7 @@
       } else if (newContent === 'dashboard') {
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'block';
-        campaignBanner.style.display = 'block';
+        if (campaignBanner) campaignBanner.style.display = 'block';
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
@@ -6494,7 +6494,7 @@
       } else if (newContent === 'crash') {
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'none';
-        campaignBanner.style.display = 'none';
+        if (campaignBanner) campaignBanner.style.display = 'none';
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
@@ -6511,7 +6511,7 @@
       } else if (newContent === 'mines') {
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'none';
-        campaignBanner.style.display = 'none';
+        if (campaignBanner) campaignBanner.style.display = 'none';
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
@@ -6532,7 +6532,7 @@
       } else if (newContent === 'blackjack') {
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'none';
-        campaignBanner.style.display = 'none';
+        if (campaignBanner) campaignBanner.style.display = 'none';
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
@@ -6549,7 +6549,7 @@
       } else if (newContent === 'campaign') {
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'none';
-        campaignBanner.style.display = 'none';
+        if (campaignBanner) campaignBanner.style.display = 'none';
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
@@ -7375,27 +7375,53 @@
       // Wallet will be reconnected when needed for transactions
       console.log('Valid session found, skipping wallet check for auto-login');
 
-      // Verify user still exists in database and get auth_user_id
-      const { data: userData, error } = await supabase
-        .from('users')
-        .select('id, display_name, gc_balance, auth_user_id')
-        .eq('id', session.userId)
-        .single();
+      // Verify user still exists in database using RPC (bypasses RLS)
+      const { data: loginData, error } = await supabase.rpc('login_with_wallet', {
+        p_wallet_address: session.walletAddress
+      });
 
-      if (error || !userData) {
+      if (error || !loginData || !loginData.success) {
         console.log('User not found in database, clearing session');
         clearSession();
         await supabase.auth.signOut();
         return;
       }
 
-      // Restore Supabase auth session if missing
-      if (!supabaseSession && userData.auth_user_id) {
-        console.log('No Supabase session, but user has auth_user_id - session expired, please re-login');
-        clearSession();
-        await supabase.auth.signOut();
-        Toast.info('Session expired. Please login again.', 'SESSION EXPIRED');
-        return;
+      // Extract user data from RPC response
+      const userData = {
+        id: loginData.user_id,
+        display_name: loginData.display_name,
+        gc_balance: loginData.gc_balance,
+        auth_user_id: loginData.auth_user_id
+      };
+
+      // Restore Supabase auth session if missing - create new anonymous session
+      if (!supabaseSession) {
+        console.log('No Supabase session, creating new anonymous session for auto-login');
+        const authResult = await supabase.auth.signInAnonymously({
+          options: {
+            data: {
+              wallet_address: session.walletAddress,
+              display_name: userData.display_name,
+              user_id: userData.id
+            }
+          }
+        });
+
+        if (authResult.error) {
+          console.error('Failed to create auth session:', authResult.error);
+          clearSession();
+          Toast.info('Session expired. Please login again.', 'SESSION EXPIRED');
+          return;
+        }
+
+        // Set the session explicitly
+        if (authResult.data?.session) {
+          await supabase.auth.setSession({
+            access_token: authResult.data.session.access_token,
+            refresh_token: authResult.data.session.refresh_token
+          });
+        }
       }
 
       // Verify Supabase session matches user
@@ -8792,7 +8818,7 @@
     // X post sharing quest
     async function openSharePostQuest() {
       // Open the X post to retweet
-      const postUrl = 'https://x.com/duelpvp_game';
+      const postUrl = 'https://x.com/Duelpvp';
       window.open(postUrl, '_blank');
 
       // Show modal to submit retweet link
