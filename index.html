@@ -8945,28 +8945,8 @@
         const session = getSession();
         const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
 
-        // Insert/update quest progress directly in user_quests table
-        const { error: upsertError } = await supabase
-          .from('user_quests')
-          .upsert({
-            user_id: userId,
-            quest_id: 'like_retweet',
-            progress: 1,
-            is_completed: true,
-            completed_at: new Date().toISOString()
-          }, {
-            onConflict: 'user_id,quest_id'
-          });
-
-        if (upsertError) {
-          console.error('Quest upsert error:', upsertError);
-          Loading.hide();
-          Toast.error('Failed to complete quest', 'ERROR');
-          return;
-        }
-
-        // Immediately claim the reward
-        const { data, error } = await supabase.rpc('claim_quest_reward', {
+        // Complete and claim the quest in one call
+        const { data, error } = await supabase.rpc('complete_manual_quest', {
           p_quest_id: 'like_retweet',
           p_user_id: userId
         });
@@ -8974,8 +8954,8 @@
         Loading.hide();
 
         if (error || !data?.success) {
-          console.error('Claim error:', error || data?.error);
-          Toast.error(data?.error || 'Quest completed but failed to claim reward. Try claiming manually.', 'ERROR');
+          console.error('Quest error:', error || data?.error);
+          Toast.error(data?.error || 'Failed to complete quest', 'ERROR');
         } else {
           // Clear GC cache and update display
           gcCache.lastFetch = 0;
