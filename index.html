@@ -3269,11 +3269,12 @@
     width:min(600px,92vw);
     max-height:85vh;
     overflow-y:auto;
-    background:rgba(12,16,20,.10);
-    border:2px solid rgba(255,214,77,.3);
-    border-radius:12px;
+    background:linear-gradient(135deg, rgba(20,25,30,.95) 0%, rgba(12,16,20,.98) 100%);
+    border:2px solid rgba(255,214,77,.4);
+    border-radius:16px;
     padding:24px;
-    backdrop-filter:blur(8px);
+    backdrop-filter:blur(12px);
+    box-shadow:0 8px 32px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,214,77,.1);
   }
 
   .inventory-header{
@@ -3282,13 +3283,14 @@
     align-items:center;
     margin-bottom:24px;
     padding-bottom:16px;
-    border-bottom:1px solid rgba(255,214,77,.2);
+    border-bottom:2px solid rgba(255,214,77,.3);
   }
 
   .inventory-title{
     font-family:'Press Start 2P', monospace;
     font-size:18px;
     color:var(--gold);
+    text-shadow:0 0 10px rgba(255,214,77,.3);
   }
 
   .gp-display{
@@ -3299,45 +3301,71 @@
 
   .inventory-grid{
     display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(100px, 1fr));
+    grid-template-columns:repeat(4, 1fr);
     gap:12px;
     margin-bottom:20px;
+    padding:16px;
+    background:rgba(0,0,0,.3);
+    border-radius:12px;
+    border:1px solid rgba(255,214,77,.15);
   }
 
   .inventory-slot{
     aspect-ratio:1;
-    background:rgba(0,0,0,.4);
-    border:2px solid rgba(255,214,77,.2);
+    background:linear-gradient(145deg, rgba(30,35,40,.8) 0%, rgba(20,25,30,.9) 100%);
+    border:2px solid rgba(255,214,77,.25);
     border-radius:8px;
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
     cursor:pointer;
-    transition:all 0.2s;
+    transition:all 0.2s ease;
     padding:8px;
     position:relative;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 2px 4px rgba(0,0,0,.3);
   }
 
   .inventory-slot:hover{
     border-color:var(--gold);
-    background:rgba(255,214,77,.1);
+    background:linear-gradient(145deg, rgba(255,214,77,.15) 0%, rgba(255,214,77,.05) 100%);
+    transform:translateY(-2px);
+    box-shadow:0 4px 12px rgba(255,214,77,.2);
   }
 
   .inventory-slot.empty{
-    opacity:0.3;
+    opacity:0.4;
+    cursor:default;
+  }
+
+  .inventory-slot.empty:hover{
+    transform:none;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 2px 4px rgba(0,0,0,.3);
+    background:linear-gradient(145deg, rgba(30,35,40,.8) 0%, rgba(20,25,30,.9) 100%);
+    border-color:rgba(255,214,77,.25);
+  }
+
+  .inventory-slot.invite-code{
+    border-color:rgba(34,197,94,.5);
+    background:linear-gradient(145deg, rgba(34,197,94,.15) 0%, rgba(20,25,30,.9) 100%);
+  }
+
+  .inventory-slot.invite-code:hover{
+    border-color:#22c55e;
+    box-shadow:0 4px 12px rgba(34,197,94,.3);
   }
 
   .item-icon{
-    font-size:32px;
-    margin-bottom:4px;
+    font-size:28px;
+    margin-bottom:6px;
   }
 
   .item-name{
     font-family:'Press Start 2P', monospace;
-    font-size:8px;
+    font-size:7px;
     color:#e6ecf1;
     text-align:center;
+    line-height:1.3;
   }
 
   .item-count{
@@ -3350,6 +3378,15 @@
     font-family:'Press Start 2P', monospace;
     font-size:9px;
     color:var(--gold);
+  }
+
+  .inventory-section-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    color:var(--gold);
+    margin-bottom:12px;
+    padding-left:4px;
+    opacity:0.8;
   }
 
   .shop-section{
@@ -4636,10 +4673,7 @@
     <div class="inventory-container" id="inventoryContent" role="region" aria-label="Inventory">
       <div class="inventory-header">
         <div class="inventory-title">INVENTORY</div>
-        <div>
-          <div class="gp-display" id="gpDisplay">GP: 0</div>
-          <button class="back-btn" id="backFromInventoryBtn" aria-label="Back to dashboard" style="margin-top:8px;">BACK</button>
-        </div>
+        <button class="back-btn" id="backFromInventoryBtn" aria-label="Back to dashboard">BACK</button>
       </div>
 
       <!-- Breadcrumb -->
@@ -4649,6 +4683,7 @@
         <span class="breadcrumb-item active">Inventory</span>
       </div>
 
+      <div class="inventory-section-title">INVITE CODES</div>
       <div class="inventory-grid" id="inventoryGrid">
         <!-- Inventory slots will be generated here -->
       </div>
@@ -8056,7 +8091,8 @@
     const QUESTS = {
       daily: [
         {id: 'first_login', name: 'First Steps', desc: 'Log in for the first time', target: 1, reward: 500, icon: '🗡️', type: 'regular'},
-        {id: 'invite_used', name: 'Recruit Warriors', desc: 'Have 3 friends use your invite codes', target: 3, reward: 1500, icon: '👥', type: 'regular'},
+        {id: 'invite_used', name: 'Recruit Warriors', desc: 'Have 3 friends use your invite codes', target: 3, reward: 1500, icon: '👥', type: 'regular', action: 'openInventory'},
+        {id: 'share_post', name: 'Spread the Word', desc: 'Retweet our post on X', target: 1, reward: 500, icon: '🐦', type: 'manual'},
         {id: 'bunnz_holder', name: 'BAD BUNNZ Holder', desc: 'Own a BAD BUNNZ NFT', target: 1, reward: 500, icon: '🐰', type: 'nft'},
         {id: 'fluffle_holder', name: 'FLUFFLE Holder', desc: 'Own a FLUFFLE NFT', target: 1, reward: 2500, icon: '🐇', type: 'nft'}
       ],
@@ -8195,6 +8231,18 @@
               } else {
                 html += `<div style="text-align:center;padding:8px;color:#888;">Not a holder</div>`;
               }
+            } else if (quest.type === 'manual') {
+              // Manual verification quest (like X sharing)
+              const pct = Math.min(100, (p.value / quest.target) * 100);
+              html += `
+                <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+                <div class="progress-text">${p.value} / ${quest.target}</div>
+              `;
+              if (isComplete) {
+                html += `<button class="action-btn btn-primary" style="width:100%;margin-top:8px;" onclick="claimQuestReward('${quest.id}', ${quest.reward})">CLAIM ${quest.reward} GP</button>`;
+              } else {
+                html += `<button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="openSharePostQuest()">COMPLETE QUEST</button>`;
+              }
             } else {
               // Regular quest with progress bar
               const pct = Math.min(100, (p.value / quest.target) * 100);
@@ -8204,6 +8252,8 @@
               `;
               if (isComplete) {
                 html += `<button class="action-btn btn-primary" style="width:100%;margin-top:8px;" onclick="claimQuestReward('${quest.id}', ${quest.reward})">CLAIM ${quest.reward} GP</button>`;
+              } else if (quest.action === 'openInventory') {
+                html += `<button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="showInventory()">VIEW INVITE CODES</button>`;
               }
             }
 
@@ -8288,6 +8338,85 @@
       }
     }
 
+    // X post sharing quest
+    async function openSharePostQuest() {
+      // Open the X post to retweet
+      const postUrl = 'https://x.com/duelpvp_game';
+      window.open(postUrl, '_blank');
+
+      // Show modal to submit retweet link
+      const modalHtml = `
+        <div style="text-align:center;">
+          <p style="margin-bottom:16px;color:#e6ecf1;font-size:12px;">
+            1. Retweet our post on X<br>
+            2. Copy the link to your retweet<br>
+            3. Paste it below to complete the quest
+          </p>
+          <input type="text" id="retweetLinkInput" placeholder="Paste your retweet link here..."
+            style="width:100%;padding:12px;background:rgba(0,0,0,.4);border:2px solid rgba(255,214,77,.3);border-radius:8px;color:#e6ecf1;font-family:monospace;font-size:12px;margin-bottom:16px;">
+          <div style="background:rgba(255,193,7,.1);border:1px solid rgba(255,193,7,.3);border-radius:8px;padding:12px;margin-bottom:16px;">
+            <p style="color:#ffc107;font-size:10px;margin:0;">
+              Note: Your submission will be manually verified. GP will be granted immediately but may be revoked if the retweet is not valid.
+            </p>
+          </div>
+        </div>
+      `;
+
+      Modal.confirm(modalHtml, 'Retweet Quest', async (confirmed) => {
+        if (!confirmed) return;
+
+        const retweetLink = document.getElementById('retweetLinkInput')?.value?.trim();
+        if (!retweetLink) {
+          Toast.error('Please paste your retweet link', 'ERROR');
+          return;
+        }
+
+        // Validate it looks like an X/Twitter link
+        if (!retweetLink.includes('x.com/') && !retweetLink.includes('twitter.com/')) {
+          Toast.error('Please paste a valid X/Twitter link', 'ERROR');
+          return;
+        }
+
+        Loading.show('Submitting...');
+
+        try {
+          const session = getSession();
+          const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
+
+          // Store the submission for manual review
+          const { error: submitError } = await supabase
+            .from('quest_submissions')
+            .insert({
+              user_id: userId,
+              quest_id: 'share_post',
+              submission_data: { retweet_url: retweetLink },
+              status: 'pending'
+            });
+
+          if (submitError) {
+            console.error('Submission error:', submitError);
+            // Continue anyway - we'll still grant the GP
+          }
+
+          // Update quest progress
+          await updateQuestProgress('share_post', 1);
+
+          Loading.hide();
+          Toast.success('+500 GP earned! (Subject to verification)', 'QUEST SUBMITTED');
+
+          // Reload quests
+          const activeTab = document.querySelector('.quest-tab.active');
+          const tabType = activeTab ? activeTab.getAttribute('data-quest-tab') : 'daily';
+          loadQuests(tabType);
+
+        } catch (err) {
+          Loading.hide();
+          console.error('Quest submission error:', err);
+          Toast.error('Failed to submit', 'ERROR');
+        }
+      });
+    }
+
     // Inventory and Shop System
     const SHOP_ITEMS = [
       {id: 'sword_bronze', name: 'Bronze Sword', desc: 'A sturdy starter weapon', price: 1000, icon: '🗡️', type: 'weapon'},
@@ -8314,18 +8443,6 @@
         return;
       }
 
-      // Get user data from Supabase
-      const { data: userData } = await supabase
-        .from('users')
-        .select('points')
-        .eq('id', userId)
-        .single();
-
-      const gp = userData?.points || 0;
-
-      // Get inventory from localStorage (for now)
-      const inventory = JSON.parse(localStorage.getItem(`duelpvp_inventory_${email}`) || '[]');
-
       // Get user's invite codes using RPC function
       const { data: codesData, error: codesError } = await supabase
         .rpc('get_my_codes', { p_user_id: userId });
@@ -8334,7 +8451,19 @@
         console.error('Failed to get codes:', codesError);
       }
 
-      const inviteCodes = codesData && codesData.length > 0
+      // Check if invite_used quest is complete
+      const { data: questData } = await supabase
+        .from('quests')
+        .select('quest_id, progress, claimed_at')
+        .eq('user_id', userId)
+        .eq('quest_id', 'invite_used')
+        .eq('reset_date', new Date().toISOString().split('T')[0])
+        .single();
+
+      const inviteQuestComplete = questData && questData.progress >= 3;
+
+      // Filter invite codes - hide used ones unless quest is complete
+      let inviteCodes = codesData && codesData.length > 0
         ? codesData.map(c => ({
             code: c.code,
             used: c.used,
@@ -8342,54 +8471,32 @@
           }))
         : [];
 
-      // Update GP display
-      document.getElementById('gpDisplay').textContent = `GP: ${gp.toLocaleString()}`;
+      // If quest is not complete, filter out used codes
+      if (!inviteQuestComplete) {
+        inviteCodes = inviteCodes.filter(c => !c.used);
+      }
 
       // Render inventory
       const inventoryGrid = document.getElementById('inventoryGrid');
       inventoryGrid.innerHTML = '';
 
-      // Combine invite codes + regular inventory
-      const allItems = [];
-
-      // Add invite codes first
-      if (inviteCodes) {
-        inviteCodes.forEach(code => {
-          allItems.push({
-            type: 'invite_code',
-            code: code.code,
-            used: code.used,
-            used_at: code.used_at
-          });
-        });
-      }
-
-      // Add regular inventory items
-      inventory.forEach(item => {
-        allItems.push({
-          type: 'shop_item',
-          ...item
-        });
-      });
-
-      // Show first 28 slots (like RuneScape)
-      for (let i = 0; i < 28; i++) {
-        const item = allItems[i];
+      // Show 8 slots for invite codes
+      const numSlots = 8;
+      for (let i = 0; i < numSlots; i++) {
+        const item = inviteCodes[i];
         const slot = document.createElement('div');
-        slot.className = item ? 'inventory-slot' : 'inventory-slot empty';
 
-        if (item && item.type === 'invite_code') {
+        if (item) {
           // Invite code item
-          slot.className = item.used ? 'inventory-slot used-code' : 'inventory-slot';
+          slot.className = item.used ? 'inventory-slot used-code' : 'inventory-slot invite-code';
           slot.innerHTML = `
             <div class="item-icon">
-              <svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;">
+              <svg width="28" height="28" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;">
                 <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5"
                          fill="none"
-                         stroke="#d4af37"
-                         stroke-width="3"/>
-                <circle cx="40" cy="50" r="8" fill="#22c55e"/>
-                <circle cx="60" cy="50" r="8" fill="#ef4444"/>
+                         stroke="${item.used ? '#666' : '#22c55e'}"
+                         stroke-width="4"/>
+                <text x="50" y="58" text-anchor="middle" fill="${item.used ? '#666' : '#22c55e'}" font-size="24" font-family="monospace">${item.used ? '✓' : '?'}</text>
               </svg>
             </div>
             <div class="item-name">${item.code}</div>
@@ -8407,22 +8514,23 @@
               Toast.success(`Code ${item.code} copied!`, 'SHARE WITH FRIENDS');
             });
           }
-        } else if (item && item.type === 'shop_item') {
-          // Regular shop item
-          const shopItem = SHOP_ITEMS.find(si => si.id === item.id);
-          slot.innerHTML = `
-            <div class="item-icon">${shopItem.icon}</div>
-            <div class="item-name">${shopItem.name}</div>
-            ${item.count > 1 ? `<div class="item-count">${item.count}</div>` : ''}
-          `;
-          slot.title = shopItem.desc;
         } else {
           // Empty slot
+          slot.className = 'inventory-slot empty';
           slot.innerHTML = '<div style="opacity:0.3">━</div>';
         }
 
         inventoryGrid.appendChild(slot);
       }
+
+      // Get user data for shop
+      const { data: userData } = await supabase
+        .from('users')
+        .select('points')
+        .eq('id', userId)
+        .single();
+
+      const gp = userData?.points || 0;
 
       // Render shop
       const shopGrid = document.getElementById('shopGrid');
