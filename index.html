@@ -5286,30 +5286,27 @@
     // Show wallet selection modal
     function showWalletSelector() {
       return new Promise((resolve, reject) => {
-        const wallets = getAvailableWallets();
-
-        if (wallets.length === 0) {
-          reject(new Error('No wallet detected. Please install MetaMask or another EVM wallet.'));
-          return;
-        }
-
-        // If only one wallet, use it directly
-        if (wallets.length === 1) {
-          resolve(wallets[0].id);
-          return;
-        }
+        // Always show all wallet options
+        const walletOptions = [
+          { id: 'metamask', name: 'MetaMask', icon: '🦊', check: () => window.ethereum?.isMetaMask },
+          { id: 'coinbase', name: 'Coinbase Wallet', icon: '🔵', check: () => window.ethereum?.isCoinbaseWallet },
+          { id: 'trust', name: 'Trust Wallet', icon: '🛡️', check: () => window.ethereum?.isTrust }
+        ];
 
         // Build wallet buttons HTML
-        let buttonsHtml = wallets.map(w =>
-          `<button class="wallet-option-btn" data-wallet="${w.id}" style="
+        let buttonsHtml = walletOptions.map(w => {
+          const isAvailable = w.check();
+          return `<button class="wallet-option-btn" data-wallet="${w.id}" ${!isAvailable ? 'data-unavailable="true"' : ''} style="
             display:flex;align-items:center;gap:12px;width:100%;padding:16px;
             background:rgba(255,214,77,.1);border:2px solid rgba(255,214,77,.3);
             border-radius:8px;color:#e6ecf1;font-family:'Press Start 2P',monospace;
-            font-size:10px;cursor:pointer;margin-bottom:8px;transition:all 0.2s;">
+            font-size:10px;cursor:pointer;margin-bottom:8px;transition:all 0.2s;
+            ${!isAvailable ? 'opacity:0.5;' : ''}">
             <span style="font-size:24px;">${w.icon}</span>
-            ${w.name}
-          </button>`
-        ).join('');
+            <span style="flex:1;text-align:left;">${w.name}</span>
+            ${!isAvailable ? '<span style="font-size:8px;color:#888;">Not installed</span>' : ''}
+          </button>`;
+        }).join('');
 
         const modalHtml = `
           <div style="text-align:center;">
@@ -5325,6 +5322,17 @@
           document.querySelectorAll('.wallet-option-btn').forEach(btn => {
             btn.addEventListener('click', () => {
               const walletId = btn.getAttribute('data-wallet');
+              const isUnavailable = btn.getAttribute('data-unavailable');
+
+              if (isUnavailable) {
+                let installUrl = 'https://metamask.io/download/';
+                if (walletId === 'coinbase') installUrl = 'https://www.coinbase.com/wallet';
+                if (walletId === 'trust') installUrl = 'https://trustwallet.com/download';
+
+                window.open(installUrl, '_blank');
+                return;
+              }
+
               Modal.close(false);
               resolve(walletId);
             });
