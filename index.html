@@ -379,7 +379,7 @@
     opacity:0.8;
   }
 
-  .footer{position:fixed;right:20px;bottom:16px;font-size:12px;opacity:.85; z-index:5; display:flex; align-items:center; gap:12px;}
+  .footer{position:fixed;right:20px;bottom:16px;font-size:12px;opacity:.85; z-index:100; display:flex; align-items:center; gap:12px;}
   .footer a{color:var(--gold); text-decoration:none; transition:all 0.2s; display:flex; align-items:center; gap:4px;}
   .footer a:hover{opacity:1; text-shadow:0 0 8px var(--gold);}
 
@@ -1647,31 +1647,12 @@
     overflow:hidden;
   }
 
-  .campaign-card:hover{
-    border-color:rgba(255,214,77,0.6);
-    transform:translateY(-4px) scale(1.01);
-    box-shadow:0 8px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,214,77,0.1);
-    background:rgba(0,0,0,0.4);
-  }
-
   .campaign-card.invest{
     border-color:rgba(76,175,80,0.3);
   }
 
-  .campaign-card.invest:hover{
-    border-color:rgba(76,175,80,0.7);
-    box-shadow:0 8px 28px rgba(76,175,80,0.2), 0 0 40px rgba(76,175,80,0.1);
-    background:rgba(16,24,16,0.3);
-  }
-
   .campaign-card.gamble{
     border-color:rgba(244,67,54,0.3);
-  }
-
-  .campaign-card.gamble:hover{
-    border-color:rgba(244,67,54,0.7);
-    box-shadow:0 8px 28px rgba(244,67,54,0.2), 0 0 40px rgba(244,67,54,0.1);
-    background:rgba(24,16,16,0.3);
   }
 
   .campaign-card-title{
