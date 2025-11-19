@@ -11,8 +11,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-<script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
-<script src="https://unpkg.com/web3modal@1.9.12/dist/index.js"></script>
 <style>
   :root{
     --gold:#FFD64D;
@@ -5262,69 +5260,129 @@
       }
     });
 
-    // ===== WEB3MODAL SETUP =====
-    const providerOptions = {
-      walletconnect: {
-        package: window.WalletConnectProvider.default,
-        options: {
-          rpc: {
-            1: "https://eth-mainnet.g.alchemy.com/v2/demo",
-            137: "https://polygon-rpc.com",
-            56: "https://bsc-dataseed.binance.org"
-          }
+    // ===== WALLET CONNECTION =====
+    let web3Provider = null;
+    let selectedWalletType = null;
+
+    // Detect available wallets
+    function getAvailableWallets() {
+      const wallets = [];
+
+      if (window.ethereum) {
+        if (window.ethereum.isMetaMask) {
+          wallets.push({ id: 'metamask', name: 'MetaMask', icon: '🦊' });
+        } else if (window.ethereum.isCoinbaseWallet) {
+          wallets.push({ id: 'coinbase', name: 'Coinbase Wallet', icon: '🔵' });
+        } else if (window.ethereum.isTrust) {
+          wallets.push({ id: 'trust', name: 'Trust Wallet', icon: '🛡️' });
+        } else {
+          wallets.push({ id: 'injected', name: 'Browser Wallet', icon: '🔗' });
         }
       }
-    };
 
-    const web3Modal = new Web3Modal.default({
-      cacheProvider: true,
-      providerOptions,
-      theme: "dark"
-    });
+      return wallets;
+    }
 
-    let web3Provider = null;
+    // Show wallet selection modal
+    function showWalletSelector() {
+      return new Promise((resolve, reject) => {
+        const wallets = getAvailableWallets();
 
-    // Connect wallet using Web3Modal
+        if (wallets.length === 0) {
+          reject(new Error('No wallet detected. Please install MetaMask or another EVM wallet.'));
+          return;
+        }
+
+        // If only one wallet, use it directly
+        if (wallets.length === 1) {
+          resolve(wallets[0].id);
+          return;
+        }
+
+        // Build wallet buttons HTML
+        let buttonsHtml = wallets.map(w =>
+          `<button class="wallet-option-btn" data-wallet="${w.id}" style="
+            display:flex;align-items:center;gap:12px;width:100%;padding:16px;
+            background:rgba(255,214,77,.1);border:2px solid rgba(255,214,77,.3);
+            border-radius:8px;color:#e6ecf1;font-family:'Press Start 2P',monospace;
+            font-size:10px;cursor:pointer;margin-bottom:8px;transition:all 0.2s;">
+            <span style="font-size:24px;">${w.icon}</span>
+            ${w.name}
+          </button>`
+        ).join('');
+
+        const modalHtml = `
+          <div style="text-align:center;">
+            <p style="margin-bottom:16px;color:#888;font-size:11px;">Select your wallet</p>
+            ${buttonsHtml}
+          </div>
+        `;
+
+        Modal.show({ type: 'custom', title: 'Connect Wallet', html: modalHtml });
+
+        // Add click handlers
+        setTimeout(() => {
+          document.querySelectorAll('.wallet-option-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const walletId = btn.getAttribute('data-wallet');
+              Modal.close(false);
+              resolve(walletId);
+            });
+            btn.addEventListener('mouseenter', () => {
+              btn.style.borderColor = 'var(--gold)';
+              btn.style.background = 'rgba(255,214,77,.2)';
+            });
+            btn.addEventListener('mouseleave', () => {
+              btn.style.borderColor = 'rgba(255,214,77,.3)';
+              btn.style.background = 'rgba(255,214,77,.1)';
+            });
+          });
+        }, 100);
+      });
+    }
+
+    // Connect wallet
     async function connectWallet() {
-      try {
-        const instance = await web3Modal.connect();
-        web3Provider = new ethers.providers.Web3Provider(instance);
+      const walletId = await showWalletSelector();
+      selectedWalletType = walletId;
 
-        // Handle account/chain changes
-        instance.on("accountsChanged", (accounts) => {
-          if (accounts.length === 0) {
-            disconnectWallet();
-          } else {
-            window.location.reload();
-          }
-        });
-
-        instance.on("chainChanged", () => {
-          window.location.reload();
-        });
-
-        instance.on("disconnect", () => {
-          disconnectWallet();
-        });
-
-        return web3Provider;
-      } catch (error) {
-        console.error("Wallet connection failed:", error);
-        throw error;
+      if (!window.ethereum) {
+        throw new Error('No wallet detected');
       }
+
+      web3Provider = new ethers.providers.Web3Provider(window.ethereum);
+
+      // Handle account/chain changes
+      window.ethereum.on("accountsChanged", (accounts) => {
+        if (accounts.length === 0) {
+          disconnectWallet();
+        } else {
+          window.location.reload();
+        }
+      });
+
+      window.ethereum.on("chainChanged", () => {
+        window.location.reload();
+      });
+
+      return web3Provider;
     }
 
     // Disconnect wallet
-    async function disconnectWallet() {
-      await web3Modal.clearCachedProvider();
+    function disconnectWallet() {
       web3Provider = null;
+      selectedWalletType = null;
     }
 
     // Get connected wallet address
     async function getWalletAddress() {
       if (!web3Provider) {
-        web3Provider = await connectWallet();
+        await connectWallet();
       }
+
+      // Request accounts
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+
       const signer = web3Provider.getSigner();
       return await signer.getAddress();
     }
@@ -5332,7 +5390,7 @@
     // Sign message with wallet
     async function signMessage(message) {
       if (!web3Provider) {
-        web3Provider = await connectWallet();
+        await connectWallet();
       }
       const signer = web3Provider.getSigner();
       return await signer.signMessage(message);
@@ -5381,24 +5439,37 @@
           this.resolveCallback = resolve;
 
           this.title.textContent = options.title || 'Confirmation';
-          this.body.textContent = options.message || '';
+
+          // Support HTML content
+          if (options.html) {
+            this.body.innerHTML = options.html;
+          } else {
+            this.body.textContent = options.message || '';
+          }
 
           // Show/hide action buttons based on type
           if (options.type === 'alert') {
             this.cancelBtn.style.display = 'none';
             this.confirmBtn.textContent = 'OK';
+            this.actions.style.display = 'flex';
+          } else if (options.type === 'custom') {
+            // Hide all action buttons for custom modals
+            this.actions.style.display = 'none';
           } else {
             this.cancelBtn.style.display = 'block';
             this.confirmBtn.textContent = options.confirmText || 'CONFIRM';
             this.cancelBtn.textContent = options.cancelText || 'CANCEL';
+            this.actions.style.display = 'flex';
           }
 
           this.overlay.classList.add('show');
         });
       },
 
-      close(confirmed) {
+      close(confirmed = false) {
         this.overlay.classList.remove('show');
+        // Reset actions display
+        this.actions.style.display = 'flex';
         if (this.resolveCallback) {
           this.resolveCallback(confirmed);
           this.resolveCallback = null;
@@ -6900,18 +6971,13 @@
 
     async function checkWalletConnection(expectedAddress) {
       try {
-        // Check if we have a cached provider
-        if (web3Modal.cachedProvider) {
-          const instance = await web3Modal.connect();
-          const provider = new ethers.providers.Web3Provider(instance);
-          const accounts = await provider.listAccounts();
+        if (!window.ethereum) return false;
 
-          if (accounts.length === 0) return false;
+        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+        if (accounts.length === 0) return false;
 
-          const connectedAddresses = accounts.map(a => a.toLowerCase());
-          return connectedAddresses.includes(expectedAddress.toLowerCase());
-        }
-        return false;
+        const connectedAddresses = accounts.map(a => a.toLowerCase());
+        return connectedAddresses.includes(expectedAddress.toLowerCase());
       } catch (e) {
         console.error('Failed to check wallet connection:', e);
         return false;
