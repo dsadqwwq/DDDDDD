@@ -8443,6 +8443,11 @@
       {id: 'pet_dragon', name: 'Baby Dragon', desc: 'Rare and powerful', price: 50000, icon: '🐉', type: 'pet'}
     ];
 
+    // Show inventory screen
+    function showInventory() {
+      swapContent('inventory');
+    }
+
     async function loadInventory() {
       const session = getSession();
       const userId = session?.userId;
