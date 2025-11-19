@@ -7566,16 +7566,19 @@
 
         if (!userId) return;
 
-        // Get user's total games played
-        const { data: userScores, error: scoresError } = await supabase
+        // Get user's total games played (scores table may not exist yet)
+        let userScores = [];
+        const { data: scoresData, error: scoresError } = await supabase
           .from('scores')
           .select('time_ms, created_at')
           .eq('user_id', userId)
           .order('created_at', { ascending: false });
 
         if (scoresError) {
-          console.error('Failed to load user scores:', scoresError);
-          return;
+          // Scores table doesn't exist yet - that's okay, continue with other stats
+          console.log('Scores table not available:', scoresError.message);
+        } else {
+          userScores = scoresData || [];
         }
 
         // Get user's GC from users table
