@@ -414,8 +414,8 @@ BEGIN
   FROM quest_templates qt
   WHERE qt.is_active = TRUE;
 
-  -- Auto-claim "First Steps" quest
-  PERFORM claim_quest_reward(v_user_id, 'first_steps');
+  -- First Steps quest is auto-completed but NOT auto-claimed
+  -- User must click "Claim" to receive the 500 GC reward
 
   -- Return success with user info
   RETURN json_build_object(
