@@ -8281,11 +8281,15 @@
 
     // Claim quest reward
     async function claimQuestReward(questId) {
+      const session = getSession();
+      const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
+
       Loading.show('Claiming reward...');
 
       try {
         const { data, error } = await supabase.rpc('claim_quest_reward', {
-          p_quest_id: questId
+          p_quest_id: questId,
+          p_user_id: userId
         });
 
         Loading.hide();
@@ -8324,10 +8328,14 @@
 
     // Update quest progress
     async function updateQuestProgress(questId, amount = 1) {
+      const session = getSession();
+      const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
+
       try {
         const { error } = await supabase.rpc('update_quest_progress', {
           p_quest_id: questId,
-          p_increment: amount
+          p_increment: amount,
+          p_user_id: userId
         });
         if (error) console.error('Progress update error:', error);
       } catch (err) {
