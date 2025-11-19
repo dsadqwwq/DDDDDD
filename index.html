@@ -7108,9 +7108,11 @@
         // Set username in dashboard
         document.getElementById('userName').textContent = warriorName.toUpperCase();
 
-        // Initialize GC cache
+        // Initialize GC cache and update display
         await initializeGCCache();
         const gp = await getUserGC();
+        const displayGC = gp >= 1000000 ? `${(gp/1000000).toFixed(1)}M` : gp >= 1000 ? `${(gp/1000).toFixed(1)}K` : gp;
+        document.getElementById('dashboardGCBalance').textContent = displayGC;
 
         Loading.hide();
         Toast.success(`Welcome, ${warriorName}!`, `${gp} GC`);
