@@ -10,6 +10,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+<script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
+<script src="https://unpkg.com/web3modal@1.9.12/dist/index.js"></script>
 <style>
   :root{
     --gold:#FFD64D;
@@ -5259,6 +5262,82 @@
       }
     });
 
+    // ===== WEB3MODAL SETUP =====
+    const providerOptions = {
+      walletconnect: {
+        package: window.WalletConnectProvider.default,
+        options: {
+          rpc: {
+            1: "https://eth-mainnet.g.alchemy.com/v2/demo",
+            137: "https://polygon-rpc.com",
+            56: "https://bsc-dataseed.binance.org"
+          }
+        }
+      }
+    };
+
+    const web3Modal = new Web3Modal.default({
+      cacheProvider: true,
+      providerOptions,
+      theme: "dark"
+    });
+
+    let web3Provider = null;
+
+    // Connect wallet using Web3Modal
+    async function connectWallet() {
+      try {
+        const instance = await web3Modal.connect();
+        web3Provider = new ethers.providers.Web3Provider(instance);
+
+        // Handle account/chain changes
+        instance.on("accountsChanged", (accounts) => {
+          if (accounts.length === 0) {
+            disconnectWallet();
+          } else {
+            window.location.reload();
+          }
+        });
+
+        instance.on("chainChanged", () => {
+          window.location.reload();
+        });
+
+        instance.on("disconnect", () => {
+          disconnectWallet();
+        });
+
+        return web3Provider;
+      } catch (error) {
+        console.error("Wallet connection failed:", error);
+        throw error;
+      }
+    }
+
+    // Disconnect wallet
+    async function disconnectWallet() {
+      await web3Modal.clearCachedProvider();
+      web3Provider = null;
+    }
+
+    // Get connected wallet address
+    async function getWalletAddress() {
+      if (!web3Provider) {
+        web3Provider = await connectWallet();
+      }
+      const signer = web3Provider.getSigner();
+      return await signer.getAddress();
+    }
+
+    // Sign message with wallet
+    async function signMessage(message) {
+      if (!web3Provider) {
+        web3Provider = await connectWallet();
+      }
+      const signer = web3Provider.getSigner();
+      return await signer.signMessage(message);
+    }
+
     // ===== MODAL SYSTEM =====
     const Modal = {
       overlay: null,
@@ -6272,20 +6351,10 @@
 
     async function handleWalletConnectForRegistration() {
       try {
-        // Check if MetaMask/wallet is installed
-        if (typeof window.ethereum === 'undefined') {
-          Modal.alert('No Web3 wallet detected! Please install MetaMask or another Ethereum wallet.', 'Wallet Not Found');
-          return;
-        }
-
         Loading.show('Connecting wallet...');
 
-        // Request account access
-        const accounts = await window.ethereum.request({
-          method: 'eth_requestAccounts'
-        });
-
-        const walletAddress = accounts[0];
+        // Connect wallet using Web3Modal
+        const walletAddress = await getWalletAddress();
 
         // Check if wallet already registered using RPC function (bypasses RLS)
         const { data: checkData } = await supabase.rpc('login_with_wallet', {
@@ -6301,10 +6370,7 @@
         // Request signature to verify ownership
         const message = `Sign to register on Duel PVP\nWallet: ${walletAddress}\nCode: ${tempRegistrationData.inviteCode}\nTimestamp: ${Date.now()}`;
 
-        const signature = await window.ethereum.request({
-          method: 'personal_sign',
-          params: [message, walletAddress]
-        });
+        const signature = await signMessage(message);
 
         // Store wallet and signature
         tempRegistrationData.walletAddress = walletAddress;
@@ -6682,28 +6748,15 @@
     // Wallet connection functions
     async function handleConnectWallet() {
       try {
-        // Check if MetaMask/wallet is installed
-        if (typeof window.ethereum === 'undefined') {
-          Modal.alert('No Web3 wallet detected! Please install MetaMask or another Ethereum wallet.', 'Wallet Not Found');
-          return;
-        }
-
         Loading.show('Connecting wallet...');
 
-        // Request account access
-        const accounts = await window.ethereum.request({
-          method: 'eth_requestAccounts'
-        });
-
-        const walletAddress = accounts[0];
+        // Connect wallet using Web3Modal
+        const walletAddress = await getWalletAddress();
 
         // Request signature to verify ownership (doesn't touch assets)
         const message = `Verify wallet ownership for Duel PVP\nWallet: ${walletAddress}\nTimestamp: ${Date.now()}`;
 
-        const signature = await window.ethereum.request({
-          method: 'personal_sign',
-          params: [message, walletAddress]
-        });
+        const signature = await signMessage(message);
 
         // Store wallet address linked to current email
         const email = localStorage.getItem('duelpvp_email');
@@ -6847,18 +6900,18 @@
 
     async function checkWalletConnection(expectedAddress) {
       try {
-        if (typeof window.ethereum === 'undefined') return false;
+        // Check if we have a cached provider
+        if (web3Modal.cachedProvider) {
+          const instance = await web3Modal.connect();
+          const provider = new ethers.providers.Web3Provider(instance);
+          const accounts = await provider.listAccounts();
 
-        // Use eth_accounts (no popup!) to check current connection
-        const accounts = await window.ethereum.request({
-          method: 'eth_accounts'
-        });
+          if (accounts.length === 0) return false;
 
-        if (accounts.length === 0) return false;
-
-        // Check if expected wallet is still connected
-        const connectedAddresses = accounts.map(a => a.toLowerCase());
-        return connectedAddresses.includes(expectedAddress.toLowerCase());
+          const connectedAddresses = accounts.map(a => a.toLowerCase());
+          return connectedAddresses.includes(expectedAddress.toLowerCase());
+        }
+        return false;
       } catch (e) {
         console.error('Failed to check wallet connection:', e);
         return false;
@@ -6945,18 +6998,10 @@
 
     async function handleWalletLogin() {
       try {
-        if (typeof window.ethereum === 'undefined') {
-          Modal.alert('No Web3 wallet detected! Please install MetaMask.', 'Wallet Not Found');
-          return;
-        }
-
         Loading.show('Connecting to wallet...');
 
-        const accounts = await window.ethereum.request({
-          method: 'eth_requestAccounts'
-        });
-
-        const walletAddress = accounts[0].toLowerCase();
+        // Connect wallet using Web3Modal
+        const walletAddress = (await getWalletAddress()).toLowerCase();
 
         // Check if wallet exists in database using RPC function (bypasses RLS)
         const { data: loginData, error: loginError } = await supabase.rpc('login_with_wallet', {
@@ -6980,10 +7025,7 @@
         // Verify ownership with signature
         const message = `Sign in to Duel PVP\nWallet: ${walletAddress}\nTimestamp: ${Date.now()}`;
 
-        const signature = await window.ethereum.request({
-          method: 'personal_sign',
-          params: [message, accounts[0]]
-        });
+        const signature = await signMessage(message);
 
         // Create Supabase Auth session using anonymous authentication
         Loading.show('Creating secure session...');
