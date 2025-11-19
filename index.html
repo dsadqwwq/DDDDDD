@@ -5289,33 +5289,52 @@
         // Always show all wallet options
         const walletOptions = [
           { id: 'metamask', name: 'MetaMask', icon: '🦊', check: () => window.ethereum?.isMetaMask },
-          { id: 'coinbase', name: 'Coinbase Wallet', icon: '🔵', check: () => window.ethereum?.isCoinbaseWallet },
-          { id: 'trust', name: 'Trust Wallet', icon: '🛡️', check: () => window.ethereum?.isTrust }
+          { id: 'coinbase', name: 'Coinbase', icon: '🔵', check: () => window.ethereum?.isCoinbaseWallet },
+          { id: 'trust', name: 'Trust Wallet', icon: '🛡️', check: () => window.ethereum?.isTrust },
+          { id: 'walletconnect', name: 'WalletConnect', icon: '🔗', check: () => false, comingSoon: true }
         ];
 
         // Build wallet buttons HTML
         let buttonsHtml = walletOptions.map(w => {
           const isAvailable = w.check();
-          return `<button class="wallet-option-btn" data-wallet="${w.id}" ${!isAvailable ? 'data-unavailable="true"' : ''} style="
-            display:flex;align-items:center;gap:12px;width:100%;padding:16px;
-            background:rgba(255,214,77,.1);border:2px solid rgba(255,214,77,.3);
-            border-radius:8px;color:#e6ecf1;font-family:'Press Start 2P',monospace;
-            font-size:10px;cursor:pointer;margin-bottom:8px;transition:all 0.2s;
-            ${!isAvailable ? 'opacity:0.5;' : ''}">
-            <span style="font-size:24px;">${w.icon}</span>
+          const isComingSoon = w.comingSoon;
+          return `<button class="wallet-option-btn" data-wallet="${w.id}"
+            ${!isAvailable ? 'data-unavailable="true"' : ''}
+            ${isComingSoon ? 'data-coming-soon="true"' : ''}
+            style="
+              display:flex;align-items:center;gap:12px;width:100%;padding:14px 16px;
+              background:linear-gradient(135deg, rgba(20,25,30,.9) 0%, rgba(30,35,40,.8) 100%);
+              border:2px solid rgba(255,214,77,.3);
+              border-radius:12px;color:#e6ecf1;font-family:'Press Start 2P',monospace;
+              font-size:9px;cursor:pointer;margin-bottom:10px;transition:all 0.2s ease;
+              box-shadow:0 2px 8px rgba(0,0,0,.3);
+              ${!isAvailable || isComingSoon ? 'opacity:0.5;' : ''}">
+            <span style="font-size:20px;width:28px;text-align:center;">${w.icon}</span>
             <span style="flex:1;text-align:left;">${w.name}</span>
-            ${!isAvailable ? '<span style="font-size:8px;color:#888;">Not installed</span>' : ''}
+            ${isComingSoon ? '<span style="font-size:7px;color:#ffc107;background:rgba(255,193,7,.2);padding:3px 6px;border-radius:4px;">SOON</span>' : ''}
+            ${!isAvailable && !isComingSoon ? '<span style="font-size:7px;color:#888;">Not installed</span>' : ''}
           </button>`;
         }).join('');
 
         const modalHtml = `
           <div style="text-align:center;">
-            <p style="margin-bottom:16px;color:#888;font-size:11px;">Select your wallet</p>
+            <div style="margin-bottom:20px;">
+              <img src="duelpvp-logo.svg" alt="Duel PVP" style="width:60px;height:60px;margin-bottom:12px;">
+            </div>
+            <p style="margin-bottom:20px;color:var(--gold);font-family:'Press Start 2P',monospace;font-size:10px;">
+              Connect Wallet
+            </p>
+            <p style="margin-bottom:20px;color:#888;font-size:10px;">
+              Choose your preferred wallet
+            </p>
             ${buttonsHtml}
+            <p style="margin-top:16px;color:#666;font-size:8px;">
+              By connecting, you agree to our Terms of Service
+            </p>
           </div>
         `;
 
-        Modal.show({ type: 'custom', title: 'Connect Wallet', html: modalHtml });
+        Modal.show({ type: 'custom', title: '', html: modalHtml });
 
         // Add click handlers
         setTimeout(() => {
@@ -5323,6 +5342,12 @@
             btn.addEventListener('click', () => {
               const walletId = btn.getAttribute('data-wallet');
               const isUnavailable = btn.getAttribute('data-unavailable');
+              const isComingSoon = btn.getAttribute('data-coming-soon');
+
+              if (isComingSoon) {
+                Toast.info('WalletConnect coming soon!', 'COMING SOON');
+                return;
+              }
 
               if (isUnavailable) {
                 let installUrl = 'https://metamask.io/download/';
@@ -5338,11 +5363,15 @@
             });
             btn.addEventListener('mouseenter', () => {
               btn.style.borderColor = 'var(--gold)';
-              btn.style.background = 'rgba(255,214,77,.2)';
+              btn.style.background = 'linear-gradient(135deg, rgba(255,214,77,.15) 0%, rgba(255,214,77,.05) 100%)';
+              btn.style.transform = 'translateY(-2px)';
+              btn.style.boxShadow = '0 4px 12px rgba(255,214,77,.2)';
             });
             btn.addEventListener('mouseleave', () => {
               btn.style.borderColor = 'rgba(255,214,77,.3)';
-              btn.style.background = 'rgba(255,214,77,.1)';
+              btn.style.background = 'linear-gradient(135deg, rgba(20,25,30,.9) 0%, rgba(30,35,40,.8) 100%)';
+              btn.style.transform = 'translateY(0)';
+              btn.style.boxShadow = '0 2px 8px rgba(0,0,0,.3)';
             });
           });
         }, 100);
