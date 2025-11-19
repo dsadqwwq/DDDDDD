@@ -7576,14 +7576,6 @@
           return;
         }
 
-        // Get user's rank using GC-based ranking
-        const { data: rankData, error: rankError } = await supabase
-          .rpc('get_user_rank', { p_user_id: userId });
-
-        if (rankError) {
-          console.error('Failed to get user rank:', rankError);
-        }
-
         // Get user's GC from users table
         const { data: userData, error: userError } = await supabase
           .from('users')
@@ -7595,10 +7587,24 @@
           console.error('Failed to load user data:', userError);
         }
 
+        // Calculate rank by counting users with higher GC balance
+        let userRank = 0;
+        if (userData?.gc_balance) {
+          const { count, error: rankError } = await supabase
+            .from('users')
+            .select('*', { count: 'exact', head: true })
+            .gt('gc_balance', userData.gc_balance);
+
+          if (!rankError) {
+            userRank = (count || 0) + 1; // Add 1 because rank starts at 1
+          } else {
+            console.error('Failed to get user rank:', rankError);
+          }
+        }
+
         // Calculate stats
         const totalWins = userData?.total_wins || userScores?.length || 0;
         const streak = userData?.win_streak || 0;
-        const userRank = rankData?.rank || 0;
         const totalGP = userData?.gc_balance || 0;
 
         // Update UI
