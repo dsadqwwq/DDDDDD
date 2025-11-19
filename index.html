@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Duel PVP – Enter the Arena</title>
+<link rel="icon" type="image/svg+xml" href="duelpvp-logo.svg">
+<link rel="apple-touch-icon" href="duelpvp-logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -130,33 +132,32 @@
   }
   
   .brand .title{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    position: relative;
+  }
+
+  .brand-logo{
+    filter: drop-shadow(2px 2px 0px #000)
+            drop-shadow(0 0 20px rgba(255,214,77,.4))
+            drop-shadow(0 0 40px rgba(255,214,77,.2));
+    flex-shrink: 0;
+  }
+
+  .brand-text{
     font-family:'Press Start 2P', monospace;
     font-size:32px;
     letter-spacing:.08em;
-    margin-bottom:12px;
     /* Multi-layer text effects */
     background: linear-gradient(180deg, var(--gold-hi) 0%, var(--gold) 50%, #D4A033 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(2px 2px 0px #000) 
+    filter: drop-shadow(2px 2px 0px #000)
             drop-shadow(0 0 20px rgba(255,214,77,.4))
             drop-shadow(0 0 40px rgba(255,214,77,.2));
-    position: relative;
-  }
-  
-  /* 3D effect for title */
-  .brand .title::before{
-    content: 'DUEL PVP';
-    position: absolute;
-    left: 3px;
-    top: 3px;
-    z-index: -1;
-    background: linear-gradient(180deg, #8B6914 0%, #5C440E 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: blur(0.5px);
   }
 
   /* Enhanced slogan with better styling */
@@ -505,6 +506,15 @@
     border-radius:8px;
     padding:16px;
     text-align:center;
+    transition:all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position:relative;
+  }
+
+  .stat-card:hover{
+    transform:translateY(-3px) scale(1.02);
+    border-color:rgba(255,214,77,0.5);
+    background:rgba(255,214,77,.08);
+    box-shadow:0 8px 24px rgba(255,214,77,0.15), 0 0 0 1px rgba(255,214,77,0.1);
   }
 
   .stat-label{
@@ -534,6 +544,15 @@
     border-radius:8px;
     padding:20px;
     margin-bottom:20px;
+    transition:all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position:relative;
+  }
+
+  .dashboard-card:hover{
+    transform:translateY(-2px);
+    border-color:rgba(255,214,77,0.4);
+    background:rgba(0,0,0,.4);
+    box-shadow:0 6px 20px rgba(0,0,0,0.4);
   }
 
   /* Themed cards */
@@ -835,30 +854,110 @@
       inset 0 1px 3px rgba(0,0,0,.2);
   }
 
+  /* Gold Particle Effects */
+  @keyframes goldParticle{
+    0%{
+      transform:translate(0, 0) scale(1);
+      opacity:1;
+    }
+    100%{
+      transform:translate(var(--tx), var(--ty)) scale(0);
+      opacity:0;
+    }
+  }
+
+  .gold-particle{
+    position:fixed;
+    width:8px;
+    height:8px;
+    background:radial-gradient(circle, #FFD700 0%, #FFA500 100%);
+    border-radius:50%;
+    pointer-events:none;
+    z-index:9999;
+    animation:goldParticle 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    box-shadow:0 0 10px rgba(255,215,0,0.8), 0 0 20px rgba(255,215,0,0.4);
+  }
+
+  /* Loading Skeletons */
+  @keyframes shimmer{
+    0%{background-position:-1000px 0;}
+    100%{background-position:1000px 0;}
+  }
+
+  .skeleton{
+    background:linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.05) 75%);
+    background-size:1000px 100%;
+    animation:shimmer 2s infinite;
+    border-radius:8px;
+  }
+
+  .skeleton-text{
+    height:14px;
+    margin-bottom:8px;
+    border-radius:4px;
+  }
+
+  .skeleton-title{
+    height:24px;
+    width:60%;
+    margin-bottom:16px;
+    border-radius:6px;
+  }
+
+  .skeleton-card{
+    height:120px;
+    border-radius:12px;
+    margin-bottom:16px;
+  }
+
   /* Page transitions */
   .fade-in{
-    animation: fadeIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
   @keyframes fadeIn{
-    from{opacity:0;transform:translateY(10px) scale(0.98);}
-    to{opacity:1;transform:translateY(0) scale(1);}
+    from{
+      opacity:0;
+      transform:translateY(20px) translateX(-5px) scale(0.96);
+      filter:blur(4px);
+    }
+    to{
+      opacity:1;
+      transform:translateY(0) translateX(0) scale(1);
+      filter:blur(0);
+    }
   }
 
   .fade-in-delayed{
     opacity: 0;
-    animation: fadeInDelayed 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 1s forwards;
+    animation: fadeInDelayed 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
   }
   @keyframes fadeInDelayed{
-    from{opacity:0;transform:translateY(20px) scale(0.98);}
-    to{opacity:1;transform:translateY(0) scale(1);}
+    from{
+      opacity:0;
+      transform:translateY(30px) translateX(-8px) scale(0.95);
+      filter:blur(6px);
+    }
+    to{
+      opacity:1;
+      transform:translateY(0) translateX(0) scale(1);
+      filter:blur(0);
+    }
   }
 
   .fade-out{
-    animation: fadeOut 0.25s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+    animation: fadeOut 0.3s cubic-bezier(0.4, 0, 1, 1) forwards;
   }
   @keyframes fadeOut{
-    from{opacity:1;transform:translateY(0) scale(1);}
-    to{opacity:0;transform:translateY(-10px) scale(0.98);}
+    from{
+      opacity:1;
+      transform:translateY(0) translateX(0) scale(1);
+      filter:blur(0);
+    }
+    to{
+      opacity:0;
+      transform:translateY(-15px) translateX(5px) scale(0.97);
+      filter:blur(3px);
+    }
   }
 
   /* Oven Investment Styles */
@@ -1128,15 +1227,15 @@
     border-radius:12px;
     padding:20px 24px;
     margin-bottom:24px;
-    cursor:pointer;
+    cursor:not-allowed;
+    opacity:0.7;
     transition:all 0.3s ease;
     box-shadow:0 4px 20px rgba(255,215,0,0.15);
   }
 
+  /* Disabled - campaign not started yet */
   .campaign-banner:hover{
-    border-color:rgba(255,215,0,0.6);
-    box-shadow:0 6px 30px rgba(255,215,0,0.25);
-    transform:translateY(-2px);
+    /* No hover effect */
   }
 
   .campaign-banner-header{
@@ -1199,6 +1298,398 @@
     color:rgba(255,215,0,0.8);
     text-align:center;
     margin-top:8px;
+  }
+
+  /* About Section Styles */
+  .about-section{
+    width:min(720px,92vw);
+    background:linear-gradient(135deg, rgba(12,16,20,0.85) 0%, rgba(20,25,30,0.90) 100%);
+    border:2px solid rgba(255,214,77,0.4);
+    border-radius:12px;
+    margin-bottom:24px;
+    overflow:hidden;
+    backdrop-filter:blur(12px);
+    transition:all 0.3s ease;
+  }
+
+  .about-section:hover{
+    border-color:rgba(255,214,77,0.6);
+    box-shadow:0 4px 20px rgba(255,214,77,0.15);
+  }
+
+  .about-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 24px;
+    background:linear-gradient(90deg, rgba(255,215,0,0.1) 0%, rgba(255,165,0,0.05) 100%);
+    border-bottom:1px solid rgba(255,214,77,0.2);
+    cursor:pointer;
+    user-select:none;
+  }
+
+  .about-header:hover{
+    background:linear-gradient(90deg, rgba(255,215,0,0.15) 0%, rgba(255,165,0,0.08) 100%);
+  }
+
+  .about-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:12px;
+    color:#FFD700;
+    text-shadow:0 2px 4px rgba(0,0,0,0.5);
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+
+  .about-toggle{
+    font-size:14px;
+    color:#FFD700;
+    transition:transform 0.3s ease;
+  }
+
+  .about-toggle.expanded{
+    transform:rotate(180deg);
+  }
+
+  .about-content{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height 0.4s ease, padding 0.4s ease;
+    padding:0 24px;
+  }
+
+  .about-content.expanded{
+    max-height:800px;
+    padding:24px;
+  }
+
+  .about-intro{
+    font-family:'Courier New', monospace;
+    font-size:15px;
+    line-height:1.8;
+    color:#e0e8f0;
+    margin-bottom:20px;
+    text-align:center;
+    font-weight:500;
+  }
+
+  .about-intro strong{
+    color:#FFD700;
+    font-weight:700;
+  }
+
+  .about-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+    gap:16px;
+    margin-top:20px;
+  }
+
+  .about-card{
+    background:rgba(0,0,0,0.4);
+    border:1px solid rgba(255,214,77,0.25);
+    border-radius:8px;
+    padding:20px;
+    transition:all 0.3s ease;
+  }
+
+  .about-card:hover{
+    border-color:rgba(255,214,77,0.5);
+    background:rgba(0,0,0,0.5);
+    transform:translateY(-2px);
+  }
+
+  .about-card-icon{
+    font-size:36px;
+    margin-bottom:12px;
+    display:block;
+  }
+
+  .about-card-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    color:#FFD700;
+    margin-bottom:12px;
+    text-transform:uppercase;
+  }
+
+  .about-card-text{
+    font-family:'Courier New', monospace;
+    font-size:13px;
+    line-height:1.6;
+    color:#c0c8d0;
+  }
+
+  .about-card-text strong{
+    color:#FFD700;
+  }
+
+  /* Campaign Page Styles */
+  .campaign-container{
+    display:none;
+    width:min(720px,92vw);
+    background:rgba(12,16,20,.10);
+    border:2px solid rgba(255,214,77,.3);
+    border-radius:12px;
+    padding:24px;
+    backdrop-filter:blur(8px);
+  }
+
+  .campaign-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:16px;
+    padding-bottom:12px;
+    border-bottom:1px solid rgba(255,214,77,.2);
+  }
+
+  .campaign-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:14px;
+    color:#FFD700;
+    text-shadow:0 2px 4px rgba(0,0,0,0.4);
+  }
+
+  .campaign-stats-section{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:16px;
+    margin-bottom:24px;
+  }
+
+  .campaign-stat-card{
+    background:rgba(0,0,0,0.3);
+    border:1px solid rgba(255,214,77,0.3);
+    border-radius:8px;
+    padding:16px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    transition:all 0.3s ease;
+  }
+
+  .campaign-stat-card:hover{
+    border-color:rgba(255,214,77,0.5);
+    background:rgba(0,0,0,0.4);
+  }
+
+  .campaign-stat-icon{
+    font-size:32px;
+  }
+
+  .campaign-stat-info{
+    flex:1;
+  }
+
+  .campaign-stat-label{
+    font-family:'Press Start 2P', monospace;
+    font-size:8px;
+    color:#a0a8b0;
+    margin-bottom:4px;
+  }
+
+  .campaign-stat-value{
+    font-family:'Press Start 2P', monospace;
+    font-size:18px;
+    color:#FFD700;
+  }
+
+  .campaign-progress-section{
+    background:linear-gradient(135deg, rgba(255,215,0,0.08) 0%, rgba(255,165,0,0.12) 100%);
+    border:2px solid rgba(255,214,77,0.3);
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:24px;
+  }
+
+  .campaign-progress-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:12px;
+  }
+
+  .campaign-progress-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    color:#FFD700;
+  }
+
+  .campaign-progress-percentage{
+    font-family:'Press Start 2P', monospace;
+    font-size:12px;
+    color:#FFD700;
+  }
+
+  .campaign-progress-bar-large{
+    width:100%;
+    height:16px;
+    background:rgba(0,0,0,0.4);
+    border-radius:8px;
+    overflow:hidden;
+    position:relative;
+    margin-bottom:12px;
+  }
+
+  .campaign-progress-fill-large{
+    height:100%;
+    background:linear-gradient(90deg, #FFD700, #FFA500);
+    border-radius:8px;
+    transition:width 0.5s ease;
+    box-shadow:0 0 15px rgba(255,215,0,0.6);
+  }
+
+  .campaign-progress-info{
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    color:#FFD700;
+    text-align:center;
+  }
+
+  .campaign-info-section{
+    background:rgba(0,0,0,0.2);
+    border:1px solid rgba(255,214,77,0.2);
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:24px;
+  }
+
+  .campaign-info-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    color:#FFD700;
+    margin-bottom:16px;
+  }
+
+  .campaign-info-content{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .campaign-info-item{
+    display:flex;
+    gap:12px;
+    font-family:Inter, system-ui, Arial;
+    font-size:13px;
+    line-height:1.6;
+    color:#e0e0e0;
+  }
+
+  .campaign-info-bullet{
+    color:#FFD700;
+    font-weight:bold;
+  }
+
+  .campaign-disclaimer-section{
+    background:rgba(244,67,54,0.08);
+    border:1px solid rgba(244,67,54,0.2);
+    border-radius:8px;
+    padding:12px;
+    margin-top:16px;
+    font-family:Inter, system-ui, Arial;
+    font-size:11px;
+    color:rgba(244,67,54,0.9);
+    text-align:center;
+    line-height:1.6;
+  }
+
+  .campaign-time-section{
+    background:rgba(0,0,0,0.3);
+    border:1px solid rgba(255,214,77,0.3);
+    border-radius:8px;
+    padding:16px;
+    text-align:center;
+  }
+
+  .campaign-time-label{
+    font-family:'Press Start 2P', monospace;
+    font-size:9px;
+    color:#a0a8b0;
+    margin-bottom:8px;
+  }
+
+  .campaign-time-value{
+    font-family:Inter, system-ui, Arial;
+    font-size:14px;
+    color:#FFD700;
+  }
+
+  .campaign-earn-section{
+    margin-top:24px;
+  }
+
+  .campaign-earn-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    color:#FFD700;
+    margin-bottom:16px;
+    text-align:center;
+  }
+
+  .campaign-cards-row{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:16px;
+    margin-bottom:16px;
+  }
+
+  .campaign-card{
+    background:rgba(0,0,0,0.3);
+    border:2px solid rgba(255,214,77,0.3);
+    border-radius:12px;
+    padding:16px;
+    transition:all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    position:relative;
+    overflow:hidden;
+  }
+
+  .campaign-card:hover{
+    border-color:rgba(255,214,77,0.6);
+    transform:translateY(-4px) scale(1.01);
+    box-shadow:0 8px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,214,77,0.1);
+    background:rgba(0,0,0,0.4);
+  }
+
+  .campaign-card.invest{
+    border-color:rgba(76,175,80,0.3);
+  }
+
+  .campaign-card.invest:hover{
+    border-color:rgba(76,175,80,0.7);
+    box-shadow:0 8px 28px rgba(76,175,80,0.2), 0 0 40px rgba(76,175,80,0.1);
+    background:rgba(16,24,16,0.3);
+  }
+
+  .campaign-card.gamble{
+    border-color:rgba(244,67,54,0.3);
+  }
+
+  .campaign-card.gamble:hover{
+    border-color:rgba(244,67,54,0.7);
+    box-shadow:0 8px 28px rgba(244,67,54,0.2), 0 0 40px rgba(244,67,54,0.1);
+    background:rgba(24,16,16,0.3);
+  }
+
+  .campaign-card-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    color:#FFD700;
+    margin-bottom:12px;
+    text-align:center;
+  }
+
+  .campaign-card-content{
+    display:flex;
+    flex-direction:column;
+  }
+
+  @media(max-width:600px){
+    .campaign-cards-row{
+      grid-template-columns:1fr;
+    }
   }
 
   .gambling-disclaimer{
@@ -2447,7 +2938,7 @@
       max-height:88vh;
       overflow-y:auto;
     }
-    .dashboard-container, .quest-container, .leaderboard-container, .game-container, .inventory-container{
+    .dashboard-container, .quest-container, .leaderboard-container, .game-container, .inventory-container, .campaign-container{
       width:96vw;
       padding:16px 12px;
       max-height:88vh;
@@ -2715,6 +3206,8 @@
   .quest-card.completed{
     background:rgba(76,175,80,.1);
     border-color:rgba(76,175,80,.3);
+    opacity:1 !important;
+    visibility:visible !important;
   }
 
   .quest-name{
@@ -3781,7 +4274,7 @@
       font-size:8px;
     }
 
-    .panel, .dashboard-container, .quest-container, .leaderboard-container, .game-container, .inventory-container{
+    .panel, .dashboard-container, .quest-container, .leaderboard-container, .game-container, .inventory-container, .campaign-container{
       max-height:85vh;
     }
 
@@ -3819,7 +4312,24 @@
 
   <!-- Brand always visible with continuous animation -->
   <div class="brand">
-    <div class="title">DUEL PVP</div>
+    <div class="title">
+      <svg class="brand-logo" width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5"
+                 fill="none"
+                 stroke="url(#logoGradient)"
+                 stroke-width="4"/>
+        <circle cx="40" cy="50" r="10" fill="#22c55e"/>
+        <circle cx="60" cy="50" r="10" fill="#ef4444"/>
+        <defs>
+          <linearGradient id="logoGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#FFD64D;stop-opacity:1" />
+            <stop offset="50%" style="stop-color:#D4AF37;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#D4A033;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <span class="brand-text">DUEL PVP</span>
+    </div>
     <div class="slogan">
       Real Time<span class="slogan-divider"></span>Real Skill<span class="slogan-divider"></span>Real Rewards
     </div>
@@ -3830,7 +4340,7 @@
     <!-- Initial page content -->
     <section class="panel panel-transparent fade-in-delayed" id="panelContent">
       <div class="panel-header">
-        <div class="sys">Welcome to the arena<span class="blink">.</span></div>
+        <div class="sys">Belcome to the arena<span class="blink">.</span></div>
         <div class="sub-text">Enter your exclusive access code to begin</div>
       </div>
 
@@ -3852,12 +4362,12 @@
       <div class="dashboard-header">
         <div class="user-info">
           <div class="user-name" id="userName" aria-label="User name">Champion</div>
-          <div class="user-stats" aria-label="User level and rank">Level 87 • Falafel Enjoyer</div>
+          <div class="user-stats" aria-label="User level and rank">Level 0 • Falafel Enjoyer</div>
         </div>
         <div style="display:flex;align-items:center;gap:20px;">
           <div class="stat-card" style="margin:0;padding:8px 16px;">
             <div class="stat-label" style="font-size:10px;">RANK</div>
-            <div class="stat-value" style="font-size:16px;">#127</div>
+            <div class="stat-value" style="font-size:16px;" id="dashboardRank">--</div>
           </div>
           <div class="stat-card" style="margin:0;padding:8px 16px;">
             <div class="stat-label" style="font-size:10px;">GP BALANCE</div>
@@ -3868,17 +4378,14 @@
       </div>
 
       <div class="stats-grid">
-        <div class="stat-card" style="cursor:pointer;" id="viewLeaderboardBtn">
-          <div class="stat-label">LEADERBOARD</div>
-          <div class="stat-value" style="font-size:20px;">🏆</div>
+        <div class="stat-card" style="cursor:pointer;display:flex;align-items:center;justify-content:center;" id="viewLeaderboardBtn">
+          <div class="stat-label" style="margin:0;">LEADERBOARD</div>
         </div>
-        <div class="stat-card" style="cursor:pointer;" id="viewQuestsBtn">
-          <div class="stat-label">QUESTS</div>
-          <div class="stat-value" style="font-size:20px;">📋</div>
+        <div class="stat-card" style="cursor:pointer;display:flex;align-items:center;justify-content:center;" id="viewQuestsBtn">
+          <div class="stat-label" style="margin:0;">QUESTS</div>
         </div>
-        <div class="stat-card" style="cursor:pointer;" id="viewInventoryBtn">
-          <div class="stat-label">INVENTORY</div>
-          <div class="stat-value" style="font-size:20px;">🎒</div>
+        <div class="stat-card" style="cursor:pointer;display:flex;align-items:center;justify-content:center;" id="viewInventoryBtn">
+          <div class="stat-label" style="margin:0;">INVENTORY</div>
         </div>
       </div>
 
@@ -3888,9 +4395,9 @@
       <!-- Campaign Banner -->
       <div class="campaign-banner" id="campaignBanner">
         <div class="campaign-banner-header">
-          <div class="campaign-banner-icon">🏆</div>
+          <div class="campaign-banner-icon"></div>
           <div class="campaign-banner-text">WHO WANTS TO BE A MILLIONAIRE</div>
-          <div class="campaign-banner-info">ℹ️</div>
+          <div class="campaign-banner-info"></div>
         </div>
         <div class="campaign-progress">
           <div class="campaign-progress-text">
@@ -3899,101 +4406,152 @@
           <div class="campaign-progress-bar">
             <div class="campaign-progress-fill" id="campaignProgressFill" style="width:0%"></div>
           </div>
-          <div class="campaign-time-remaining" id="campaignTimeRemaining">Campaign in progress</div>
+          <div class="campaign-time-remaining" id="campaignTimeRemaining">Starting tomorrow</div>
         </div>
       </div>
 
-      <!-- Two-column card layout -->
-      <div class="dashboard-cards-row">
-        <!-- Left: DeFi -->
-        <div class="dashboard-card invest">
-          <div class="card-title">💎 DEFI</div>
-          <div class="card-content">
-            <button class="action-btn btn-invest" id="openOvenBtn" aria-label="Open Staking" style="width:100%;margin-bottom:12px;">STAKING</button>
-            <button class="action-btn btn-invest" id="openFarmBtn" aria-label="Open Airdrop Farm" style="width:100%;margin-bottom:12px;">FARM</button>
-            <button class="action-btn btn-invest" disabled style="width:100%;margin-bottom:12px;opacity:0.5;cursor:not-allowed;">SWAP</button>
-            <button class="action-btn btn-invest" disabled style="width:100%;opacity:0.5;cursor:not-allowed;">YIELD FARMING</button>
+      <!-- About Section -->
+      <div class="campaign-earn-section">
+        <div class="campaign-earn-title">ABOUT</div>
+
+        <!-- Main Description -->
+        <div style="background:rgba(0,0,0,0.5);border:2px solid rgba(255,214,77,0.4);border-radius:12px;padding:28px;margin-bottom:24px;box-shadow:0 4px 12px rgba(0,0,0,0.3);">
+          <div style="font-family:'Press Start 2P',monospace;font-size:11px;color:#FFD700;margin-bottom:20px;text-align:center;letter-spacing:1px;">FULLY ON-CHAIN MMO</div>
+          <div style="font-family:'Courier New',monospace;font-size:14px;line-height:2;color:#ffffff;text-align:left;padding:0 12px;text-shadow:0 1px 3px rgba(0,0,0,0.8);">
+            <strong style="color:#FFD700;">Duel PVP</strong> combines classic MMO progression with idle game mechanics. Build your empire while you sleep, or actively dominate the arena—the choice is yours.
+            <br><br>
+            <strong style="color:#4CAF50;">Every game state, transaction, and mechanic lives on the blockchain.</strong>
+            <br>
+            No centralized servers. No hidden RNG. Trustless, transparent, verifiable by anyone.
+            <br><br>
+            <span style="color:#FFD700;font-size:13px;">Launch planned for first half of 2026.</span>
           </div>
         </div>
 
-        <!-- Right: Gambling -->
-        <div class="dashboard-card gamble">
-          <div class="card-title">🎲 GAMBLING</div>
-          <div class="card-content">
-            <button class="action-btn btn-gamble" id="playReactionBtn" aria-label="Play trading simulator" style="width:100%;margin-bottom:12px;">TRADING SIM</button>
-            <button class="action-btn btn-gamble" id="playCrashBtn" aria-label="Play crash rocket game" style="width:100%;margin-bottom:12px;">CRASH</button>
-            <button class="action-btn btn-gamble" id="playMinesBtn" aria-label="Play mines game" style="width:100%;margin-bottom:12px;">MINES</button>
-            <button class="action-btn btn-gamble" id="playBlackjackBtn" aria-label="Play blackjack game" style="width:100%;">BLACKJACK</button>
-            <div style="background:rgba(244,67,54,0.08);border:1px solid rgba(244,67,54,0.2);border-radius:8px;padding:12px;margin-top:12px;font-size:11px;line-height:1.6;color:rgba(244,67,54,0.9);text-align:center;">
-              * Campaign uses fake tokens not exchangeable for real value.
+        <!-- Two Paths -->
+        <div style="font-family:'Press Start 2P',monospace;font-size:11px;color:#FFD700;margin-bottom:20px;text-align:center;letter-spacing:1px;">
+          CHOOSE YOUR PATH:
+        </div>
+
+        <div class="campaign-cards-row">
+          <!-- Left: Cultivator (green like DeFi) -->
+          <div class="campaign-card invest">
+            <div class="campaign-card-title">THE CULTIVATOR</div>
+            <div style="font-family:'Courier New',monospace;font-size:14px;line-height:1.7;color:#ffffff;text-align:center;margin-bottom:16px;text-shadow:0 2px 4px rgba(0,0,0,0.8);">
+              <strong style="color:#4CAF50;">Low-risk, steady growth.</strong><br><br>
+              Farm resources, control markets, hire warriors to fight for you.<br>
+              Build wealth through strategic resource management.
+            </div>
+          </div>
+
+          <!-- Right: Warrior (red like Gambling) -->
+          <div class="campaign-card gamble">
+            <div class="campaign-card-title">THE WARRIOR</div>
+            <div style="font-family:'Courier New',monospace;font-size:14px;line-height:1.7;color:#ffffff;text-align:center;margin-bottom:16px;text-shadow:0 2px 4px rgba(0,0,0,0.8);">
+              <strong style="color:#F44336;">High-risk, high-reward.</strong><br><br>
+              Raid dungeons, slay legendary bosses, dominate the PVP arena.<br>
+              Earn through combat prowess and fearless execution.
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Market Section -->
-      <div class="dashboard-cards-row">
-        <div class="dashboard-card" style="background:linear-gradient(135deg, rgba(255,214,77,0.05) 0%, rgba(255,165,0,0.08) 100%); border-color:rgba(255,214,77,0.3);">
-          <div class="card-title">🏪 MARKET</div>
-          <div class="card-content">
-            <button class="action-btn" disabled style="width:100%;margin-bottom:12px;opacity:0.5;cursor:not-allowed;background:rgba(255,214,77,0.1);border-color:rgba(255,214,77,0.3);color:#FFD64D;">ITEMS</button>
-            <button class="action-btn" disabled style="width:100%;opacity:0.5;cursor:not-allowed;background:rgba(255,214,77,0.1);border-color:rgba(255,214,77,0.3);color:#FFD64D;">POWERUPS</button>
+    </div>
+
+    <!-- Campaign content (hidden initially) -->
+    <div class="campaign-container" id="campaignContent" role="region" aria-label="Millionaire campaign">
+      <div class="campaign-header">
+        <div class="campaign-title">WHO WANTS TO BE A MILLIONAIRE</div>
+        <button class="back-btn" id="backFromCampaignBtn" aria-label="Back to dashboard">BACK</button>
+      </div>
+
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item active">Campaign</span>
+      </div>
+
+      <!-- Progress Section -->
+      <div class="campaign-progress-section">
+        <div class="campaign-progress-header">
+          <div class="campaign-progress-title">CAMPAIGN PROGRESS</div>
+          <div class="campaign-progress-percentage" id="campaignProgressPercentage">0%</div>
+        </div>
+        <div class="campaign-progress-bar-large">
+          <div class="campaign-progress-fill-large" id="campaignProgressFillLarge" style="width:0%"></div>
+        </div>
+        <div class="campaign-progress-info">
+          <span id="campaignCurrentGPPage">0</span> / 1,000,000 GP
+        </div>
+      </div>
+
+      <!-- Campaign Info -->
+      <div class="campaign-info-section">
+        <div class="campaign-info-title">CAMPAIGN RULES</div>
+        <div class="campaign-info-content">
+          <div class="campaign-info-item">
+            <span class="campaign-info-bullet">•</span>
+            <span>Reach 1,000,000 GP to qualify for Founder's Sword mint eligibility</span>
+          </div>
+          <div class="campaign-info-item">
+            <span class="campaign-info-bullet">•</span>
+            <span>Earn GP through gambling, farming, and staking</span>
+          </div>
+          <div class="campaign-info-item">
+            <span class="campaign-info-bullet">•</span>
+            <span>All GP accumulates toward your campaign total</span>
+          </div>
+          <div class="campaign-info-item">
+            <span class="campaign-info-bullet">•</span>
+            <span>Campaign ends when all Founder's Swords are distributed</span>
+          </div>
+        </div>
+
+        <div class="campaign-disclaimer-section" style="background:rgba(255,69,0,0.1);border:2px solid rgba(255,69,0,0.3);border-radius:8px;padding:16px;margin-top:16px;">
+          <div style="font-family:'Press Start 2P',monospace;font-size:10px;color:#FF4500;margin-bottom:12px;text-align:center;">IMPORTANT DISCLAIMER</div>
+          <div style="font-family:'Courier New',monospace;font-size:12px;line-height:1.7;color:#e0e8f0;">
+            <strong>This pre-launch campaign is NOT the main game.</strong> These mechanics are for fun only. Campaign GP is temporary and has no monetary value.
+            <br><br>
+            <strong>The actual Duel PVP game launching in 2026 will be a fully on-chain MMO</strong> with completely different mechanics, progression systems, and gameplay. Think RuneScape meets blockchain - not a casino.
+            <br><br>
+            Campaign GP does not carry over to the main game.
           </div>
         </div>
       </div>
 
-      <!-- PVE Adventures -->
-      <div class="dashboard-cards-row">
-        <!-- Loot Forest -->
-        <div class="dashboard-card" style="opacity:0.5;cursor:not-allowed;pointer-events:none;">
-          <div class="card-title">🌲 LOOT FOREST</div>
-          <div class="card-content" style="min-height:200px;opacity:0.3;">
-            <div class="match-list">
-              <div class="match-item">
-                <span>Goblin Camp</span>
-                <span class="match-result win">CLEARED</span>
-              </div>
-              <div class="match-item">
-                <span>Ancient Trees</span>
-                <span class="match-result">EXPLORED</span>
-              </div>
-              <div class="match-item">
-                <span>Hidden Grove</span>
-                <span class="match-result win">LOOTED</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Lava Dungeons -->
-        <div class="dashboard-card" style="opacity:0.5;cursor:not-allowed;pointer-events:none;">
-          <div class="card-title">🔥 LAVA DUNGEONS</div>
-          <div class="card-content" style="min-height:200px;opacity:0.3;">
-            <div class="match-list">
-              <div class="match-item">
-                <span>Fire Elementals</span>
-                <span class="match-result loss">DEFEATED</span>
-              </div>
-              <div class="match-item">
-                <span>Molten Core</span>
-                <span class="match-result">ENTERED</span>
-              </div>
-              <div class="match-item">
-                <span>Lava Dragon</span>
-                <span class="match-result win">SLAIN</span>
-              </div>
-            </div>
-          </div>
-        </div>
+      <!-- Time Remaining -->
+      <div class="campaign-time-section">
+        <div class="campaign-time-label">TIME REMAINING</div>
+        <div class="campaign-time-value" id="campaignTimeRemainingPage">Starting tomorrow</div>
       </div>
 
-      <!-- Full-width cards -->
-      <div class="dashboard-card">
-        <div class="card-title">WALLET CONNECTION</div>
-        <div class="card-content">
-          <div class="wallet-info" id="walletInfo">
-            <div class="wallet-status" id="walletStatus">No wallet connected</div>
-            <button class="action-btn btn-secondary" id="connectWalletBtn" style="width:100%;margin-top:12px;">CONNECT WALLET</button>
+      <!-- Ways to Earn GP Section -->
+      <div class="campaign-earn-section">
+        <div class="campaign-earn-title">WAYS TO EARN GP</div>
+
+        <!-- Two-column card layout -->
+        <div class="campaign-cards-row">
+          <!-- Left: DeFi -->
+          <div class="campaign-card invest">
+            <div class="campaign-card-title">DEFI</div>
+            <div class="campaign-card-content">
+              <button class="action-btn btn-invest" id="openOvenBtn" aria-label="Open Staking" style="width:100%;margin-bottom:12px;">STAKING</button>
+              <button class="action-btn btn-invest" id="openFarmBtn" aria-label="Open Airdrop Farm" style="width:100%;margin-bottom:12px;">FARM</button>
+              <button class="action-btn btn-invest" disabled style="width:100%;margin-bottom:12px;opacity:0.5;cursor:not-allowed;">SWAP</button>
+              <button class="action-btn btn-invest" disabled style="width:100%;opacity:0.5;cursor:not-allowed;">YIELD FARMING</button>
+            </div>
+          </div>
+
+          <!-- Right: Gambling -->
+          <div class="campaign-card gamble">
+            <div class="campaign-card-title">GAMBLING</div>
+            <div class="campaign-card-content">
+              <button class="action-btn btn-gamble" id="playCrashBtn" aria-label="Play crash rocket game" style="width:100%;margin-bottom:12px;">CRASH</button>
+              <button class="action-btn btn-gamble" id="playMinesBtn" aria-label="Play mines game" style="width:100%;margin-bottom:12px;">MINES</button>
+              <button class="action-btn btn-gamble" id="playBlackjackBtn" aria-label="Play blackjack game" style="width:100%;margin-bottom:12px;">BLACKJACK</button>
+              <button class="action-btn btn-gamble" disabled style="width:100%;opacity:0.5;cursor:not-allowed;">TRADING SIM</button>
+            </div>
           </div>
         </div>
       </div>
@@ -4014,27 +4572,16 @@
       </div>
 
       <div class="your-best" id="yourBestSection" style="display:none;">
-        <div class="your-best-label">YOUR BEST TIME</div>
-        <div class="your-best-time" id="yourBestTime">-- ms</div>
-      </div>
-
-      <div class="leaderboard-filters" id="leaderboardFilters" role="group" aria-label="Filter leaderboard by time period">
-        <button class="filter-btn active" data-filter="all" aria-label="Show all time scores" aria-pressed="true">ALL TIME</button>
-        <button class="filter-btn" data-filter="today" aria-label="Show today's scores" aria-pressed="false">TODAY</button>
-        <button class="filter-btn" data-filter="week" aria-label="Show this week's scores" aria-pressed="false">THIS WEEK</button>
-        <button class="filter-btn" data-filter="month" aria-label="Show this month's scores" aria-pressed="false">THIS MONTH</button>
-      </div>
-
-      <div class="podium" id="podium">
-        <!-- Top 3 will be generated here -->
+        <div class="your-best-label">YOUR RANK</div>
+        <div class="your-best-time" id="yourBestTime">#-- | -- GP</div>
       </div>
 
       <div class="leaderboard-table">
         <div class="table-header">
           <div>RANK</div>
           <div>PLAYER</div>
-          <div>TIME</div>
-          <div class="entry-date">DATE</div>
+          <div>GP BALANCE</div>
+          <div class="entry-date">WALLET</div>
         </div>
         <div id="leaderboardTableBody">
           <!-- Table rows will be generated here -->
@@ -4043,7 +4590,7 @@
 
       <!-- Empty state for leaderboard -->
       <div id="leaderboardEmpty" class="empty-state" style="display:none;">
-        <div class="empty-state-icon">🏆</div>
+        <div class="empty-state-icon"></div>
         <div class="empty-state-title">No Records Yet</div>
         <div class="empty-state-message">Be the first to appear on the leaderboard! Complete games to set your record.</div>
       </div>
@@ -4064,10 +4611,10 @@
       </div>
 
       <div class="quest-tabs">
-        <button class="quest-tab active" data-quest-tab="daily">DAILY QUESTS</button>
-        <button class="quest-tab" data-quest-tab="weekly">WEEKLY QUESTS</button>
-        <button class="quest-tab" data-quest-tab="special">SPECIAL QUESTS</button>
-        <button class="quest-tab" data-quest-tab="completed">COMPLETED</button>
+        <button class="quest-tab active" data-quest-tab="daily" onclick="switchQuestTab(this, 'daily')">DAILY QUESTS</button>
+        <button class="quest-tab" data-quest-tab="weekly" disabled style="opacity:0.5;cursor:not-allowed;">WEEKLY QUESTS</button>
+        <button class="quest-tab" data-quest-tab="special" disabled style="opacity:0.5;cursor:not-allowed;">SPECIAL QUESTS</button>
+        <button class="quest-tab" data-quest-tab="completed" onclick="switchQuestTab(this, 'completed')">COMPLETED</button>
       </div>
 
       <div class="quest-grid-wrapper">
@@ -4138,49 +4685,49 @@
             <div class="item-icon">🗡️</div>
             <div class="shop-item-name">BRONZE SWORD</div>
             <div class="shop-item-desc">A sturdy starter weapon</div>
-            <div class="shop-item-price">💰 1,000 GP</div>
+            <div class="shop-item-price">1,000 GP</div>
           </div>
           <div class="shop-item">
             <div class="item-icon">🛡️</div>
             <div class="shop-item-name">IRON SHIELD</div>
             <div class="shop-item-desc">Basic defense equipment</div>
-            <div class="shop-item-price">💰 1,500 GP</div>
+            <div class="shop-item-price">1,500 GP</div>
           </div>
           <div class="shop-item">
             <div class="item-icon">⚔️</div>
             <div class="shop-item-name">STEEL BLADE</div>
             <div class="shop-item-desc">Improved attack power</div>
-            <div class="shop-item-price">💰 2,500 GP</div>
+            <div class="shop-item-price">2,500 GP</div>
           </div>
           <div class="shop-item">
             <div class="item-icon">🏹</div>
             <div class="shop-item-name">HUNTER BOW</div>
             <div class="shop-item-desc">Ranged weapon for distance</div>
-            <div class="shop-item-price">💰 3,000 GP</div>
+            <div class="shop-item-price">3,000 GP</div>
           </div>
           <div class="shop-item">
             <div class="item-icon">🪄</div>
             <div class="shop-item-name">MAGIC STAFF</div>
             <div class="shop-item-desc">Channel mystical energies</div>
-            <div class="shop-item-price">💰 4,000 GP</div>
+            <div class="shop-item-price">4,000 GP</div>
           </div>
           <div class="shop-item">
             <div class="item-icon">💎</div>
             <div class="shop-item-name">RARE GEM</div>
             <div class="shop-item-desc">Valuable collectible item</div>
-            <div class="shop-item-price">💰 5,000 GP</div>
+            <div class="shop-item-price">5,000 GP</div>
           </div>
           <div class="shop-item">
             <div class="item-icon">🎭</div>
             <div class="shop-item-name">MYSTIC MASK</div>
             <div class="shop-item-desc">Enhance your abilities</div>
-            <div class="shop-item-price">💰 6,000 GP</div>
+            <div class="shop-item-price">6,000 GP</div>
           </div>
           <div class="shop-item">
             <div class="item-icon">👑</div>
             <div class="shop-item-name">ROYAL CROWN</div>
             <div class="shop-item-desc">Ultimate prestige item</div>
-            <div class="shop-item-price">💰 10,000 GP</div>
+            <div class="shop-item-price">10,000 GP</div>
           </div>
         </div>
         <div class="coming-soon-overlay">
@@ -4192,7 +4739,7 @@
     <!-- Staking Investment content (hidden initially) -->
     <div class="oven-container" id="ovenContent" role="region" aria-label="Staking investment">
       <div class="oven-header">
-        <div class="oven-title">🔥 STAKING</div>
+        <div class="oven-title">STAKING</div>
         <button class="back-btn" id="backFromOvenBtn" aria-label="Back to dashboard">BACK</button>
       </div>
 
@@ -4245,8 +4792,8 @@
 
       <!-- Info box -->
       <div class="oven-info">
-        <strong>10% Hourly Compound Interest</strong><br>
-        Your investment grows automatically every hour. Withdraw anytime.
+        <strong>10% Hourly Compound Interest (Continuous)</strong><br>
+        Your investment compounds every second at 10% per hour. Watch it grow in real-time! Withdraw anytime.
       </div>
 
       <!-- Disclaimer for Oven -->
@@ -4657,7 +5204,7 @@
 
   <div class="footer">
     <span>© 2025 Duel PVP</span>
-    <a href="https://x.com/YourProject" target="_blank" rel="noopener noreferrer" aria-label="Follow us on X">
+    <a href="https://x.com/Duelpvp" target="_blank" rel="noopener noreferrer" aria-label="Follow us on X">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
       </svg>
@@ -4669,7 +5216,13 @@
     const SUPABASE_URL = 'https://smgqccnggmyreacjyyil.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNtZ3FjY25nZ215cmVhY2p5eWlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI5ODIwNDgsImV4cCI6MjA3ODU1ODA0OH0.y1AeyXkKCdVvE3JUIlCyDl6p12TFrgMkEiUocUB4YMI';
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: false
+      }
+    });
 
     // ===== MODAL SYSTEM =====
     const Modal = {
@@ -4848,10 +5401,13 @@
     };
 
     // Initialize systems on DOM ready
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       Modal.init();
       Toast.init();
       Loading.init();
+
+      // Initialize app - check for existing session (Blur-style auto-reconnect)
+      await initializeApp();
     });
 
     // Particle System
@@ -5054,6 +5610,8 @@
     const inventoryContent = document.getElementById('inventoryContent');
     const shopContent = document.getElementById('shopContent');
     const crashContent = document.getElementById('crashContent');
+    const campaignContent = document.getElementById('campaignContent');
+    const campaignBanner = document.getElementById('campaignBanner');
 
     // Debug: Check if all elements exist
     console.log('Elements loaded:', {
@@ -5079,16 +5637,16 @@
 
     // Temporary registration data
     let tempRegistrationData = {
-      email: '',
-      warriorName: '',
-      password: '',
-      inviteCode: ''
+      walletAddress: '',
+      inviteCode: '',
+      signature: '',
+      termsAccepted: false
     };
 
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
       // Find currently visible element
-      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent];
+      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent, campaignContent];
       const currentVisible = allContainers.find(el => el.style.display !== 'none' && el.style.display !== '');
 
       // Add fade-out to current visible element
@@ -5112,36 +5670,45 @@
           panelContent.innerHTML = `
           <div class="panel-header">
             <div class="sys">Welcome back, champion<span class="blink">.</span></div>
-            <div class="sub-text">Enter your credentials to access the arena</div>
+            <div class="sub-text">Connect your wallet to access the arena</div>
           </div>
 
-          <div class="input-group">
-            <label class="input-label">Email Address</label>
-            <input id="loginEmail" class="input-field" type="email" placeholder="name@example.com" autocomplete="email">
-            <div class="error-msg" id="emailError"></div>
-          </div>
-
-          <div class="input-group">
-            <label class="input-label">Password</label>
-            <div class="bar">
-              <input id="loginPass" class="input-field" type="password" placeholder="Enter your password" autocomplete="current-password">
-              <button class="btn-submit" id="loginBtn">LOG IN</button>
+          <div style="text-align:center;padding:40px 20px;">
+            <div style="margin-bottom:20px;">
+              <svg width="64" height="64" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5"
+                         fill="none"
+                         stroke="url(#walletLoginGradient)"
+                         stroke-width="4"/>
+                <circle cx="40" cy="50" r="10" fill="#22c55e"/>
+                <circle cx="60" cy="50" r="10" fill="#ef4444"/>
+                <defs>
+                  <linearGradient id="walletLoginGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#FFD64D;stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:#D4AF37;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#D4A033;stop-opacity:1" />
+                  </linearGradient>
+                </defs>
+              </svg>
             </div>
-            <div class="error-msg" id="passError"></div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:12px;color:var(--gold);margin-bottom:12px;">
+              WALLET AUTHENTICATION
+            </div>
+            <div style="font-family:Inter,system-ui,Arial;font-size:14px;color:#a0a8b0;margin-bottom:30px;line-height:1.6;">
+              Sign in with your connected wallet.<br>
+              Only wallets with existing accounts can login.
+            </div>
+            <button class="btn-submit" id="walletLoginBtn" style="width:100%;max-width:300px;">
+              SIGN IN WITH WALLET
+            </button>
           </div>
 
           <div class="helper">
-            Don't have access? <a id="backLink">Get access code</a>
-          </div>
-
-          <div style="text-align:center;margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,214,77,.15);">
-            <div style="font-family:Inter,system-ui,Arial;font-size:11px;color:#a0a8b0;margin-bottom:12px;">OR</div>
-            <button class="action-btn btn-secondary" id="walletLoginBtn" style="width:100%;">SIGN IN WITH WALLET</button>
+            Don't have an account? <a id="backLink">Enter access code</a>
           </div>
         `;
 
         // Re-attach event listeners
-        document.getElementById('loginBtn').addEventListener('click', handleLogin);
         document.getElementById('walletLoginBtn').addEventListener('click', handleWalletLogin);
         const backLink = document.getElementById('backLink');
         backLink.addEventListener('click', () => swapContent('home'));
@@ -5151,83 +5718,60 @@
             swapContent('home');
           }
         });
-        // Allow enter key to submit
-        document.getElementById('loginPass').addEventListener('keypress', (e) => {
-          if (e.key === 'Enter') handleLogin();
-        });
 
-      } else if (newContent === 'register') {
+      } else if (newContent === 'termsAcceptance') {
         panelContent.style.display = 'block';
         dashboardContent.style.display = 'none';
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.add('center-aligned');
+        pageContainer.classList.remove('bottom-aligned');
         panelContent.classList.remove('panel-transparent');
 
         panelContent.innerHTML = `
           <div class="panel-header">
-            <div class="sys">Create your account<span class="blink">.</span></div>
-            <div class="sub-text">Join the arena and prove your worth</div>
+            <div class="warrior-title">TERMS & DISCLAIMER</div>
+            <div class="sub-text">Please read and accept to continue</div>
           </div>
 
-          <div class="input-group">
-            <label class="input-label">Email Address</label>
-            <input id="registerEmail" class="input-field" type="email" placeholder="name@example.com" autocomplete="email">
-            <div class="error-msg" id="emailError"></div>
-          </div>
-
-          <div class="input-group">
-            <label class="input-label">Password</label>
-            <input id="registerPass" class="input-field" type="password" placeholder="Enter your password" autocomplete="new-password">
-            <div class="error-msg" id="passError"></div>
-          </div>
-
-          <div class="input-group">
-            <label class="input-label">Confirm Password</label>
-            <input id="registerPassConfirm" class="input-field" type="password" placeholder="Confirm your password" autocomplete="new-password">
-            <div class="error-msg" id="passConfirmError"></div>
-          </div>
-
-          <div class="input-group">
-            <label class="input-label">Access Code</label>
-            <div class="bar">
-              <input id="registerCode" class="input-field" type="text" placeholder="XXXX-XXXX-XXXX" autocomplete="off" value="${data || ''}">
-              <button class="btn-submit" id="registerBtn">CREATE ACCOUNT</button>
+          <div style="max-width:500px;margin:0 auto;padding:20px;">
+            <div style="background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:20px;margin-bottom:20px;max-height:300px;overflow-y:auto;text-align:left;font-size:13px;line-height:1.6;color:#a0a8b0;">
+              <p style="color:var(--gold);font-weight:bold;margin-bottom:10px;">⚠️ IMPORTANT - READ CAREFULLY</p>
+              <p style="margin-bottom:10px;">By connecting your wallet and using this service, you acknowledge and agree that:</p>
+              <ul style="margin-left:20px;margin-bottom:15px;">
+                <li style="margin-bottom:8px;">This is <strong>experimental alpha software</strong> provided "AS IS" without warranties of any kind</li>
+                <li style="margin-bottom:8px;">Virtual items (NFTs, GP, tokens) have <strong>NO monetary value</strong> and are <strong>NOT investment vehicles</strong></li>
+                <li style="margin-bottom:8px;">This project <strong>may never fully launch</strong>, be completed, or continue development</li>
+                <li style="margin-bottom:8px;">The service may be modified, suspended, or <strong>discontinued at any time</strong> without notice</li>
+                <li style="margin-bottom:8px;">You are using this platform for <strong>entertainment purposes only</strong> at your own risk</li>
+                <li style="margin-bottom:8px;"><strong>No promises or guarantees</strong> are made about future features, updates, or token launches</li>
+                <li style="margin-bottom:8px;">All blockchain transactions are <strong>irreversible</strong> and you are solely responsible for your wallet security</li>
+                <li style="margin-bottom:8px;">You must be <strong>18 years or older</strong> to use this service</li>
+              </ul>
+              <p style="font-size:11px;color:#666;">For full terms, see our <a href="#" style="color:var(--gold);">Terms of Service</a> and <a href="#" style="color:var(--gold);">Privacy Policy</a></p>
             </div>
-            <div class="error-msg" id="codeError"></div>
-          </div>
 
-          <div class="helper">
-            Already have an account? <a id="loginLinkFromReg" role="button" tabindex="0">Sign in</a>
+            <div class="input-group" style="margin-bottom:20px;">
+              <label style="display:flex;align-items:start;cursor:pointer;font-size:14px;color:#e5e7eb;">
+                <input type="checkbox" id="termsCheckbox" style="margin-right:12px;margin-top:4px;width:18px;height:18px;cursor:pointer;">
+                <span>I have read and agree to the Terms of Service. I understand this is experimental software, virtual items have no value, and the project may never launch.</span>
+              </label>
+              <div class="error-msg" id="termsError"></div>
+            </div>
+
+            <div style="display:flex;gap:10px;">
+              <button class="btn-cancel" id="backToWalletBtn" style="flex:1;">← BACK</button>
+              <button class="btn-submit" id="acceptTermsBtn" style="flex:2;">ACCEPT & CONTINUE</button>
+            </div>
           </div>
         `;
 
         // Re-attach event listeners
-        document.getElementById('registerBtn').addEventListener('click', handleRegister);
-        const loginLinkFromReg = document.getElementById('loginLinkFromReg');
-        loginLinkFromReg.addEventListener('click', () => swapContent('login'));
-        loginLinkFromReg.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            swapContent('login');
-          }
-        });
-
-        // Clear errors on input
-        document.getElementById('registerEmail').addEventListener('input', () => clearError('emailError'));
-        document.getElementById('registerPass').addEventListener('input', () => {
-          clearError('passError');
-          clearError('passConfirmError');
-        });
-        document.getElementById('registerPassConfirm').addEventListener('input', () => clearError('passConfirmError'));
-        document.getElementById('registerCode').addEventListener('input', () => clearError('codeError'));
-
-        // Allow enter key to submit
-        document.getElementById('registerPassConfirm').addEventListener('keypress', (e) => {
-          if (e.key === 'Enter') handleRegister();
-        });
+        document.getElementById('acceptTermsBtn').addEventListener('click', handleTermsAcceptance);
+        document.getElementById('backToWalletBtn').addEventListener('click', () => swapContent('home'));
+        document.getElementById('termsCheckbox').addEventListener('change', () => clearError('termsError'));
 
       } else if (newContent === 'nameWarrior') {
         panelContent.style.display = 'block';
@@ -5270,6 +5814,61 @@
         setTimeout(() => {
           document.getElementById('warriorName').focus();
         }, 500);
+
+      } else if (newContent === 'walletConnect') {
+        panelContent.style.display = 'block';
+        dashboardContent.style.display = 'none';
+        pageContainer.classList.add('bottom-aligned');
+        pageContainer.classList.remove('center-aligned');
+
+        panelContent.innerHTML = `
+          <div class="panel-header">
+            <div class="warrior-title">CONNECT WALLET</div>
+            <div class="sub-text">Sign to verify ownership • No gas fees</div>
+          </div>
+
+          <div class="wallet-connect-container" style="text-align:center;padding:40px 20px;">
+            <div style="margin-bottom:20px;">
+              <svg width="64" height="64" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5"
+                         fill="none"
+                         stroke="url(#walletConnectGradient)"
+                         stroke-width="4"/>
+                <circle cx="40" cy="50" r="10" fill="#22c55e"/>
+                <circle cx="60" cy="50" r="10" fill="#ef4444"/>
+                <defs>
+                  <linearGradient id="walletConnectGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#FFD64D;stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:#D4AF37;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#D4A033;stop-opacity:1" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:12px;color:var(--gold);margin-bottom:12px;">
+              SECURE AUTHENTICATION
+            </div>
+            <div style="font-family:Inter,system-ui,Arial;font-size:14px;color:#a0a8b0;margin-bottom:30px;line-height:1.6;">
+              Connect your wallet to continue.<br>
+              You'll be asked to sign a message to prove ownership.<br>
+              <strong style="color:var(--gold);">No transaction, no gas fees.</strong>
+            </div>
+            <button class="btn-submit" id="connectWalletForRegBtn" style="width:100%;max-width:300px;">
+              CONNECT WALLET
+            </button>
+            <div style="margin-top:20px;">
+              <a id="backToCodeLink" style="color:#6b7280;font-size:12px;cursor:pointer;text-decoration:underline;">
+                ← Back to code entry
+              </a>
+            </div>
+          </div>
+        `;
+
+        // Store the code for later use
+        tempRegistrationData.inviteCode = data;
+
+        document.getElementById('connectWalletForRegBtn').addEventListener('click', handleWalletConnectForRegistration);
+        document.getElementById('backToCodeLink').addEventListener('click', () => swapContent('home'));
 
       } else if (newContent === 'home') {
         panelContent.style.display = 'block';
@@ -5320,13 +5919,25 @@
       } else if (newContent === 'dashboard') {
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'block';
+        campaignBanner.style.display = 'block';
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
         shopContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        // Force refresh GP cache and display when loading dashboard
+        gpCache.lastFetch = 0;
         updateDashboardStats();
+        // Load user's invite code
+        loadUserInviteCode();
+        // Also directly update GP display to ensure it shows
+        (async () => {
+          const gp = await getUserGP();
+          const displayGP = gp >= 1000000 ? `${(gp/1000000).toFixed(1)}M` : gp >= 1000 ? `${(gp/1000).toFixed(1)}K` : gp;
+          document.getElementById('dashboardGPBalance').textContent = displayGP;
+          console.log('[Dashboard] GP display updated:', gp);
+        })();
 
       } else if (newContent === 'game') {
         panelContent.style.display = 'none';
@@ -5373,6 +5984,7 @@
       } else if (newContent === 'crash') {
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'none';
+        campaignBanner.style.display = 'none';
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
@@ -5389,6 +6001,7 @@
       } else if (newContent === 'mines') {
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'none';
+        campaignBanner.style.display = 'none';
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
@@ -5400,12 +6013,16 @@
         minesContent.style.display = 'block';
         blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
-        initMinesGame();
+        // Only init grid if not currently playing
+        if (!minesGameState.isPlaying) {
+          initMinesGame();
+        }
         updateMinesGPDisplay();
 
       } else if (newContent === 'blackjack') {
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'none';
+        campaignBanner.style.display = 'none';
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
@@ -5418,6 +6035,24 @@
         blackjackContent.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initBlackjack();
+
+      } else if (newContent === 'campaign') {
+        panelContent.style.display = 'none';
+        dashboardContent.style.display = 'none';
+        campaignBanner.style.display = 'none';
+        gameContent.style.display = 'none';
+        leaderboardContent.style.display = 'none';
+        questContent.style.display = 'none';
+        inventoryContent.style.display = 'none';
+        shopContent.style.display = 'none';
+        ovenContent.style.display = 'none';
+        farmContent.style.display = 'none';
+        crashContent.style.display = 'none';
+        minesContent.style.display = 'none';
+        blackjackContent.style.display = 'none';
+        campaignContent.style.display = 'block';
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        updateCampaignPage();
 
       } else if (newContent === 'leaderboard') {
         console.log('Switching to leaderboard...');
@@ -5433,6 +6068,7 @@
         crashContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
+        campaignContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         console.log('Leaderboard display set to block');
         loadLeaderboard('all');
@@ -5451,6 +6087,7 @@
         crashContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
+        campaignContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadQuests('daily');
 
@@ -5467,6 +6104,7 @@
         crashContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
+        campaignContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadInventory();
 
@@ -5481,6 +6119,7 @@
         ovenContent.style.display = 'none';
         farmContent.style.display = 'none';
         crashContent.style.display = 'none';
+        campaignContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
@@ -5495,8 +6134,12 @@
           newVisible.classList.add('fade-in');
         }
 
-        // Scroll to top when changing pages
-        window.scrollTo(0, 0);
+        // Scroll to top AFTER content is fully laid out
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            window.scrollTo({ top: 0, behavior: 'instant' });
+          });
+        });
       }, currentVisible ? 200 : 0); // 200ms matches fade-out animation duration
     }
     
@@ -5527,10 +6170,32 @@
       }
     }
 
+    // Copy text to clipboard
+    async function copyToClipboard(text) {
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          // Fallback for older browsers
+          const textArea = document.createElement('textarea');
+          textArea.value = text;
+          textArea.style.position = 'fixed';
+          textArea.style.left = '-999999px';
+          document.body.appendChild(textArea);
+          textArea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textArea);
+        }
+      } catch (err) {
+        console.error('Failed to copy:', err);
+        Toast.error('Failed to copy code', 'TRY AGAIN');
+      }
+    }
+
     // Event handlers
-    function handleJoin() {
+    async function handleJoin() {
       const codeInput = document.getElementById('code');
-      const code = codeInput.value.trim();
+      const code = codeInput.value.trim().toUpperCase();
 
       clearError('codeError');
 
@@ -5539,42 +6204,156 @@
         return;
       }
 
-      // Accept any code - no validation required
-      swapContent('register', code);
+      // Validate code exists in database and is unused
+      Loading.show('Validating access code...');
+
+      try {
+        const { data: codeData, error: codeError } = await supabase
+          .from('codes')
+          .select('code, used_by')
+          .eq('code', code.toUpperCase().trim())
+          .single();
+
+        Loading.hide();
+
+        if (codeError || !codeData) {
+          showError('codeError', 'Invalid invite code');
+          return;
+        }
+
+        if (codeData.used_by) {
+          showError('codeError', 'Code already used');
+          return;
+        }
+
+        // Code is valid, proceed to wallet connect
+        swapContent('walletConnect', code);
+      } catch (err) {
+        Loading.hide();
+        console.error('Code validation error:', err);
+        showError('codeError', 'Failed to validate code');
+      }
     }
 
-    function handleLogin() {
-      // Skip all validation - instant login for testing
+    async function handleWalletConnectForRegistration() {
+      try {
+        // Check if MetaMask/wallet is installed
+        if (typeof window.ethereum === 'undefined') {
+          Modal.alert('No Web3 wallet detected! Please install MetaMask or another Ethereum wallet.', 'Wallet Not Found');
+          return;
+        }
+
+        Loading.show('Connecting wallet...');
+
+        // Request account access
+        const accounts = await window.ethereum.request({
+          method: 'eth_requestAccounts'
+        });
+
+        const walletAddress = accounts[0];
+
+        // Check if wallet already registered using RPC function (bypasses RLS)
+        const { data: checkData } = await supabase.rpc('login_with_wallet', {
+          p_wallet_address: walletAddress.toLowerCase()
+        });
+
+        if (checkData && checkData.length > 0 && checkData[0].success) {
+          Loading.hide();
+          Modal.alert('This wallet is already registered. Please login instead.', 'Wallet Already Registered');
+          return;
+        }
+
+        // Request signature to verify ownership
+        const message = `Sign to register on Duel PVP\nWallet: ${walletAddress}\nCode: ${tempRegistrationData.inviteCode}\nTimestamp: ${Date.now()}`;
+
+        const signature = await window.ethereum.request({
+          method: 'personal_sign',
+          params: [message, walletAddress]
+        });
+
+        // Store wallet and signature
+        tempRegistrationData.walletAddress = walletAddress;
+        tempRegistrationData.signature = signature;
+
+        Loading.hide();
+        Toast.success('Wallet verified!', 'SUCCESS');
+
+        // Proceed to terms acceptance
+        swapContent('termsAcceptance');
+
+      } catch (error) {
+        Loading.hide();
+        console.error('Wallet connection error:', error);
+        if (error.code === 4001) {
+          Toast.warning('You cancelled the wallet connection', 'Connection Cancelled');
+        } else {
+          Modal.alert('Failed to connect wallet: ' + error.message, 'Connection Error');
+        }
+      }
+    }
+
+    async function handleLogin() {
       clearError('emailError');
       clearError('passError');
 
-      // Generate random user ID
-      const testUserId = 'test-' + Math.random().toString(36).substring(7);
-      const testEmail = 'test@demo.com';
-      const testWarriorName = '1337';
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPass').value.trim();
 
-      // Store test user info
-      try {
-        localStorage.setItem('duelpvp_user_id', testUserId);
-        localStorage.setItem('duelpvp_email', testEmail);
-        localStorage.setItem('duelpvp_display_name', testWarriorName);
-        localStorage.setItem('duelpvp_warrior', testWarriorName);
-
-        // Initialize GP - 1000 for testing (normally 10 for new accounts)
-        if (!localStorage.getItem('duelpvp_gp')) {
-          localStorage.setItem('duelpvp_gp', '1000');
-        }
-
-        // Set username in dashboard
-        document.getElementById('userName').textContent = testWarriorName.toUpperCase();
-
-        Toast.success('Logged in as ' + testWarriorName + ' • ' + localStorage.getItem('duelpvp_gp') + ' GP', 'TEST MODE');
-      } catch (e) {
-        console.error('Failed to save login:', e);
-        showError('passError', 'Failed to save login. Check browser settings.');
+      // Validate input
+      if (!email) {
+        showError('emailError', 'Email is required');
         return;
       }
 
+      if (!password) {
+        showError('passError', 'Password is required');
+        return;
+      }
+
+      // Attempt Supabase authentication
+      Loading.show('Signing in...');
+
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+      if (authError) {
+        Loading.hide();
+        showError('passError', 'Invalid email or password');
+        console.error('Login error:', authError);
+        return;
+      }
+
+      // Get user data from database
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('email', email)
+        .single();
+
+      Loading.hide();
+
+      if (userError || !userData) {
+        showError('passError', 'User data not found');
+        console.error('User lookup error:', userError);
+        return;
+      }
+
+      // Store user info in localStorage
+      localStorage.setItem('duelpvp_user_id', userData.id);
+      localStorage.setItem('duelpvp_email', userData.email);
+      localStorage.setItem('duelpvp_display_name', userData.display_name);
+      localStorage.setItem('duelpvp_warrior', userData.display_name);
+
+      // Set username in dashboard
+      document.getElementById('userName').textContent = userData.display_name.toUpperCase();
+
+      // Initialize GP cache
+      await initializeGPCache();
+      const gp = await getUserGP();
+
+      Toast.success(`Welcome back, ${userData.display_name}!`, `${gp} GP`);
       swapContent('dashboard');
     }
 
@@ -5644,17 +6423,28 @@
       // Check if invite code exists and is unused
       Loading.show('Validating invite code...');
 
-      const { data: codeData, error: codeError } = await supabase
-        .from('codes')
-        .select('*')
-        .eq('code', code)
-        .is('used_by', null)
-        .single();
+      try {
+        const { data: codeData, error: codeError } = await supabase
+          .from('codes')
+          .select('code, used_by')
+          .eq('code', code.toUpperCase().trim())
+          .single();
 
-      Loading.hide();
+        Loading.hide();
 
-      if (codeError || !codeData) {
-        showError('codeError', 'Invalid or already used invite code');
+        if (codeError || !codeData) {
+          showError('codeError', 'Invalid invite code');
+          return;
+        }
+
+        if (codeData.used_by) {
+          showError('codeError', 'Code already used');
+          return;
+        }
+      } catch (err) {
+        Loading.hide();
+        console.error('Code validation error:', err);
+        showError('codeError', 'Failed to validate code');
         return;
       }
 
@@ -5674,6 +6464,23 @@
       tempRegistrationData.email = email;
       tempRegistrationData.password = pass;
       tempRegistrationData.inviteCode = code;
+      swapContent('nameWarrior');
+    }
+
+    function handleTermsAcceptance() {
+      const termsCheckbox = document.getElementById('termsCheckbox');
+
+      clearError('termsError');
+
+      if (!termsCheckbox.checked) {
+        showError('termsError', 'You must accept the Terms of Service to continue');
+        return;
+      }
+
+      // Store terms acceptance
+      tempRegistrationData.termsAccepted = true;
+
+      // Proceed to warrior naming
       swapContent('nameWarrior');
     }
 
@@ -5701,80 +6508,104 @@
       Loading.show('Creating your account...');
 
       try {
-        // 1. Create user in database
-        console.log('Step 1: Creating user in database...');
-        const { data: newUser, error: userError } = await supabase
-          .from('users')
-          .insert({
-            email: tempRegistrationData.email,
-            display_name: warriorName,
-            points: 0
-          })
-          .select()
-          .single();
+        // Call server-side registration function
+        const { data, error } = await supabase.rpc('register_with_wallet', {
+          p_wallet_address: tempRegistrationData.walletAddress,
+          p_display_name: warriorName,
+          p_invite_code: tempRegistrationData.inviteCode,
+          p_terms_accepted: tempRegistrationData.termsAccepted
+        });
 
-        if (userError) {
+        if (error || !data || data.length === 0 || !data[0].success) {
           Loading.hide();
-          console.error('User creation failed:', userError);
-          if (userError.code === '23505') { // Unique constraint violation
+          const errorCode = data && data[0]?.error_code;
+          const message = data && data[0]?.message;
+
+          if (errorCode === 'NAME_TAKEN') {
             showError('warriorNameError', 'Display name already taken');
-          } else if (userError.code === '42P01') {
-            Modal.alert('Database not set up. Please run minimal_setup.sql in Supabase first.', 'Setup Required');
+          } else if (errorCode === 'WALLET_EXISTS') {
+            Modal.alert('This wallet is already registered', 'Registration Failed');
           } else {
-            Modal.alert('Registration failed: ' + userError.message, 'Error');
+            Modal.alert(message || 'Registration failed', 'Error');
           }
           return;
         }
 
-        console.log('Step 1 complete: User created', newUser.id);
+        const userId = data[0].user_id;
 
-        // 2. Mark invite code as used (atomic operation prevents race condition)
-        console.log('Step 2: Marking code as used...');
-        const { error: codeError } = await supabase
-          .from('codes')
-          .update({
-            used_by: newUser.id,
-            used_at: new Date().toISOString()
-          })
-          .eq('code', tempRegistrationData.inviteCode)
-          .is('used_by', null); // Only update if still unused!
+        // Create anonymous Supabase Auth session
+        console.log('Creating anonymous auth for new user...');
+        const authResult = await supabase.auth.signInAnonymously({
+          options: {
+            data: {
+              wallet_address: tempRegistrationData.walletAddress,
+              display_name: warriorName,
+              user_id: userId
+            }
+          }
+        });
+        console.log('Registration auth result:', authResult);
 
-        if (codeError) {
-          // Code was used by someone else in the meantime - rollback
-          console.error('Code update failed:', codeError);
-          await supabase.from('users').delete().eq('id', newUser.id);
+        // Explicitly set the session to ensure client uses it immediately for all requests
+        if (authResult.data?.session) {
+          await supabase.auth.setSession({
+            access_token: authResult.data.session.access_token,
+            refresh_token: authResult.data.session.refresh_token
+          });
+          console.log('Registration session explicitly set on Supabase client');
+        }
+
+        if (authResult.error) {
+          console.error('Failed to create auth session:', authResult.error);
           Loading.hide();
-          showError('codeError', 'Code update failed: ' + codeError.message);
-          swapContent('register', tempRegistrationData.inviteCode);
+          Modal.alert('Account created but auth session failed: ' + authResult.error.message + '\n\nPlease try logging in with your wallet.', 'Warning');
+          swapContent('home');
           return;
         }
 
-        console.log('Step 2 complete: Code marked as used');
-
-        // 3. Generate 3 invite codes for new user
-        console.log('Step 3: Generating 3 invite codes...');
-        const { error: rpcError } = await supabase.rpc('create_user_codes', { user_id: newUser.id });
-
-        if (rpcError) {
-          console.error('Code generation failed (non-critical):', rpcError);
-          // Don't fail registration if code generation fails
-          Toast.info('Registration successful, but invite code generation failed', 'PARTIAL SUCCESS');
-        } else {
-          console.log('Step 3 complete: 3 codes generated');
+        // Link anonymous auth user to new user record
+        if (authResult.data?.user) {
+          console.log('Linking new user to auth...');
+          const linkResult = await supabase.rpc('link_auth_to_user', {
+            p_user_id: userId,
+            p_auth_user_id: authResult.data.user.id
+          });
+          console.log('Link result:', linkResult);
         }
 
-        // 4. Store session in localStorage
-        localStorage.setItem('duelpvp_user_id', newUser.id);
-        localStorage.setItem('duelpvp_email', newUser.email);
-        localStorage.setItem('duelpvp_display_name', warriorName);
+        // Verify session is active
+        console.log('Verifying registration session...');
+        const { data: { session: verifySession } } = await supabase.auth.getSession();
+        console.log('Registration session:', verifySession ? 'Active' : 'None');
 
-        // Update UI
+        if (!verifySession) {
+          Loading.hide();
+          Modal.alert('Registration complete but session failed. Please login with your wallet.', 'Warning');
+          swapContent('home');
+          return;
+        }
+
+        // Create session (Blur-style)
+        createSession(userId, tempRegistrationData.walletAddress, warriorName);
+
+        // Set username in dashboard
         document.getElementById('userName').textContent = warriorName.toUpperCase();
 
-        Loading.hide();
-        Toast.success(`Welcome to the arena, ${warriorName}!`, 'WARRIOR REGISTERED');
+        // Initialize GP cache
+        await initializeGPCache();
+        const gp = await getUserGP();
 
+        Loading.hide();
+        Toast.success(`Welcome, ${warriorName}!`, `${gp} GP`);
         swapContent('dashboard');
+
+        // Clear temp data
+        tempRegistrationData = {
+          walletAddress: '',
+          inviteCode: '',
+          signature: '',
+          termsAccepted: false
+        };
       } catch (e) {
         Loading.hide();
         console.error('Registration error:', e);
@@ -5786,9 +6617,22 @@
       const confirmed = await Modal.confirm('Are you sure you want to logout?', 'Confirm Logout');
       if (!confirmed) return;
 
+      // Sign out from Supabase Auth
+      await supabase.auth.signOut();
+
+      // Clear custom session (legacy support)
+      clearSession();
+
+      // Clear GP cache
+      gpCache.balance = 0;
+      gpCache.lastFetch = 0;
+
+      // Reset UI
       dashboardContent.style.display = 'none';
       panelContent.style.display = 'block';
       swapContent('home');
+
+      Toast.info('Logged out successfully', 'GOODBYE');
     }
 
     // Wallet connection functions
@@ -5819,16 +6663,30 @@
 
         // Store wallet address linked to current email
         const email = localStorage.getItem('duelpvp_email');
-        if (email) {
+        const userId = localStorage.getItem('duelpvp_user_id');
+
+        if (email && userId) {
+          // Save to localStorage
           localStorage.setItem(`duelpvp_wallet_${email}`, walletAddress);
           localStorage.setItem(`duelpvp_wallet_verified_${email}`, signature);
-
-          // Also store reverse mapping (wallet -> email) for login
           localStorage.setItem(`duelpvp_email_${walletAddress.toLowerCase()}`, email);
 
-          updateWalletDisplay(walletAddress);
-          Loading.hide();
-          Toast.success(`Wallet ${walletAddress.substring(0, 6)}...${walletAddress.substring(38)} linked to your account`, 'WALLET CONNECTED');
+          // Save to Supabase database
+          const { error: updateError } = await supabase
+            .from('users')
+            .update({ wallet_address: walletAddress })
+            .eq('id', userId);
+
+          if (updateError) {
+            console.error('Failed to save wallet to database:', updateError);
+            Loading.hide();
+            Toast.warning('Wallet connected locally but not saved to database', 'PARTIAL SUCCESS');
+            updateWalletDisplay(walletAddress);
+          } else {
+            updateWalletDisplay(walletAddress);
+            Loading.hide();
+            Toast.success(`Wallet ${walletAddress.substring(0, 6)}...${walletAddress.substring(38)} linked to your account`, 'WALLET CONNECTED');
+          }
         } else {
           Loading.hide();
           Modal.alert('No email found. Please login first.', 'Login Required');
@@ -5845,29 +6703,9 @@
     }
 
     function updateWalletDisplay(address = null) {
-      const walletStatus = document.getElementById('walletStatus');
-      const connectBtn = document.getElementById('connectWalletBtn');
-
-      if (!address) {
-        // Check if wallet is already connected
-        const email = localStorage.getItem('duelpvp_email');
-        if (email) {
-          address = localStorage.getItem(`duelpvp_wallet_${email}`);
-        }
-      }
-
-      if (address) {
-        const shortAddress = `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
-        walletStatus.textContent = `Connected: ${shortAddress}`;
-        walletStatus.classList.add('connected');
-        connectBtn.textContent = 'DISCONNECT WALLET';
-        connectBtn.onclick = handleDisconnectWallet;
-      } else {
-        walletStatus.textContent = 'No wallet connected';
-        walletStatus.classList.remove('connected');
-        connectBtn.textContent = 'CONNECT WALLET';
-        connectBtn.onclick = handleConnectWallet;
-      }
+      // Wallet connection card removed - wallet is now required for registration
+      // This function is kept for compatibility but does nothing
+      return;
     }
 
     function handleDisconnectWallet() {
@@ -5882,6 +6720,183 @@
         updateWalletDisplay();
         Toast.info('Wallet disconnected from your account', 'DISCONNECTED');
       }
+    }
+
+    // =====================================================
+    // SESSION MANAGEMENT (Blur-style)
+    // =====================================================
+
+    const SESSION_KEY = 'duelpvp.auth';
+    const SESSION_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 days
+
+    function createSession(userId, walletAddress, displayName) {
+      const session = {
+        version: "1",
+        userId: userId,
+        walletAddress: walletAddress.toLowerCase(),
+        displayName: displayName,
+        issuedAt: Date.now(),
+        expiresAt: Date.now() + SESSION_DURATION
+      };
+
+      localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+      // Also store userId directly for backward compatibility
+      localStorage.setItem('duelpvp_user_id', userId);
+
+      // Also cache GP for navbar (Blur-style)
+      const gpCacheKey = `duelpvp.cache.gp`;
+      localStorage.setItem(gpCacheKey, JSON.stringify({
+        [walletAddress.toLowerCase()]: 0 // Will be updated by initializeGPCache
+      }));
+
+      console.log('Session created for', displayName);
+    }
+
+    function getSession() {
+      try {
+        const sessionData = localStorage.getItem(SESSION_KEY);
+        if (!sessionData) return null;
+        return JSON.parse(sessionData);
+      } catch (e) {
+        console.error('Failed to parse session:', e);
+        return null;
+      }
+    }
+
+    function clearSession() {
+      // Clear all duelpvp.* keys (Blur-style namespacing)
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith('duelpvp.') || key.startsWith('duelpvp_')) {
+          localStorage.removeItem(key);
+        }
+      });
+      console.log('Session cleared');
+    }
+
+    function isSessionValid(session) {
+      if (!session) return false;
+      if (!session.userId || !session.walletAddress) return false;
+      if (Date.now() > session.expiresAt) {
+        console.log('Session expired');
+        return false;
+      }
+      return true;
+    }
+
+    // Helper to get current user ID from session
+    function getCurrentUserId() {
+      const session = getSession();
+      if (session?.userId) return session.userId;
+
+      // Backwards compatibility - check old localStorage key
+      return localStorage.getItem('duelpvp_user_id') || null;
+    }
+
+    // Helper to get current wallet address from session
+    function getCurrentWalletAddress() {
+      const session = getSession();
+      if (session?.walletAddress) return session.walletAddress;
+
+      // Backwards compatibility - check old localStorage key
+      return localStorage.getItem('duelpvp_wallet') || null;
+    }
+
+    async function checkWalletConnection(expectedAddress) {
+      try {
+        if (typeof window.ethereum === 'undefined') return false;
+
+        // Use eth_accounts (no popup!) to check current connection
+        const accounts = await window.ethereum.request({
+          method: 'eth_accounts'
+        });
+
+        if (accounts.length === 0) return false;
+
+        // Check if expected wallet is still connected
+        const connectedAddresses = accounts.map(a => a.toLowerCase());
+        return connectedAddresses.includes(expectedAddress.toLowerCase());
+      } catch (e) {
+        console.error('Failed to check wallet connection:', e);
+        return false;
+      }
+    }
+
+    async function initializeApp() {
+      console.log('Initializing app...');
+
+      // Check for existing Supabase auth session first
+      const { data: { session: supabaseSession } } = await supabase.auth.getSession();
+      console.log('Supabase session:', supabaseSession ? 'Found' : 'None');
+
+      const session = getSession();
+
+      if (!session) {
+        console.log('No localStorage session found, showing home screen');
+        return; // Show home screen by default
+      }
+
+      if (!isSessionValid(session)) {
+        console.log('Session invalid or expired, clearing');
+        clearSession();
+        await supabase.auth.signOut();
+        return; // Show home screen
+      }
+
+      // Check if wallet is still connected (Blur-style verification)
+      const walletConnected = await checkWalletConnection(session.walletAddress);
+
+      if (!walletConnected) {
+        console.log('Wallet no longer connected, session invalid');
+        clearSession();
+        await supabase.auth.signOut();
+        Toast.info('Please reconnect your wallet', 'SESSION EXPIRED');
+        return;
+      }
+
+      // Verify user still exists in database and get auth_user_id
+      const { data: userData, error } = await supabase
+        .from('users')
+        .select('id, display_name, gp_balance, auth_user_id')
+        .eq('id', session.userId)
+        .single();
+
+      if (error || !userData) {
+        console.log('User not found in database, clearing session');
+        clearSession();
+        await supabase.auth.signOut();
+        return;
+      }
+
+      // Restore Supabase auth session if missing
+      if (!supabaseSession && userData.auth_user_id) {
+        console.log('No Supabase session, but user has auth_user_id - session expired, please re-login');
+        clearSession();
+        await supabase.auth.signOut();
+        Toast.info('Session expired. Please login again.', 'SESSION EXPIRED');
+        return;
+      }
+
+      // Verify Supabase session matches user
+      if (supabaseSession && userData.auth_user_id && supabaseSession.user.id !== userData.auth_user_id) {
+        console.log('Supabase session mismatch, clearing');
+        clearSession();
+        await supabase.auth.signOut();
+        return;
+      }
+
+      // Session is valid! Auto-login
+      console.log('Valid session found, auto-logging in as', session.displayName);
+
+      // Set UI
+      document.getElementById('userName').textContent = session.displayName.toUpperCase();
+
+      // Initialize GP cache
+      await initializeGPCache();
+      const gp = await getUserGP();
+
+      // Auto-redirect to dashboard
+      swapContent('dashboard');
+      Toast.success(`Welcome back, ${session.displayName}!`, `${gp} GP`);
     }
 
     async function handleWalletLogin() {
@@ -5899,42 +6914,139 @@
 
         const walletAddress = accounts[0].toLowerCase();
 
-        // Check if this wallet is linked to an account
-        const email = localStorage.getItem(`duelpvp_email_${walletAddress}`);
+        // Check if wallet exists in database using RPC function (bypasses RLS)
+        const { data: loginData, error: loginError } = await supabase.rpc('login_with_wallet', {
+          p_wallet_address: walletAddress
+        });
 
-        if (email) {
-          // Verify ownership with signature
-          const message = `Sign in to Duel PVP\nWallet: ${walletAddress}\nTimestamp: ${Date.now()}`;
-
-          await window.ethereum.request({
-            method: 'personal_sign',
-            params: [message, accounts[0]]
-          });
-
-          // Login successful
-          localStorage.setItem('duelpvp_email', email);
-          const warriorName = localStorage.getItem('duelpvp_warrior');
-          if (warriorName) {
-            document.getElementById('userName').textContent = warriorName.toUpperCase();
-          }
+        if (loginError || !loginData || loginData.length === 0 || !loginData[0].success) {
           Loading.hide();
-          Toast.success('Signed in successfully!', 'WELCOME BACK');
-          swapContent('dashboard');
-        } else {
-          Loading.hide();
-          Modal.alert('This wallet is not linked to any account. Please login with email and connect your wallet first.', 'Wallet Not Linked');
+          Modal.alert('This wallet is not registered. Please sign up with an invite code first.', 'Wallet Not Found');
+          return;
         }
+
+        // Extract user data from RPC response
+        const userData = {
+          id: loginData[0].user_id,
+          display_name: loginData[0].display_name,
+          gp_balance: loginData[0].gp_balance,
+          auth_user_id: loginData[0].auth_user_id
+        };
+
+        // Verify ownership with signature
+        const message = `Sign in to Duel PVP\nWallet: ${walletAddress}\nTimestamp: ${Date.now()}`;
+
+        const signature = await window.ethereum.request({
+          method: 'personal_sign',
+          params: [message, accounts[0]]
+        });
+
+        // Create Supabase Auth session using anonymous authentication
+        Loading.show('Creating secure session...');
+
+        // Check if user already has an auth session linked
+        let authResult;
+        if (userData.auth_user_id) {
+          // Try to get existing session (may have been created before)
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session && session.user.id === userData.auth_user_id) {
+            authResult = { data: { user: session.user }, error: null };
+          }
+        }
+
+        // If no existing session, create new anonymous auth session
+        if (!authResult || authResult.error) {
+          console.log('Creating new anonymous auth session...');
+          authResult = await supabase.auth.signInAnonymously({
+            options: {
+              data: {
+                wallet_address: walletAddress,
+                display_name: userData.display_name,
+                user_id: userData.id
+              }
+            }
+          });
+          console.log('Anonymous auth result:', authResult);
+
+          // Explicitly set the session to ensure client uses it immediately for all requests
+          if (authResult.data?.session) {
+            await supabase.auth.setSession({
+              access_token: authResult.data.session.access_token,
+              refresh_token: authResult.data.session.refresh_token
+            });
+            console.log('Session explicitly set on Supabase client');
+          }
+
+          // Link anonymous auth user to existing user record
+          if (authResult.data?.user) {
+            console.log('Linking auth user to database user...');
+            const linkResult = await supabase.rpc('link_auth_to_user', {
+              p_user_id: userData.id,
+              p_auth_user_id: authResult.data.user.id
+            });
+            console.log('Link result:', linkResult);
+          }
+        }
+
+        if (authResult.error) {
+          console.error('Auth session error:', authResult.error);
+          Loading.hide();
+          Modal.alert('Failed to create auth session: ' + authResult.error.message + '\n\nPlease ensure anonymous authentication is enabled in Supabase dashboard.', 'Authentication Error');
+          return;
+        }
+
+        if (!authResult.data?.user) {
+          console.error('No auth user created');
+          Loading.hide();
+          Modal.alert('Failed to create auth session. Please check browser console.', 'Authentication Error');
+          return;
+        }
+
+        // Verify session is active and client is using it
+        console.log('Verifying session is active...');
+        const { data: { session: verifySession } } = await supabase.auth.getSession();
+        console.log('Session verification:', verifySession ? 'Active' : 'None');
+
+        if (!verifySession) {
+          console.error('Session not active after creation');
+          Loading.hide();
+          Modal.alert('Session creation failed. Please try again.', 'Authentication Error');
+          return;
+        }
+
+        // Store user info in localStorage (legacy support)
+        createSession(userData.id, walletAddress, userData.display_name);
+
+        document.getElementById('userName').textContent = userData.display_name.toUpperCase();
+
+        // Check NFT holder status and auto-complete quests
+        await checkNFTHolderQuests(userData.id, walletAddress);
+
+        // Initialize GP cache
+        await initializeGPCache();
+        const gp = await getUserGP();
+
+        Loading.hide();
+        Toast.success(`Welcome back, ${userData.display_name}!`, `${gp} GP`);
+        swapContent('dashboard');
+
       } catch (error) {
         Loading.hide();
         console.error('Wallet login error:', error);
-        Modal.alert('Failed to login with wallet: ' + error.message, 'Login Failed');
+        if (error.code === 4001) {
+          Toast.warning('You cancelled the signature request', 'Signature Cancelled');
+        } else {
+          Modal.alert('Failed to login with wallet: ' + error.message, 'Login Failed');
+        }
       }
     }
 
     // Dashboard stats update
     async function updateDashboardStats() {
       try {
-        const userId = localStorage.getItem('duelpvp_user_id');
+        // Get user ID from session or old localStorage format
+        const session = getSession();
+        const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
 
         if (!userId) return;
 
@@ -5980,13 +7092,10 @@
         const totalGP = userData?.points || 0;
 
         // Update UI
-        document.querySelector('.stat-card:nth-child(1) .stat-value').textContent = totalWins;
-        document.querySelector('.stat-card:nth-child(2) .stat-value').textContent = streak;
-        document.querySelector('.stat-card:nth-child(3) .stat-value').textContent = userRank > 0 ? `#${userRank}` : '--';
+        document.getElementById('dashboardRank').textContent = userRank > 0 ? `#${userRank}` : '--';
 
-        // Update GP from localStorage (for test mode) or database
-        const localGP = parseInt(localStorage.getItem('duelpvp_gp')) || 0;
-        const displayGP = localGP || totalGP;
+        // Update GP using secure getUserGP function (supports both database and localStorage)
+        const displayGP = await getUserGP();
         document.getElementById('dashboardGPBalance').textContent = displayGP >= 1000000 ? `${(displayGP/1000000).toFixed(1)}M` : displayGP >= 1000 ? `${(displayGP/1000).toFixed(1)}K` : displayGP;
 
       } catch (e) {
@@ -6010,17 +7119,19 @@
       // Get inventory from localStorage (for now - can be migrated to Supabase later)
       const inventory = JSON.parse(localStorage.getItem(`duelpvp_inventory_${email}`) || '[]');
 
-      // Get user's invite codes from Supabase
+      // Get user's invite codes using RPC function
       let inviteCodes = [];
       if (userId) {
         const { data } = await supabase
-          .from('codes')
-          .select('*')
-          .eq('created_by', userId)
-          .order('created_at', { ascending: false })
-          .limit(4);
+          .rpc('get_my_codes', { p_user_id: userId });
 
-        inviteCodes = data || [];
+        if (data && data.length > 0) {
+          inviteCodes = data.map(c => ({
+            code: c.code,
+            used: c.used,
+            used_at: c.used_at
+          }));
+        }
       }
 
       // Combine inventory items and codes
@@ -6030,7 +7141,11 @@
       inviteCodes.slice(0, 4).forEach(code => {
         allItems.push({
           type: 'invite_code',
-          icon: '🎟️',
+          icon: `<svg width="24" height="24" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;">
+            <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5" fill="none" stroke="#d4af37" stroke-width="3"/>
+            <circle cx="40" cy="50" r="8" fill="#22c55e"/>
+            <circle cx="60" cy="50" r="8" fill="#ef4444"/>
+          </svg>`,
           name: code.used_by ? 'USED CODE' : 'INVITE CODE',
           desc: code.used_by
             ? `This code was used on ${new Date(code.used_at).toLocaleDateString()}`
@@ -6084,6 +7199,15 @@
               ${item.code ? `<div class="tooltip-desc" style="margin-top:4px;color:var(--gold);font-family:'Press Start 2P';font-size:9px;">${item.code}</div>` : ''}
             </div>
           `;
+
+          // Add click-to-copy for unused invite codes
+          if (item.type === 'invite_code' && !item.used) {
+            slot.style.cursor = 'pointer';
+            slot.addEventListener('click', () => {
+              copyToClipboard(item.code);
+              Toast.success(`Code ${item.code} copied!`, 'SHARE WITH FRIENDS');
+            });
+          }
         }
 
         dashboardItemsGrid.appendChild(slot);
@@ -6091,20 +7215,19 @@
     }
 
     // Leaderboard functions
-    async function loadLeaderboard(filter) {
-      console.log('loadLeaderboard called with filter:', filter);
+    async function loadLeaderboard(filter = 'all') {
+      console.log('loadLeaderboard called');
       try {
-        const email = localStorage.getItem('duelpvp_email') || 'anonymous';
         const userId = localStorage.getItem('duelpvp_user_id');
 
         Loading.show('Loading leaderboard...');
 
-        // Call Supabase RPC function to get leaderboard
+        // Get top 500 users by GP balance
         const { data: leaderboard, error } = await supabase
-          .rpc('get_leaderboard', {
-            time_filter: filter,
-            limit_count: 100
-          });
+          .from('users')
+          .select('id, display_name, wallet_address, gp_balance, created_at')
+          .order('gp_balance', { ascending: false })
+          .limit(500);
 
         Loading.hide();
 
@@ -6115,24 +7238,36 @@
 
         console.log('Loaded leaderboard:', leaderboard?.length || 0, 'entries');
 
-        // Show user's best time
+        // Add rank to each entry
+        const rankedLeaderboard = leaderboard?.map((entry, index) => ({
+          ...entry,
+          rank: index + 1
+        })) || [];
+
+        // Show user's rank if they're logged in
         if (userId) {
-          const userEntry = leaderboard?.find(entry => entry.user_id === userId);
+          const userEntry = rankedLeaderboard.find(entry => entry.id === userId);
           if (userEntry) {
             document.getElementById('yourBestSection').style.display = 'block';
-            document.getElementById('yourBestTime').textContent = `${userEntry.time_ms}ms`;
+            document.getElementById('yourBestTime').textContent = `#${userEntry.rank} | ${userEntry.gp_balance?.toLocaleString() || 0} GP`;
           } else {
-            document.getElementById('yourBestSection').style.display = 'none';
+            // User is not in top 500, get their actual rank
+            const { data: userRankData } = await supabase
+              .rpc('get_user_rank', { p_user_id: userId });
+
+            if (userRankData && userRankData[0]) {
+              document.getElementById('yourBestSection').style.display = 'block';
+              document.getElementById('yourBestTime').textContent = `#${userRankData[0].rank} | ${userRankData[0].gp_balance?.toLocaleString() || 0} GP`;
+            } else {
+              document.getElementById('yourBestSection').style.display = 'none';
+            }
           }
         } else {
           document.getElementById('yourBestSection').style.display = 'none';
         }
 
-        // Render podium (top 3)
-        renderPodium(leaderboard?.slice(0, 3) || []);
-
         // Render table
-        renderLeaderboardTable(leaderboard || [], userId);
+        renderLeaderboardTable(rankedLeaderboard, userId);
 
       } catch (e) {
         Loading.hide();
@@ -6141,89 +7276,42 @@
       }
     }
 
-    function renderPodium(topThree) {
-      const podium = document.getElementById('podium');
-      podium.innerHTML = '';
-
-      if (topThree.length === 0) {
-        podium.innerHTML = '<div class="no-data" style="grid-column: 1/-1;">No scores yet. Be the first!</div>';
-        return;
-      }
-
-      topThree.forEach((entry, index) => {
-        const rank = index + 1;
-        const playerName = entry.display_name || entry.email?.split('@')[0] || 'Unknown';
-        const date = new Date(entry.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-
-        const podiumItem = document.createElement('div');
-        podiumItem.className = `podium-item rank-${rank}`;
-        podiumItem.innerHTML = `
-          <div class="podium-rank">${rank}</div>
-          <div class="podium-player">${playerName.toUpperCase()}</div>
-          <div class="podium-time">${entry.time_ms}ms</div>
-          <div class="podium-date">${date}</div>
-        `;
-        podium.appendChild(podiumItem);
-      });
-
-      // Add empty slots if less than 3
-      for (let i = topThree.length; i < 3; i++) {
-        const podiumItem = document.createElement('div');
-        podiumItem.className = `podium-item rank-${i + 1}`;
-        podiumItem.innerHTML = `
-          <div class="podium-rank">${i + 1}</div>
-          <div class="podium-player">---</div>
-          <div class="podium-time">--ms</div>
-          <div class="podium-date">No entry</div>
-        `;
-        podium.appendChild(podiumItem);
-      }
-    }
-
     function renderLeaderboardTable(leaderboard, currentUserId) {
       const tbody = document.getElementById('leaderboardTableBody');
       tbody.innerHTML = '';
 
       if (leaderboard.length === 0) {
-        tbody.innerHTML = '<div class="no-data">No scores recorded yet</div>';
+        tbody.innerHTML = '<div class="no-data">No warriors yet. Be the first!</div>';
         return;
       }
 
       leaderboard.forEach((entry) => {
         const rank = entry.rank || '?';
-        const playerName = entry.display_name || entry.email?.split('@')[0] || 'Unknown';
-        const date = new Date(entry.created_at).toLocaleDateString('en-US', {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric'
-        });
-        const isCurrentUser = entry.user_id === currentUserId;
+        const playerName = entry.display_name || 'Unknown';
+        const gpBalance = entry.gp_balance?.toLocaleString() || '0';
+        const walletShort = entry.wallet_address ?
+          `${entry.wallet_address.substring(0, 6)}...${entry.wallet_address.substring(entry.wallet_address.length - 4)}` :
+          'No wallet';
+        const isCurrentUser = entry.id === currentUserId;
+
+        // Highlight top 3 differently
+        let rankBadgeClass = 'rank-badge';
+        if (rank === 1) rankBadgeClass += ' rank-gold';
+        else if (rank === 2) rankBadgeClass += ' rank-silver';
+        else if (rank === 3) rankBadgeClass += ' rank-bronze';
 
         const row = document.createElement('div');
         row.className = isCurrentUser ? 'table-row user-row' : 'table-row';
         row.innerHTML = `
-          <div class="rank-badge">#${rank}</div>
+          <div class="${rankBadgeClass}">#${rank}</div>
           <div class="player-name">${playerName.toUpperCase()}${isCurrentUser ? ' (YOU)' : ''}</div>
-          <div class="reaction-time">${entry.time_ms}ms</div>
-          <div class="entry-date">${date}</div>
+          <div class="reaction-time" style="color:var(--gold);font-weight:700;">${gpBalance} GP</div>
+          <div class="entry-date" style="font-family:monospace;font-size:11px;">${walletShort}</div>
         `;
         tbody.appendChild(row);
       });
     }
 
-    function handleFilterChange(filter) {
-      // Update active button
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.remove('active');
-        btn.setAttribute('aria-pressed', 'false');
-      });
-      event.target.classList.add('active');
-      event.target.setAttribute('aria-pressed', 'true');
-
-      // Reload leaderboard
-      loadLeaderboard(filter);
-    }
-    
     // Game functions
     function initChart() {
       const canvas = document.getElementById('chartCanvas');
@@ -6471,7 +7559,7 @@
 
       // Award GP for fast reactions
       if (reactionTime < 1000) {
-        await updateUserGP(300);
+        await updateUserGP(300, 'reaction');
         Toast.success('Fast hands! +300 GP', 'PROFIT');
         gameStatus.textContent = `${reactionTime.toFixed(0)}ms - +300 GP!`;
         gameStatus.className = 'game-status';
@@ -6665,8 +7753,8 @@
       startCrashRound();
     }
 
-    function updateCrashGPDisplay() {
-      const gp = parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+    async function updateCrashGPDisplay() {
+      const gp = await getUserGP();
       document.getElementById('crashGPDisplay').textContent = gp;
       document.getElementById('crashCurrentBet').textContent = crashGameState.betAmount;
 
@@ -6870,7 +7958,7 @@
       }, 2000); // Reduced from 3000ms to 2000ms
     }
 
-    function placeCrashBet() {
+    async function placeCrashBet() {
       if (crashGameState.phase !== 'waiting') {
         Toast.error('Wait for next round', 'TOO LATE');
         return;
@@ -6881,7 +7969,7 @@
       const autoCashoutInput = document.getElementById('crashAutoCashout');
       const autoCashout = parseFloat(autoCashoutInput.value) || 0;
 
-      const gp = parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+      const gp = await getUserGP();
 
       if (isNaN(betAmount) || betAmount < 10) {
         Toast.error('Minimum bet is 10 GP', 'INVALID BET');
@@ -6899,7 +7987,7 @@
       }
 
       // Deduct bet from balance
-      localStorage.setItem('duelpvp_gp', (gp - betAmount).toString());
+      await updateUserGP(-betAmount, 'crash');
       crashGameState.betAmount = betAmount;
       crashGameState.autoCashout = autoCashout;
       crashGameState.hashedIn = true;
@@ -6912,7 +8000,7 @@
       document.getElementById('crashPlaceBetBtn').textContent = 'BET PLACED';
     }
 
-    function crashCashout() {
+    async function crashCashout() {
       if (crashGameState.phase !== 'flying' || crashGameState.betAmount <= 0) {
         return;
       }
@@ -6921,8 +8009,7 @@
       const profit = winAmount - crashGameState.betAmount;
 
       // Add winnings to balance
-      const gp = parseInt(localStorage.getItem('duelpvp_gp')) || 0;
-      localStorage.setItem('duelpvp_gp', (gp + winAmount).toString());
+      await updateUserGP(winAmount, 'crash');
 
       Toast.success(`Cashed out at ${crashGameState.currentMultiplier.toFixed(2)}x! Won ${winAmount} GP (+${profit})`, 'CASHED OUT');
 
@@ -6963,407 +8050,241 @@
       });
     }
 
-    // Quest System Data and Functions
+    // ========== QUEST SYSTEM - REBUILT FROM SCRATCH ==========
+
+    // Quest definitions
     const QUESTS = {
       daily: [
-        {id: 'daily_play_3', name: 'Speed Demon', desc: 'Play 3 reaction games', target: 3, reward: 500, icon: '⚡'},
-        {id: 'daily_fast_time', name: 'Lightning Reflexes', desc: 'Get a time under 300ms', target: 1, reward: 750, icon: '⏱️'},
-        {id: 'daily_streak_3', name: 'On Fire', desc: 'Win 3 games in a row', target: 3, reward: 600, icon: '🔥'},
-        {id: 'daily_login', name: 'Daily Warrior', desc: 'Login to the arena', target: 1, reward: 250, icon: '🗡️'},
-        {id: 'twitter_follow', name: 'Follow on Twitter', desc: 'Follow @YourProject on Twitter/X', target: 1, reward: 500, icon: '🐦', type: 'twitter', hasTimer: true},
-        {id: 'twitter_like', name: 'Like Launch Tweet', desc: 'Like our official launch announcement', target: 1, reward: 300, icon: '❤️', type: 'twitter', tweetUrl: 'https://twitter.com/YourProject/status/123456789', hasTimer: true},
-        {id: 'twitter_retweet', name: 'Retweet Launch', desc: 'Retweet our launch announcement', target: 1, reward: 300, icon: '🔄', type: 'twitter', tweetUrl: 'https://twitter.com/YourProject/status/123456789', hasTimer: true},
-        {id: 'twitter_quote', name: 'Quote Tweet', desc: 'Quote tweet with your thoughts', target: 1, reward: 500, icon: '💬', type: 'twitter', hasTimer: true},
-        {id: 'discord_join', name: 'Join Discord', desc: 'Join our Discord community', target: 1, reward: 400, icon: '💬', type: 'discord', hasTimer: true}
+        {id: 'first_login', name: 'First Steps', desc: 'Log in for the first time', target: 1, reward: 500, icon: '🗡️', type: 'regular'},
+        {id: 'invite_used', name: 'Recruit Warriors', desc: 'Have 3 friends use your invite codes', target: 3, reward: 1500, icon: '👥', type: 'regular'},
+        {id: 'bunnz_holder', name: 'BAD BUNNZ Holder', desc: 'Own a BAD BUNNZ NFT', target: 1, reward: 500, icon: '🐰', type: 'nft'},
+        {id: 'fluffle_holder', name: 'FLUFFLE Holder', desc: 'Own a FLUFFLE NFT', target: 1, reward: 2500, icon: '🐇', type: 'nft'}
       ],
-      weekly: [
-        {id: 'weekly_play_20', name: 'Arena Regular', desc: 'Play 20 reaction games', target: 20, reward: 2500, icon: '🎮'},
-        {id: 'weekly_top_10', name: 'Elite Fighter', desc: 'Reach top 10 on leaderboard', target: 1, reward: 5000, icon: '🏆'},
-        {id: 'weekly_sub_250', name: 'Reflex Master', desc: 'Get 5 times under 250ms', target: 5, reward: 3000, icon: '⚡'},
-        {id: 'weekly_shop', name: 'Merchant', desc: 'Buy 3 items from shop', target: 3, reward: 1500, icon: '🛒'}
-      ],
+      weekly: [],
       special: []
     };
 
-    // Server time fetching to prevent local clock manipulation
-    async function getServerTime() {
-      try {
-        const response = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC');
-        const data = await response.json();
-        return new Date(data.datetime);
-      } catch (error) {
-        console.error('Failed to fetch server time, using local time as fallback:', error);
-        return new Date();
-      }
+    // Tab switching
+    function switchQuestTab(tab, questType) {
+      document.querySelectorAll('.quest-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      loadQuests(questType);
     }
 
-    function formatTimeRemaining(ms) {
-      const hours = Math.floor(ms / (1000 * 60 * 60));
-      const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-      return `${hours}h ${minutes}m`;
-    }
-
+    // Main quest loader
     async function loadQuests(type) {
       const questGrid = document.getElementById('questGrid');
       const comingSoonOverlay = document.getElementById('comingSoonOverlay');
-      const userId = localStorage.getItem('duelpvp_user_id');
+
+      if (!questGrid) {
+        console.error('Quest grid not found');
+        return;
+      }
+
+      // Get user ID
+      const session = getSession();
+      const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
 
       if (!userId) {
         questGrid.innerHTML = '<div class="no-data">Please log in to view quests</div>';
         return;
       }
 
-      // Check if test mode user
-      const isTestMode = userId.startsWith('test-');
-
-      // Show coming soon overlay for weekly and special quests
+      // Handle locked tabs
       if (type === 'weekly' || type === 'special') {
         questGrid.classList.add('locked');
-        comingSoonOverlay.style.display = 'flex';
-
-        // Show blurred placeholder quests
-        questGrid.innerHTML = '';
-        const placeholderQuests = type === 'weekly' ? QUESTS.weekly : [
-          {name: 'Mystery Quest 1', desc: 'Complete special challenges for massive rewards', reward: '???', icon: '🌟'},
-          {name: 'Mystery Quest 2', desc: 'Limited time event quest', reward: '???', icon: '✨'},
-          {name: 'Mystery Quest 3', desc: 'Exclusive seasonal challenge', reward: '???', icon: '🎁'},
-          {name: 'Mystery Quest 4', desc: 'Epic endgame content', reward: '???', icon: '💫'}
-        ];
-
-        placeholderQuests.forEach(quest => {
-          const card = document.createElement('div');
-          card.className = 'quest-card';
-          card.innerHTML = `
-            <div class="quest-name"><span class="quest-icon">${quest.icon}</span> ${quest.name}</div>
-            <div class="quest-desc">${quest.desc}</div>
-            <div class="quest-progress">
-              <div class="progress-bar">
-                <div class="progress-fill" style="width:0%"></div>
-              </div>
-              <div class="progress-text">0 / ${quest.target || 1}</div>
-            </div>
-            <div class="quest-reward">💰 ${quest.reward} GP</div>
-          `;
-          questGrid.appendChild(card);
-        });
+        if (comingSoonOverlay) comingSoonOverlay.style.display = 'flex';
+        questGrid.innerHTML = '<div class="no-data">Coming Soon</div>';
         return;
       } else {
         questGrid.classList.remove('locked');
-        comingSoonOverlay.style.display = 'none';
+        if (comingSoonOverlay) comingSoonOverlay.style.display = 'none';
+        // Force grid visibility
+        questGrid.style.opacity = '1';
+        questGrid.style.filter = 'none';
+        questGrid.style.pointerEvents = 'auto';
       }
 
-      // For daily quests or completed - show actual quests
-      if (isTestMode) {
-        // Test mode - show daily quests without database
-        questGrid.innerHTML = '';
-        const quests = type === 'completed' ? [] : QUESTS.daily;
+      // Show loading
+      questGrid.innerHTML = '<div class="no-data">Loading quests...</div>';
 
-        if (quests.length === 0) {
+      try {
+        // Fetch quest progress from database
+        const { data: questData, error: questError } = await supabase
+          .from('quests')
+          .select('quest_id, progress, claimed_at')
+          .eq('user_id', userId)
+          .eq('reset_date', new Date().toISOString().split('T')[0]);
+
+        if (questError) {
+          console.error('Quest load error:', questError);
+          questGrid.innerHTML = '<div class="no-data">Error loading quests</div>';
+          return;
+        }
+
+        // Build progress lookup
+        const progress = {};
+        (questData || []).forEach(q => {
+          progress[q.quest_id] = {
+            value: q.progress || 0,
+            claimed: !!q.claimed_at
+          };
+        });
+
+        // Get quests to display
+        let questList;
+        if (type === 'completed') {
+          // Show all completed quests from any category
+          questList = QUESTS.daily.filter(q => {
+            const p = progress[q.id];
+            return p && p.value >= q.target;
+          });
+        } else {
+          // For daily tab, filter OUT completed quests
+          questList = (QUESTS[type] || QUESTS.daily).filter(q => {
+            const p = progress[q.id];
+            const isComplete = p && p.value >= q.target;
+            return !isComplete; // Only show uncompleted quests
+          });
+        }
+
+        // Clear and render
+        questGrid.innerHTML = '';
+
+        if (questList.length === 0) {
           questGrid.innerHTML = '<div class="no-data">No quests available</div>';
           return;
         }
 
-        quests.forEach(quest => {
-          const card = document.createElement('div');
-          card.className = 'quest-card';
-          const isSocialQuest = quest.type === 'twitter' || quest.type === 'discord';
+        // Render each quest
+        questList.forEach(quest => {
+          const p = progress[quest.id] || {value: 0, claimed: false};
+          const isComplete = p.value >= quest.target;
+          const isClaimed = p.claimed;
 
-          if (isSocialQuest) {
-            card.innerHTML = `
+          const card = document.createElement('div');
+          card.className = 'quest-card' + (isComplete ? ' completed' : '') + (isComplete && !isClaimed ? ' claimable' : '');
+          // Force visibility
+          card.style.opacity = '1';
+          card.style.visibility = 'visible';
+          card.style.display = 'block';
+
+          let html;
+
+          // Simplified display for claimed quests
+          if (isClaimed) {
+            html = `
               <div class="quest-name"><span class="quest-icon">${quest.icon}</span> ${quest.name}</div>
-              <div class="quest-desc">${quest.desc}${quest.tweetUrl ? ` <a href="${quest.tweetUrl}" target="_blank" style="color:var(--gold);text-decoration:underline;">View Tweet</a>` : ''}</div>
-              <div class="quest-progress">
-                <button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" disabled>
-                  VERIFY
-                </button>
+              <div style="text-align:center;padding:16px 0;color:#4CAF50;font-family:'Press Start 2P',monospace;font-size:12px;">
+                +${quest.reward} GP CLAIMED
               </div>
-              <div class="quest-reward">💰 ${quest.reward} GP</div>
             `;
           } else {
-            card.innerHTML = `
+            // Full display for unclaimed quests
+            html = `
               <div class="quest-name"><span class="quest-icon">${quest.icon}</span> ${quest.name}</div>
               <div class="quest-desc">${quest.desc}</div>
               <div class="quest-progress">
-                <div class="progress-bar">
-                  <div class="progress-fill" style="width:0%"></div>
-                </div>
-                <div class="progress-text">0 / ${quest.target}</div>
-              </div>
-              <div class="quest-reward">💰 ${quest.reward} GP</div>
             `;
+
+            // Quest status/action
+            if (quest.type === 'nft') {
+              // NFT holder quest
+              if (isComplete) {
+                html += `<button class="action-btn btn-primary" style="width:100%;margin-top:8px;" onclick="claimQuestReward('${quest.id}', ${quest.reward})">CLAIM ${quest.reward} GP</button>`;
+              } else {
+                html += `<div style="text-align:center;padding:8px;color:#888;">Not a holder</div>`;
+              }
+            } else {
+              // Regular quest with progress bar
+              const pct = Math.min(100, (p.value / quest.target) * 100);
+              html += `
+                <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+                <div class="progress-text">${p.value} / ${quest.target}</div>
+              `;
+              if (isComplete) {
+                html += `<button class="action-btn btn-primary" style="width:100%;margin-top:8px;" onclick="claimQuestReward('${quest.id}', ${quest.reward})">CLAIM ${quest.reward} GP</button>`;
+              }
+            }
+
+            html += `</div>`;
+            html += `<div class="quest-reward">${quest.reward} GP</div>`;
           }
+
+          card.innerHTML = html;
           questGrid.appendChild(card);
         });
-        return;
-      }
 
-      Loading.show('Loading quests...');
-
-      // Fetch quest progress from Supabase
-      const { data: questData, error: questError } = await supabase
-        .from('quests')
-        .select('*')
-        .eq('user_id', userId)
-        .eq('reset_date', new Date().toISOString().split('T')[0]); // Today's date
-
-      Loading.hide();
-
-      if (questError) {
-        console.error('Failed to load quests:', questError);
-        questGrid.innerHTML = '<div class="no-data">Error loading quests. Please try again later.</div>';
-        return;
-      }
-
-      // Convert array to object for easier lookup
-      const questProgress = {};
-      questData?.forEach(q => {
-        questProgress[q.quest_id] = q.progress;
-        if (q.claimed_at) {
-          questProgress[`${q.quest_id}_claimed`] = true;
-        }
-        if (q.start_time) {
-          questProgress[`${q.quest_id}_start_time`] = new Date(q.start_time).getTime();
-        }
-      });
-
-      // Get server time to prevent clock manipulation
-      const serverTime = await getServerTime();
-
-      questGrid.innerHTML = '';
-      const quests = type === 'completed'
-        ? [...QUESTS.daily, ...QUESTS.weekly, ...QUESTS.special].filter(q => (questProgress[q.id] || 0) >= q.target)
-        : QUESTS[type] || QUESTS.daily;
-
-      quests.forEach(quest => {
-        const progress = questProgress[quest.id] || 0;
-        const completed = progress >= quest.target;
-        const claimed = questProgress[`${quest.id}_claimed`] || false;
-        const isSocialQuest = quest.type === 'twitter' || quest.type === 'discord';
-        const hasTimer = quest.hasTimer && !completed;
-
-        // Calculate time remaining for 24-hour timer quests
-        let timeRemainingText = '';
-        if (hasTimer) {
-          const questStartTime = questProgress[`${quest.id}_start_time`];
-          if (questStartTime) {
-            const elapsed = serverTime.getTime() - questStartTime;
-            const remaining = (24 * 60 * 60 * 1000) - elapsed;
-            if (remaining > 0) {
-              timeRemainingText = `<div style="font-size:10px;color:#4CAF50;margin-top:4px;">⏱️ ${formatTimeRemaining(remaining)} left</div>`;
-            } else {
-              // Timer expired, quest failed
-              delete questProgress[quest.id];
-              delete questProgress[`${quest.id}_start_time`];
-              localStorage.setItem(`duelpvp_quests_${email}`, JSON.stringify(questProgress));
-            }
-          }
-        }
-
-        const card = document.createElement('div');
-        card.className = `quest-card ${completed ? 'completed' : ''} ${completed && !claimed ? 'claimable' : ''}`;
-
-        if (isSocialQuest) {
-          // Social quest with verify button
-          card.innerHTML = `
-            <div class="quest-name"><span class="quest-icon">${quest.icon}</span> ${quest.name}</div>
-            <div class="quest-desc">${quest.desc}${quest.tweetUrl ? ` <a href="${quest.tweetUrl}" target="_blank" style="color:var(--gold);text-decoration:underline;">View Tweet</a>` : ''}</div>
-            <div class="quest-progress">
-              <button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="verifySocialQuest('${quest.id}', '${quest.type}')">
-                ${completed ? '✓ VERIFIED' : 'VERIFY'}
-              </button>
-              ${timeRemainingText}
-            </div>
-            <div class="quest-reward">
-              💰 ${quest.reward} GP ${completed && !claimed ? '• <span style="color:var(--gold)">CLAIM!</span>' : completed ? '✓ CLAIMED' : ''}
-            </div>
-          `;
-        } else {
-          // Regular quest with progress bar
-          card.innerHTML = `
-            <div class="quest-name"><span class="quest-icon">${quest.icon}</span> ${quest.name}</div>
-            <div class="quest-desc">${quest.desc}</div>
-            <div class="quest-progress">
-              <div class="progress-bar">
-                <div class="progress-fill" style="width:${Math.min(100, (progress/quest.target)*100)}%"></div>
-              </div>
-              <div class="progress-text">${progress} / ${quest.target}</div>
-            </div>
-            <div class="quest-reward">
-              💰 ${quest.reward} GP ${completed && !claimed ? '• <span style="color:var(--gold)">CLAIM!</span>' : completed ? '✓ CLAIMED' : ''}
-            </div>
-          `;
-        }
-
-        if (completed && !claimed) {
-          card.style.cursor = 'pointer';
-          card.addEventListener('click', () => claimQuestReward(quest.id, quest.reward));
-        }
-
-        questGrid.appendChild(card);
-      });
-
-      if (quests.length === 0) {
-        questGrid.innerHTML = '<div class="no-data">No quests available</div>';
+      } catch (err) {
+        console.error('Quest system error:', err);
+        questGrid.innerHTML = '<div class="no-data">Error loading quests</div>';
       }
     }
 
-    // Social quest verification (manual for now, Galxe integration ready)
-    async function verifySocialQuest(questId, questType) {
-      const email = localStorage.getItem('duelpvp_email') || 'anonymous';
-      let questProgress = JSON.parse(localStorage.getItem(`duelpvp_quests_${email}`) || '{}');
-
-      // Check if already completed
-      if (questProgress[questId] >= 1) {
-        Modal.alert('Quest already verified!', 'Already Completed');
-        return;
-      }
-
-      // Get server time for timer
-      Loading.show('Checking server time...');
-      const serverTime = await getServerTime();
-      Loading.hide();
-
-      // MANUAL VERIFICATION (Free, no API costs)
-      // TODO: Replace with Galxe API when ready
-      if (questType === 'twitter') {
-        const handle = prompt('Enter your Twitter handle (@username) to verify:');
-        if (!handle) return;
-
-        // Show confirmation
-        const confirmed = await Modal.confirm(`Please complete the quest first, then click CONFIRM.
-
-Your handle: ${handle}
-
-You have 24 hours to complete this quest.
-We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
-
-        if (confirmed) {
-          // Store pending verification and start 24-hour timer
-          questProgress[`${questId}_pending`] = handle;
-          questProgress[`${questId}_timestamp`] = serverTime.getTime();
-          questProgress[`${questId}_start_time`] = serverTime.getTime();
-          localStorage.setItem(`duelpvp_quests_${email}`, JSON.stringify(questProgress));
-
-          Toast.info('You have 24 hours to complete this quest', 'QUEST STARTED');
-          loadQuests('daily');
-
-          // GALXE INTEGRATION POINT:
-          // Uncomment below when Galxe is set up
-          /*
-          try {
-            const wallet = localStorage.getItem(`duelpvp_wallet_${email}`);
-            const verified = await checkGalxeCredential(wallet, questId);
-            if (verified) {
-              questProgress[questId] = 1;
-              localStorage.setItem(`duelpvp_quests_${email}`, JSON.stringify(questProgress));
-              Toast.success('Quest verified! Claim your reward.', 'QUEST COMPLETE');
-              loadQuests('daily');
-            }
-          } catch (error) {
-            Toast.error('Verification failed. Please try again.', 'ERROR');
-          }
-          */
-        }
-      } else if (questType === 'discord') {
-        const discordTag = prompt('Enter your Discord username:');
-        if (!discordTag) return;
-
-        // Store pending and start 24-hour timer
-        questProgress[`${questId}_pending`] = discordTag;
-        questProgress[`${questId}_timestamp`] = serverTime.getTime();
-        questProgress[`${questId}_start_time`] = serverTime.getTime();
-        localStorage.setItem(`duelpvp_quests_${email}`, JSON.stringify(questProgress));
-
-        Toast.info('Join our Discord and complete within 24 hours', 'QUEST STARTED');
-        loadQuests('daily');
-      }
-    }
-
-    // Helper function for Galxe API (ready for when you set it up)
-    async function checkGalxeCredential(walletAddress, questId) {
-      // TODO: Replace with your actual Galxe campaign ID
-      const GALXE_CAMPAIGN_ID = 'YOUR_CAMPAIGN_ID';
-
-      try {
-        const response = await fetch('https://graphigo.prd.galaxy.eco/query', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            query: `{
-              campaign(id: "${GALXE_CAMPAIGN_ID}") {
-                participants(address: "${walletAddress}") {
-                  eligible
-                }
-              }
-            }`
-          })
-        });
-
-        const data = await response.json();
-        return data?.data?.campaign?.participants?.eligible || false;
-      } catch (error) {
-        console.error('Galxe verification error:', error);
-        return false;
-      }
-    }
-
+    // Claim quest reward
     async function claimQuestReward(questId, reward) {
-      const userId = localStorage.getItem('duelpvp_user_id');
-
+      const session = getSession();
+      const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
       if (!userId) return;
 
       Loading.show('Claiming reward...');
 
       try {
-        // Use Supabase RPC function to claim quest reward
-        const { data: success, error } = await supabase
-          .rpc('claim_quest_reward', {
-            p_user_id: userId,
-            p_quest_id: questId,
-            p_reward_points: reward
-          });
+        const { data, error } = await supabase.rpc('claim_quest_reward', {
+          p_user_id: userId,
+          p_quest_id: questId,
+          p_reward_points: reward
+        });
 
         Loading.hide();
 
-        if (error || !success) {
-          console.error('Failed to claim quest reward:', error);
+        if (error) {
+          console.error('Claim error:', error);
           Toast.error('Failed to claim reward', 'ERROR');
           return;
         }
 
-        // Reload quests
-        const activeTab = document.querySelector('.quest-tab.active').getAttribute('data-quest-tab');
-        loadQuests(activeTab);
-
-        // Show notification
         Toast.success(`+${reward} GP earned!`, 'QUEST COMPLETED');
 
-      } catch (e) {
+        // Reload current tab
+        const activeTab = document.querySelector('.quest-tab.active');
+        const tabType = activeTab ? activeTab.getAttribute('data-quest-tab') : 'daily';
+        loadQuests(tabType);
+
+      } catch (err) {
         Loading.hide();
-        console.error('Error claiming quest reward:', e);
+        console.error('Claim error:', err);
         Toast.error('An error occurred', 'ERROR');
       }
     }
 
+    // Check NFT holder status on login
+    async function checkNFTHolderQuests(userId, walletAddress) {
+      try {
+        const { error } = await supabase.rpc('check_nft_holder_quests', {
+          p_user_id: userId,
+          p_wallet_address: walletAddress.toLowerCase()
+        });
+        if (error) console.error('NFT check error:', error);
+      } catch (err) {
+        console.error('NFT check failed:', err);
+      }
+    }
+
+    // Update quest progress
     async function updateQuestProgress(questId, amount = 1) {
       const userId = localStorage.getItem('duelpvp_user_id');
-
       if (!userId) return;
 
       try {
-        // Use Supabase RPC function to update quest progress
-        const { error } = await supabase
-          .rpc('update_quest_progress', {
-            p_user_id: userId,
-            p_quest_id: questId,
-            p_increment: amount
-          });
-
-        if (error) {
-          console.error('Failed to update quest progress:', error);
-        }
-      } catch (e) {
-        console.error('Error updating quest progress:', e);
+        const { error } = await supabase.rpc('update_quest_progress', {
+          p_user_id: userId,
+          p_quest_id: questId,
+          p_increment: amount
+        });
+        if (error) console.error('Progress update error:', error);
+      } catch (err) {
+        console.error('Progress update failed:', err);
       }
     }
 
@@ -7384,8 +8305,14 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     ];
 
     async function loadInventory() {
-      const userId = localStorage.getItem('duelpvp_user_id');
+      const session = getSession();
+      const userId = session?.userId;
       const email = localStorage.getItem('duelpvp_email') || 'anonymous';
+
+      if (!userId) {
+        console.warn('No user ID found, skipping inventory load');
+        return;
+      }
 
       // Get user data from Supabase
       const { data: userData } = await supabase
@@ -7399,12 +8326,21 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       // Get inventory from localStorage (for now)
       const inventory = JSON.parse(localStorage.getItem(`duelpvp_inventory_${email}`) || '[]');
 
-      // Get invite codes from Supabase
-      const { data: inviteCodes } = await supabase
-        .from('codes')
-        .select('*')
-        .eq('created_by', userId)
-        .order('used_at', { ascending: true, nullsFirst: false });
+      // Get user's invite codes using RPC function
+      const { data: codesData, error: codesError } = await supabase
+        .rpc('get_my_codes', { p_user_id: userId });
+
+      if (codesError) {
+        console.error('Failed to get codes:', codesError);
+      }
+
+      const inviteCodes = codesData && codesData.length > 0
+        ? codesData.map(c => ({
+            code: c.code,
+            used: c.used,
+            used_at: c.used_at
+          }))
+        : [];
 
       // Update GP display
       document.getElementById('gpDisplay').textContent = `GP: ${gp.toLocaleString()}`;
@@ -7422,7 +8358,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
           allItems.push({
             type: 'invite_code',
             code: code.code,
-            used: code.used_by !== null,
+            used: code.used,
             used_at: code.used_at
           });
         });
@@ -7446,13 +8382,31 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
           // Invite code item
           slot.className = item.used ? 'inventory-slot used-code' : 'inventory-slot';
           slot.innerHTML = `
-            <div class="item-icon">${item.used ? '📜' : '🎟️'}</div>
+            <div class="item-icon">
+              <svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;">
+                <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5"
+                         fill="none"
+                         stroke="#d4af37"
+                         stroke-width="3"/>
+                <circle cx="40" cy="50" r="8" fill="#22c55e"/>
+                <circle cx="60" cy="50" r="8" fill="#ef4444"/>
+              </svg>
+            </div>
             <div class="item-name">${item.code}</div>
           `;
           // Tooltip
           slot.title = item.used
             ? `Invite Code (USED)\nCode: ${item.code}\nUsed on: ${new Date(item.used_at).toLocaleDateString()}`
-            : `Invite Code (UNUSED)\nShare this code with friends!\nOne-time use only`;
+            : `Invite Code (UNUSED)\nClick to copy!\nShare this code with friends!`;
+
+          // Add click-to-copy for unused codes
+          if (!item.used) {
+            slot.style.cursor = 'pointer';
+            slot.addEventListener('click', () => {
+              copyToClipboard(item.code);
+              Toast.success(`Code ${item.code} copied!`, 'SHARE WITH FRIENDS');
+            });
+          }
         } else if (item && item.type === 'shop_item') {
           // Regular shop item
           const shopItem = SHOP_ITEMS.find(si => si.id === item.id);
@@ -7481,7 +8435,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
           <div class="item-icon">${item.icon}</div>
           <div class="shop-item-name">${item.name}</div>
           <div class="shop-item-desc">${item.desc}</div>
-          <div class="shop-item-price">💰 ${item.price.toLocaleString()} GP</div>
+          <div class="shop-item-price">${item.price.toLocaleString()} GP</div>
           <button class="buy-btn" ${gp < item.price ? 'disabled' : ''}>BUY</button>
         `;
 
@@ -7494,7 +8448,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
 
     function buyItem(item) {
       const email = localStorage.getItem('duelpvp_email') || 'anonymous';
-      let gp = parseInt(localStorage.getItem(`duelpvp_gp_${email}`) || '0');
+      let gp = parseInt(localStorage.getItem('duelpvp_gp') || '0');
       let inventory = JSON.parse(localStorage.getItem(`duelpvp_inventory_${email}`) || '[]');
 
       if (gp < item.price) {
@@ -7510,7 +8464,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
 
       // Deduct GP
       gp -= item.price;
-      localStorage.setItem(`duelpvp_gp_${email}`, gp.toString());
+      localStorage.setItem('duelpvp_gp', gp.toString());
 
       // Add to inventory
       if (item.type === 'consumable') {
@@ -7535,19 +8489,210 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     }
 
     // ===============================================
-    // OVEN INVESTMENT SYSTEM
+    // STAKING SYSTEM (SERVER-SIDE SECURE)
+    // ===============================================
+    // All calculations happen server-side to prevent cheating
+
+    // ===============================================
+    // GP BALANCE SYSTEM (SECURE - DATABASE BACKED)
     // ===============================================
 
+    // Cache for GP balance to reduce database queries
+    let gpCache = {
+      balance: 0,
+      lastFetch: 0,
+      cacheTime: 5000 // Cache for 5 seconds
+    };
+
     // Helper functions for GP
-    function getUserGP() {
-      return parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+    async function getUserGP() {
+      // Get user ID from session or old localStorage format
+      const session = getSession();
+      const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
+
+      // Fallback to localStorage for test mode
+      if (!userId || userId.startsWith('test-')) {
+        return parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+      }
+
+      // Check cache first
+      const now = Date.now();
+      if (gpCache.lastFetch && (now - gpCache.lastFetch < gpCache.cacheTime)) {
+        return gpCache.balance;
+      }
+
+      try {
+        // Try secure JWT-based function first
+        const { data: secureData, error: secureError } = await supabase.rpc('secure_get_gp');
+
+        if (!secureError && secureData !== null) {
+          gpCache.balance = secureData;
+          gpCache.lastFetch = now;
+          return secureData;
+        }
+
+        console.log('Secure GP function failed, using fallback:', secureError);
+
+        // Fallback to old function for users not yet migrated
+        const { data, error } = await supabase
+          .rpc('get_user_gp', { p_user_id: userId });
+
+        if (error) {
+          console.error('Failed to fetch GP:', error);
+          return parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+        }
+
+        gpCache.balance = data || 0;
+        gpCache.lastFetch = now;
+        return data || 0;
+      } catch (e) {
+        console.error('Error getting GP:', e);
+        return parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+      }
     }
 
-    async function updateUserGP(amount) {
-      const currentGP = getUserGP();
-      const newGP = currentGP + amount;
-      localStorage.setItem('duelpvp_gp', newGP.toString());
+    function getUserLevel() {
+      const gp = gpCache.balance || parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+      // Calculate level based on GP (every 50,000 GP = 1 level)
+      return Math.floor(gp / 50000) + 1;
+    }
 
+    async function updateUserGP(amount, gameType = null) {
+      // Get user ID from session or old localStorage format
+      const session = getSession();
+      const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
+
+      // Fallback to localStorage for test mode
+      if (!userId || userId.startsWith('test-')) {
+        const currentGP = parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+        const newGP = currentGP + amount;
+
+        // Prevent negative balance even in test mode
+        if (newGP < 0) {
+          Toast.error('Insufficient balance', 'TRANSACTION FAILED');
+          return currentGP;
+        }
+
+        localStorage.setItem('duelpvp_gp', newGP.toString());
+
+        // Update UI
+        updateGPDisplay(newGP, amount);
+        return newGP;
+      }
+
+      try {
+        // Debug: Check session state before RPC call
+        const { data: { session: currentSession } } = await supabase.auth.getSession();
+        console.log('[GP Update] Session check before RPC:', {
+          hasSession: !!currentSession,
+          userId: currentSession?.user?.id,
+          tokenPreview: currentSession?.access_token?.substring(0, 20) + '...'
+        });
+
+        // Try secure JWT-based function first
+        const transactionType = amount > 0 ? 'game_win' : 'game_loss';
+        console.log('[GP Update] Calling secure_update_gp with:', { amount, transactionType, gameType });
+        let result = await supabase.rpc('secure_update_gp', {
+          p_amount: amount,
+          p_transaction_type: transactionType,
+          p_game_type: gameType
+        });
+        console.log('[GP Update] RPC result:', result);
+
+        // If secure function fails, fallback to old function
+        if (result.error) {
+          console.log('Secure update failed, using fallback:', result.error);
+          result = await supabase.rpc('update_user_gp', {
+            p_user_id: userId,
+            p_amount: amount
+          });
+        }
+
+        const { data, error } = result;
+
+        if (error) {
+          console.error('Failed to update GP:', error);
+
+          // If database function doesn't exist, fall back to localStorage with validation
+          if (error.message && error.message.includes('function') && error.message.includes('does not exist')) {
+            Toast.error('Database not configured! Using localStorage fallback.', 'WARNING');
+
+            const currentGP = parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+            const newGP = currentGP + amount;
+
+            // Prevent negative balance
+            if (newGP < 0) {
+              Toast.error('Insufficient balance', 'TRANSACTION FAILED');
+              return currentGP;
+            }
+
+            localStorage.setItem('duelpvp_gp', newGP.toString());
+            gpCache.balance = newGP;
+            gpCache.lastFetch = Date.now();
+            updateGPDisplay(newGP, amount);
+            return newGP;
+          }
+
+          Toast.error('Failed to update balance', 'ERROR');
+          return gpCache.balance;
+        }
+
+        // Check if update was successful
+        if (!data || data.length === 0 || !data[0].success) {
+          const message = data && data[0] ? data[0].message : 'Update failed';
+          Toast.error(message, 'TRANSACTION FAILED');
+          return gpCache.balance;
+        }
+
+        const newBalance = data[0].new_balance;
+
+        // Update cache
+        gpCache.balance = newBalance;
+        gpCache.lastFetch = Date.now();
+
+        // Update UI
+        updateGPDisplay(newBalance, amount);
+
+        return newBalance;
+      } catch (e) {
+        console.error('Error updating GP:', e);
+        Toast.error('Connection error', 'ERROR');
+        return gpCache.balance;
+      }
+    }
+
+    // Create gold particle effect
+    function createGoldParticles(element, count = 12) {
+      if (!element) return;
+
+      const rect = element.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      for (let i = 0; i < count; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'gold-particle';
+        particle.style.left = centerX + 'px';
+        particle.style.top = centerY + 'px';
+
+        // Random direction
+        const angle = (Math.PI * 2 * i) / count;
+        const distance = 60 + Math.random() * 40;
+        const tx = Math.cos(angle) * distance;
+        const ty = Math.sin(angle) * distance - 20; // Slight upward bias
+
+        particle.style.setProperty('--tx', tx + 'px');
+        particle.style.setProperty('--ty', ty + 'px');
+
+        document.body.appendChild(particle);
+
+        // Remove after animation
+        setTimeout(() => particle.remove(), 800);
+      }
+    }
+
+    // Helper function to update GP displays across the UI
+    function updateGPDisplay(newGP, changeAmount) {
       // Update dashboard display if visible with animation
       const dashboardGPEl = document.getElementById('dashboardGPBalance');
       if (dashboardGPEl) {
@@ -7559,9 +8704,11 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
         void dashboardGPEl.offsetWidth; // Trigger reflow
         dashboardGPEl.classList.add('gp-change');
 
-        if (amount > 0) {
+        if (changeAmount > 0) {
           dashboardGPEl.classList.add('gp-increase');
-        } else if (amount < 0) {
+          // Trigger gold particles on GP gain
+          createGoldParticles(dashboardGPEl);
+        } else if (changeAmount < 0) {
           dashboardGPEl.classList.add('gp-decrease');
         }
 
@@ -7581,144 +8728,134 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
         const progress = Math.min((newGP / 1000000) * 100, 100);
         campaignProgressFill.style.width = progress + '%';
       }
-
-      return newGP;
     }
 
-    let ovenState = {
-      invested: 0,
-      lastCompoundTime: null,
-      timerInterval: null
-    };
+    // Initialize GP cache on login/page load
+    async function initializeGPCache() {
+      // Get user ID from session or old localStorage format
+      const session = getSession();
+      const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
+      if (userId && !userId.startsWith('test-')) {
+        await getUserGP(); // This will populate the cache
+      }
+    }
 
-    function loadOvenState() {
+    // Load and display user's invite code
+    async function loadUserInviteCode() {
+      const inviteCodeEl = document.getElementById('userInviteCode');
+      if (!inviteCodeEl) return;
+
+      const session = getSession();
+      const userId = session?.userId;
+      if (!userId) {
+        inviteCodeEl.textContent = 'No code yet';
+        return;
+      }
+
       try {
-        const saved = localStorage.getItem('duelpvp_oven');
-        if (saved) {
-          const data = JSON.parse(saved);
-          ovenState.invested = data.invested || 0;
-          ovenState.lastCompoundTime = data.lastCompoundTime ? new Date(data.lastCompoundTime) : null;
+        const { data, error } = await supabase
+          .rpc('get_my_codes', { p_user_id: userId });
 
-          // Calculate missed compounds
-          if (ovenState.lastCompoundTime && ovenState.invested > 0) {
-            const now = new Date();
-            const hoursPassed = (now - new Date(ovenState.lastCompoundTime)) / (1000 * 60 * 60);
-            const fullHours = Math.floor(hoursPassed);
-
-            if (fullHours > 0) {
-              // Apply missed compounds (10% per hour)
-              for (let i = 0; i < fullHours; i++) {
-                ovenState.invested *= 1.10;
-              }
-              ovenState.lastCompoundTime = new Date(ovenState.lastCompoundTime.getTime() + fullHours * 60 * 60 * 1000);
-              saveOvenState();
-            }
-          }
+        if (error) {
+          console.error('Error loading invite code:', error);
+          inviteCodeEl.textContent = 'Error loading';
+          return;
         }
-      } catch (e) {
-        console.error('Error loading oven state:', e);
+
+        // Find first unused code
+        const unusedCode = data && data.find(c => !c.used);
+        if (unusedCode) {
+          inviteCodeEl.textContent = unusedCode.code;
+        } else {
+          inviteCodeEl.textContent = 'All codes used';
+        }
+      } catch (err) {
+        console.error('Failed to load invite code:', err);
+        inviteCodeEl.textContent = 'Error';
       }
     }
 
-    function saveOvenState() {
-      try {
-        localStorage.setItem('duelpvp_oven', JSON.stringify({
-          invested: ovenState.invested,
-          lastCompoundTime: ovenState.lastCompoundTime
-        }));
-      } catch (e) {
-        console.error('Error saving oven state:', e);
+    // Update campaign page with current stats
+    async function updateCampaignPage() {
+      const currentGP = await getUserGP();
+
+      // Update current GP on page
+      const currentGPPageEl = document.getElementById('campaignCurrentGPPage');
+      if (currentGPPageEl) {
+        currentGPPageEl.textContent = currentGP.toLocaleString();
+      }
+
+      // Update progress bar and percentage
+      const progress = Math.min((currentGP / 1000000) * 100, 100);
+      const progressFillEl = document.getElementById('campaignProgressFillLarge');
+      if (progressFillEl) {
+        progressFillEl.style.width = progress + '%';
+      }
+
+      const progressPercentageEl = document.getElementById('campaignProgressPercentage');
+      if (progressPercentageEl) {
+        progressPercentageEl.textContent = progress.toFixed(1) + '%';
       }
     }
 
-    function initOven() {
-      loadOvenState();
-      updateOvenDisplay();
-      startOvenTimer();
+    // ===============================================
+    // SERVER-SIDE STAKING SYSTEM (OVEN)
+    // ===============================================
+    let ovenUpdateInterval = null;
+
+    async function initOven() {
+      await updateOvenDisplay();
+      startOvenAutoUpdate();
     }
 
-    function updateOvenDisplay() {
+    async function updateOvenDisplay() {
       try {
-        const userGP = getUserGP();
+        // Get user balance
+        const userGP = await getUserGP();
         const balanceEl = document.getElementById('ovenUserBalance');
-        const investedEl = document.getElementById('ovenInvested');
-        const valueEl = document.getElementById('ovenCurrentValue');
+        if (balanceEl) balanceEl.textContent = Math.floor(userGP).toLocaleString() + ' GP';
 
-        if (balanceEl) balanceEl.textContent = Math.floor(userGP) + ' GP';
-        if (investedEl) investedEl.textContent = Math.floor(ovenState.invested) + ' GP';
-        if (valueEl) valueEl.textContent = Math.floor(ovenState.invested) + ' GP';
+        // Get staking info from server
+        const { data, error } = await supabase.rpc('get_stake_value');
+
+        if (error) {
+          console.error('Failed to get stake value:', error);
+          document.getElementById('ovenInvested').textContent = '0 GP';
+          document.getElementById('ovenCurrentValue').textContent = '0 GP';
+          document.getElementById('ovenTimer').textContent = 'No active investment';
+          return;
+        }
+
+        const principal = data?.principal || 0;
+        const currentValue = data?.current_value || 0;
+        const profit = data?.profit || 0;
+        const apy = data?.apy || 0;
+
+        // Update display
+        document.getElementById('ovenInvested').textContent = principal.toLocaleString() + ' GP';
+        document.getElementById('ovenCurrentValue').textContent = currentValue.toLocaleString() + ' GP';
+
+        if (principal > 0) {
+          // Show APY and profit
+          document.getElementById('ovenTimer').textContent =
+            `Profit: +${profit.toLocaleString()} GP | APY: ${apy > 1000000 ? '>1,000,000' : apy.toLocaleString()}%`;
+        } else {
+          document.getElementById('ovenTimer').textContent = 'No active investment';
+        }
       } catch (e) {
         console.error('Error updating oven display:', e);
       }
     }
 
-    function startOvenTimer() {
-      // Clear existing timer
-      if (ovenState.timerInterval) {
-        clearInterval(ovenState.timerInterval);
+    function startOvenAutoUpdate() {
+      // Clear existing interval
+      if (ovenUpdateInterval) {
+        clearInterval(ovenUpdateInterval);
       }
 
-      const timerEl = document.getElementById('ovenTimer');
-      if (!timerEl) {
-        console.error('Timer element not found');
-        return;
-      }
-
-      if (ovenState.invested <= 0) {
-        timerEl.textContent = 'No active investment';
-        return;
-      }
-
-      // Set initial compound time if not set
-      if (!ovenState.lastCompoundTime) {
-        ovenState.lastCompoundTime = new Date();
-        saveOvenState();
-      }
-
-      // Update timer every second
-      ovenState.timerInterval = setInterval(() => {
-        const now = new Date();
-        const nextCompound = new Date(ovenState.lastCompoundTime.getTime() + 60 * 60 * 1000);
-        const timeLeft = nextCompound - now;
-
-        if (timeLeft <= 0) {
-          // Time to compound!
-          applyCompound();
-        } else {
-          const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-          const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-          const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-
-          const timer = document.getElementById('ovenTimer');
-          if (timer) {
-            timer.textContent = `Next compound in: ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-          }
-        }
-      }, 1000);
-    }
-
-    function applyCompound() {
-      if (ovenState.invested <= 0) return;
-
-      // Apply 10% compound
-      const oldValue = ovenState.invested;
-      ovenState.invested *= 1.10;
-      const profit = ovenState.invested - oldValue;
-      ovenState.lastCompoundTime = new Date();
-
-      saveOvenState();
-      updateOvenDisplay();
-
-      // Show notification
-      const timer = document.getElementById('ovenTimer');
-      if (timer) {
-        timer.textContent = `🔥 COMPOUNDED! +${Math.floor(profit)} GP`;
-      }
-
-      Toast.success(`Oven compounded! +${Math.floor(profit)} GP`, 'COMPOUND');
-
-      setTimeout(() => {
-        startOvenTimer();
+      // Update display every 2 seconds to show live compounding
+      ovenUpdateInterval = setInterval(async () => {
+        await updateOvenDisplay();
       }, 2000);
     }
 
@@ -7730,63 +8867,96 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
         return;
       }
 
-      const userGP = getUserGP();
-      if (amount > userGP) {
-        Toast.error('Insufficient balance', 'INSUFFICIENT FUNDS');
-        return;
+      Loading.show();
+
+      try {
+        // Call server-side deposit function
+        const { data, error } = await supabase.rpc('stake_deposit', {
+          p_amount: amount
+        });
+
+        Loading.hide();
+
+        if (error) {
+          console.error('Deposit error:', error);
+          Toast.error('Failed to deposit: ' + error.message, 'ERROR');
+          return;
+        }
+
+        if (!data.success) {
+          Toast.error(data.message, 'DEPOSIT FAILED');
+          return;
+        }
+
+        // Success!
+        document.getElementById('ovenDepositAmount').value = '';
+        Toast.success(`Deposited ${amount.toLocaleString()} GP to staking!`, 'DEPOSIT');
+
+        // Refresh display and GP cache
+        gpCache.lastFetch = 0;
+        await updateOvenDisplay();
+
+      } catch (e) {
+        Loading.hide();
+        console.error('Deposit exception:', e);
+        Toast.error('An error occurred during deposit', 'ERROR');
       }
-
-      // Deduct from user balance
-      await updateUserGP(-amount);
-
-      // Add to invested
-      ovenState.invested += amount;
-
-      // Set compound time if first deposit
-      if (!ovenState.lastCompoundTime) {
-        ovenState.lastCompoundTime = new Date();
-      }
-
-      saveOvenState();
-      updateOvenDisplay();
-      startOvenTimer();
-
-      document.getElementById('ovenDepositAmount').value = '';
-      Toast.success(`Deposited ${amount} GP to the Oven!`, 'DEPOSIT');
     }
 
     async function withdrawFromOven() {
-      if (ovenState.invested <= 0) {
-        Toast.error('No investment to withdraw', 'NO INVESTMENT');
-        return;
+      Loading.show();
+
+      try {
+        // Get current value first
+        const { data: valueData } = await supabase.rpc('get_stake_value');
+
+        const currentValue = valueData?.current_value || 0;
+
+        if (currentValue <= 0) {
+          Loading.hide();
+          Toast.error('No investment to withdraw', 'NO INVESTMENT');
+          return;
+        }
+
+        Loading.hide();
+
+        // Confirm withdrawal
+        const confirmed = await Modal.confirm(
+          `Withdraw ${currentValue.toLocaleString()} GP from staking?`,
+          'Confirm Withdrawal'
+        );
+        if (!confirmed) return;
+
+        Loading.show();
+
+        // Call server-side withdraw function
+        const { data, error } = await supabase.rpc('stake_withdraw');
+
+        Loading.hide();
+
+        if (error) {
+          console.error('Withdraw error:', error);
+          Toast.error('Failed to withdraw: ' + error.message, 'ERROR');
+          return;
+        }
+
+        if (!data.success) {
+          Toast.error(data.message, 'WITHDRAW FAILED');
+          return;
+        }
+
+        // Success!
+        Toast.success(`Withdrawn ${data.amount_withdrawn.toLocaleString()} GP!`, 'WITHDRAW');
+
+        // Refresh display and GP cache
+        gpCache.lastFetch = 0;
+        await updateOvenDisplay();
+
+      } catch (e) {
+        Loading.hide();
+        console.error('Withdraw exception:', e);
+        Toast.error('An error occurred during withdrawal', 'ERROR');
       }
-
-      const amount = Math.floor(ovenState.invested);
-
-      // Confirm withdrawal
-      const confirmed = await Modal.confirm(
-        `Withdraw ${amount.toLocaleString()} GP from the Oven?`,
-        'Confirm Withdrawal'
-      );
-      if (!confirmed) return;
-
-      // Add to user balance
-      await updateUserGP(amount);
-
-      // Reset oven
-      ovenState.invested = 0;
-      ovenState.lastCompoundTime = null;
-
-      // Clear timer
-      if (ovenState.timerInterval) clearInterval(ovenState.timerInterval);
-
-      saveOvenState();
-      updateOvenDisplay();
-
-      const timer = document.getElementById('ovenTimer');
-      if (timer) timer.textContent = 'No active investment';
-
-      Toast.success(`Withdrawn ${amount} GP from the Oven!`, 'WITHDRAW');
     }
 
     // ===============================================
@@ -7887,7 +9057,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       if (reward.amount > 0) {
         farmState.totalEarned += reward.amount;
         farmState.todayEarned += reward.amount;
-        updateUserGP(reward.amount);
+        updateUserGP(reward.amount, 'farm');
       }
       farmState.lastClickTime = Date.now();
       saveFarmState();
@@ -7968,6 +9138,12 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     };
 
     function initMinesGame() {
+      // Prevent re-initialization during active game
+      if (minesGameState.isPlaying) {
+        console.log('[Mines] Cannot reinitialize grid during active game');
+        return;
+      }
+
       const grid = document.getElementById('minesGrid');
       grid.innerHTML = '';
 
@@ -7976,20 +9152,25 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
         const tile = document.createElement('div');
         tile.className = 'mines-tile';
         tile.dataset.index = i;
-        tile.addEventListener('click', () => handleMinesTileClick(i));
+        tile.dataset.clicked = 'false'; // Track if tile has been clicked
+        tile.addEventListener('click', function handleClick() {
+          // Immediately remove listener to prevent double-firing
+          tile.removeEventListener('click', handleClick);
+          handleMinesTileClick(i);
+        }, { once: true }); // Use 'once' option as additional safety
         grid.appendChild(tile);
       }
     }
 
-    function updateMinesGPDisplay() {
-      const gp = getUserGP();
+    async function updateMinesGPDisplay() {
+      const gp = await getUserGP();
       document.getElementById('minesGPDisplay').textContent = gp;
     }
 
     async function startMinesGame() {
       const betAmount = parseInt(document.getElementById('minesBetAmount').value);
       const minesCount = parseInt(document.getElementById('minesCount').value);
-      const userGP = getUserGP();
+      const userGP = await getUserGP();
 
       // Validation
       if (isNaN(betAmount) || betAmount < 10) {
@@ -8008,10 +9189,13 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       }
 
       // Deduct bet
-      updateUserGP(-betAmount);
+      updateUserGP(-betAmount, 'mines');
       updateMinesGPDisplay();
 
-      // Initialize game
+      // Reset grid BEFORE setting isPlaying to true
+      initMinesGame();
+
+      // Initialize game state
       minesGameState = {
         isPlaying: true,
         betAmount: betAmount,
@@ -8028,8 +9212,6 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       document.getElementById('minesBetAmount').disabled = true;
       document.getElementById('minesCount').disabled = true;
 
-      // Reset grid
-      initMinesGame();
       updateMinesStats();
 
       Toast.success(`Game started with ${minesCount} mines!`, 'MINES');
@@ -8051,6 +9233,16 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       if (minesGameState.grid[index]) return; // Already revealed
 
       const tile = document.querySelector(`.mines-tile[data-index="${index}"]`);
+
+      // Additional safety: check if tile was already clicked
+      if (tile.dataset.clicked === 'true') {
+        console.log('[Mines] Tile already clicked, ignoring');
+        return;
+      }
+
+      // Mark as clicked and revealed IMMEDIATELY
+      tile.dataset.clicked = 'true';
+      minesGameState.grid[index] = true;
 
       // Check if mine
       if (minesGameState.minePositions.includes(index)) {
@@ -8077,7 +9269,6 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
         // Safe tile!
         tile.classList.add('revealed');
         tile.textContent = '💎';
-        minesGameState.grid[index] = true;
         minesGameState.revealedCount++;
 
         // Calculate multiplier
@@ -8109,7 +9300,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       if (!minesGameState.isPlaying) return;
 
       const profit = Math.floor(minesGameState.betAmount * minesGameState.multiplier);
-      updateUserGP(profit);
+      updateUserGP(profit, 'mines');
       updateMinesGPDisplay();
 
       // Reveal all tiles
@@ -8234,22 +9425,22 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       return cardDiv;
     }
 
-    function updateBlackjackGPDisplay() {
-      const gp = getUserGP();
+    async function updateBlackjackGPDisplay() {
+      const gp = await getUserGP();
       document.getElementById('blackjackGPDisplay').textContent = gp;
       if (blackjackGameState && blackjackGameState.betAmount) {
         document.getElementById('blackjackCurrentBet').textContent = blackjackGameState.betAmount + ' GP';
       }
     }
 
-    function initBlackjack() {
-      const gp = getUserGP();
+    async function initBlackjack() {
+      const gp = await getUserGP();
       document.getElementById('blackjackGPDisplay').textContent = gp;
     }
 
     async function dealBlackjack() {
       const betAmount = parseInt(document.getElementById('blackjackBetAmount').value);
-      const userGP = getUserGP();
+      const userGP = await getUserGP();
 
       // Validation
       if (isNaN(betAmount) || betAmount < 10) {
@@ -8268,7 +9459,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       }
 
       // Deduct bet
-      updateUserGP(-betAmount);
+      updateUserGP(-betAmount, 'blackjack');
 
       // Initialize game
       blackjackGameState = {
@@ -8293,14 +9484,15 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       document.getElementById('blackjackDealBtn').disabled = true;
       document.getElementById('blackjackBetAmount').disabled = true;
 
-      // Check for instant blackjack
+      // Check for natural blackjack (player has 21 with 2 cards)
       const playerValue = calculateHandValue(blackjackGameState.playerCards);
-      if (playerValue === 21) {
-        setTimeout(() => blackjackStand(), 500);
+      if (playerValue === 21 && blackjackGameState.playerCards.length === 2) {
+        // Player has blackjack! Peek at dealer's hidden card
+        setTimeout(() => checkDealerBlackjack(), 500);
       }
     }
 
-    function blackjackHit() {
+    async function blackjackHit() {
       if (!blackjackGameState.isPlaying) return;
 
       // Deal card to player
@@ -8311,8 +9503,29 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
 
       // Check for bust
       if (playerValue > 21) {
-        endBlackjack('bust');
+        await endBlackjack('bust');
       }
+    }
+
+    function checkDealerBlackjack() {
+      if (!blackjackGameState.isPlaying) return;
+
+      // Reveal dealer's hidden card to check for blackjack
+      blackjackGameState.dealerCards.push(blackjackGameState.dealerHiddenCard);
+      blackjackGameState.dealerHiddenCard = null;
+      updateBlackjackDisplay();
+
+      const dealerValue = calculateHandValue(blackjackGameState.dealerCards);
+
+      setTimeout(async () => {
+        if (dealerValue === 21) {
+          // Both have blackjack - push
+          await endBlackjack('push');
+        } else {
+          // Player has blackjack, dealer doesn't - player wins 3:2
+          await endBlackjack('blackjack');
+        }
+      }, 800);
     }
 
     function blackjackStand() {
@@ -8335,8 +9548,8 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
           }, 800);
         } else {
           // Determine winner
-          setTimeout(() => {
-            determineBlackjackWinner();
+          setTimeout(async () => {
+            await determineBlackjackWinner();
           }, 500);
         }
       };
@@ -8344,22 +9557,22 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       dealerPlay();
     }
 
-    function determineBlackjackWinner() {
+    async function determineBlackjackWinner() {
       const playerValue = calculateHandValue(blackjackGameState.playerCards);
       const dealerValue = calculateHandValue(blackjackGameState.dealerCards);
 
       if (dealerValue > 21) {
-        endBlackjack('dealerBust');
+        await endBlackjack('dealerBust');
       } else if (playerValue > dealerValue) {
-        endBlackjack('win');
+        await endBlackjack('win');
       } else if (playerValue < dealerValue) {
-        endBlackjack('lose');
+        await endBlackjack('lose');
       } else {
-        endBlackjack('push');
+        await endBlackjack('push');
       }
     }
 
-    function endBlackjack(result) {
+    async function endBlackjack(result) {
       blackjackGameState.isPlaying = false;
 
       let message = '';
@@ -8370,18 +9583,26 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
           message = `Bust! Lost ${blackjackGameState.betAmount} GP`;
           Toast.error(message, 'BUST');
           break;
+        case 'blackjack':
+          // Natural blackjack pays 3:2 (1.5x the bet, plus original bet returned = 2.5x total)
+          winAmount = Math.floor(blackjackGameState.betAmount * 2.5);
+          message = `BLACKJACK! Won ${winAmount} GP`;
+          await updateUserGP(winAmount, 'blackjack');
+          await updateBlackjackGPDisplay();
+          Toast.success(message, 'BLACKJACK');
+          break;
         case 'dealerBust':
           winAmount = blackjackGameState.betAmount * 2;
           message = `Dealer bust! Won ${winAmount} GP`;
-          updateUserGP(winAmount);
-          updateBlackjackGPDisplay();
+          await updateUserGP(winAmount, 'blackjack');
+          await updateBlackjackGPDisplay();
           Toast.success(message, 'WIN');
           break;
         case 'win':
           winAmount = blackjackGameState.betAmount * 2;
           message = `You win! Won ${winAmount} GP`;
-          updateUserGP(winAmount);
-          updateBlackjackGPDisplay();
+          await updateUserGP(winAmount, 'blackjack');
+          await updateBlackjackGPDisplay();
           Toast.success(message, 'WIN');
           break;
         case 'lose':
@@ -8391,8 +9612,8 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
         case 'push':
           winAmount = blackjackGameState.betAmount;
           message = `Push! Bet returned`;
-          updateUserGP(winAmount);
-          updateBlackjackGPDisplay();
+          await updateUserGP(winAmount, 'blackjack');
+          await updateBlackjackGPDisplay();
           Toast.info(message, 'PUSH');
           break;
       }
@@ -8455,11 +9676,16 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     document.getElementById('joinBtn').addEventListener('click', handleJoin);
     document.getElementById('loginLink').addEventListener('click', () => swapContent('login'));
     document.getElementById('logoutBtn').addEventListener('click', handleLogout);
-    document.getElementById('connectWalletBtn').addEventListener('click', handleConnectWallet);
-    document.getElementById('playReactionBtn').addEventListener('click', () => {
-      console.log('Play Reaction clicked');
-      swapContent('game');
-    });
+
+    // Only add listener if button exists (Trading Sim is disabled)
+    const playReactionBtn = document.getElementById('playReactionBtn');
+    if (playReactionBtn) {
+      playReactionBtn.addEventListener('click', () => {
+        console.log('Play Reaction clicked');
+        swapContent('game');
+      });
+    }
+
     document.getElementById('playCrashBtn').addEventListener('click', () => {
       console.log('Play Crash clicked');
       swapContent('crash');
@@ -8509,18 +9735,30 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
     document.getElementById('sellButton').addEventListener('click', handleSell);
     document.getElementById('resetGameBtn').addEventListener('click', resetGame);
 
-    // Campaign banner click handler
-    document.getElementById('campaignBanner').addEventListener('click', () => {
-      Modal.alert(
-        'Get over 1,000,000 GP during the campaign to qualify for a special badge!\n\n' +
-        '• Use STAKING for compound interest (10% hourly)\n' +
-        '• Click FARM every 5 seconds for random GP drops\n' +
-        '• Play gambling games: Trading Sim, Crash, Mines, Blackjack\n' +
-        '• All GP earned counts toward your total\n\n' +
-        'Note: These are fake tokens for the campaign only and cannot be exchanged.',
-        '🏆 Who Wants to be a Millionaire - Campaign Rules'
-      );
+    // Invite code handlers
+    document.getElementById('copyInviteCodeBtn').addEventListener('click', async () => {
+      const codeText = document.getElementById('userInviteCode').textContent;
+      if (codeText && codeText !== 'Loading...' && codeText !== 'No code') {
+        try {
+          await navigator.clipboard.writeText(codeText);
+          Toast.success('Invite code copied!', 'Share it with friends');
+        } catch (err) {
+          // Fallback for older browsers
+          const textArea = document.createElement('textarea');
+          textArea.value = codeText;
+          document.body.appendChild(textArea);
+          textArea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textArea);
+          Toast.success('Invite code copied!', 'Share it with friends');
+        }
+      }
     });
+
+    // Campaign banner and page handlers
+    // DISABLED: Campaign starts 19th November
+    // document.getElementById('campaignBanner').addEventListener('click', () => swapContent('campaign'));
+    document.getElementById('backFromCampaignBtn').addEventListener('click', () => swapContent('dashboard'));
 
     // Leaderboard filter buttons
     document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -8530,15 +9768,6 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       });
     });
 
-    // Quest tab switching
-    document.querySelectorAll('.quest-tab').forEach(tab => {
-      tab.addEventListener('click', function() {
-        document.querySelectorAll('.quest-tab').forEach(t => t.classList.remove('active'));
-        this.classList.add('active');
-        const questType = this.getAttribute('data-quest-tab');
-        loadQuests(questType);
-      });
-    });
 
     // Add keyboard navigation support
     document.addEventListener('keydown', (e) => {

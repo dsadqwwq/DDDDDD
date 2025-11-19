@@ -1,0 +1,22 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hexagon with gold gradient (scaled from website logo) -->
+  <polygon points="256,25.6 460.8,140.8 460.8,371.2 256,486.4 51.2,371.2 51.2,140.8"
+           fill="none"
+           stroke="url(#logoGradient)"
+           stroke-width="20"/>
+
+  <!-- Green dot (left) - player 1 -->
+  <circle cx="204.8" cy="256" r="51.2" fill="#22c55e"/>
+
+  <!-- Red dot (right) - player 2 -->
+  <circle cx="307.2" cy="256" r="51.2" fill="#ef4444"/>
+
+  <!-- Gold gradient definition -->
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD64D;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#D4AF37;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D4A033;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+</svg>
