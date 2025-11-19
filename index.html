@@ -7122,18 +7122,16 @@
       // Get inventory from localStorage (for now - can be migrated to Supabase later)
       const inventory = JSON.parse(localStorage.getItem(`duelpvp_inventory_${email}`) || '[]');
 
-      // Get user's invite codes from Supabase codes table
+      // Get user's invite codes using RPC function
       let inviteCodes = [];
       if (userId) {
         const { data } = await supabase
-          .from('codes')
-          .select('code, used_by, used_at')
-          .eq('created_by', userId);
+          .rpc('get_my_codes', { p_user_id: userId });
 
         if (data && data.length > 0) {
           inviteCodes = data.map(c => ({
             code: c.code,
-            used: c.used_by !== null,
+            used: c.used,
             used_at: c.used_at
           }));
         }
@@ -8492,16 +8490,18 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       // Get inventory from localStorage (for now)
       const inventory = JSON.parse(localStorage.getItem(`duelpvp_inventory_${email}`) || '[]');
 
-      // Get user's invite codes from Supabase codes table (3 codes per user)
-      const { data: codesData } = await supabase
-        .from('codes')
-        .select('code, used_by, used_at')
-        .eq('created_by', userId);
+      // Get user's invite codes using RPC function
+      const { data: codesData, error: codesError } = await supabase
+        .rpc('get_my_codes', { p_user_id: userId });
+
+      if (codesError) {
+        console.error('Failed to get codes:', codesError);
+      }
 
       const inviteCodes = codesData && codesData.length > 0
         ? codesData.map(c => ({
             code: c.code,
-            used_by: c.used_by,
+            used: c.used,
             used_at: c.used_at
           }))
         : [];
@@ -8522,7 +8522,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
           allItems.push({
             type: 'invite_code',
             code: code.code,
-            used: code.used_by !== null,
+            used: code.used,
             used_at: code.used_at
           });
         });
@@ -8917,11 +8917,7 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
 
       try {
         const { data, error } = await supabase
-          .from('codes')
-          .select('code, used_by')
-          .eq('created_by', userId)
-          .is('used_by', null)
-          .limit(1);
+          .rpc('get_my_codes', { p_user_id: userId });
 
         if (error) {
           console.error('Error loading invite code:', error);
@@ -8929,8 +8925,10 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
           return;
         }
 
-        if (data && data.length > 0) {
-          inviteCodeEl.textContent = data[0].code;
+        // Find first unused code
+        const unusedCode = data && data.find(c => !c.used);
+        if (unusedCode) {
+          inviteCodeEl.textContent = unusedCode.code;
         } else {
           inviteCodeEl.textContent = 'All codes used';
         }
