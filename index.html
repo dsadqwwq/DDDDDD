@@ -4609,10 +4609,10 @@
       </div>
 
       <div class="quest-tabs">
-        <button class="quest-tab active" data-quest-tab="daily">DAILY QUESTS</button>
+        <button class="quest-tab active" data-quest-tab="daily" onclick="switchQuestTab(this, 'daily')">DAILY QUESTS</button>
         <button class="quest-tab" data-quest-tab="weekly" disabled style="opacity:0.5;cursor:not-allowed;">WEEKLY QUESTS</button>
         <button class="quest-tab" data-quest-tab="special" disabled style="opacity:0.5;cursor:not-allowed;">SPECIAL QUESTS</button>
-        <button class="quest-tab" data-quest-tab="completed">COMPLETED</button>
+        <button class="quest-tab" data-quest-tab="completed" onclick="switchQuestTab(this, 'completed')">COMPLETED</button>
       </div>
 
       <div class="quest-grid-wrapper">
@@ -9972,15 +9972,12 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       });
     });
 
-    // Quest tab switching
-    document.querySelectorAll('.quest-tab').forEach(tab => {
-      tab.addEventListener('click', function() {
-        document.querySelectorAll('.quest-tab').forEach(t => t.classList.remove('active'));
-        this.classList.add('active');
-        const questType = this.getAttribute('data-quest-tab');
-        loadQuests(questType);
-      });
-    });
+    // Quest tab switching function (called by onclick)
+    window.switchQuestTab = function(tab, questType) {
+      document.querySelectorAll('.quest-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      loadQuests(questType);
+    };
 
     // Add keyboard navigation support
     document.addEventListener('keydown', (e) => {
