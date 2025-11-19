@@ -6544,6 +6544,13 @@
 
       try {
         // Call server-side registration function
+        console.log('Calling register_with_wallet with:', {
+          wallet: tempRegistrationData.walletAddress,
+          name: warriorName,
+          code: tempRegistrationData.inviteCode,
+          terms: tempRegistrationData.termsAccepted
+        });
+
         const { data, error } = await supabase.rpc('register_with_wallet', {
           p_wallet_address: tempRegistrationData.walletAddress,
           p_display_name: warriorName,
@@ -6551,8 +6558,11 @@
           p_terms_accepted: tempRegistrationData.termsAccepted
         });
 
+        console.log('register_with_wallet response:', { data, error });
+
         if (error || !data || data.length === 0 || !data[0].success) {
           Loading.hide();
+          console.error('Registration failed:', { error, data });
           const errorCode = data && data[0]?.error_code;
           const message = data && data[0]?.message;
 
