@@ -7166,7 +7166,7 @@
       let inviteCodes = [];
       if (userId) {
         const { data } = await supabase
-          .rpc('get_my_codes');
+          .rpc('get_my_codes', { p_user_id: userId });
 
         if (data && data.length > 0) {
           inviteCodes = data.map(c => ({
@@ -8442,7 +8442,7 @@
 
       // Get user's invite codes using RPC function
       const { data: codesData, error: codesError } = await supabase
-        .rpc('get_my_codes');
+        .rpc('get_my_codes', { p_user_id: userId });
 
       if (codesError) {
         console.error('Failed to get codes:', codesError);
@@ -8859,7 +8859,7 @@
 
       try {
         const { data, error } = await supabase
-          .rpc('get_my_codes');
+          .rpc('get_my_codes', { p_user_id: userId });
 
         if (error) {
           console.error('Error loading invite code:', error);
