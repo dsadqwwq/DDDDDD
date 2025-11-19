@@ -8135,16 +8135,17 @@
         let questList;
         if (type === 'completed') {
           // Show all completed quests from any category
-          console.log('Loading completed quests, progress:', progress);
           questList = QUESTS.daily.filter(q => {
             const p = progress[q.id];
-            const isComplete = p && p.value >= q.target;
-            console.log(`Quest ${q.id}: progress=${p?.value}, target=${q.target}, complete=${isComplete}`);
-            return isComplete;
+            return p && p.value >= q.target;
           });
-          console.log('Filtered completed quests:', questList);
         } else {
-          questList = QUESTS[type] || QUESTS.daily;
+          // For daily tab, filter OUT completed quests
+          questList = (QUESTS[type] || QUESTS.daily).filter(q => {
+            const p = progress[q.id];
+            const isComplete = p && p.value >= q.target;
+            return !isComplete; // Only show uncompleted quests
+          });
         }
 
         // Clear and render
