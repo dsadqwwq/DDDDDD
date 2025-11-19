@@ -3206,6 +3206,8 @@
   .quest-card.completed{
     background:rgba(76,175,80,.1);
     border-color:rgba(76,175,80,.3);
+    opacity:1 !important;
+    visibility:visible !important;
   }
 
   .quest-name{
@@ -8097,6 +8099,10 @@
       } else {
         questGrid.classList.remove('locked');
         if (comingSoonOverlay) comingSoonOverlay.style.display = 'none';
+        // Force grid visibility
+        questGrid.style.opacity = '1';
+        questGrid.style.filter = 'none';
+        questGrid.style.pointerEvents = 'auto';
       }
 
       // Show loading
@@ -8157,6 +8163,10 @@
 
           const card = document.createElement('div');
           card.className = 'quest-card' + (isComplete ? ' completed' : '') + (isComplete && !isClaimed ? ' claimable' : '');
+          // Force visibility
+          card.style.opacity = '1';
+          card.style.visibility = 'visible';
+          card.style.display = 'block';
 
           // Quest header
           let html = `
