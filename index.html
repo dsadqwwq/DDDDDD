@@ -5639,6 +5639,10 @@
       });
     }
 
+    // Track if we're in the middle of connecting (to prevent reload)
+    let isConnecting = false;
+    let walletListenersAdded = false;
+
     // Connect wallet
     async function connectWallet() {
       const walletId = await showWalletSelector();
@@ -5648,22 +5652,35 @@
         throw new Error('No wallet detected');
       }
 
+      isConnecting = true;
       web3Provider = new ethers.providers.Web3Provider(window.ethereum);
 
-      // Handle account/chain changes
-      window.ethereum.on("accountsChanged", (accounts) => {
-        if (accounts.length === 0) {
-          disconnectWallet();
-        } else {
-          window.location.reload();
-        }
-      });
+      // Only add event listeners once, and respect isConnecting flag
+      if (!walletListenersAdded) {
+        walletListenersAdded = true;
 
-      window.ethereum.on("chainChanged", () => {
-        window.location.reload();
-      });
+        // Handle account/chain changes - but not during initial connection
+        window.ethereum.on("accountsChanged", (accounts) => {
+          if (isConnecting) return; // Don't reload during connection flow
+          if (accounts.length === 0) {
+            disconnectWallet();
+          } else {
+            window.location.reload();
+          }
+        });
+
+        window.ethereum.on("chainChanged", () => {
+          if (isConnecting) return; // Don't reload during connection flow
+          window.location.reload();
+        });
+      }
 
       return web3Provider;
+    }
+
+    // Mark connection as complete (call after successful login/registration)
+    function finishWalletConnection() {
+      isConnecting = false;
     }
 
     // Disconnect wallet
@@ -7104,6 +7121,7 @@
 
         // Create session (Blur-style)
         createSession(userId, tempRegistrationData.walletAddress, warriorName);
+        finishWalletConnection(); // Allow wallet event handlers to reload page now
 
         // Set username in dashboard
         document.getElementById('userName').textContent = warriorName.toUpperCase();
@@ -7509,6 +7527,7 @@
 
         // Store user info in localStorage (legacy support)
         createSession(userData.id, walletAddress, userData.display_name);
+        finishWalletConnection(); // Allow wallet event handlers to reload page now
 
         document.getElementById('userName').textContent = userData.display_name.toUpperCase();
 
@@ -9032,20 +9051,26 @@
       }
 
       try {
-        // Try secure JWT-based function first
-        const { data: secureData, error: secureError } = await supabase.rpc('secure_get_gc');
+        // Check if we have a Supabase Auth session
+        const { data: { session: authSession } } = await supabase.auth.getSession();
 
-        if (!secureError && secureData !== null) {
-          gcCache.balance = secureData;
-          gcCache.lastFetch = now;
-          return secureData;
+        if (authSession) {
+          // Try secure JWT-based function first
+          const { data: secureData, error: secureError } = await supabase.rpc('secure_get_gc');
+
+          if (!secureError && secureData !== null) {
+            gcCache.balance = secureData;
+            gcCache.lastFetch = now;
+            return secureData;
+          }
+          console.log('Secure GC function failed, using fallback:', secureError);
         }
 
-        console.log('Secure GC function failed, using fallback:', secureError);
-
-        // Fallback to old function for users not yet migrated
+        // Use direct user ID lookup (for users without Supabase Auth or as fallback)
         const { data, error } = await supabase
           .rpc('get_user_gc', { p_user_id: userId });
+
+        console.log('get_user_gc result:', { data, error, userId });
 
         if (error) {
           console.error('Failed to fetch GC:', error);
