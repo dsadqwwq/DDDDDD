@@ -8300,6 +8300,11 @@
           return;
         }
 
+        // Clear GP cache and update display
+        gpCache.lastFetch = 0;
+        const newGP = await getUserGP();
+        updateGPDisplay(newGP, data.reward);
+
         Toast.success(`+${data.reward} GP earned!`, 'QUEST COMPLETED');
 
         // Reload current tab
