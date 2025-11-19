@@ -8252,19 +8252,24 @@
         const card = document.createElement('div');
         card.className = `quest-card ${completed ? 'completed' : ''} ${completed && !claimed ? 'claimable' : ''}`;
 
+        // Build claim button HTML if needed
+        const claimButtonHtml = completed && !claimed
+          ? `<button class="action-btn btn-primary" style="width:100%;margin-top:8px;" onclick="claimQuestReward('${quest.id}', ${quest.reward})">CLAIM ${quest.reward} GP</button>`
+          : '';
+
         if (isSocialQuest) {
           // Social quest with verify button
           card.innerHTML = `
             <div class="quest-name"><span class="quest-icon">${quest.icon}</span> ${quest.name}</div>
             <div class="quest-desc">${quest.desc}${quest.tweetUrl ? ` <a href="${quest.tweetUrl}" target="_blank" style="color:var(--gold);text-decoration:underline;">View Tweet</a>` : ''}</div>
             <div class="quest-progress">
-              <button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="verifySocialQuest('${quest.id}', '${quest.type}')">
+              ${completed && !claimed ? claimButtonHtml : `<button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="verifySocialQuest('${quest.id}', '${quest.type}')">
                 ${completed ? '✓ VERIFIED' : 'VERIFY'}
-              </button>
+              </button>`}
               ${timeRemainingText}
             </div>
             <div class="quest-reward">
-              ${quest.reward} GP ${completed && !claimed ? '• <span style="color:var(--gold)">CLAIM!</span>' : completed ? '✓ CLAIMED' : ''}
+              ${quest.reward} GP ${completed && claimed ? '✓ CLAIMED' : ''}
             </div>
           `;
         } else if (isNFTQuest) {
@@ -8276,9 +8281,10 @@
               <div style="text-align:center;padding:8px;color:${completed ? '#4CAF50' : '#888'};">
                 ${completed ? '✓ HOLDER VERIFIED' : 'Not a holder'}
               </div>
+              ${claimButtonHtml}
             </div>
             <div class="quest-reward">
-              ${quest.reward} GP ${completed && !claimed ? '• <span style="color:var(--gold)">CLAIM!</span>' : completed ? '✓ CLAIMED' : ''}
+              ${quest.reward} GP ${completed && claimed ? '✓ CLAIMED' : ''}
             </div>
           `;
         } else {
@@ -8291,16 +8297,12 @@
                 <div class="progress-fill" style="width:${Math.min(100, (progress/quest.target)*100)}%"></div>
               </div>
               <div class="progress-text">${progress} / ${quest.target}</div>
+              ${claimButtonHtml}
             </div>
             <div class="quest-reward">
-              ${quest.reward} GP ${completed && !claimed ? '• <span style="color:var(--gold)">CLAIM!</span>' : completed ? '✓ CLAIMED' : ''}
+              ${quest.reward} GP ${completed && claimed ? '✓ CLAIMED' : ''}
             </div>
           `;
-        }
-
-        if (completed && !claimed) {
-          card.style.cursor = 'pointer';
-          card.addEventListener('click', () => claimQuestReward(quest.id, quest.reward));
         }
 
         questGrid.appendChild(card);
