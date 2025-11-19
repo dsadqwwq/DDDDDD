@@ -8168,44 +8168,48 @@
           card.style.visibility = 'visible';
           card.style.display = 'block';
 
-          // Quest header
-          let html = `
-            <div class="quest-name"><span class="quest-icon">${quest.icon}</span> ${quest.name}</div>
-            <div class="quest-desc">${quest.desc}</div>
-            <div class="quest-progress">
-          `;
+          let html;
 
-          // Quest status/action
-          if (quest.type === 'nft') {
-            // NFT holder quest
-            if (isComplete) {
-              html += `<div style="text-align:center;padding:8px;color:#4CAF50;">✓ HOLDER VERIFIED</div>`;
-              if (!isClaimed) {
+          // Simplified display for claimed quests
+          if (isClaimed) {
+            html = `
+              <div class="quest-name"><span class="quest-icon">${quest.icon}</span> ${quest.name}</div>
+              <div style="text-align:center;padding:16px 0;color:#4CAF50;font-family:'Press Start 2P',monospace;font-size:12px;">
+                +${quest.reward} GP CLAIMED
+              </div>
+            `;
+          } else {
+            // Full display for unclaimed quests
+            html = `
+              <div class="quest-name"><span class="quest-icon">${quest.icon}</span> ${quest.name}</div>
+              <div class="quest-desc">${quest.desc}</div>
+              <div class="quest-progress">
+            `;
+
+            // Quest status/action
+            if (quest.type === 'nft') {
+              // NFT holder quest
+              if (isComplete) {
+                html += `<div style="text-align:center;padding:8px;color:#4CAF50;">✓ HOLDER VERIFIED</div>`;
                 html += `<button class="action-btn btn-primary" style="width:100%;margin-top:8px;" onclick="claimQuestReward('${quest.id}', ${quest.reward})">CLAIM ${quest.reward} GP</button>`;
+              } else {
+                html += `<div style="text-align:center;padding:8px;color:#888;">Not a holder</div>`;
               }
             } else {
-              html += `<div style="text-align:center;padding:8px;color:#888;">Not a holder</div>`;
+              // Regular quest with progress bar
+              const pct = Math.min(100, (p.value / quest.target) * 100);
+              html += `
+                <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+                <div class="progress-text">${p.value} / ${quest.target}</div>
+              `;
+              if (isComplete) {
+                html += `<button class="action-btn btn-primary" style="width:100%;margin-top:8px;" onclick="claimQuestReward('${quest.id}', ${quest.reward})">CLAIM ${quest.reward} GP</button>`;
+              }
             }
-          } else {
-            // Regular quest with progress bar
-            const pct = Math.min(100, (p.value / quest.target) * 100);
-            html += `
-              <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-              <div class="progress-text">${p.value} / ${quest.target}</div>
-            `;
-            if (isComplete && !isClaimed) {
-              html += `<button class="action-btn btn-primary" style="width:100%;margin-top:8px;" onclick="claimQuestReward('${quest.id}', ${quest.reward})">CLAIM ${quest.reward} GP</button>`;
-            }
-          }
 
-          html += `</div>`;
-
-          // Reward display
-          html += `<div class="quest-reward">${quest.reward} GP`;
-          if (isClaimed) {
-            html += ' ✓ CLAIMED';
+            html += `</div>`;
+            html += `<div class="quest-reward">${quest.reward} GP</div>`;
           }
-          html += `</div>`;
 
           card.innerHTML = html;
           questGrid.appendChild(card);
