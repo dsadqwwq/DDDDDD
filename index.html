@@ -3478,17 +3478,17 @@
     cursor:not-allowed;
   }
 
-  /* ===== CUSTOM MODAL SYSTEM ===== */
+  /* ===== CUSTOM MODAL SYSTEM - Glassmorphism Design ===== */
   .modal-overlay{
     position:fixed;
     inset:0;
     background:rgba(0,0,0,0.85);
-    backdrop-filter:blur(8px);
+    backdrop-filter:blur(12px);
     display:none;
     align-items:center;
     justify-content:center;
     z-index:9999;
-    animation:fadeIn 0.2s ease-out;
+    animation:fadeIn 0.3s ease-out;
   }
 
   .modal-overlay.show{
@@ -3497,19 +3497,23 @@
 
   .modal-container{
     background:rgba(12,16,20,0.95);
-    border:2px solid var(--gold);
-    border-radius:12px;
-    max-width:480px;
+    border:2px solid rgba(255,214,77,0.4);
+    border-radius:16px;
+    max-width:420px;
     width:90%;
-    box-shadow:0 20px 60px rgba(0,0,0,0.8), 0 0 40px rgba(255,214,77,0.3);
-    animation:modalSlideIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow:
+      0 24px 80px rgba(0,0,0,0.8),
+      0 0 60px rgba(255,214,77,0.15),
+      inset 0 1px 0 rgba(255,255,255,0.05);
+    animation:modalSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     overflow:hidden;
+    backdrop-filter:blur(20px);
   }
 
   @keyframes modalSlideIn{
     0%{
       opacity:0;
-      transform:scale(0.8) translateY(-40px);
+      transform:scale(0.95) translateY(-20px);
     }
     100%{
       opacity:1;
@@ -3517,27 +3521,50 @@
     }
   }
 
+  .modal-logo{
+    display:block;
+    width:56px;
+    height:56px;
+    margin:0 auto 16px;
+    filter:drop-shadow(0 4px 12px rgba(255,214,77,0.3));
+  }
+
   .modal-header{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:28px 24px 20px;
+    border-bottom:1px solid rgba(255,255,255,0.1);
+    background:transparent;
+    position:relative;
+  }
+
+  .modal-header-row{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:20px 24px;
-    border-bottom:1px solid rgba(255,214,77,0.2);
-    background:rgba(255,214,77,0.05);
+    width:100%;
+    position:absolute;
+    top:16px;
+    left:0;
+    right:0;
+    padding:0 16px;
   }
 
   .modal-title{
     font-family:'Press Start 2P', monospace;
-    font-size:14px;
+    font-size:12px;
     color:var(--gold);
-    text-shadow:0 0 10px rgba(255,214,77,0.5);
+    text-shadow:0 2px 8px rgba(255,214,77,0.3);
+    text-align:center;
+    margin-top:8px;
   }
 
   .modal-close{
-    background:none;
+    background:rgba(255,255,255,0.1);
     border:none;
-    color:var(--gold);
-    font-size:32px;
+    color:#888;
+    font-size:20px;
     line-height:1;
     cursor:pointer;
     padding:0;
@@ -3547,12 +3574,15 @@
     align-items:center;
     justify-content:center;
     transition:all 0.2s;
-    border-radius:4px;
+    border-radius:8px;
+    position:absolute;
+    right:16px;
+    top:16px;
   }
 
   .modal-close:hover{
-    background:rgba(255,214,77,0.1);
-    transform:scale(1.1);
+    background:rgba(255,255,255,0.2);
+    color:#fff;
   }
 
   .modal-body{
@@ -3562,6 +3592,7 @@
     line-height:1.6;
     color:#e6ecf1;
     white-space:pre-wrap;
+    text-align:center;
   }
 
   .modal-actions{
@@ -3569,16 +3600,16 @@
     gap:12px;
     padding:20px 24px;
     background:rgba(0,0,0,0.2);
-    border-top:1px solid rgba(255,214,77,0.1);
+    border-top:1px solid rgba(255,255,255,0.1);
   }
 
   .modal-btn{
     flex:1;
     padding:12px 24px;
     font-family:'Press Start 2P', monospace;
-    font-size:10px;
+    font-size:9px;
     border:2px solid;
-    border-radius:6px;
+    border-radius:8px;
     cursor:pointer;
     transition:all 0.2s;
     text-transform:uppercase;
@@ -3603,13 +3634,13 @@
 
   .modal-btn-secondary{
     background:transparent;
-    border-color:rgba(255,214,77,0.3);
-    color:var(--gold);
+    border-color:rgba(255,255,255,0.2);
+    color:#e6ecf1;
   }
 
   .modal-btn-secondary:hover{
-    background:rgba(255,214,77,0.1);
-    border-color:var(--gold);
+    background:rgba(255,255,255,0.1);
+    border-color:rgba(255,255,255,0.3);
   }
 
   /* ===== TOAST NOTIFICATION SYSTEM ===== */
@@ -3627,17 +3658,19 @@
   .toast{
     background:rgba(12,16,20,0.95);
     border:2px solid;
-    border-radius:8px;
+    border-radius:12px;
     padding:16px 20px;
     min-width:300px;
     max-width:420px;
-    box-shadow:0 8px 32px rgba(0,0,0,0.6);
+    box-shadow:
+      0 8px 32px rgba(0,0,0,0.6),
+      inset 0 1px 0 rgba(255,255,255,0.05);
     display:flex;
     align-items:center;
     gap:12px;
     pointer-events:auto;
     animation:toastSlideIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    backdrop-filter:blur(8px);
+    backdrop-filter:blur(12px);
   }
 
   .toast.removing{
@@ -3691,8 +3724,11 @@
   }
 
   .toast-success{
-    border-color:#4CAF50;
-    background:rgba(76,175,80,0.1);
+    border-color:rgba(76,175,80,0.6);
+    box-shadow:
+      0 8px 32px rgba(0,0,0,0.6),
+      0 0 20px rgba(76,175,80,0.15),
+      inset 0 1px 0 rgba(255,255,255,0.05);
   }
 
   .toast-success .toast-title{
@@ -3700,17 +3736,23 @@
   }
 
   .toast-error{
-    border-color:#F44336;
-    background:rgba(244,67,54,0.1);
+    border-color:rgba(244,67,54,0.6);
+    box-shadow:
+      0 8px 32px rgba(0,0,0,0.6),
+      0 0 20px rgba(244,67,54,0.15),
+      inset 0 1px 0 rgba(255,255,255,0.05);
   }
 
   .toast-error .toast-title{
-    color:#F44336;
+    color:#ff6b6b;
   }
 
   .toast-warning{
-    border-color:#FF9800;
-    background:rgba(255,152,0,0.1);
+    border-color:rgba(255,152,0,0.6);
+    box-shadow:
+      0 8px 32px rgba(0,0,0,0.6),
+      0 0 20px rgba(255,152,0,0.15),
+      inset 0 1px 0 rgba(255,255,255,0.05);
   }
 
   .toast-warning .toast-title{
@@ -3718,8 +3760,11 @@
   }
 
   .toast-info{
-    border-color:var(--gold);
-    background:rgba(255,214,77,0.1);
+    border-color:rgba(255,214,77,0.6);
+    box-shadow:
+      0 8px 32px rgba(0,0,0,0.6),
+      0 0 20px rgba(255,214,77,0.15),
+      inset 0 1px 0 rgba(255,255,255,0.05);
   }
 
   .toast-info .toast-title{
@@ -5214,8 +5259,9 @@
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal-container">
       <div class="modal-header">
+        <button class="modal-close" id="modalClose" aria-label="Close modal">&times;</button>
+        <img src="duelpvp-logo.svg" alt="Duel PVP" class="modal-logo">
         <div class="modal-title" id="modalTitle">Confirmation</div>
-        <button class="modal-close" id="modalClose" aria-label="Close modal">×</button>
       </div>
       <div class="modal-body" id="modalBody">
         Are you sure?
@@ -5285,98 +5331,311 @@
       return wallets;
     }
 
-    // Show wallet selection modal
+    // Show wallet selection modal - Redesigned with glassmorphism
     function showWalletSelector() {
       return new Promise((resolve, reject) => {
         // Always show all wallet options
         const walletOptions = [
           { id: 'metamask', name: 'MetaMask', icon: '🦊', check: () => window.ethereum?.isMetaMask },
-          { id: 'coinbase', name: 'Coinbase', icon: '🔵', check: () => window.ethereum?.isCoinbaseWallet },
+          { id: 'coinbase', name: 'Coinbase Wallet', icon: '🔵', check: () => window.ethereum?.isCoinbaseWallet },
           { id: 'trust', name: 'Trust Wallet', icon: '🛡️', check: () => window.ethereum?.isTrust },
           { id: 'walletconnect', name: 'WalletConnect', icon: '🔗', check: () => false, comingSoon: true }
         ];
 
-        // Build wallet buttons HTML
-        let buttonsHtml = walletOptions.map(w => {
-          const isAvailable = w.check();
-          const isComingSoon = w.comingSoon;
-          return `<button class="wallet-option-btn" data-wallet="${w.id}"
-            ${!isAvailable ? 'data-unavailable="true"' : ''}
-            ${isComingSoon ? 'data-coming-soon="true"' : ''}
-            style="
-              display:flex;align-items:center;gap:12px;width:100%;padding:14px 16px;
-              background:linear-gradient(135deg, rgba(20,25,30,.9) 0%, rgba(30,35,40,.8) 100%);
-              border:2px solid rgba(255,214,77,.3);
-              border-radius:12px;color:#e6ecf1;font-family:'Press Start 2P',monospace;
-              font-size:9px;cursor:pointer;margin-bottom:10px;transition:all 0.2s ease;
-              box-shadow:0 2px 8px rgba(0,0,0,.3);
-              ${!isAvailable || isComingSoon ? 'opacity:0.5;' : ''}">
-            <span style="font-size:20px;width:28px;text-align:center;">${w.icon}</span>
-            <span style="flex:1;text-align:left;">${w.name}</span>
-            ${isComingSoon ? '<span style="font-size:7px;color:#ffc107;background:rgba(255,193,7,.2);padding:3px 6px;border-radius:4px;">SOON</span>' : ''}
-            ${!isAvailable && !isComingSoon ? '<span style="font-size:7px;color:#888;">Not installed</span>' : ''}
-          </button>`;
-        }).join('');
+        // Create custom wallet selector overlay
+        const overlay = document.createElement('div');
+        overlay.id = 'wallet-selector-overlay';
+        overlay.innerHTML = `
+          <div class="wallet-selector-modal">
+            <button class="wallet-selector-close" id="wallet-close-btn">&times;</button>
 
-        const modalHtml = `
-          <div style="text-align:center;">
-            <div style="margin-bottom:20px;">
-              <img src="duelpvp-logo.svg" alt="Duel PVP" style="width:60px;height:60px;margin-bottom:12px;">
+            <div class="wallet-selector-header">
+              <img src="duelpvp-logo.svg" alt="Duel PVP" class="wallet-selector-logo">
+              <h2 class="wallet-selector-title">Connect Wallet</h2>
+              <p class="wallet-selector-subtitle">Choose your preferred wallet to continue</p>
             </div>
-            <p style="margin-bottom:20px;color:var(--gold);font-family:'Press Start 2P',monospace;font-size:10px;">
-              Connect Wallet
-            </p>
-            <p style="margin-bottom:20px;color:#888;font-size:10px;">
-              Choose your preferred wallet
-            </p>
-            ${buttonsHtml}
-            <p style="margin-top:16px;color:#666;font-size:8px;">
-              By connecting, you agree to our Terms of Service
-            </p>
+
+            <div class="wallet-selector-options">
+              ${walletOptions.map(w => {
+                const isAvailable = w.check();
+                const isComingSoon = w.comingSoon;
+                return `
+                  <button class="wallet-option ${!isAvailable && !isComingSoon ? 'unavailable' : ''} ${isComingSoon ? 'coming-soon' : ''}"
+                          data-wallet="${w.id}"
+                          ${!isAvailable ? 'data-unavailable="true"' : ''}
+                          ${isComingSoon ? 'data-coming-soon="true"' : ''}>
+                    <span class="wallet-option-icon">${w.icon}</span>
+                    <span class="wallet-option-name">${w.name}</span>
+                    ${isComingSoon ? '<span class="wallet-option-badge">SOON</span>' : ''}
+                    ${!isAvailable && !isComingSoon ? '<span class="wallet-option-status">Not installed</span>' : ''}
+                    ${isAvailable ? '<span class="wallet-option-arrow">→</span>' : ''}
+                  </button>
+                `;
+              }).join('')}
+            </div>
+
+            <div class="wallet-selector-footer">
+              <p>By connecting, you agree to our <a href="#" onclick="return false;">Terms of Service</a></p>
+            </div>
           </div>
         `;
 
-        Modal.show({ type: 'custom', title: '', html: modalHtml });
+        // Add styles
+        const styles = document.createElement('style');
+        styles.id = 'wallet-selector-styles';
+        styles.textContent = `
+          #wallet-selector-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: walletFadeIn 0.3s ease-out;
+          }
 
-        // Add click handlers
-        setTimeout(() => {
-          document.querySelectorAll('.wallet-option-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-              const walletId = btn.getAttribute('data-wallet');
-              const isUnavailable = btn.getAttribute('data-unavailable');
-              const isComingSoon = btn.getAttribute('data-coming-soon');
+          @keyframes walletFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
 
-              if (isComingSoon) {
-                Toast.info('WalletConnect coming soon!', 'COMING SOON');
-                return;
-              }
+          @keyframes walletSlideIn {
+            from {
+              opacity: 0;
+              transform: translateY(-20px) scale(0.95);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0) scale(1);
+            }
+          }
 
-              if (isUnavailable) {
-                let installUrl = 'https://metamask.io/download/';
-                if (walletId === 'coinbase') installUrl = 'https://www.coinbase.com/wallet';
-                if (walletId === 'trust') installUrl = 'https://trustwallet.com/download';
+          .wallet-selector-modal {
+            position: relative;
+            width: min(420px, 90vw);
+            background: rgba(12, 16, 20, 0.95);
+            border: 2px solid rgba(255, 214, 77, 0.4);
+            border-radius: 16px;
+            padding: 32px;
+            backdrop-filter: blur(20px);
+            box-shadow:
+              0 24px 80px rgba(0, 0, 0, 0.8),
+              0 0 60px rgba(255, 214, 77, 0.15),
+              inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            animation: walletSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+          }
 
-                window.open(installUrl, '_blank');
-                return;
-              }
+          .wallet-selector-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #888;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
 
-              Modal.close(false);
-              resolve(walletId);
-            });
-            btn.addEventListener('mouseenter', () => {
-              btn.style.borderColor = 'var(--gold)';
-              btn.style.background = 'linear-gradient(135deg, rgba(255,214,77,.15) 0%, rgba(255,214,77,.05) 100%)';
-              btn.style.transform = 'translateY(-2px)';
-              btn.style.boxShadow = '0 4px 12px rgba(255,214,77,.2)';
-            });
-            btn.addEventListener('mouseleave', () => {
-              btn.style.borderColor = 'rgba(255,214,77,.3)';
-              btn.style.background = 'linear-gradient(135deg, rgba(20,25,30,.9) 0%, rgba(30,35,40,.8) 100%)';
-              btn.style.transform = 'translateY(0)';
-              btn.style.boxShadow = '0 2px 8px rgba(0,0,0,.3)';
-            });
+          .wallet-selector-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+          }
+
+          .wallet-selector-header {
+            text-align: center;
+            margin-bottom: 28px;
+          }
+
+          .wallet-selector-logo {
+            width: 72px;
+            height: 72px;
+            margin-bottom: 16px;
+            filter: drop-shadow(0 4px 12px rgba(255, 214, 77, 0.3));
+          }
+
+          .wallet-selector-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 14px;
+            color: var(--gold);
+            margin: 0 0 8px 0;
+            text-shadow: 0 2px 8px rgba(255, 214, 77, 0.3);
+          }
+
+          .wallet-selector-subtitle {
+            font-family: Inter, system-ui, Arial;
+            font-size: 13px;
+            color: #888;
+            margin: 0;
+          }
+
+          .wallet-selector-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+          }
+
+          .wallet-option {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #e6ecf1;
+            font-family: Inter, system-ui, Arial;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+          }
+
+          .wallet-option:hover:not(.unavailable):not(.coming-soon) {
+            background: rgba(255, 214, 77, 0.1);
+            border-color: var(--gold);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255, 214, 77, 0.2);
+          }
+
+          .wallet-option.unavailable,
+          .wallet-option.coming-soon {
+            opacity: 0.5;
+            cursor: pointer;
+          }
+
+          .wallet-option.unavailable:hover,
+          .wallet-option.coming-soon:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+          }
+
+          .wallet-option-icon {
+            font-size: 28px;
+            width: 40px;
+            text-align: center;
+          }
+
+          .wallet-option-name {
+            flex: 1;
+            text-align: left;
+          }
+
+          .wallet-option-badge {
+            font-size: 9px;
+            font-weight: 700;
+            color: #ffc107;
+            background: rgba(255, 193, 7, 0.2);
+            padding: 4px 8px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+          }
+
+          .wallet-option-status {
+            font-size: 11px;
+            color: #666;
+          }
+
+          .wallet-option-arrow {
+            font-size: 18px;
+            color: var(--gold);
+            opacity: 0;
+            transform: translateX(-8px);
+            transition: all 0.2s ease;
+          }
+
+          .wallet-option:hover .wallet-option-arrow {
+            opacity: 1;
+            transform: translateX(0);
+          }
+
+          .wallet-selector-footer {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+          }
+
+          .wallet-selector-footer p {
+            font-family: Inter, system-ui, Arial;
+            font-size: 11px;
+            color: #666;
+            margin: 0;
+          }
+
+          .wallet-selector-footer a {
+            color: var(--gold);
+            text-decoration: none;
+          }
+
+          .wallet-selector-footer a:hover {
+            text-decoration: underline;
+          }
+        `;
+
+        document.head.appendChild(styles);
+        document.body.appendChild(overlay);
+
+        // Close function
+        const closeSelector = () => {
+          overlay.remove();
+          styles.remove();
+          reject(new Error('User cancelled'));
+        };
+
+        // Close button handler
+        document.getElementById('wallet-close-btn').addEventListener('click', closeSelector);
+
+        // Click outside to close
+        overlay.addEventListener('click', (e) => {
+          if (e.target === overlay) closeSelector();
+        });
+
+        // Escape key to close
+        const escHandler = (e) => {
+          if (e.key === 'Escape') {
+            closeSelector();
+            document.removeEventListener('keydown', escHandler);
+          }
+        };
+        document.addEventListener('keydown', escHandler);
+
+        // Wallet option click handlers
+        document.querySelectorAll('.wallet-option').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const walletId = btn.getAttribute('data-wallet');
+            const isUnavailable = btn.getAttribute('data-unavailable');
+            const isComingSoon = btn.getAttribute('data-coming-soon');
+
+            if (isComingSoon) {
+              Toast.info('WalletConnect coming soon!', 'COMING SOON');
+              return;
+            }
+
+            if (isUnavailable) {
+              let installUrl = 'https://metamask.io/download/';
+              if (walletId === 'coinbase') installUrl = 'https://www.coinbase.com/wallet';
+              if (walletId === 'trust') installUrl = 'https://trustwallet.com/download';
+
+              window.open(installUrl, '_blank');
+              return;
+            }
+
+            overlay.remove();
+            styles.remove();
+            document.removeEventListener('keydown', escHandler);
+            resolve(walletId);
           });
-        }, 100);
+        });
       });
     }
 
