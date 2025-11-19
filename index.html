@@ -8046,10 +8046,18 @@
     }
 
     // Quest System Data and Functions
+    // NFT Contract addresses for verification (ERC-721)
+    const NFT_CONTRACTS = {
+      bunnz: '0xbdb13add477e76c1df52192d4f5f4dd67f6a40d8', // BAD BUNNZ
+      fluffle: '0x4e502ab1bb313b3c1311eb0d11b31a6b62988b86' // FLUFFLE
+    };
+
     const QUESTS = {
       daily: [
-        {id: 'first_login', name: 'First Steps', desc: 'Log in for the first time', target: 1, reward: 1000, icon: '🗡️'},
-        {id: 'invite_friends', name: 'Recruit Warriors', desc: 'Invite 3 friends', target: 3, reward: 1000, icon: '👥'}
+        {id: 'first_login', name: 'First Steps', desc: 'Log in for the first time', target: 1, reward: 500, icon: '🗡️'},
+        {id: 'invite_used', name: 'Recruit Warrior', desc: 'A friend used your invite code', target: 1, reward: 500, icon: '👥'},
+        {id: 'bunnz_holder', name: 'BAD BUNNZ Holder', desc: 'Own a BAD BUNNZ NFT', target: 1, reward: 500, icon: '🐰', type: 'nft', contract: 'bunnz'},
+        {id: 'fluffle_holder', name: 'FLUFFLE Holder', desc: 'Own a FLUFFLE NFT', target: 1, reward: 2500, icon: '🐇', type: 'nft', contract: 'fluffle'}
       ],
       weekly: [
         {id: 'weekly_play_20', name: 'Arena Regular', desc: 'Play 20 reaction games', target: 20, reward: 2500, icon: ''},
@@ -8217,6 +8225,7 @@
         const completed = progress >= quest.target;
         const claimed = questProgress[`${quest.id}_claimed`] || false;
         const isSocialQuest = quest.type === 'twitter' || quest.type === 'discord';
+        const isNFTQuest = quest.type === 'nft';
         const hasTimer = quest.hasTimer && !completed;
 
         // Calculate time remaining for 24-hour timer quests
@@ -8250,6 +8259,20 @@
                 ${completed ? '✓ VERIFIED' : 'VERIFY'}
               </button>
               ${timeRemainingText}
+            </div>
+            <div class="quest-reward">
+              ${quest.reward} GP ${completed && !claimed ? '• <span style="color:var(--gold)">CLAIM!</span>' : completed ? '✓ CLAIMED' : ''}
+            </div>
+          `;
+        } else if (isNFTQuest) {
+          // NFT holder quest with verify button
+          card.innerHTML = `
+            <div class="quest-name"><span class="quest-icon">${quest.icon}</span> ${quest.name}</div>
+            <div class="quest-desc">${quest.desc}</div>
+            <div class="quest-progress">
+              <button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="verifyNFTQuest('${quest.id}', '${quest.contract}')" ${completed ? 'disabled' : ''}>
+                ${completed ? '✓ VERIFIED' : 'VERIFY OWNERSHIP'}
+              </button>
             </div>
             <div class="quest-reward">
               ${quest.reward} GP ${completed && !claimed ? '• <span style="color:var(--gold)">CLAIM!</span>' : completed ? '✓ CLAIMED' : ''}
@@ -8385,8 +8408,67 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       }
     }
 
+    // Check NFT ownership using Alchemy API
+    async function checkNFTOwnership(walletAddress, contractAddress) {
+      try {
+        // Use Alchemy to check NFT balance
+        const response = await fetch(`https://eth-mainnet.g.alchemy.com/nft/v3/demo/isHolderOfContract?wallet=${walletAddress}&contractAddress=${contractAddress}`);
+        const data = await response.json();
+        return data.isHolderOfContract || false;
+      } catch (error) {
+        console.error('NFT verification error:', error);
+        return false;
+      }
+    }
+
+    // Verify NFT quest
+    async function verifyNFTQuest(questId, contractKey) {
+      const session = getSession();
+      if (!session?.walletAddress) {
+        Toast.error('Please connect your wallet first', 'ERROR');
+        return;
+      }
+
+      const contractAddress = NFT_CONTRACTS[contractKey];
+      if (!contractAddress) {
+        Toast.error('Invalid contract', 'ERROR');
+        return;
+      }
+
+      Loading.show('Verifying NFT ownership...');
+
+      const isHolder = await checkNFTOwnership(session.walletAddress, contractAddress);
+
+      if (isHolder) {
+        // Update quest progress in database
+        const { error } = await supabase
+          .rpc('update_quest_progress', {
+            p_user_id: session.userId,
+            p_quest_id: questId,
+            p_progress: 1
+          });
+
+        Loading.hide();
+
+        if (error) {
+          console.error('Failed to update quest progress:', error);
+          Toast.error('Failed to verify', 'ERROR');
+          return;
+        }
+
+        Toast.success('NFT ownership verified!', 'VERIFIED');
+        // Reload quests to show claimable state
+        const activeTab = document.querySelector('.quest-tab.active')?.getAttribute('data-quest-tab') || 'daily';
+        loadQuests(activeTab);
+      } else {
+        Loading.hide();
+        Toast.error('No NFT found in your wallet', 'NOT A HOLDER');
+      }
+    }
+
     async function claimQuestReward(questId, reward) {
-      const userId = localStorage.getItem('duelpvp_user_id');
+      const session = getSession();
+      const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
 
       if (!userId) return;
 
