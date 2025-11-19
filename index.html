@@ -2171,7 +2171,7 @@
     animation:pulse 2s ease-in-out infinite;
   }
 
-  /* GP Animation */
+  /* GC Animation */
   @keyframes countUp{
     0%{
       opacity:0;
@@ -2182,14 +2182,14 @@
       transform:translateY(0);
     }
   }
-  .gp-change{
+  .gc-change{
     animation:countUp 0.3s ease-out;
   }
-  .gp-increase{
+  .gc-increase{
     color:#4CAF50;
     text-shadow:0 0 8px rgba(76,175,80,.6);
   }
-  .gp-decrease{
+  .gc-decrease{
     color:#F44336;
     text-shadow:0 0 8px rgba(244,67,54,.6);
   }
@@ -3296,7 +3296,7 @@
     text-shadow:0 0 10px rgba(255,214,77,.3);
   }
 
-  .gp-display{
+  .gc-display{
     font-family:'Press Start 2P', monospace;
     font-size:14px;
     color:#4CAF50;
@@ -4455,8 +4455,8 @@
             <div class="stat-value" style="font-size:16px;" id="dashboardRank">--</div>
           </div>
           <div class="stat-card" style="margin:0;padding:8px 16px;">
-            <div class="stat-label" style="font-size:10px;">GP BALANCE</div>
-            <div class="stat-value" style="font-size:16px;" id="dashboardGPBalance">0</div>
+            <div class="stat-label" style="font-size:10px;">GC BALANCE</div>
+            <div class="stat-value" style="font-size:16px;" id="dashboardGCBalance">0</div>
           </div>
           <button class="logout-btn" id="logoutBtn" aria-label="Logout from account">LOGOUT</button>
         </div>
@@ -4486,7 +4486,7 @@
         </div>
         <div class="campaign-progress">
           <div class="campaign-progress-text">
-            <span id="campaignCurrentGP">0</span> / 1,000,000 GP
+            <span id="campaignCurrentGC">0</span> / 1,000,000 GC
           </div>
           <div class="campaign-progress-bar">
             <div class="campaign-progress-fill" id="campaignProgressFill" style="width:0%"></div>
@@ -4567,7 +4567,7 @@
           <div class="campaign-progress-fill-large" id="campaignProgressFillLarge" style="width:0%"></div>
         </div>
         <div class="campaign-progress-info">
-          <span id="campaignCurrentGPPage">0</span> / 1,000,000 GP
+          <span id="campaignCurrentGCPage">0</span> / 1,000,000 GC
         </div>
       </div>
 
@@ -4577,15 +4577,15 @@
         <div class="campaign-info-content">
           <div class="campaign-info-item">
             <span class="campaign-info-bullet">•</span>
-            <span>Reach 1,000,000 GP to qualify for Founder's Sword mint eligibility</span>
+            <span>Reach 1,000,000 GC to qualify for Founder's Sword mint eligibility</span>
           </div>
           <div class="campaign-info-item">
             <span class="campaign-info-bullet">•</span>
-            <span>Earn GP through gambling, farming, and staking</span>
+            <span>Earn GC through gambling, farming, and staking</span>
           </div>
           <div class="campaign-info-item">
             <span class="campaign-info-bullet">•</span>
-            <span>All GP accumulates toward your campaign total</span>
+            <span>All GC accumulates toward your campaign total</span>
           </div>
           <div class="campaign-info-item">
             <span class="campaign-info-bullet">•</span>
@@ -4596,11 +4596,11 @@
         <div class="campaign-disclaimer-section" style="background:rgba(255,69,0,0.1);border:2px solid rgba(255,69,0,0.3);border-radius:8px;padding:16px;margin-top:16px;">
           <div style="font-family:'Press Start 2P',monospace;font-size:10px;color:#FF4500;margin-bottom:12px;text-align:center;">IMPORTANT DISCLAIMER</div>
           <div style="font-family:'Courier New',monospace;font-size:12px;line-height:1.7;color:#e0e8f0;">
-            <strong>This pre-launch campaign is NOT the main game.</strong> These mechanics are for fun only. Campaign GP is temporary and has no monetary value.
+            <strong>This pre-launch campaign is NOT the main game.</strong> These mechanics are for fun only. Campaign GC is temporary and has no monetary value.
             <br><br>
             <strong>The actual Duel PVP game launching in 2026 will be a fully on-chain MMO</strong> with completely different mechanics, progression systems, and gameplay. Think RuneScape meets blockchain - not a casino.
             <br><br>
-            Campaign GP does not carry over to the main game.
+            Campaign GC does not carry over to the main game.
           </div>
         </div>
       </div>
@@ -4611,9 +4611,9 @@
         <div class="campaign-time-value" id="campaignTimeRemainingPage">Starting tomorrow</div>
       </div>
 
-      <!-- Ways to Earn GP Section -->
+      <!-- Ways to Earn GC Section -->
       <div class="campaign-earn-section">
-        <div class="campaign-earn-title">WAYS TO EARN GP</div>
+        <div class="campaign-earn-title">WAYS TO EARN GC</div>
 
         <!-- Two-column card layout -->
         <div class="campaign-cards-row">
@@ -4658,14 +4658,14 @@
 
       <div class="your-best" id="yourBestSection" style="display:none;">
         <div class="your-best-label">YOUR RANK</div>
-        <div class="your-best-time" id="yourBestTime">#-- | -- GP</div>
+        <div class="your-best-time" id="yourBestTime">#-- | -- GC</div>
       </div>
 
       <div class="leaderboard-table">
         <div class="table-header">
           <div>RANK</div>
           <div>PLAYER</div>
-          <div>GP BALANCE</div>
+          <div>GC BALANCE</div>
           <div class="entry-date">WALLET</div>
         </div>
         <div id="leaderboardTableBody">
@@ -4749,7 +4749,7 @@
       <div class="inventory-header">
         <div class="inventory-title">MARKET</div>
         <div>
-          <div class="gp-display" id="gpDisplayShop">GP: 0</div>
+          <div class="gc-display" id="gcDisplayShop">GC: 0</div>
           <button class="back-btn" id="backFromShopBtn" aria-label="Back to dashboard" style="margin-top:8px;">BACK</button>
         </div>
       </div>
@@ -4768,49 +4768,49 @@
             <div class="item-icon">🗡️</div>
             <div class="shop-item-name">BRONZE SWORD</div>
             <div class="shop-item-desc">A sturdy starter weapon</div>
-            <div class="shop-item-price">1,000 GP</div>
+            <div class="shop-item-price">1,000 GC</div>
           </div>
           <div class="shop-item">
             <div class="item-icon">🛡️</div>
             <div class="shop-item-name">IRON SHIELD</div>
             <div class="shop-item-desc">Basic defense equipment</div>
-            <div class="shop-item-price">1,500 GP</div>
+            <div class="shop-item-price">1,500 GC</div>
           </div>
           <div class="shop-item">
             <div class="item-icon">⚔️</div>
             <div class="shop-item-name">STEEL BLADE</div>
             <div class="shop-item-desc">Improved attack power</div>
-            <div class="shop-item-price">2,500 GP</div>
+            <div class="shop-item-price">2,500 GC</div>
           </div>
           <div class="shop-item">
             <div class="item-icon">🏹</div>
             <div class="shop-item-name">HUNTER BOW</div>
             <div class="shop-item-desc">Ranged weapon for distance</div>
-            <div class="shop-item-price">3,000 GP</div>
+            <div class="shop-item-price">3,000 GC</div>
           </div>
           <div class="shop-item">
             <div class="item-icon">🪄</div>
             <div class="shop-item-name">MAGIC STAFF</div>
             <div class="shop-item-desc">Channel mystical energies</div>
-            <div class="shop-item-price">4,000 GP</div>
+            <div class="shop-item-price">4,000 GC</div>
           </div>
           <div class="shop-item">
             <div class="item-icon">💎</div>
             <div class="shop-item-name">RARE GEM</div>
             <div class="shop-item-desc">Valuable collectible item</div>
-            <div class="shop-item-price">5,000 GP</div>
+            <div class="shop-item-price">5,000 GC</div>
           </div>
           <div class="shop-item">
             <div class="item-icon">🎭</div>
             <div class="shop-item-name">MYSTIC MASK</div>
             <div class="shop-item-desc">Enhance your abilities</div>
-            <div class="shop-item-price">6,000 GP</div>
+            <div class="shop-item-price">6,000 GC</div>
           </div>
           <div class="shop-item">
             <div class="item-icon">👑</div>
             <div class="shop-item-name">ROYAL CROWN</div>
             <div class="shop-item-desc">Ultimate prestige item</div>
-            <div class="shop-item-price">10,000 GP</div>
+            <div class="shop-item-price">10,000 GC</div>
           </div>
         </div>
         <div class="coming-soon-overlay">
@@ -4839,15 +4839,15 @@
       <div class="oven-stats-row">
         <div class="oven-stat-box">
           <div class="oven-stat-label">YOUR BALANCE</div>
-          <div class="oven-stat-value" id="ovenUserBalance">0 GP</div>
+          <div class="oven-stat-value" id="ovenUserBalance">0 GC</div>
         </div>
         <div class="oven-stat-box">
           <div class="oven-stat-label">INVESTED</div>
-          <div class="oven-stat-value" id="ovenInvested">0 GP</div>
+          <div class="oven-stat-value" id="ovenInvested">0 GC</div>
         </div>
         <div class="oven-stat-box">
           <div class="oven-stat-label">CURRENT VALUE</div>
-          <div class="oven-stat-value highlight" id="ovenCurrentValue">0 GP</div>
+          <div class="oven-stat-value highlight" id="ovenCurrentValue">0 GC</div>
         </div>
       </div>
 
@@ -4881,7 +4881,7 @@
 
       <!-- Disclaimer for Oven -->
       <div class="game-disclaimer success">
-        💡 <strong>Simulated Investment:</strong> This is a campaign feature with simulated returns. All GP earned counts toward your 1M GP goal for the special badge.
+        💡 <strong>Simulated Investment:</strong> This is a campaign feature with simulated returns. All GC earned counts toward your 1M GC goal for the special badge.
       </div>
     </div>
 
@@ -4905,11 +4905,11 @@
       <div class="oven-stats-row">
         <div class="oven-stat-box">
           <div class="oven-stat-label">TOTAL FARMED</div>
-          <div class="oven-stat-value" id="farmTotalEarned">0 GP</div>
+          <div class="oven-stat-value" id="farmTotalEarned">0 GC</div>
         </div>
         <div class="oven-stat-box">
           <div class="oven-stat-label">TODAY</div>
-          <div class="oven-stat-value" id="farmTodayEarned">0 GP</div>
+          <div class="oven-stat-value" id="farmTodayEarned">0 GC</div>
         </div>
         <div class="oven-stat-box">
           <div class="oven-stat-label">CLICKS</div>
@@ -4936,12 +4936,12 @@
       <!-- Info -->
       <div class="oven-info">
         <strong>Click to Farm Airdrops!</strong><br>
-        Click every 5 seconds for a chance to earn GP. Keep farming for 3 days to maximize your rewards!
+        Click every 5 seconds for a chance to earn GC. Keep farming for 3 days to maximize your rewards!
       </div>
 
       <!-- Disclaimer for Farm -->
       <div class="game-disclaimer info">
-        ⚠️ <strong>Campaign Event:</strong> 3-day farming challenge. Campaign tokens only • Not exchangeable • Counts toward 1M GP goal
+        ⚠️ <strong>Campaign Event:</strong> 3-day farming challenge. Campaign tokens only • Not exchangeable • Counts toward 1M GC goal
       </div>
     </div>
 
@@ -4968,7 +4968,7 @@
             <div class="instructions-title">HOW TO PLAY</div>
             <div class="instructions-text">
               Watch the memecoin chart pump and dump! When it turns RED and starts crashing, hit SELL as fast as you can!
-              React under 1000ms to earn 300 GP. Free to play, unlimited attempts!
+              React under 1000ms to earn 300 GC. Free to play, unlimited attempts!
             </div>
           </div>
 
@@ -5025,7 +5025,7 @@
             <div style="margin-bottom:12px;">
               <label style="font-size:10px;color:#a0a8b0;display:block;margin-bottom:4px;">BET AMOUNT</label>
               <input type="number" id="crashBetAmount" class="crash-input" placeholder="100" min="10" value="100">
-              <div style="font-size:9px;color:#a0a8b0;margin-top:4px;">Min: 10 GP • Max: 10,000 GP</div>
+              <div style="font-size:9px;color:#a0a8b0;margin-top:4px;">Min: 10 GC • Max: 10,000 GC</div>
             </div>
             <div style="margin-bottom:12px;">
               <label style="font-size:10px;color:#a0a8b0;display:block;margin-bottom:4px;">AUTO CASHOUT (Optional)</label>
@@ -5037,8 +5037,8 @@
 
           <div class="crash-info-section">
             <div class="crash-stat">
-              <div class="stat-label">YOUR GP</div>
-              <div class="stat-value" id="crashGPDisplay">0</div>
+              <div class="stat-label">YOUR GC</div>
+              <div class="stat-value" id="crashGCDisplay">0</div>
             </div>
             <div class="crash-stat">
               <div class="stat-label">CURRENT BET</div>
@@ -5135,8 +5135,8 @@
         <!-- Stats Display -->
         <div class="mines-stats-display">
           <div class="mines-stat">
-            <div class="mines-stat-label">YOUR GP</div>
-            <div class="mines-stat-value" id="minesGPDisplay">0</div>
+            <div class="mines-stat-label">YOUR GC</div>
+            <div class="mines-stat-value" id="minesGCDisplay">0</div>
           </div>
           <div class="mines-stat">
             <div class="mines-stat-label">MULTIPLIER</div>
@@ -5144,7 +5144,7 @@
           </div>
           <div class="mines-stat">
             <div class="mines-stat-label">PROFIT</div>
-            <div class="mines-stat-value" id="minesProfit">0 GP</div>
+            <div class="mines-stat-value" id="minesProfit">0 GC</div>
           </div>
           <div class="mines-stat">
             <div class="mines-stat-label">REVEALED</div>
@@ -5200,8 +5200,8 @@
         <!-- Stats Display -->
         <div class="blackjack-stats-display">
           <div class="blackjack-stat">
-            <div class="blackjack-stat-label">YOUR GP</div>
-            <div class="blackjack-stat-value" id="blackjackGPDisplay">0</div>
+            <div class="blackjack-stat-label">YOUR GC</div>
+            <div class="blackjack-stat-value" id="blackjackGCDisplay">0</div>
           </div>
           <div class="blackjack-stat">
             <div class="blackjack-stat-label">YOUR HAND</div>
@@ -5213,7 +5213,7 @@
           </div>
           <div class="blackjack-stat">
             <div class="blackjack-stat-label">BET</div>
-            <div class="blackjack-stat-value" id="blackjackCurrentBet">0 GP</div>
+            <div class="blackjack-stat-value" id="blackjackCurrentBet">0 GC</div>
           </div>
         </div>
 
@@ -6225,7 +6225,7 @@
               <p style="margin-bottom:10px;">By connecting your wallet and using this service, you acknowledge and agree that:</p>
               <ul style="margin-left:20px;margin-bottom:15px;">
                 <li style="margin-bottom:8px;">This is <strong>experimental alpha software</strong> provided "AS IS" without warranties of any kind</li>
-                <li style="margin-bottom:8px;">Virtual items (NFTs, GP, tokens) have <strong>NO monetary value</strong> and are <strong>NOT investment vehicles</strong></li>
+                <li style="margin-bottom:8px;">Virtual items (NFTs, GC, tokens) have <strong>NO monetary value</strong> and are <strong>NOT investment vehicles</strong></li>
                 <li style="margin-bottom:8px;">This project <strong>may never fully launch</strong>, be completed, or continue development</li>
                 <li style="margin-bottom:8px;">The service may be modified, suspended, or <strong>discontinued at any time</strong> without notice</li>
                 <li style="margin-bottom:8px;">You are using this platform for <strong>entertainment purposes only</strong> at your own risk</li>
@@ -6409,17 +6409,17 @@
         inventoryContent.style.display = 'none';
         shopContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
-        // Force refresh GP cache and display when loading dashboard
-        gpCache.lastFetch = 0;
+        // Force refresh GC cache and display when loading dashboard
+        gcCache.lastFetch = 0;
         updateDashboardStats();
         // Load user's invite code
         loadUserInviteCode();
-        // Also directly update GP display to ensure it shows
+        // Also directly update GC display to ensure it shows
         (async () => {
-          const gp = await getUserGP();
+          const gp = await getUserGC();
           const displayGP = gp >= 1000000 ? `${(gp/1000000).toFixed(1)}M` : gp >= 1000 ? `${(gp/1000).toFixed(1)}K` : gp;
-          document.getElementById('dashboardGPBalance').textContent = displayGP;
-          console.log('[Dashboard] GP display updated:', gp);
+          document.getElementById('dashboardGCBalance').textContent = displayGP;
+          console.log('[Dashboard] GC display updated:', gp);
         })();
 
       } else if (newContent === 'game') {
@@ -6500,7 +6500,7 @@
         if (!minesGameState.isPlaying) {
           initMinesGame();
         }
-        updateMinesGPDisplay();
+        updateMinesGCDisplay();
 
       } else if (newContent === 'blackjack') {
         panelContent.style.display = 'none';
@@ -6633,8 +6633,8 @@
     }
 
     function validateAccessCode(code) {
-      // Format: XXXX-XXXX-XXXX (alphanumeric)
-      const re = /^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/i;
+      // Format: ABCD1234 (4 letters + 4 digits)
+      const re = /^[A-Z]{4}[0-9]{4}$/i;
       return re.test(code);
     }
 
@@ -6687,29 +6687,34 @@
         return;
       }
 
-      // Validate code exists in database and is unused
+      // Validate code format (ABCD1234)
+      if (!validateAccessCode(code)) {
+        showError('codeError', 'Invalid code format (expected: ABCD1234)');
+        return;
+      }
+
+      // Validate code exists in database using secure RPC
       Loading.show('Validating access code...');
 
       try {
-        const { data: codeData, error: codeError } = await supabase
-          .from('codes')
-          .select('code, used_by')
-          .eq('code', code.toUpperCase().trim())
-          .single();
+        const { data: validationResult, error: validationError } = await supabase
+          .rpc('validate_invite_code', { p_code: code });
 
-        Loading.hide();
-
-        if (codeError || !codeData) {
-          showError('codeError', 'Invalid invite code');
+        if (validationError) {
+          Loading.hide();
+          console.error('Code validation error:', validationError);
+          showError('codeError', 'Failed to validate code');
           return;
         }
 
-        if (codeData.used_by) {
-          showError('codeError', 'Code already used');
+        if (!validationResult.valid) {
+          Loading.hide();
+          showError('codeError', validationResult.error || 'Invalid invite code');
           return;
         }
 
         // Code is valid, proceed to wallet connect
+        Loading.hide();
         swapContent('walletConnect', code);
       } catch (err) {
         Loading.hide();
@@ -6730,9 +6735,23 @@
           p_wallet_address: walletAddress.toLowerCase()
         });
 
-        if (checkData && checkData.length > 0 && checkData[0].success) {
+        if (checkData && checkData.success) {
           Loading.hide();
           Modal.alert('This wallet is already registered. Please login instead.', 'Wallet Already Registered');
+          return;
+        }
+
+        // Reserve the invite code for 5 minutes
+        const { data: reserveResult, error: reserveError } = await supabase
+          .rpc('reserve_invite_code', {
+            p_code: tempRegistrationData.inviteCode,
+            p_wallet_address: walletAddress.toLowerCase()
+          });
+
+        if (reserveError || !reserveResult?.success) {
+          Loading.hide();
+          const errorMsg = reserveResult?.error || 'Failed to reserve code';
+          Modal.alert(errorMsg, 'Code Error');
           return;
         }
 
@@ -6819,11 +6838,11 @@
       // Set username in dashboard
       document.getElementById('userName').textContent = userData.display_name.toUpperCase();
 
-      // Initialize GP cache
-      await initializeGPCache();
-      const gp = await getUserGP();
+      // Initialize GC cache
+      await initializeGCCache();
+      const gp = await getUserGC();
 
-      Toast.success(`Welcome back, ${userData.display_name}!`, `${gp} GP`);
+      Toast.success(`Welcome back, ${userData.display_name}!`, `${gp} GC`);
       swapContent('dashboard');
     }
 
@@ -6979,39 +6998,36 @@
 
       try {
         // Call server-side registration function
-        console.log('Calling register_with_wallet with:', {
+        console.log('Calling register_user_with_wallet with:', {
           wallet: tempRegistrationData.walletAddress,
           name: warriorName,
-          code: tempRegistrationData.inviteCode,
-          terms: tempRegistrationData.termsAccepted
+          code: tempRegistrationData.inviteCode
         });
 
-        const { data, error } = await supabase.rpc('register_with_wallet', {
+        const { data, error } = await supabase.rpc('register_user_with_wallet', {
           p_wallet_address: tempRegistrationData.walletAddress,
           p_display_name: warriorName,
-          p_invite_code: tempRegistrationData.inviteCode,
-          p_terms_accepted: tempRegistrationData.termsAccepted
+          p_invite_code: tempRegistrationData.inviteCode
         });
 
-        console.log('register_with_wallet response:', { data, error });
+        console.log('register_user_with_wallet response:', { data, error });
 
-        if (error || !data || data.length === 0 || !data[0].success) {
+        if (error || !data || !data.success) {
           Loading.hide();
           console.error('Registration failed:', { error, data });
-          const errorCode = data && data[0]?.error_code;
-          const message = data && data[0]?.message;
+          const errorMsg = data?.error || 'Registration failed';
 
-          if (errorCode === 'NAME_TAKEN') {
+          if (errorMsg.includes('Display name already taken')) {
             showError('warriorNameError', 'Display name already taken');
-          } else if (errorCode === 'WALLET_EXISTS') {
+          } else if (errorMsg.includes('Wallet already registered')) {
             Modal.alert('This wallet is already registered', 'Registration Failed');
           } else {
-            Modal.alert(message || 'Registration failed', 'Error');
+            Modal.alert(errorMsg, 'Error');
           }
           return;
         }
 
-        const userId = data[0].user_id;
+        const userId = data.user_id;
 
         // Create anonymous Supabase Auth session
         console.log('Creating anonymous auth for new user...');
@@ -7070,12 +7086,12 @@
         // Set username in dashboard
         document.getElementById('userName').textContent = warriorName.toUpperCase();
 
-        // Initialize GP cache
-        await initializeGPCache();
-        const gp = await getUserGP();
+        // Initialize GC cache
+        await initializeGCCache();
+        const gp = await getUserGC();
 
         Loading.hide();
-        Toast.success(`Welcome, ${warriorName}!`, `${gp} GP`);
+        Toast.success(`Welcome, ${warriorName}!`, `${gp} GC`);
         swapContent('dashboard');
 
         // Clear temp data
@@ -7102,9 +7118,9 @@
       // Clear custom session (legacy support)
       clearSession();
 
-      // Clear GP cache
-      gpCache.balance = 0;
-      gpCache.lastFetch = 0;
+      // Clear GC cache
+      gcCache.balance = 0;
+      gcCache.lastFetch = 0;
 
       // Reset UI
       dashboardContent.style.display = 'none';
@@ -7209,10 +7225,10 @@
       // Also store userId directly for backward compatibility
       localStorage.setItem('duelpvp_user_id', userId);
 
-      // Also cache GP for navbar (Blur-style)
-      const gpCacheKey = `duelpvp.cache.gp`;
-      localStorage.setItem(gpCacheKey, JSON.stringify({
-        [walletAddress.toLowerCase()]: 0 // Will be updated by initializeGPCache
+      // Also cache GC for navbar (Blur-style)
+      const gcCacheKey = `duelpvp.cache.gc`;
+      localStorage.setItem(gcCacheKey, JSON.stringify({
+        [walletAddress.toLowerCase()]: 0 // Will be updated by initializeGCCache
       }));
 
       console.log('Session created for', displayName);
@@ -7317,7 +7333,7 @@
       // Verify user still exists in database and get auth_user_id
       const { data: userData, error } = await supabase
         .from('users')
-        .select('id, display_name, gp_balance, auth_user_id')
+        .select('id, display_name, gc_balance, auth_user_id')
         .eq('id', session.userId)
         .single();
 
@@ -7351,13 +7367,13 @@
       // Set UI
       document.getElementById('userName').textContent = session.displayName.toUpperCase();
 
-      // Initialize GP cache
-      await initializeGPCache();
-      const gp = await getUserGP();
+      // Initialize GC cache
+      await initializeGCCache();
+      const gp = await getUserGC();
 
       // Auto-redirect to dashboard
       swapContent('dashboard');
-      Toast.success(`Welcome back, ${session.displayName}!`, `${gp} GP`);
+      Toast.success(`Welcome back, ${session.displayName}!`, `${gp} GC`);
     }
 
     async function handleWalletLogin() {
@@ -7382,7 +7398,7 @@
         const userData = {
           id: loginData[0].user_id,
           display_name: loginData[0].display_name,
-          gp_balance: loginData[0].gp_balance,
+          gc_balance: loginData[0].gc_balance,
           auth_user_id: loginData[0].auth_user_id
         };
 
@@ -7471,12 +7487,12 @@
         // Check NFT holder status and auto-complete quests
         await checkNFTHolderQuests(walletAddress);
 
-        // Initialize GP cache
-        await initializeGPCache();
-        const gp = await getUserGP();
+        // Initialize GC cache
+        await initializeGCCache();
+        const gp = await getUserGC();
 
         Loading.hide();
-        Toast.success(`Welcome back, ${userData.display_name}!`, `${gp} GP`);
+        Toast.success(`Welcome back, ${userData.display_name}!`, `${gp} GC`);
         swapContent('dashboard');
 
       } catch (error) {
@@ -7523,7 +7539,7 @@
           console.error('Failed to get user rank:', rankError);
         }
 
-        // Get user's GP from users table
+        // Get user's GC from users table
         const { data: userData, error: userError } = await supabase
           .from('users')
           .select('points, win_streak, total_wins')
@@ -7543,9 +7559,9 @@
         // Update UI
         document.getElementById('dashboardRank').textContent = userRank > 0 ? `#${userRank}` : '--';
 
-        // Update GP using secure getUserGP function (supports both database and localStorage)
-        const displayGP = await getUserGP();
-        document.getElementById('dashboardGPBalance').textContent = displayGP >= 1000000 ? `${(displayGP/1000000).toFixed(1)}M` : displayGP >= 1000 ? `${(displayGP/1000).toFixed(1)}K` : displayGP;
+        // Update GC using secure getUserGC function (supports both database and localStorage)
+        const displayGP = await getUserGC();
+        document.getElementById('dashboardGCBalance').textContent = displayGP >= 1000000 ? `${(displayGP/1000000).toFixed(1)}M` : displayGP >= 1000 ? `${(displayGP/1000).toFixed(1)}K` : displayGP;
 
       } catch (e) {
         console.error('Failed to update dashboard stats:', e);
@@ -7572,7 +7588,7 @@
       let inviteCodes = [];
       if (userId) {
         const { data } = await supabase
-          .rpc('get_my_codes', { p_user_id: userId });
+          .rpc('get_user_invite_codes', { p_user_id: userId });
 
         if (data && data.length > 0) {
           inviteCodes = data.map(c => ({
@@ -7671,12 +7687,9 @@
 
         Loading.show('Loading leaderboard...');
 
-        // Get top 500 users by GP balance
+        // Get leaderboard using secure RPC function
         const { data: leaderboard, error } = await supabase
-          .from('users')
-          .select('id, display_name, wallet_address, gp_balance, created_at')
-          .order('gp_balance', { ascending: false })
-          .limit(500);
+          .rpc('get_leaderboard', { p_limit: 100 });
 
         Loading.hide();
 
@@ -7687,26 +7700,20 @@
 
         console.log('Loaded leaderboard:', leaderboard?.length || 0, 'entries');
 
-        // Add rank to each entry
-        const rankedLeaderboard = leaderboard?.map((entry, index) => ({
-          ...entry,
-          rank: index + 1
-        })) || [];
-
         // Show user's rank if they're logged in
         if (userId) {
-          const userEntry = rankedLeaderboard.find(entry => entry.id === userId);
+          const userEntry = leaderboard?.find(entry => entry.display_name === localStorage.getItem('duelpvp_display_name'));
           if (userEntry) {
             document.getElementById('yourBestSection').style.display = 'block';
-            document.getElementById('yourBestTime').textContent = `#${userEntry.rank} | ${userEntry.gp_balance?.toLocaleString() || 0} GP`;
+            document.getElementById('yourBestTime').textContent = `#${userEntry.rank} | ${userEntry.gc_balance?.toLocaleString() || 0} GC`;
           } else {
-            // User is not in top 500, get their actual rank
+            // User is not in top 100, get their actual rank
             const { data: userRankData } = await supabase
               .rpc('get_user_rank', { p_user_id: userId });
 
-            if (userRankData && userRankData[0]) {
+            if (userRankData && userRankData.rank) {
               document.getElementById('yourBestSection').style.display = 'block';
-              document.getElementById('yourBestTime').textContent = `#${userRankData[0].rank} | ${userRankData[0].gp_balance?.toLocaleString() || 0} GP`;
+              document.getElementById('yourBestTime').textContent = `#${userRankData.rank} | ${userRankData.gc_balance?.toLocaleString() || 0} GC`;
             } else {
               document.getElementById('yourBestSection').style.display = 'none';
             }
@@ -7716,7 +7723,7 @@
         }
 
         // Render table
-        renderLeaderboardTable(rankedLeaderboard, userId);
+        renderLeaderboardTable(leaderboard || [], userId);
 
       } catch (e) {
         Loading.hide();
@@ -7737,7 +7744,7 @@
       leaderboard.forEach((entry) => {
         const rank = entry.rank || '?';
         const playerName = entry.display_name || 'Unknown';
-        const gpBalance = entry.gp_balance?.toLocaleString() || '0';
+        const gpBalance = entry.gc_balance?.toLocaleString() || '0';
         const walletShort = entry.wallet_address ?
           `${entry.wallet_address.substring(0, 6)}...${entry.wallet_address.substring(entry.wallet_address.length - 4)}` :
           'No wallet';
@@ -7754,7 +7761,7 @@
         row.innerHTML = `
           <div class="${rankBadgeClass}">#${rank}</div>
           <div class="player-name">${playerName.toUpperCase()}${isCurrentUser ? ' (YOU)' : ''}</div>
-          <div class="reaction-time" style="color:var(--gold);font-weight:700;">${gpBalance} GP</div>
+          <div class="reaction-time" style="color:var(--gold);font-weight:700;">${gpBalance} GC</div>
           <div class="entry-date" style="font-family:monospace;font-size:11px;">${walletShort}</div>
         `;
         tbody.appendChild(row);
@@ -8006,11 +8013,11 @@
         gameState.bestTime = reactionTime;
       }
 
-      // Award GP for fast reactions
+      // Award GC for fast reactions
       if (reactionTime < 1000) {
-        await updateUserGP(300, 'reaction');
-        Toast.success('Fast hands! +300 GP', 'PROFIT');
-        gameStatus.textContent = `${reactionTime.toFixed(0)}ms - +300 GP!`;
+        await updateUserGC(300, 'reaction');
+        Toast.success('Fast hands! +300 GC', 'PROFIT');
+        gameStatus.textContent = `${reactionTime.toFixed(0)}ms - +300 GC!`;
         gameStatus.className = 'game-status';
         gameStatus.style.color = '#4CAF50';
       } else {
@@ -8065,7 +8072,7 @@
             <div class="result-time" style="color:#F44336">TOO EARLY</div>
           `;
         } else {
-          const gpEarned = time < 1000 ? '+300 GP' : '0 GP';
+          const gpEarned = time < 1000 ? '+300 GC' : '0 GC';
           const color = time < 1000 ? '#4CAF50' : '#a0a8b0';
           card.innerHTML = `
             <div class="result-attempt">TRY ${actualIndex + 1}</div>
@@ -8186,8 +8193,8 @@
         updateCrashHistory();
       }
 
-      // Update GP display
-      updateCrashGPDisplay();
+      // Update GC display
+      updateCrashGCDisplay();
 
       // Setup canvas
       const canvas = document.getElementById('crashTrailCanvas');
@@ -8202,9 +8209,9 @@
       startCrashRound();
     }
 
-    async function updateCrashGPDisplay() {
-      const gp = await getUserGP();
-      document.getElementById('crashGPDisplay').textContent = gp;
+    async function updateCrashGCDisplay() {
+      const gp = await getUserGC();
+      document.getElementById('crashGCDisplay').textContent = gp;
       document.getElementById('crashCurrentBet').textContent = crashGameState.betAmount;
 
       if (crashGameState.betAmount > 0 && crashGameState.phase === 'flying') {
@@ -8263,8 +8270,8 @@
       document.getElementById('crashPlaceBetBtn').disabled = false;
       document.getElementById('crashPlaceBetBtn').textContent = 'PLACE BET';
 
-      // Update GP display
-      updateCrashGPDisplay();
+      // Update GC display
+      updateCrashGCDisplay();
 
       // Countdown phase
       const countdownInterval = setInterval(() => {
@@ -8312,7 +8319,7 @@
 
       // Update display
       document.getElementById('crashMultiplierValue').textContent = crashGameState.currentMultiplier.toFixed(2) + 'x';
-      updateCrashGPDisplay();
+      updateCrashGCDisplay();
 
       // Move rocket up
       const rocket = document.getElementById('crashRocket');
@@ -8379,9 +8386,9 @@
 
       // If player had bet and didn't cash out, they lose
       if (crashGameState.betAmount > 0) {
-        Toast.error(`Lost ${crashGameState.betAmount} GP at ${crashGameState.crashPoint.toFixed(2)}x`, 'CRASHED');
+        Toast.error(`Lost ${crashGameState.betAmount} GC at ${crashGameState.crashPoint.toFixed(2)}x`, 'CRASHED');
         crashGameState.betAmount = 0;
-        updateCrashGPDisplay();
+        updateCrashGCDisplay();
         updateDashboardStats();
       }
 
@@ -8418,33 +8425,33 @@
       const autoCashoutInput = document.getElementById('crashAutoCashout');
       const autoCashout = parseFloat(autoCashoutInput.value) || 0;
 
-      const gp = await getUserGP();
+      const gp = await getUserGC();
 
       if (isNaN(betAmount) || betAmount < 10) {
-        Toast.error('Minimum bet is 10 GP', 'INVALID BET');
+        Toast.error('Minimum bet is 10 GC', 'INVALID BET');
         return;
       }
 
       if (betAmount > 10000) {
-        Toast.error('Maximum bet is 10,000 GP', 'INVALID BET');
+        Toast.error('Maximum bet is 10,000 GC', 'INVALID BET');
         return;
       }
 
       if (betAmount > gp) {
-        Toast.error('Insufficient GP', 'INSUFFICIENT FUNDS');
+        Toast.error('Insufficient GC', 'INSUFFICIENT FUNDS');
         return;
       }
 
       // Deduct bet from balance
-      await updateUserGP(-betAmount, 'crash');
+      await updateUserGC(-betAmount, 'crash');
       crashGameState.betAmount = betAmount;
       crashGameState.autoCashout = autoCashout;
       crashGameState.hashedIn = true;
 
-      updateCrashGPDisplay();
+      updateCrashGCDisplay();
       updateDashboardStats();
 
-      Toast.success(`Bet placed: ${betAmount} GP`, 'BET PLACED');
+      Toast.success(`Bet placed: ${betAmount} GC`, 'BET PLACED');
       document.getElementById('crashPlaceBetBtn').disabled = true;
       document.getElementById('crashPlaceBetBtn').textContent = 'BET PLACED';
     }
@@ -8458,12 +8465,12 @@
       const profit = winAmount - crashGameState.betAmount;
 
       // Add winnings to balance
-      await updateUserGP(winAmount, 'crash');
+      await updateUserGC(winAmount, 'crash');
 
-      Toast.success(`Cashed out at ${crashGameState.currentMultiplier.toFixed(2)}x! Won ${winAmount} GP (+${profit})`, 'CASHED OUT');
+      Toast.success(`Cashed out at ${crashGameState.currentMultiplier.toFixed(2)}x! Won ${winAmount} GC (+${profit})`, 'CASHED OUT');
 
       crashGameState.betAmount = 0;
-      updateCrashGPDisplay();
+      updateCrashGCDisplay();
       updateDashboardStats();
 
       document.getElementById('crashCashoutBtn').disabled = true;
@@ -8521,7 +8528,7 @@
       loadQuests(questType);
     }
 
-    // Main quest loader
+    // Main quest loader - uses server-side quest system
     async function loadQuests(type) {
       const questGrid = document.getElementById('questGrid');
       const comingSoonOverlay = document.getElementById('comingSoonOverlay');
@@ -8549,7 +8556,6 @@
       } else {
         questGrid.classList.remove('locked');
         if (comingSoonOverlay) comingSoonOverlay.style.display = 'none';
-        // Force grid visibility
         questGrid.style.opacity = '1';
         questGrid.style.filter = 'none';
         questGrid.style.pointerEvents = 'auto';
@@ -8559,12 +8565,9 @@
       questGrid.innerHTML = '<div class="no-data">Loading quests...</div>';
 
       try {
-        // Fetch quest progress from database
+        // Fetch quests from server-side RPC
         const { data: questData, error: questError } = await supabase
-          .from('quests')
-          .select('quest_id, progress, claimed_at')
-          .eq('user_id', userId)
-          .eq('reset_date', new Date().toISOString().split('T')[0]);
+          .rpc('get_user_quests', { p_user_id: userId });
 
         if (questError) {
           console.error('Quest load error:', questError);
@@ -8572,30 +8575,13 @@
           return;
         }
 
-        // Build progress lookup
-        const progress = {};
-        (questData || []).forEach(q => {
-          progress[q.quest_id] = {
-            value: q.progress || 0,
-            claimed: !!q.claimed_at
-          };
-        });
-
-        // Get quests to display
-        let questList;
+        // Filter quests based on tab type
+        let questList = questData || [];
         if (type === 'completed') {
-          // Show all completed quests from any category
-          questList = QUESTS.daily.filter(q => {
-            const p = progress[q.id];
-            return p && p.value >= q.target;
-          });
+          questList = questList.filter(q => q.is_claimed);
         } else {
-          // For daily tab, filter OUT completed quests
-          questList = (QUESTS[type] || QUESTS.daily).filter(q => {
-            const p = progress[q.id];
-            const isComplete = p && p.value >= q.target;
-            return !isComplete; // Only show uncompleted quests
-          });
+          // Show unclaimed quests
+          questList = questList.filter(q => !q.is_claimed);
         }
 
         // Clear and render
@@ -8606,15 +8592,22 @@
           return;
         }
 
+        // Quest icons
+        const questIcons = {
+          'first_steps': '🎯',
+          'invite_3_friends': '👥',
+          'fluffle_holder': '🐰',
+          'bunnz_holder': '🔥'
+        };
+
         // Render each quest
         questList.forEach(quest => {
-          const p = progress[quest.id] || {value: 0, claimed: false};
-          const isComplete = p.value >= quest.target;
-          const isClaimed = p.claimed;
+          const isComplete = quest.is_completed;
+          const isClaimed = quest.is_claimed;
+          const icon = questIcons[quest.id] || '⭐';
 
           const card = document.createElement('div');
           card.className = 'quest-card' + (isComplete ? ' completed' : '') + (isComplete && !isClaimed ? ' claimable' : '');
-          // Force visibility
           card.style.opacity = '1';
           card.style.visibility = 'visible';
           card.style.display = 'block';
@@ -8624,55 +8617,35 @@
           // Simplified display for claimed quests
           if (isClaimed) {
             html = `
-              <div class="quest-name"><span class="quest-icon">${quest.icon}</span> ${quest.name}</div>
+              <div class="quest-name"><span class="quest-icon">${icon}</span> ${quest.name}</div>
               <div style="text-align:center;padding:16px 0;color:#4CAF50;font-family:'Press Start 2P',monospace;font-size:12px;">
-                +${quest.reward} GP CLAIMED
+                +${quest.gc_reward} GC CLAIMED
               </div>
             `;
           } else {
             // Full display for unclaimed quests
             html = `
-              <div class="quest-name"><span class="quest-icon">${quest.icon}</span> ${quest.name}</div>
-              <div class="quest-desc">${quest.desc}</div>
+              <div class="quest-name"><span class="quest-icon">${icon}</span> ${quest.name}</div>
+              <div class="quest-desc">${quest.description}</div>
               <div class="quest-progress">
             `;
 
-            // Quest status/action
-            if (quest.type === 'nft') {
-              // NFT holder quest
-              if (isComplete) {
-                html += `<button class="action-btn btn-primary" style="width:100%;margin-top:8px;" onclick="claimQuestReward('${quest.id}')">CLAIM ${quest.reward} GP</button>`;
-              } else {
-                html += `<div style="text-align:center;padding:8px;color:#888;">Not a holder</div>`;
-              }
-            } else if (quest.type === 'manual') {
-              // Manual verification quest (like X sharing)
-              const pct = Math.min(100, (p.value / quest.target) * 100);
-              html += `
-                <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-                <div class="progress-text">${p.value} / ${quest.target}</div>
-              `;
-              if (isComplete) {
-                html += `<button class="action-btn btn-primary" style="width:100%;margin-top:8px;" onclick="claimQuestReward('${quest.id}')">CLAIM ${quest.reward} GP</button>`;
-              } else {
-                html += `<button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="openSharePostQuest()">COMPLETE QUEST</button>`;
-              }
-            } else {
-              // Regular quest with progress bar
-              const pct = Math.min(100, (p.value / quest.target) * 100);
-              html += `
-                <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-                <div class="progress-text">${p.value} / ${quest.target}</div>
-              `;
-              if (isComplete) {
-                html += `<button class="action-btn btn-primary" style="width:100%;margin-top:8px;" onclick="claimQuestReward('${quest.id}')">CLAIM ${quest.reward} GP</button>`;
-              } else if (quest.action === 'openInventory') {
-                html += `<button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="showInventory()">VIEW INVITE CODES</button>`;
-              }
+            // Progress bar
+            const pct = Math.min(100, (quest.progress / quest.target_count) * 100);
+            html += `
+              <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+              <div class="progress-text">${quest.progress} / ${quest.target_count}</div>
+            `;
+
+            // Action button
+            if (isComplete) {
+              html += `<button class="action-btn btn-primary" style="width:100%;margin-top:8px;" onclick="claimQuestReward('${quest.id}')">CLAIM ${quest.gc_reward} GC</button>`;
+            } else if (quest.id === 'invite_3_friends') {
+              html += `<button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="showInventory()">VIEW INVITE CODES</button>`;
             }
 
             html += `</div>`;
-            html += `<div class="quest-reward">${quest.reward} GP</div>`;
+            html += `<div class="quest-reward">${quest.gc_reward} GC</div>`;
           }
 
           card.innerHTML = html;
@@ -8706,12 +8679,12 @@
           return;
         }
 
-        // Clear GP cache and update display
-        gpCache.lastFetch = 0;
-        const newGP = await getUserGP();
-        updateGPDisplay(newGP, data.reward);
+        // Clear GC cache and update display
+        gcCache.lastFetch = 0;
+        const newGP = await getUserGC();
+        updateGCDisplay(newGP, data.reward);
 
-        Toast.success(`+${data.reward} GP earned!`, 'QUEST COMPLETED');
+        Toast.success(`+${data.reward} GC earned!`, 'QUEST COMPLETED');
 
         // Reload current tab
         const activeTab = document.querySelector('.quest-tab.active');
@@ -8772,7 +8745,7 @@
             style="width:100%;padding:12px;background:rgba(0,0,0,.4);border:2px solid rgba(255,214,77,.3);border-radius:8px;color:#e6ecf1;font-family:monospace;font-size:12px;margin-bottom:16px;">
           <div style="background:rgba(255,193,7,.1);border:1px solid rgba(255,193,7,.3);border-radius:8px;padding:12px;margin-bottom:16px;">
             <p style="color:#ffc107;font-size:10px;margin:0;">
-              Note: Your submission will be manually verified. GP will be granted immediately but may be revoked if the retweet is not valid.
+              Note: Your submission will be manually verified. GC will be granted immediately but may be revoked if the retweet is not valid.
             </p>
           </div>
         </div>
@@ -8811,14 +8784,14 @@
 
           if (submitError) {
             console.error('Submission error:', submitError);
-            // Continue anyway - we'll still grant the GP
+            // Continue anyway - we'll still grant the GC
           }
 
           // Update quest progress
           await updateQuestProgress('share_post', 1);
 
           Loading.hide();
-          Toast.success('+500 GP earned! (Subject to verification)', 'QUEST SUBMITTED');
+          Toast.success('+500 GC earned! (Subject to verification)', 'QUEST SUBMITTED');
 
           // Reload quests
           const activeTab = document.querySelector('.quest-tab.active');
@@ -8857,7 +8830,6 @@
     async function loadInventory() {
       const session = getSession();
       const userId = session?.userId;
-      const email = localStorage.getItem('duelpvp_email') || 'anonymous';
 
       if (!userId) {
         console.warn('No user ID found, skipping inventory load');
@@ -8866,9 +8838,9 @@
 
       console.log('Loading inventory for user:', userId);
 
-      // Get user's invite codes using RPC function
+      // Get user's invite codes using RPC function (only returns unused codes)
       const { data: codesData, error: codesError } = await supabase
-        .rpc('get_my_codes', { p_user_id: userId });
+        .rpc('get_user_invite_codes', { p_user_id: userId });
 
       console.log('Codes response:', { codesData, codesError });
 
@@ -8876,73 +8848,52 @@
         console.error('Failed to get codes:', codesError);
       }
 
-      // Check if invite_used quest is complete
-      const { data: questData } = await supabase
-        .from('quests')
-        .select('quest_id, progress, claimed_at')
-        .eq('user_id', userId)
-        .eq('quest_id', 'invite_used')
-        .eq('reset_date', new Date().toISOString().split('T')[0])
-        .single();
-
-      const inviteQuestComplete = questData && questData.progress >= 3;
-
-      // Filter invite codes - hide used ones unless quest is complete
+      // Map invite codes (only unused ones are returned)
       let inviteCodes = codesData && codesData.length > 0
         ? codesData.map(c => ({
             code: c.code,
-            used: c.used,
-            used_at: c.used_at
+            created_at: c.created_at
           }))
         : [];
-
-      // If quest is not complete, filter out used codes
-      if (!inviteQuestComplete) {
-        inviteCodes = inviteCodes.filter(c => !c.used);
-      }
 
       // Render inventory
       const inventoryGrid = document.getElementById('inventoryGrid');
       inventoryGrid.innerHTML = '';
 
-      // Show 8 slots for invite codes
-      const numSlots = 8;
+      // Show 3 slots for invite codes (user gets 3 codes)
+      const numSlots = 3;
       for (let i = 0; i < numSlots; i++) {
         const item = inviteCodes[i];
         const slot = document.createElement('div');
 
         if (item) {
-          // Invite code item
-          slot.className = item.used ? 'inventory-slot used-code' : 'inventory-slot invite-code';
+          // Invite code item (only unused codes shown)
+          slot.className = 'inventory-slot invite-code';
           slot.innerHTML = `
             <div class="item-icon">
               <svg width="28" height="28" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;">
                 <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5"
                          fill="none"
-                         stroke="${item.used ? '#666' : '#22c55e'}"
+                         stroke="#22c55e"
                          stroke-width="4"/>
-                <text x="50" y="58" text-anchor="middle" fill="${item.used ? '#666' : '#22c55e'}" font-size="24" font-family="monospace">${item.used ? '✓' : '?'}</text>
+                <text x="50" y="58" text-anchor="middle" fill="#22c55e" font-size="24" font-family="monospace">?</text>
               </svg>
             </div>
             <div class="item-name">${item.code}</div>
           `;
           // Tooltip
-          slot.title = item.used
-            ? `Invite Code (USED)\nCode: ${item.code}\nUsed on: ${new Date(item.used_at).toLocaleDateString()}`
-            : `Invite Code (UNUSED)\nClick to copy!\nShare this code with friends!`;
+          slot.title = `Invite Code\nClick to copy!\nShare this code with friends!`;
 
-          // Add click-to-copy for unused codes
-          if (!item.used) {
-            slot.style.cursor = 'pointer';
-            slot.addEventListener('click', () => {
-              copyToClipboard(item.code);
-              Toast.success(`Code ${item.code} copied!`, 'SHARE WITH FRIENDS');
-            });
-          }
+          // Add click-to-copy
+          slot.style.cursor = 'pointer';
+          slot.addEventListener('click', () => {
+            copyToClipboard(item.code);
+            Toast.success(`Code ${item.code} copied!`, 'SHARE WITH FRIENDS');
+          });
         } else {
-          // Empty slot
+          // Empty slot (code was used)
           slot.className = 'inventory-slot empty';
-          slot.innerHTML = '<div style="opacity:0.3">━</div>';
+          slot.innerHTML = '<div style="opacity:0.3;font-size:10px;">USED</div>';
         }
 
         inventoryGrid.appendChild(slot);
@@ -8968,7 +8919,7 @@
           <div class="item-icon">${item.icon}</div>
           <div class="shop-item-name">${item.name}</div>
           <div class="shop-item-desc">${item.desc}</div>
-          <div class="shop-item-price">${item.price.toLocaleString()} GP</div>
+          <div class="shop-item-price">${item.price.toLocaleString()} GC</div>
           <button class="buy-btn" ${gp < item.price ? 'disabled' : ''}>BUY</button>
         `;
 
@@ -8981,11 +8932,11 @@
 
     function buyItem(item) {
       const email = localStorage.getItem('duelpvp_email') || 'anonymous';
-      let gp = parseInt(localStorage.getItem('duelpvp_gp') || '0');
+      let gp = parseInt(localStorage.getItem('duelpvp_gc') || '0');
       let inventory = JSON.parse(localStorage.getItem(`duelpvp_inventory_${email}`) || '[]');
 
       if (gp < item.price) {
-        Modal.alert('Not enough GP! Complete quests or play games to earn more.', 'Insufficient Funds');
+        Modal.alert('Not enough GC! Complete quests or play games to earn more.', 'Insufficient Funds');
         return;
       }
 
@@ -8995,9 +8946,9 @@
         return;
       }
 
-      // Deduct GP
+      // Deduct GC
       gp -= item.price;
-      localStorage.setItem('duelpvp_gp', gp.toString());
+      localStorage.setItem('duelpvp_gc', gp.toString());
 
       // Add to inventory
       if (item.type === 'consumable') {
@@ -9027,77 +8978,77 @@
     // All calculations happen server-side to prevent cheating
 
     // ===============================================
-    // GP BALANCE SYSTEM (SECURE - DATABASE BACKED)
+    // GC BALANCE SYSTEM (SECURE - DATABASE BACKED)
     // ===============================================
 
-    // Cache for GP balance to reduce database queries
-    let gpCache = {
+    // Cache for GC balance to reduce database queries
+    let gcCache = {
       balance: 0,
       lastFetch: 0,
       cacheTime: 5000 // Cache for 5 seconds
     };
 
-    // Helper functions for GP
-    async function getUserGP() {
+    // Helper functions for GC
+    async function getUserGC() {
       // Get user ID from session or old localStorage format
       const session = getSession();
       const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
 
       // Fallback to localStorage for test mode
       if (!userId || userId.startsWith('test-')) {
-        return parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+        return parseInt(localStorage.getItem('duelpvp_gc')) || 0;
       }
 
       // Check cache first
       const now = Date.now();
-      if (gpCache.lastFetch && (now - gpCache.lastFetch < gpCache.cacheTime)) {
-        return gpCache.balance;
+      if (gcCache.lastFetch && (now - gcCache.lastFetch < gcCache.cacheTime)) {
+        return gcCache.balance;
       }
 
       try {
         // Try secure JWT-based function first
-        const { data: secureData, error: secureError } = await supabase.rpc('secure_get_gp');
+        const { data: secureData, error: secureError } = await supabase.rpc('secure_get_gc');
 
         if (!secureError && secureData !== null) {
-          gpCache.balance = secureData;
-          gpCache.lastFetch = now;
+          gcCache.balance = secureData;
+          gcCache.lastFetch = now;
           return secureData;
         }
 
-        console.log('Secure GP function failed, using fallback:', secureError);
+        console.log('Secure GC function failed, using fallback:', secureError);
 
         // Fallback to old function for users not yet migrated
         const { data, error } = await supabase
-          .rpc('get_user_gp', { p_user_id: userId });
+          .rpc('get_user_gc', { p_user_id: userId });
 
         if (error) {
-          console.error('Failed to fetch GP:', error);
-          return parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+          console.error('Failed to fetch GC:', error);
+          return parseInt(localStorage.getItem('duelpvp_gc')) || 0;
         }
 
-        gpCache.balance = data || 0;
-        gpCache.lastFetch = now;
+        gcCache.balance = data || 0;
+        gcCache.lastFetch = now;
         return data || 0;
       } catch (e) {
-        console.error('Error getting GP:', e);
-        return parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+        console.error('Error getting GC:', e);
+        return parseInt(localStorage.getItem('duelpvp_gc')) || 0;
       }
     }
 
     function getUserLevel() {
-      const gp = gpCache.balance || parseInt(localStorage.getItem('duelpvp_gp')) || 0;
-      // Calculate level based on GP (every 50,000 GP = 1 level)
+      const gp = gcCache.balance || parseInt(localStorage.getItem('duelpvp_gc')) || 0;
+      // Calculate level based on GC (every 50,000 GC = 1 level)
       return Math.floor(gp / 50000) + 1;
     }
 
-    async function updateUserGP(amount, gameType = null) {
+    async function updateUserGC(amount, gameType = null) {
       // Get user ID from session or old localStorage format
       const session = getSession();
       const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
 
       // Fallback to localStorage for test mode
       if (!userId || userId.startsWith('test-')) {
-        const currentGP = parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+        const currentGP = parseInt(localStorage.getItem('duelpvp_gc')) || 0;
         const newGP = currentGP + amount;
 
         // Prevent negative balance even in test mode
@@ -9106,10 +9057,10 @@
           return currentGP;
         }
 
-        localStorage.setItem('duelpvp_gp', newGP.toString());
+        localStorage.setItem('duelpvp_gc', newGP.toString());
 
         // Update UI
-        updateGPDisplay(newGP, amount);
+        updateGCDisplay(newGP, amount);
         return newGP;
       }
 
@@ -9144,13 +9095,13 @@
         const { data, error } = result;
 
         if (error) {
-          console.error('Failed to update GP:', error);
+          console.error('Failed to update GC:', error);
 
           // If database function doesn't exist, fall back to localStorage with validation
           if (error.message && error.message.includes('function') && error.message.includes('does not exist')) {
             Toast.error('Database not configured! Using localStorage fallback.', 'WARNING');
 
-            const currentGP = parseInt(localStorage.getItem('duelpvp_gp')) || 0;
+            const currentGP = parseInt(localStorage.getItem('duelpvp_gc')) || 0;
             const newGP = currentGP + amount;
 
             // Prevent negative balance
@@ -9159,38 +9110,38 @@
               return currentGP;
             }
 
-            localStorage.setItem('duelpvp_gp', newGP.toString());
-            gpCache.balance = newGP;
-            gpCache.lastFetch = Date.now();
-            updateGPDisplay(newGP, amount);
+            localStorage.setItem('duelpvp_gc', newGP.toString());
+            gcCache.balance = newGP;
+            gcCache.lastFetch = Date.now();
+            updateGCDisplay(newGP, amount);
             return newGP;
           }
 
           Toast.error('Failed to update balance', 'ERROR');
-          return gpCache.balance;
+          return gcCache.balance;
         }
 
         // Check if update was successful
         if (!data || data.length === 0 || !data[0].success) {
           const message = data && data[0] ? data[0].message : 'Update failed';
           Toast.error(message, 'TRANSACTION FAILED');
-          return gpCache.balance;
+          return gcCache.balance;
         }
 
         const newBalance = data[0].new_balance;
 
         // Update cache
-        gpCache.balance = newBalance;
-        gpCache.lastFetch = Date.now();
+        gcCache.balance = newBalance;
+        gcCache.lastFetch = Date.now();
 
         // Update UI
-        updateGPDisplay(newBalance, amount);
+        updateGCDisplay(newBalance, amount);
 
         return newBalance;
       } catch (e) {
-        console.error('Error updating GP:', e);
+        console.error('Error updating GC:', e);
         Toast.error('Connection error', 'ERROR');
-        return gpCache.balance;
+        return gcCache.balance;
       }
     }
 
@@ -9224,10 +9175,10 @@
       }
     }
 
-    // Helper function to update GP displays across the UI
-    function updateGPDisplay(newGP, changeAmount) {
+    // Helper function to update GC displays across the UI
+    function updateGCDisplay(newGP, changeAmount) {
       // Update dashboard display if visible with animation
-      const dashboardGPEl = document.getElementById('dashboardGPBalance');
+      const dashboardGPEl = document.getElementById('dashboardGCBalance');
       if (dashboardGPEl) {
         const displayGP = newGP;
         const formattedGP = displayGP >= 1000000 ? `${(displayGP/1000000).toFixed(1)}M` : displayGP >= 1000 ? `${(displayGP/1000).toFixed(1)}K` : displayGP;
@@ -9239,7 +9190,7 @@
 
         if (changeAmount > 0) {
           dashboardGPEl.classList.add('gp-increase');
-          // Trigger gold particles on GP gain
+          // Trigger gold particles on GC gain
           createGoldParticles(dashboardGPEl);
         } else if (changeAmount < 0) {
           dashboardGPEl.classList.add('gp-decrease');
@@ -9254,22 +9205,22 @@
       }
 
       // Update campaign progress
-      const campaignCurrentGP = document.getElementById('campaignCurrentGP');
+      const campaignCurrentGC = document.getElementById('campaignCurrentGC');
       const campaignProgressFill = document.getElementById('campaignProgressFill');
-      if (campaignCurrentGP && campaignProgressFill) {
-        campaignCurrentGP.textContent = newGP.toLocaleString();
+      if (campaignCurrentGC && campaignProgressFill) {
+        campaignCurrentGC.textContent = newGP.toLocaleString();
         const progress = Math.min((newGP / 1000000) * 100, 100);
         campaignProgressFill.style.width = progress + '%';
       }
     }
 
-    // Initialize GP cache on login/page load
-    async function initializeGPCache() {
+    // Initialize GC cache on login/page load
+    async function initializeGCCache() {
       // Get user ID from session or old localStorage format
       const session = getSession();
       const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
       if (userId && !userId.startsWith('test-')) {
-        await getUserGP(); // This will populate the cache
+        await getUserGC(); // This will populate the cache
       }
     }
 
@@ -9287,7 +9238,7 @@
 
       try {
         const { data, error } = await supabase
-          .rpc('get_my_codes', { p_user_id: userId });
+          .rpc('get_user_invite_codes', { p_user_id: userId });
 
         if (error) {
           console.error('Error loading invite code:', error);
@@ -9310,10 +9261,10 @@
 
     // Update campaign page with current stats
     async function updateCampaignPage() {
-      const currentGP = await getUserGP();
+      const currentGP = await getUserGC();
 
-      // Update current GP on page
-      const currentGPPageEl = document.getElementById('campaignCurrentGPPage');
+      // Update current GC on page
+      const currentGPPageEl = document.getElementById('campaignCurrentGCPage');
       if (currentGPPageEl) {
         currentGPPageEl.textContent = currentGP.toLocaleString();
       }
@@ -9344,17 +9295,17 @@
     async function updateOvenDisplay() {
       try {
         // Get user balance
-        const userGP = await getUserGP();
+        const userGP = await getUserGC();
         const balanceEl = document.getElementById('ovenUserBalance');
-        if (balanceEl) balanceEl.textContent = Math.floor(userGP).toLocaleString() + ' GP';
+        if (balanceEl) balanceEl.textContent = Math.floor(userGP).toLocaleString() + ' GC';
 
         // Get staking info from server
         const { data, error } = await supabase.rpc('get_stake_value');
 
         if (error) {
           console.error('Failed to get stake value:', error);
-          document.getElementById('ovenInvested').textContent = '0 GP';
-          document.getElementById('ovenCurrentValue').textContent = '0 GP';
+          document.getElementById('ovenInvested').textContent = '0 GC';
+          document.getElementById('ovenCurrentValue').textContent = '0 GC';
           document.getElementById('ovenTimer').textContent = 'No active investment';
           return;
         }
@@ -9365,13 +9316,13 @@
         const apy = data?.apy || 0;
 
         // Update display
-        document.getElementById('ovenInvested').textContent = principal.toLocaleString() + ' GP';
-        document.getElementById('ovenCurrentValue').textContent = currentValue.toLocaleString() + ' GP';
+        document.getElementById('ovenInvested').textContent = principal.toLocaleString() + ' GC';
+        document.getElementById('ovenCurrentValue').textContent = currentValue.toLocaleString() + ' GC';
 
         if (principal > 0) {
           // Show APY and profit
           document.getElementById('ovenTimer').textContent =
-            `Profit: +${profit.toLocaleString()} GP | APY: ${apy > 1000000 ? '>1,000,000' : apy.toLocaleString()}%`;
+            `Profit: +${profit.toLocaleString()} GC | APY: ${apy > 1000000 ? '>1,000,000' : apy.toLocaleString()}%`;
         } else {
           document.getElementById('ovenTimer').textContent = 'No active investment';
         }
@@ -9423,10 +9374,10 @@
 
         // Success!
         document.getElementById('ovenDepositAmount').value = '';
-        Toast.success(`Deposited ${amount.toLocaleString()} GP to staking!`, 'DEPOSIT');
+        Toast.success(`Deposited ${amount.toLocaleString()} GC to staking!`, 'DEPOSIT');
 
-        // Refresh display and GP cache
-        gpCache.lastFetch = 0;
+        // Refresh display and GC cache
+        gcCache.lastFetch = 0;
         await updateOvenDisplay();
 
       } catch (e) {
@@ -9455,7 +9406,7 @@
 
         // Confirm withdrawal
         const confirmed = await Modal.confirm(
-          `Withdraw ${currentValue.toLocaleString()} GP from staking?`,
+          `Withdraw ${currentValue.toLocaleString()} GC from staking?`,
           'Confirm Withdrawal'
         );
         if (!confirmed) return;
@@ -9479,10 +9430,10 @@
         }
 
         // Success!
-        Toast.success(`Withdrawn ${data.amount_withdrawn.toLocaleString()} GP!`, 'WITHDRAW');
+        Toast.success(`Withdrawn ${data.amount_withdrawn.toLocaleString()} GC!`, 'WITHDRAW');
 
-        // Refresh display and GP cache
-        gpCache.lastFetch = 0;
+        // Refresh display and GC cache
+        gcCache.lastFetch = 0;
         await updateOvenDisplay();
 
       } catch (e) {
@@ -9539,8 +9490,8 @@
       const todayEl = document.getElementById('farmTodayEarned');
       const clicksEl = document.getElementById('farmTotalClicks');
 
-      if (totalEl) totalEl.textContent = Math.floor(farmState.totalEarned).toLocaleString() + ' GP';
-      if (todayEl) todayEl.textContent = Math.floor(farmState.todayEarned).toLocaleString() + ' GP';
+      if (totalEl) totalEl.textContent = Math.floor(farmState.totalEarned).toLocaleString() + ' GC';
+      if (todayEl) todayEl.textContent = Math.floor(farmState.todayEarned).toLocaleString() + ' GC';
       if (clicksEl) clicksEl.textContent = farmState.totalClicks.toLocaleString();
     }
 
@@ -9560,19 +9511,19 @@
     function getRandomReward() {
       const rand = Math.random() * 100;
 
-      // 80% chance: 0 GP
+      // 80% chance: 0 GC
       if (rand < 80) {
         return { amount: 0, tier: 'miss' };
       }
-      // 15% chance: 20 GP
+      // 15% chance: 20 GC
       else if (rand < 95) {
         return { amount: 20, tier: 'common' };
       }
-      // 4% chance: 150 GP
+      // 4% chance: 150 GC
       else if (rand < 99) {
         return { amount: 150, tier: 'rare' };
       }
-      // 1% chance: 1500 GP
+      // 1% chance: 1500 GC
       else {
         return { amount: 1500, tier: 'jackpot' };
       }
@@ -9590,7 +9541,7 @@
       if (reward.amount > 0) {
         farmState.totalEarned += reward.amount;
         farmState.todayEarned += reward.amount;
-        updateUserGP(reward.amount, 'farm');
+        updateUserGC(reward.amount, 'farm');
       }
       farmState.lastClickTime = Date.now();
       saveFarmState();
@@ -9599,16 +9550,16 @@
       // Show result with animation
       resultEl.className = 'farm-result';
       if (reward.tier === 'miss') {
-        resultEl.textContent = '✕ 0 GP';
+        resultEl.textContent = '✕ 0 GC';
         resultEl.classList.add('flash-red');
       } else if (reward.tier === 'common') {
-        resultEl.textContent = '✓ +' + reward.amount + ' GP';
+        resultEl.textContent = '✓ +' + reward.amount + ' GC';
         resultEl.classList.add('flash-green');
       } else if (reward.tier === 'rare') {
-        resultEl.textContent = '✓ +' + reward.amount + ' GP';
+        resultEl.textContent = '✓ +' + reward.amount + ' GC';
         resultEl.classList.add('flash-green');
       } else {
-        resultEl.textContent = '🎉 ✓ +' + reward.amount + ' GP 🎉';
+        resultEl.textContent = '🎉 ✓ +' + reward.amount + ' GC 🎉';
         resultEl.classList.add('flash-gold');
       }
 
@@ -9695,35 +9646,35 @@
       }
     }
 
-    async function updateMinesGPDisplay() {
-      const gp = await getUserGP();
-      document.getElementById('minesGPDisplay').textContent = gp;
+    async function updateMinesGCDisplay() {
+      const gp = await getUserGC();
+      document.getElementById('minesGCDisplay').textContent = gp;
     }
 
     async function startMinesGame() {
       const betAmount = parseInt(document.getElementById('minesBetAmount').value);
       const minesCount = parseInt(document.getElementById('minesCount').value);
-      const userGP = await getUserGP();
+      const userGP = await getUserGC();
 
       // Validation
       if (isNaN(betAmount) || betAmount < 10) {
-        Toast.error('Minimum bet is 10 GP', 'INVALID BET');
+        Toast.error('Minimum bet is 10 GC', 'INVALID BET');
         return;
       }
 
       if (betAmount > 10000) {
-        Toast.error('Maximum bet is 10,000 GP', 'INVALID BET');
+        Toast.error('Maximum bet is 10,000 GC', 'INVALID BET');
         return;
       }
 
       if (betAmount > userGP) {
-        Toast.error('Insufficient GP', 'INSUFFICIENT FUNDS');
+        Toast.error('Insufficient GC', 'INSUFFICIENT FUNDS');
         return;
       }
 
       // Deduct bet
-      updateUserGP(-betAmount, 'mines');
-      updateMinesGPDisplay();
+      updateUserGC(-betAmount, 'mines');
+      updateMinesGCDisplay();
 
       // Reset grid BEFORE setting isPlaying to true
       initMinesGame();
@@ -9797,7 +9748,7 @@
 
         // Game over
         endMinesGame(false);
-        Toast.error(`Hit a mine! Lost ${minesGameState.betAmount} GP`, 'GAME OVER');
+        Toast.error(`Hit a mine! Lost ${minesGameState.betAmount} GC`, 'GAME OVER');
       } else {
         // Safe tile!
         tile.classList.add('revealed');
@@ -9815,7 +9766,7 @@
         if (minesGameState.revealedCount >= safeTiles) {
           endMinesGame(true);
           const profit = Math.floor(minesGameState.betAmount * minesGameState.multiplier);
-          Toast.success(`Perfect game! Won ${profit} GP!`, 'VICTORY');
+          Toast.success(`Perfect game! Won ${profit} GC!`, 'VICTORY');
         }
       }
     }
@@ -9833,8 +9784,8 @@
       if (!minesGameState.isPlaying) return;
 
       const profit = Math.floor(minesGameState.betAmount * minesGameState.multiplier);
-      updateUserGP(profit, 'mines');
-      updateMinesGPDisplay();
+      updateUserGC(profit, 'mines');
+      updateMinesGCDisplay();
 
       // Reveal all tiles
       for (let i = 0; i < 25; i++) {
@@ -9850,7 +9801,7 @@
       }
 
       endMinesGame(true);
-      Toast.success(`Cashed out ${profit} GP at ${minesGameState.multiplier.toFixed(2)}x!`, 'CASHOUT');
+      Toast.success(`Cashed out ${profit} GC at ${minesGameState.multiplier.toFixed(2)}x!`, 'CASHOUT');
     }
 
     function endMinesGame(won) {
@@ -9874,7 +9825,7 @@
     function updateMinesStats() {
       document.getElementById('minesMultiplier').textContent = minesGameState.multiplier.toFixed(2) + 'x';
       const profit = Math.floor(minesGameState.betAmount * minesGameState.multiplier);
-      document.getElementById('minesProfit').textContent = profit + ' GP';
+      document.getElementById('minesProfit').textContent = profit + ' GC';
       document.getElementById('minesRevealed').textContent = `${minesGameState.revealedCount} / ${25 - minesGameState.minesCount}`;
     }
 
@@ -9959,40 +9910,40 @@
     }
 
     async function updateBlackjackGPDisplay() {
-      const gp = await getUserGP();
-      document.getElementById('blackjackGPDisplay').textContent = gp;
+      const gp = await getUserGC();
+      document.getElementById('blackjackGCDisplay').textContent = gp;
       if (blackjackGameState && blackjackGameState.betAmount) {
-        document.getElementById('blackjackCurrentBet').textContent = blackjackGameState.betAmount + ' GP';
+        document.getElementById('blackjackCurrentBet').textContent = blackjackGameState.betAmount + ' GC';
       }
     }
 
     async function initBlackjack() {
-      const gp = await getUserGP();
-      document.getElementById('blackjackGPDisplay').textContent = gp;
+      const gp = await getUserGC();
+      document.getElementById('blackjackGCDisplay').textContent = gp;
     }
 
     async function dealBlackjack() {
       const betAmount = parseInt(document.getElementById('blackjackBetAmount').value);
-      const userGP = await getUserGP();
+      const userGP = await getUserGC();
 
       // Validation
       if (isNaN(betAmount) || betAmount < 10) {
-        Toast.error('Minimum bet is 10 GP', 'INVALID BET');
+        Toast.error('Minimum bet is 10 GC', 'INVALID BET');
         return;
       }
 
       if (betAmount > 10000) {
-        Toast.error('Maximum bet is 10,000 GP', 'INVALID BET');
+        Toast.error('Maximum bet is 10,000 GC', 'INVALID BET');
         return;
       }
 
       if (betAmount > userGP) {
-        Toast.error('Insufficient GP', 'INSUFFICIENT FUNDS');
+        Toast.error('Insufficient GC', 'INSUFFICIENT FUNDS');
         return;
       }
 
       // Deduct bet
-      updateUserGP(-betAmount, 'blackjack');
+      updateUserGC(-betAmount, 'blackjack');
 
       // Initialize game
       blackjackGameState = {
@@ -10113,39 +10064,39 @@
 
       switch(result) {
         case 'bust':
-          message = `Bust! Lost ${blackjackGameState.betAmount} GP`;
+          message = `Bust! Lost ${blackjackGameState.betAmount} GC`;
           Toast.error(message, 'BUST');
           break;
         case 'blackjack':
           // Natural blackjack pays 3:2 (1.5x the bet, plus original bet returned = 2.5x total)
           winAmount = Math.floor(blackjackGameState.betAmount * 2.5);
-          message = `BLACKJACK! Won ${winAmount} GP`;
-          await updateUserGP(winAmount, 'blackjack');
+          message = `BLACKJACK! Won ${winAmount} GC`;
+          await updateUserGC(winAmount, 'blackjack');
           await updateBlackjackGPDisplay();
           Toast.success(message, 'BLACKJACK');
           break;
         case 'dealerBust':
           winAmount = blackjackGameState.betAmount * 2;
-          message = `Dealer bust! Won ${winAmount} GP`;
-          await updateUserGP(winAmount, 'blackjack');
+          message = `Dealer bust! Won ${winAmount} GC`;
+          await updateUserGC(winAmount, 'blackjack');
           await updateBlackjackGPDisplay();
           Toast.success(message, 'WIN');
           break;
         case 'win':
           winAmount = blackjackGameState.betAmount * 2;
-          message = `You win! Won ${winAmount} GP`;
-          await updateUserGP(winAmount, 'blackjack');
+          message = `You win! Won ${winAmount} GC`;
+          await updateUserGC(winAmount, 'blackjack');
           await updateBlackjackGPDisplay();
           Toast.success(message, 'WIN');
           break;
         case 'lose':
-          message = `Dealer wins! Lost ${blackjackGameState.betAmount} GP`;
+          message = `Dealer wins! Lost ${blackjackGameState.betAmount} GC`;
           Toast.error(message, 'LOSE');
           break;
         case 'push':
           winAmount = blackjackGameState.betAmount;
           message = `Push! Bet returned`;
-          await updateUserGP(winAmount, 'blackjack');
+          await updateUserGC(winAmount, 'blackjack');
           await updateBlackjackGPDisplay();
           Toast.info(message, 'PUSH');
           break;
@@ -10167,7 +10118,7 @@
       document.getElementById('blackjackDealerCards').innerHTML = '';
       document.getElementById('blackjackPlayerValue').textContent = '0';
       document.getElementById('blackjackDealerValue').textContent = '0';
-      document.getElementById('blackjackCurrentBet').textContent = '0 GP';
+      document.getElementById('blackjackCurrentBet').textContent = '0 GC';
       document.getElementById('blackjackGameInfo').textContent = 'Place your bet and click DEAL to start. Get closer to 21 than the dealer without going over!';
       document.getElementById('blackjackDealBtn').disabled = false;
       document.getElementById('blackjackBetAmount').disabled = false;
@@ -10202,7 +10153,7 @@
         : calculateHandValue(blackjackGameState.dealerCards);
       document.getElementById('blackjackDealerValue').textContent = dealerValue;
 
-      document.getElementById('blackjackCurrentBet').textContent = blackjackGameState.betAmount + ' GP';
+      document.getElementById('blackjackCurrentBet').textContent = blackjackGameState.betAmount + ' GC';
     }
 
     // Initial event listeners
