@@ -7412,7 +7412,9 @@
           p_wallet_address: walletAddress
         });
 
-        if (loginError || !loginData || loginData.length === 0 || !loginData[0].success) {
+        console.log('login_with_wallet response:', { loginData, loginError });
+
+        if (loginError || !loginData || !loginData.success) {
           Loading.hide();
           Modal.alert('This wallet is not registered. Please sign up with an invite code first.', 'Wallet Not Found');
           return;
@@ -7420,10 +7422,10 @@
 
         // Extract user data from RPC response
         const userData = {
-          id: loginData[0].user_id,
-          display_name: loginData[0].display_name,
-          gc_balance: loginData[0].gc_balance,
-          auth_user_id: loginData[0].auth_user_id
+          id: loginData.user_id,
+          display_name: loginData.display_name,
+          gc_balance: loginData.gc_balance,
+          auth_user_id: loginData.auth_user_id
         };
 
         // Verify ownership with signature
