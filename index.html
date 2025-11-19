@@ -8453,9 +8453,13 @@
         return;
       }
 
+      console.log('Loading inventory for user:', userId);
+
       // Get user's invite codes using RPC function
       const { data: codesData, error: codesError } = await supabase
         .rpc('get_my_codes', { p_user_id: userId });
+
+      console.log('Codes response:', { codesData, codesError });
 
       if (codesError) {
         console.error('Failed to get codes:', codesError);
