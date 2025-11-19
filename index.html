@@ -4658,6 +4658,10 @@
         <span class="breadcrumb-item active">Leaderboard</span>
       </div>
 
+      <div style="text-align:center;padding:16px 20px;margin-bottom:16px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);border-radius:8px;">
+        <span style="color:#FFD700;font-family:'Courier New',monospace;font-size:13px;">Complete quests and climb the leaderboard for a chance to mint one of 1,500 Founder's Swords</span>
+      </div>
+
       <div class="your-best" id="yourBestSection" style="display:none;">
         <div class="your-best-label">YOUR RANK</div>
         <div class="your-best-time" id="yourBestTime">#-- | -- GC</div>
@@ -4695,6 +4699,10 @@
         <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
         <span class="breadcrumb-separator">›</span>
         <span class="breadcrumb-item active">Quests</span>
+      </div>
+
+      <div style="text-align:center;padding:16px 20px;margin-bottom:16px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);border-radius:8px;">
+        <span style="color:#FFD700;font-family:'Courier New',monospace;font-size:13px;">Complete quests and climb the leaderboard for a chance to mint one of 1,500 Founder's Swords</span>
       </div>
 
       <div class="quest-tabs">
@@ -7363,16 +7371,9 @@
         return; // Show home screen
       }
 
-      // Check if wallet is still connected (Blur-style verification)
-      const walletConnected = await checkWalletConnection(session.walletAddress);
-
-      if (!walletConnected) {
-        console.log('Wallet no longer connected, session invalid');
-        clearSession();
-        await supabase.auth.signOut();
-        Toast.info('Please reconnect your wallet', 'SESSION EXPIRED');
-        return;
-      }
+      // Blur-style: Trust valid session without requiring wallet reconnection
+      // Wallet will be reconnected when needed for transactions
+      console.log('Valid session found, skipping wallet check for auto-login');
 
       // Verify user still exists in database and get auth_user_id
       const { data: userData, error } = await supabase
@@ -7592,22 +7593,28 @@
           console.error('Failed to load user data:', userError);
         }
 
-        // Calculate rank by counting users with higher GC balance
+        // Calculate rank using RPC function (bypasses RLS)
         let userRank = 0;
         const userGC = userData?.gc_balance ?? 0;
 
-        // Always calculate rank (even if GC is 0)
-        const { count, error: rankError } = await supabase
-          .from('users')
-          .select('*', { count: 'exact', head: true })
-          .gt('gc_balance', userGC);
+        // Use get_user_rank RPC if available, otherwise try direct count
+        const { data: rankData, error: rankError } = await supabase
+          .rpc('get_user_rank', { p_user_id: userId });
 
-        console.log('Rank calculation:', { userGC, count, rankError });
+        console.log('Rank calculation:', { userGC, rankData, rankError });
 
-        if (!rankError && count !== null) {
-          userRank = count + 1; // Add 1 because rank starts at 1
-        } else if (rankError) {
-          console.error('Failed to get user rank:', rankError);
+        if (!rankError && rankData?.rank) {
+          userRank = rankData.rank;
+        } else {
+          // Fallback: try direct count (may fail with RLS)
+          const { count } = await supabase
+            .from('users')
+            .select('*', { count: 'exact', head: true })
+            .gt('gc_balance', userGC);
+
+          if (count !== null) {
+            userRank = count + 1;
+          }
         }
 
         // Calculate stats
