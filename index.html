@@ -6729,11 +6729,21 @@
 
         // Connect wallet using Web3Modal
         const walletAddress = await getWalletAddress();
+        console.log('Wallet connected:', walletAddress);
 
         // Check if wallet already registered using RPC function (bypasses RLS)
-        const { data: checkData } = await supabase.rpc('login_with_wallet', {
+        console.log('Checking if wallet registered...');
+        const { data: checkData, error: checkError } = await supabase.rpc('login_with_wallet', {
           p_wallet_address: walletAddress.toLowerCase()
         });
+        console.log('login_with_wallet check:', { checkData, checkError });
+
+        if (checkError) {
+          Loading.hide();
+          console.error('login_with_wallet error:', checkError);
+          Modal.alert('Failed to check wallet: ' + checkError.message, 'Error');
+          return;
+        }
 
         if (checkData && checkData.success) {
           Loading.hide();
@@ -6742,15 +6752,25 @@
         }
 
         // Reserve the invite code for 5 minutes
+        console.log('Reserving invite code:', tempRegistrationData.inviteCode);
         const { data: reserveResult, error: reserveError } = await supabase
           .rpc('reserve_invite_code', {
             p_code: tempRegistrationData.inviteCode,
             p_wallet_address: walletAddress.toLowerCase()
           });
+        console.log('reserve_invite_code result:', { reserveResult, reserveError });
 
-        if (reserveError || !reserveResult?.success) {
+        if (reserveError) {
+          Loading.hide();
+          console.error('reserve_invite_code error:', reserveError);
+          Modal.alert('Failed to reserve code: ' + reserveError.message, 'Code Error');
+          return;
+        }
+
+        if (!reserveResult?.success) {
           Loading.hide();
           const errorMsg = reserveResult?.error || 'Failed to reserve code';
+          console.error('Code reservation failed:', errorMsg);
           Modal.alert(errorMsg, 'Code Error');
           return;
         }
@@ -6758,7 +6778,9 @@
         // Request signature to verify ownership
         const message = `Sign to register on Duel PVP\nWallet: ${walletAddress}\nCode: ${tempRegistrationData.inviteCode}\nTimestamp: ${Date.now()}`;
 
+        console.log('Requesting signature...');
         const signature = await signMessage(message);
+        console.log('Signature received');
 
         // Store wallet and signature
         tempRegistrationData.walletAddress = walletAddress;
