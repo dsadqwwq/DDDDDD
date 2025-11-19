@@ -8055,6 +8055,13 @@
       fluffle: '0x4e502ab1bb313b3c1311eb0d11b31a6b62988b86' // FLUFFLE
     };
 
+    // Quest tab switching function (must be global for onclick)
+    function switchQuestTab(tab, questType) {
+      document.querySelectorAll('.quest-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      loadQuests(questType);
+    }
+
     const QUESTS = {
       daily: [
         {id: 'first_login', name: 'First Steps', desc: 'Log in for the first time', target: 1, reward: 500, icon: '🗡️'},
@@ -9972,12 +9979,6 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       });
     });
 
-    // Quest tab switching function (called by onclick)
-    window.switchQuestTab = function(tab, questType) {
-      document.querySelectorAll('.quest-tab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      loadQuests(questType);
-    };
 
     // Add keyboard navigation support
     document.addEventListener('keydown', (e) => {
