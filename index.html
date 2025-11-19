@@ -8945,8 +8945,25 @@
         const session = getSession();
         const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
 
-        // Update quest progress
-        await updateQuestProgress('like_retweet', 1);
+        // Insert/update quest progress directly in user_quests table
+        const { error: upsertError } = await supabase
+          .from('user_quests')
+          .upsert({
+            user_id: userId,
+            quest_id: 'like_retweet',
+            progress: 1,
+            is_completed: true,
+            completed_at: new Date().toISOString()
+          }, {
+            onConflict: 'user_id,quest_id'
+          });
+
+        if (upsertError) {
+          console.error('Quest upsert error:', upsertError);
+          Loading.hide();
+          Toast.error('Failed to complete quest', 'ERROR');
+          return;
+        }
 
         // Immediately claim the reward
         const { data, error } = await supabase.rpc('claim_quest_reward', {
