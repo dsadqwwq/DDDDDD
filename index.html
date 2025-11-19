@@ -7557,13 +7557,9 @@
           return;
         }
 
-        // Get user's rank
+        // Get user's rank using GC-based ranking
         const { data: rankData, error: rankError } = await supabase
-          .rpc('get_user_best_time', {
-            p_user_id: userId,
-            time_filter: 'all'
-          })
-          .single();
+          .rpc('get_user_rank', { p_user_id: userId });
 
         if (rankError) {
           console.error('Failed to get user rank:', rankError);
@@ -7572,7 +7568,7 @@
         // Get user's GC from users table
         const { data: userData, error: userError } = await supabase
           .from('users')
-          .select('points, win_streak, total_wins')
+          .select('gc_balance, win_streak, total_wins')
           .eq('id', userId)
           .single();
 
@@ -7584,7 +7580,7 @@
         const totalWins = userData?.total_wins || userScores?.length || 0;
         const streak = userData?.win_streak || 0;
         const userRank = rankData?.rank || 0;
-        const totalGP = userData?.points || 0;
+        const totalGP = userData?.gc_balance || 0;
 
         // Update UI
         document.getElementById('dashboardRank').textContent = userRank > 0 ? `#${userRank}` : '--';
