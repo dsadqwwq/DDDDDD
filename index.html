@@ -7017,6 +7017,9 @@
 
         document.getElementById('userName').textContent = userData.display_name.toUpperCase();
 
+        // Check NFT holder status and auto-complete quests
+        await checkNFTHolderQuests(userData.id, walletAddress);
+
         // Initialize GP cache
         await initializeGPCache();
         const gp = await getUserGP();
@@ -8265,14 +8268,14 @@
             </div>
           `;
         } else if (isNFTQuest) {
-          // NFT holder quest with verify button
+          // NFT holder quest (auto-verified on login)
           card.innerHTML = `
             <div class="quest-name"><span class="quest-icon">${quest.icon}</span> ${quest.name}</div>
             <div class="quest-desc">${quest.desc}</div>
             <div class="quest-progress">
-              <button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="verifyNFTQuest('${quest.id}', '${quest.contract}')" ${completed ? 'disabled' : ''}>
-                ${completed ? '✓ VERIFIED' : 'VERIFY OWNERSHIP'}
-              </button>
+              <div style="text-align:center;padding:8px;color:${completed ? '#4CAF50' : '#888'};">
+                ${completed ? '✓ HOLDER VERIFIED' : 'Not a holder'}
+              </div>
             </div>
             <div class="quest-reward">
               ${quest.reward} GP ${completed && !claimed ? '• <span style="color:var(--gold)">CLAIM!</span>' : completed ? '✓ CLAIMED' : ''}
@@ -8408,61 +8411,21 @@ We'll verify manually and you can claim your reward!`, 'Start Quest Timer?');
       }
     }
 
-    // Check NFT ownership using Alchemy API
-    async function checkNFTOwnership(walletAddress, contractAddress) {
+    // Check NFT holder quests on login (auto-verify from database)
+    async function checkNFTHolderQuests(userId, walletAddress) {
       try {
-        // Use Alchemy to check NFT balance
-        const response = await fetch(`https://eth-mainnet.g.alchemy.com/nft/v3/demo/isHolderOfContract?wallet=${walletAddress}&contractAddress=${contractAddress}`);
-        const data = await response.json();
-        return data.isHolderOfContract || false;
-      } catch (error) {
-        console.error('NFT verification error:', error);
-        return false;
-      }
-    }
-
-    // Verify NFT quest
-    async function verifyNFTQuest(questId, contractKey) {
-      const session = getSession();
-      if (!session?.walletAddress) {
-        Toast.error('Please connect your wallet first', 'ERROR');
-        return;
-      }
-
-      const contractAddress = NFT_CONTRACTS[contractKey];
-      if (!contractAddress) {
-        Toast.error('Invalid contract', 'ERROR');
-        return;
-      }
-
-      Loading.show('Verifying NFT ownership...');
-
-      const isHolder = await checkNFTOwnership(session.walletAddress, contractAddress);
-
-      if (isHolder) {
-        // Update quest progress in database
+        // Check database for holder status and auto-complete quests
         const { error } = await supabase
-          .rpc('update_quest_progress', {
-            p_user_id: session.userId,
-            p_quest_id: questId,
-            p_progress: 1
+          .rpc('check_nft_holder_quests', {
+            p_user_id: userId,
+            p_wallet_address: walletAddress.toLowerCase()
           });
 
-        Loading.hide();
-
         if (error) {
-          console.error('Failed to update quest progress:', error);
-          Toast.error('Failed to verify', 'ERROR');
-          return;
+          console.error('NFT holder check error:', error);
         }
-
-        Toast.success('NFT ownership verified!', 'VERIFIED');
-        // Reload quests to show claimable state
-        const activeTab = document.querySelector('.quest-tab.active')?.getAttribute('data-quest-tab') || 'daily';
-        loadQuests(activeTab);
-      } else {
-        Loading.hide();
-        Toast.error('No NFT found in your wallet', 'NOT A HOLDER');
+      } catch (error) {
+        console.error('NFT holder check failed:', error);
       }
     }
 
