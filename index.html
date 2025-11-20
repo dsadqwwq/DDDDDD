@@ -9068,15 +9068,15 @@
       const tweetUrl = 'https://x.com/Duelpvp/status/1991529218593943677?s=20';
       window.open(tweetUrl, '_blank');
 
-      // Show modal to submit wallet address
+      // Show modal to submit tweet reply link
       const modalHtml = `
         <div style="text-align:center;">
           <p style="margin-bottom:16px;color:#e6ecf1;font-size:12px;">
             1. Post your EVM wallet address as a reply to our tweet<br>
-            2. Copy your wallet address<br>
+            2. Copy the link to your reply<br>
             3. Paste it below to complete the quest
           </p>
-          <input type="text" id="walletAddressInput" placeholder="Paste your EVM wallet address (0x...)..."
+          <input type="text" id="walletReplyLinkInput" placeholder="Paste your tweet reply link here..."
             style="width:100%;padding:12px;background:rgba(0,0,0,.4);border:2px solid rgba(255,214,77,.3);border-radius:8px;color:#e6ecf1;font-family:monospace;font-size:12px;margin-bottom:16px;">
           <div style="background:rgba(255,193,7,.1);border:1px solid rgba(255,193,7,.3);border-radius:8px;padding:12px;margin-bottom:16px;">
             <p style="color:#ffc107;font-size:10px;margin:0;">
@@ -9089,15 +9089,15 @@
       const confirmed = await Modal.show({ html: modalHtml, title: 'Post Wallet Quest', type: 'confirm' });
       if (!confirmed) return;
 
-      const walletAddress = document.getElementById('walletAddressInput')?.value?.trim();
-      if (!walletAddress) {
-        Toast.error('Please paste your wallet address', 'ERROR');
+      const walletReplyLink = document.getElementById('walletReplyLinkInput')?.value?.trim();
+      if (!walletReplyLink) {
+        Toast.error('Please paste your tweet reply link', 'ERROR');
         return;
       }
 
-      // Validate it looks like an EVM wallet address (0x followed by 40 hex characters)
-      if (!/^0x[a-fA-F0-9]{40}$/.test(walletAddress)) {
-        Toast.error('Please enter a valid EVM wallet address (0x...)', 'ERROR');
+      // Validate it looks like an X/Twitter link
+      if (!walletReplyLink.includes('x.com/') && !walletReplyLink.includes('twitter.com/')) {
+        Toast.error('Please paste a valid X/Twitter link', 'ERROR');
         return;
       }
 
