@@ -127,13 +127,16 @@ INSERT INTO quest_templates (id, name, description, gc_reward, target_count, que
 VALUES
   ('first_steps', 'First Steps', 'Welcome to the arena! Claim your signup bonus.', 500, 1, 'one_time', TRUE, 1),
   ('invite_3_friends', 'Recruit Warriors', 'Invite 3 friends to join the battle.', 500, 3, 'one_time', FALSE, 2),
-  ('fluffle_holder', 'FLUFFLE Holder', 'Hold a FLUFFLE NFT in your wallet.', 5000, 1, 'one_time', FALSE, 3),
-  ('bunnz_holder', 'BAD BUNNZ Holder', 'Hold a BAD BUNNZ NFT in your wallet.', 1500, 1, 'one_time', FALSE, 4)
+  ('like_retweet', 'Like & Retweet', 'Like and retweet our post on X.', 500, 1, 'one_time', FALSE, 3),
+  ('twitter_follow', 'Follow Us', 'Follow @Duelpvp on X.', 500, 1, 'one_time', FALSE, 4),
+  ('fluffle_holder', 'FLUFFLE Holder', 'Hold a FLUFFLE NFT in your wallet.', 5000, 1, 'one_time', FALSE, 5),
+  ('bunnz_holder', 'BAD BUNNZ Holder', 'Hold a BAD BUNNZ NFT in your wallet.', 1500, 1, 'one_time', FALSE, 6)
 ON CONFLICT (id) DO UPDATE SET
   name = EXCLUDED.name,
   description = EXCLUDED.description,
   gc_reward = EXCLUDED.gc_reward,
-  target_count = EXCLUDED.target_count;
+  target_count = EXCLUDED.target_count,
+  sort_order = EXCLUDED.sort_order;
 
 -- ============================================
 -- STEP 7: GENERATE INVITE CODE FUNCTION
@@ -483,6 +486,73 @@ BEGIN
       claimed_at = NOW(),
       updated_at = NOW()
   WHERE user_id = p_user_id AND quest_id = p_quest_id;
+
+  -- Log transaction
+  INSERT INTO gc_transactions (user_id, amount, balance_after, transaction_type, reference_id, description)
+  VALUES (p_user_id, v_quest.gc_reward, v_new_balance, 'quest_reward', p_quest_id, 'Quest reward: ' || v_quest.name);
+
+  RETURN json_build_object(
+    'success', TRUE,
+    'reward', v_quest.gc_reward,
+    'new_balance', v_new_balance
+  );
+END;
+$$;
+
+-- ============================================
+-- STEP 13B: COMPLETE MANUAL QUEST FUNCTION
+-- ============================================
+
+CREATE OR REPLACE FUNCTION complete_manual_quest(p_user_id UUID, p_quest_id VARCHAR)
+RETURNS JSON
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+  v_quest RECORD;
+  v_user_quest RECORD;
+  v_new_balance BIGINT;
+BEGIN
+  -- Get quest template
+  SELECT * INTO v_quest
+  FROM quest_templates
+  WHERE id = p_quest_id;
+
+  IF NOT FOUND THEN
+    RETURN json_build_object('success', FALSE, 'error', 'Quest not found');
+  END IF;
+
+  -- Get or create user's quest progress
+  INSERT INTO user_quests (user_id, quest_id, progress, is_completed, is_claimed)
+  VALUES (p_user_id, p_quest_id, 0, FALSE, FALSE)
+  ON CONFLICT (user_id, quest_id) DO NOTHING;
+
+  SELECT * INTO v_user_quest
+  FROM user_quests
+  WHERE user_id = p_user_id AND quest_id = p_quest_id
+  FOR UPDATE;
+
+  -- Check if already claimed
+  IF v_user_quest.is_claimed THEN
+    RETURN json_build_object('success', FALSE, 'error', 'Quest already completed');
+  END IF;
+
+  -- Mark quest as completed and claimed
+  UPDATE user_quests
+  SET progress = v_quest.target_count,
+      is_completed = TRUE,
+      is_claimed = TRUE,
+      completed_at = NOW(),
+      claimed_at = NOW(),
+      updated_at = NOW()
+  WHERE user_id = p_user_id AND quest_id = p_quest_id;
+
+  -- Update user's GC balance
+  UPDATE users
+  SET gc_balance = gc_balance + v_quest.gc_reward,
+      updated_at = NOW()
+  WHERE id = p_user_id
+  RETURNING gc_balance INTO v_new_balance;
 
   -- Log transaction
   INSERT INTO gc_transactions (user_id, amount, balance_after, transaction_type, reference_id, description)
