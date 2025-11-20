@@ -8609,6 +8609,7 @@
         {id: 'first_login', name: 'First Steps', desc: 'Log in for the first time', target: 1, reward: 500, icon: '🗡️', type: 'regular'},
         {id: 'invite_used', name: 'Recruit Warriors', desc: 'Have 3 friends use your invite codes', target: 3, reward: 1500, icon: '👥', type: 'regular', action: 'openInventory'},
         {id: 'like_retweet', name: 'Like & Retweet', desc: 'Like and retweet our post on X', target: 1, reward: 500, icon: '❤️', type: 'manual'},
+        {id: 'twitter_follow', name: 'Follow Us', desc: 'Follow @Duelpvp on X', target: 1, reward: 500, icon: '➕', type: 'manual'},
         {id: 'bunnz_holder', name: 'BAD BUNNZ Holder', desc: 'Own a BAD BUNNZ NFT', target: 1, reward: 500, icon: '🐰', type: 'nft'},
         {id: 'fluffle_holder', name: 'FLUFFLE Holder', desc: 'Own a FLUFFLE NFT', target: 1, reward: 2500, icon: '🐇', type: 'nft'}
       ],
@@ -8692,7 +8693,9 @@
           'first_steps': '🎯',
           'invite_3_friends': '<img src="duelpvp-logo.svg" alt="Invite" style="width:20px;height:20px;vertical-align:middle;">',
           'fluffle_holder': '🐰',
-          'bunnz_holder': '🔥'
+          'bunnz_holder': '🔥',
+          'like_retweet': '❤️',
+          'twitter_follow': '➕'
         };
 
         // Render each quest
@@ -8739,6 +8742,8 @@
               html += `<button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="showInventory()">VIEW INVITE CODES</button>`;
             } else if (quest.id === 'like_retweet') {
               html += `<button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="openLikeRetweetQuest()">START QUEST</button>`;
+            } else if (quest.id === 'twitter_follow') {
+              html += `<button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="openTwitterFollowQuest()">START QUEST</button>`;
             }
 
             html += `</div>`;
@@ -8950,6 +8955,82 @@
         // Complete and claim the quest in one call
         const { data, error } = await supabase.rpc('complete_manual_quest', {
           p_quest_id: 'like_retweet',
+          p_user_id: userId
+        });
+
+        Loading.hide();
+
+        if (error || !data?.success) {
+          console.error('Quest error:', error || data?.error);
+          Toast.error(data?.error || 'Failed to complete quest', 'ERROR');
+        } else {
+          // Clear GC cache and update display
+          gcCache.lastFetch = 0;
+          const newGC = await getUserGC();
+          updateGCDisplay(newGC, data.reward);
+          Toast.success(`+${data.reward} GC earned!`, 'QUEST COMPLETED');
+        }
+
+        // Reload quests
+        const activeTab = document.querySelector('.quest-tab.active');
+        const tabType = activeTab ? activeTab.getAttribute('data-quest-tab') : 'daily';
+        loadQuests(tabType);
+
+      } catch (err) {
+        Loading.hide();
+        console.error('Quest submission error:', err);
+        Toast.error('Failed to submit', 'ERROR');
+      }
+    }
+
+    // Twitter Follow quest
+    async function openTwitterFollowQuest() {
+      // Open the Duelpvp X profile to follow
+      const profileUrl = 'https://x.com/Duelpvp';
+      window.open(profileUrl, '_blank');
+
+      // Show modal to submit X account link
+      const modalHtml = `
+        <div style="text-align:center;">
+          <p style="margin-bottom:16px;color:#e6ecf1;font-size:12px;">
+            1. Follow @Duelpvp on X<br>
+            2. Copy the link to your X profile<br>
+            3. Paste it below to verify you're following
+          </p>
+          <input type="text" id="twitterFollowLinkInput" placeholder="Paste your X profile link here..."
+            style="width:100%;padding:12px;background:rgba(0,0,0,.4);border:2px solid rgba(255,214,77,.3);border-radius:8px;color:#e6ecf1;font-family:monospace;font-size:12px;margin-bottom:16px;">
+          <div style="background:rgba(255,193,7,.1);border:1px solid rgba(255,193,7,.3);border-radius:8px;padding:12px;margin-bottom:16px;">
+            <p style="color:#ffc107;font-size:10px;margin:0;">
+              Note: Your submission will be manually verified. GC will be granted immediately but may be revoked if you are not following.
+            </p>
+          </div>
+        </div>
+      `;
+
+      const confirmed = await Modal.show({ html: modalHtml, title: 'Follow Quest', type: 'confirm' });
+      if (!confirmed) return;
+
+      const twitterFollowLink = document.getElementById('twitterFollowLinkInput')?.value?.trim();
+      if (!twitterFollowLink) {
+        Toast.error('Please paste your X profile link', 'ERROR');
+        return;
+      }
+
+      // Validate it looks like an X/Twitter link
+      if (!twitterFollowLink.includes('x.com/') && !twitterFollowLink.includes('twitter.com/')) {
+        Toast.error('Please paste a valid X/Twitter profile link', 'ERROR');
+        return;
+      }
+
+      Loading.show('Submitting...');
+
+      try {
+        const session = getSession();
+        const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
+
+        // Complete and claim the quest in one call
+        const { data, error } = await supabase.rpc('complete_manual_quest', {
+          p_quest_id: 'twitter_follow',
           p_user_id: userId
         });
 
