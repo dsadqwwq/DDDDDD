@@ -8695,7 +8695,8 @@
           'fluffle_holder': '🐰',
           'bunnz_holder': '🔥',
           'like_retweet': '❤️',
-          'twitter_follow': '➕'
+          'twitter_follow': '➕',
+          'post_wallet': '💳'
         };
 
         // Render each quest
@@ -8744,6 +8745,8 @@
               html += `<button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="openLikeRetweetQuest()">START QUEST</button>`;
             } else if (quest.id === 'twitter_follow') {
               html += `<button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="openTwitterFollowQuest()">START QUEST</button>`;
+            } else if (quest.id === 'post_wallet') {
+              html += `<button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="openPostWalletQuest()">START QUEST</button>`;
             }
 
             html += `</div>`;
@@ -9031,6 +9034,82 @@
         // Complete and claim the quest in one call
         const { data, error } = await supabase.rpc('complete_manual_quest', {
           p_quest_id: 'twitter_follow',
+          p_user_id: userId
+        });
+
+        Loading.hide();
+
+        if (error || !data?.success) {
+          console.error('Quest error:', error || data?.error);
+          Toast.error(data?.error || 'Failed to complete quest', 'ERROR');
+        } else {
+          // Clear GC cache and update display
+          gcCache.lastFetch = 0;
+          const newGC = await getUserGC();
+          updateGCDisplay(newGC, data.reward);
+          Toast.success(`+${data.reward} GC earned!`, 'QUEST COMPLETED');
+        }
+
+        // Reload quests
+        const activeTab = document.querySelector('.quest-tab.active');
+        const tabType = activeTab ? activeTab.getAttribute('data-quest-tab') : 'daily';
+        loadQuests(tabType);
+
+      } catch (err) {
+        Loading.hide();
+        console.error('Quest submission error:', err);
+        Toast.error('Failed to submit', 'ERROR');
+      }
+    }
+
+    // Post Wallet quest
+    async function openPostWalletQuest() {
+      // Open the specific tweet to post wallet under
+      const tweetUrl = 'https://x.com/Duelpvp/status/1991525696443965681?s=20';
+      window.open(tweetUrl, '_blank');
+
+      // Show modal to submit wallet address
+      const modalHtml = `
+        <div style="text-align:center;">
+          <p style="margin-bottom:16px;color:#e6ecf1;font-size:12px;">
+            1. Post your EVM wallet address as a reply to our tweet<br>
+            2. Copy your wallet address<br>
+            3. Paste it below to complete the quest
+          </p>
+          <input type="text" id="walletAddressInput" placeholder="Paste your EVM wallet address (0x...)..."
+            style="width:100%;padding:12px;background:rgba(0,0,0,.4);border:2px solid rgba(255,214,77,.3);border-radius:8px;color:#e6ecf1;font-family:monospace;font-size:12px;margin-bottom:16px;">
+          <div style="background:rgba(255,193,7,.1);border:1px solid rgba(255,193,7,.3);border-radius:8px;padding:12px;margin-bottom:16px;">
+            <p style="color:#ffc107;font-size:10px;margin:0;">
+              Note: Your submission will be manually verified. GC will be granted immediately but may be revoked if the wallet address is not posted under the tweet.
+            </p>
+          </div>
+        </div>
+      `;
+
+      const confirmed = await Modal.show({ html: modalHtml, title: 'Post Wallet Quest', type: 'confirm' });
+      if (!confirmed) return;
+
+      const walletAddress = document.getElementById('walletAddressInput')?.value?.trim();
+      if (!walletAddress) {
+        Toast.error('Please paste your wallet address', 'ERROR');
+        return;
+      }
+
+      // Validate it looks like an EVM wallet address (0x followed by 40 hex characters)
+      if (!/^0x[a-fA-F0-9]{40}$/.test(walletAddress)) {
+        Toast.error('Please enter a valid EVM wallet address (0x...)', 'ERROR');
+        return;
+      }
+
+      Loading.show('Submitting...');
+
+      try {
+        const session = getSession();
+        const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
+
+        // Complete and claim the quest in one call
+        const { data, error } = await supabase.rpc('complete_manual_quest', {
+          p_quest_id: 'post_wallet',
           p_user_id: userId
         });
 

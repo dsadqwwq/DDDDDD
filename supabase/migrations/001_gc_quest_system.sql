@@ -129,8 +129,9 @@ VALUES
   ('invite_3_friends', 'Recruit Warriors', 'Invite 3 friends to join the battle.', 500, 3, 'one_time', FALSE, 2),
   ('like_retweet', 'Like & Retweet', 'Like and retweet our post on X.', 500, 1, 'one_time', FALSE, 3),
   ('twitter_follow', 'Follow Us', 'Follow @Duelpvp on X.', 500, 1, 'one_time', FALSE, 4),
-  ('fluffle_holder', 'FLUFFLE Holder', 'Hold a FLUFFLE NFT in your wallet.', 5000, 1, 'one_time', FALSE, 5),
-  ('bunnz_holder', 'BAD BUNNZ Holder', 'Hold a BAD BUNNZ NFT in your wallet.', 1500, 1, 'one_time', FALSE, 6)
+  ('post_wallet', 'Post Your EVM Wallet', 'Post your EVM wallet address under our tweet.', 500, 1, 'one_time', FALSE, 5),
+  ('fluffle_holder', 'FLUFFLE Holder', 'Hold a FLUFFLE NFT in your wallet.', 5000, 1, 'one_time', FALSE, 6),
+  ('bunnz_holder', 'BAD BUNNZ Holder', 'Hold a BAD BUNNZ NFT in your wallet.', 1500, 1, 'one_time', FALSE, 7)
 ON CONFLICT (id) DO UPDATE SET
   name = EXCLUDED.name,
   description = EXCLUDED.description,
