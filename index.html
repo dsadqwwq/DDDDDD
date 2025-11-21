@@ -7636,8 +7636,8 @@
 
         console.log('Rank calculation:', { userGC, rankData, rankError });
 
-        if (!rankError && rankData?.rank) {
-          userRank = rankData.rank;
+        if (!rankError && rankData && rankData[0]?.rank) {
+          userRank = rankData[0].rank;
         } else {
           // Fallback: try direct count (may fail with RLS)
           const { count } = await supabase
