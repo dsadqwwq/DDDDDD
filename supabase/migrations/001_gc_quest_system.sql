@@ -401,18 +401,21 @@ BEGIN
            WHEN qt.id = 'first_steps' THEN 1
            WHEN qt.id = 'fluffle_holder' AND (v_nft_holdings->>'has_fluffle')::boolean THEN 1
            WHEN qt.id = 'bunnz_holder' AND (v_nft_holdings->>'has_bunnz')::boolean THEN 1
+           WHEN qt.id = 'megalio_holder' AND (v_nft_holdings->>'has_megalio')::boolean THEN 1
            ELSE 0
          END,
          CASE
            WHEN qt.id = 'first_steps' THEN TRUE
            WHEN qt.id = 'fluffle_holder' AND (v_nft_holdings->>'has_fluffle')::boolean THEN TRUE
            WHEN qt.id = 'bunnz_holder' AND (v_nft_holdings->>'has_bunnz')::boolean THEN TRUE
+           WHEN qt.id = 'megalio_holder' AND (v_nft_holdings->>'has_megalio')::boolean THEN TRUE
            ELSE FALSE
          END,
          CASE
            WHEN qt.id = 'first_steps' THEN NOW()
            WHEN qt.id = 'fluffle_holder' AND (v_nft_holdings->>'has_fluffle')::boolean THEN NOW()
            WHEN qt.id = 'bunnz_holder' AND (v_nft_holdings->>'has_bunnz')::boolean THEN NOW()
+           WHEN qt.id = 'megalio_holder' AND (v_nft_holdings->>'has_megalio')::boolean THEN NOW()
            ELSE NULL
          END
   FROM quest_templates qt
@@ -426,7 +429,8 @@ BEGIN
     'success', TRUE,
     'user_id', v_user_id,
     'has_fluffle', (v_nft_holdings->>'has_fluffle')::boolean,
-    'has_bunnz', (v_nft_holdings->>'has_bunnz')::boolean
+    'has_bunnz', (v_nft_holdings->>'has_bunnz')::boolean,
+    'has_megalio', (v_nft_holdings->>'has_megalio')::boolean
   );
 END;
 $$;
