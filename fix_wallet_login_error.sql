@@ -21,7 +21,12 @@ BEGIN
   END IF;
 END $$;
 
--- STEP 2: Recreate the correct login_with_wallet function
+-- STEP 2: Drop old functions first (needed to change return types)
+DROP FUNCTION IF EXISTS login_with_wallet(text);
+DROP FUNCTION IF EXISTS login_with_wallet(varchar);
+DROP FUNCTION IF EXISTS get_user_rank(uuid);
+
+-- STEP 3: Recreate the correct login_with_wallet function
 CREATE OR REPLACE FUNCTION login_with_wallet(p_wallet_address VARCHAR)
 RETURNS JSON
 LANGUAGE plpgsql
@@ -80,7 +85,7 @@ BEGIN
 END;
 $$;
 
--- STEP 3: Fix get_user_rank function
+-- STEP 4: Fix get_user_rank function
 CREATE OR REPLACE FUNCTION get_user_rank(p_user_id uuid)
 RETURNS TABLE(rank bigint, gc_balance bigint)
 LANGUAGE plpgsql
@@ -103,7 +108,7 @@ BEGIN
 END;
 $$;
 
--- STEP 4: Grant permissions
+-- STEP 5: Grant permissions
 GRANT EXECUTE ON FUNCTION login_with_wallet TO authenticated, anon;
 GRANT EXECUTE ON FUNCTION get_user_rank(uuid) TO authenticated, anon;
 
