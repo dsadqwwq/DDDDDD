@@ -5,7 +5,7 @@
 -- Add megalio quest to quest_templates
 INSERT INTO quest_templates (id, name, description, gc_reward, target_count, quest_type, auto_claim, sort_order, is_active)
 VALUES
-  ('megalio_holder', 'MEGALIO Holder', 'Hold a MEGALIO NFT in your wallet.', 3000, 1, 'one_time', FALSE, 8, TRUE)
+  ('megalio_holder', 'MEGALIO Holder', 'Hold a MEGALIO NFT in your wallet.', 2000, 1, 'one_time', FALSE, 8, TRUE)
 ON CONFLICT (id) DO UPDATE SET
   name = EXCLUDED.name,
   description = EXCLUDED.description,
