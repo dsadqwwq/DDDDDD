@@ -296,10 +296,10 @@ BEGIN
     WHERE LOWER(wallet_address) = LOWER(p_wallet_address)
   ) INTO v_has_bunnz;
 
-  -- Check megalio_holders table
+  -- Check megalio_holders table (uses 'address' column)
   SELECT EXISTS(
     SELECT 1 FROM megalio_holders
-    WHERE LOWER(wallet_address) = LOWER(p_wallet_address)
+    WHERE LOWER(address) = LOWER(p_wallet_address)
   ) INTO v_has_megalio;
 
   RETURN json_build_object(
