@@ -7808,7 +7808,7 @@
 
             if (userRankData && userRankData.rank) {
               document.getElementById('yourBestSection').style.display = 'block';
-              document.getElementById('yourBestTime').textContent = `#${userRankData.rank} | ${userRankData.gc_balance?.toLocaleString() || 0} GC`;
+              document.getElementById('yourBestTime').textContent = `#${userRankData.rank} | ${userRankData.user_gc_balance?.toLocaleString() || 0} GC`;
             } else {
               document.getElementById('yourBestSection').style.display = 'none';
             }
@@ -8611,7 +8611,8 @@
         {id: 'like_retweet', name: 'Like & Retweet', desc: 'Like and retweet our post on X', target: 1, reward: 500, icon: '❤️', type: 'manual'},
         {id: 'twitter_follow', name: 'Follow Us', desc: 'Follow @Duelpvp on X', target: 1, reward: 500, icon: '➕', type: 'manual'},
         {id: 'bunnz_holder', name: 'BAD BUNNZ Holder', desc: 'Own a BAD BUNNZ NFT', target: 1, reward: 500, icon: '🐰', type: 'nft'},
-        {id: 'fluffle_holder', name: 'FLUFFLE Holder', desc: 'Own a FLUFFLE NFT', target: 1, reward: 2500, icon: '🐇', type: 'nft'}
+        {id: 'fluffle_holder', name: 'FLUFFLE Holder', desc: 'Own a FLUFFLE NFT', target: 1, reward: 2500, icon: '🐇', type: 'nft'},
+        {id: 'megalio_holder', name: 'MEGALIO Holder', desc: 'Own a MEGALIO NFT', target: 1, reward: 3000, icon: '🦁', type: 'nft'}
       ],
       weekly: [],
       special: []
@@ -8694,6 +8695,7 @@
           'invite_3_friends': '<img src="duelpvp-logo.svg" alt="Invite" style="width:20px;height:20px;vertical-align:middle;">',
           'fluffle_holder': '🐰',
           'bunnz_holder': '🔥',
+          'megalio_holder': '🦁',
           'like_retweet': '❤️',
           'twitter_follow': '➕',
           'post_wallet': '💳'
