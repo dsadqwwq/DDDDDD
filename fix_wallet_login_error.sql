@@ -87,7 +87,7 @@ $$;
 
 -- STEP 4: Fix get_user_rank function
 CREATE OR REPLACE FUNCTION get_user_rank(p_user_id uuid)
-RETURNS TABLE(rank bigint, gc_balance bigint)
+RETURNS TABLE(rank bigint, user_gc_balance bigint)
 LANGUAGE plpgsql
 SECURITY DEFINER
 AS $$
@@ -95,16 +95,16 @@ BEGIN
   RETURN QUERY
   WITH ranked_users AS (
     SELECT
-      id,
-      gc_balance,
-      ROW_NUMBER() OVER (ORDER BY gc_balance DESC, created_at ASC) as user_rank
-    FROM users
+      u.id,
+      u.gc_balance,
+      ROW_NUMBER() OVER (ORDER BY u.gc_balance DESC, u.created_at ASC) as user_rank
+    FROM users u
   )
   SELECT
-    user_rank::bigint as rank,
-    ranked_users.gc_balance
-  FROM ranked_users
-  WHERE id = p_user_id;
+    r.user_rank::bigint,
+    r.gc_balance::bigint
+  FROM ranked_users r
+  WHERE r.id = p_user_id;
 END;
 $$;
 
