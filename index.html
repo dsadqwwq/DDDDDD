@@ -7636,8 +7636,8 @@
 
         console.log('Rank calculation:', { userGC, rankData, rankError });
 
-        if (!rankError && rankData?.rank) {
-          userRank = rankData.rank;
+        if (!rankError && rankData && rankData.length > 0) {
+          userRank = rankData[0].rank;
         } else {
           // Fallback: try direct count (may fail with RLS)
           const { count } = await supabase
@@ -7806,9 +7806,9 @@
             const { data: userRankData } = await supabase
               .rpc('get_user_rank', { p_user_id: userId });
 
-            if (userRankData && userRankData.rank) {
+            if (userRankData && userRankData.length > 0) {
               document.getElementById('yourBestSection').style.display = 'block';
-              document.getElementById('yourBestTime').textContent = `#${userRankData.rank} | ${userRankData.user_gc_balance?.toLocaleString() || 0} GC`;
+              document.getElementById('yourBestTime').textContent = `#${userRankData[0].rank} | ${userRankData[0].user_gc_balance?.toLocaleString() || 0} GC`;
             } else {
               document.getElementById('yourBestSection').style.display = 'none';
             }
