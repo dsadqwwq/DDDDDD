@@ -131,7 +131,8 @@ VALUES
   ('twitter_follow', 'Follow Us', 'Follow @Duelpvp on X.', 500, 1, 'one_time', FALSE, 4),
   ('post_wallet', 'Post Your EVM Wallet', 'Post your EVM wallet address under our tweet.', 1000, 1, 'one_time', FALSE, 5),
   ('fluffle_holder', 'FLUFFLE Holder', 'Hold a FLUFFLE NFT in your wallet.', 5000, 1, 'one_time', FALSE, 6),
-  ('bunnz_holder', 'BAD BUNNZ Holder', 'Hold a BAD BUNNZ NFT in your wallet.', 1500, 1, 'one_time', FALSE, 7)
+  ('bunnz_holder', 'BAD BUNNZ Holder', 'Hold a BAD BUNNZ NFT in your wallet.', 1500, 1, 'one_time', FALSE, 7),
+  ('megalio_holder', 'MEGALIO Holder', 'Hold a MEGALIO NFT in your wallet.', 2500, 1, 'one_time', FALSE, 8)
 ON CONFLICT (id) DO UPDATE SET
   name = EXCLUDED.name,
   description = EXCLUDED.description,
@@ -281,6 +282,7 @@ AS $$
 DECLARE
   v_has_fluffle BOOLEAN := FALSE;
   v_has_bunnz BOOLEAN := FALSE;
+  v_has_megalio BOOLEAN := FALSE;
 BEGIN
   -- Check fluffle_holders table
   SELECT EXISTS(
@@ -294,9 +296,16 @@ BEGIN
     WHERE LOWER(wallet_address) = LOWER(p_wallet_address)
   ) INTO v_has_bunnz;
 
+  -- Check megalio_holders table
+  SELECT EXISTS(
+    SELECT 1 FROM megalio_holders
+    WHERE LOWER(wallet_address) = LOWER(p_wallet_address)
+  ) INTO v_has_megalio;
+
   RETURN json_build_object(
     'has_fluffle', v_has_fluffle,
-    'has_bunnz', v_has_bunnz
+    'has_bunnz', v_has_bunnz,
+    'has_megalio', v_has_megalio
   );
 END;
 $$;
@@ -401,18 +410,21 @@ BEGIN
            WHEN qt.id = 'first_steps' THEN 1
            WHEN qt.id = 'fluffle_holder' AND (v_nft_holdings->>'has_fluffle')::boolean THEN 1
            WHEN qt.id = 'bunnz_holder' AND (v_nft_holdings->>'has_bunnz')::boolean THEN 1
+           WHEN qt.id = 'megalio_holder' AND (v_nft_holdings->>'has_megalio')::boolean THEN 1
            ELSE 0
          END,
          CASE
            WHEN qt.id = 'first_steps' THEN TRUE
            WHEN qt.id = 'fluffle_holder' AND (v_nft_holdings->>'has_fluffle')::boolean THEN TRUE
            WHEN qt.id = 'bunnz_holder' AND (v_nft_holdings->>'has_bunnz')::boolean THEN TRUE
+           WHEN qt.id = 'megalio_holder' AND (v_nft_holdings->>'has_megalio')::boolean THEN TRUE
            ELSE FALSE
          END,
          CASE
            WHEN qt.id = 'first_steps' THEN NOW()
            WHEN qt.id = 'fluffle_holder' AND (v_nft_holdings->>'has_fluffle')::boolean THEN NOW()
            WHEN qt.id = 'bunnz_holder' AND (v_nft_holdings->>'has_bunnz')::boolean THEN NOW()
+           WHEN qt.id = 'megalio_holder' AND (v_nft_holdings->>'has_megalio')::boolean THEN NOW()
            ELSE NULL
          END
   FROM quest_templates qt
@@ -426,7 +438,8 @@ BEGIN
     'success', TRUE,
     'user_id', v_user_id,
     'has_fluffle', (v_nft_holdings->>'has_fluffle')::boolean,
-    'has_bunnz', (v_nft_holdings->>'has_bunnz')::boolean
+    'has_bunnz', (v_nft_holdings->>'has_bunnz')::boolean,
+    'has_megalio', (v_nft_holdings->>'has_megalio')::boolean
   );
 END;
 $$;
@@ -817,13 +830,24 @@ BEGIN
     WHERE user_id = v_user.id AND quest_id = 'bunnz_holder' AND NOT is_completed;
   END IF;
 
+  -- Update MEGALIO quest if holder
+  IF (v_nft_holdings->>'has_megalio')::boolean THEN
+    UPDATE user_quests
+    SET progress = 1,
+        is_completed = TRUE,
+        completed_at = COALESCE(completed_at, NOW()),
+        updated_at = NOW()
+    WHERE user_id = v_user.id AND quest_id = 'megalio_holder' AND NOT is_completed;
+  END IF;
+
   RETURN json_build_object(
     'success', TRUE,
     'user_id', v_user.id,
     'display_name', v_user.display_name,
     'gc_balance', v_user.gc_balance,
     'has_fluffle', (v_nft_holdings->>'has_fluffle')::boolean,
-    'has_bunnz', (v_nft_holdings->>'has_bunnz')::boolean
+    'has_bunnz', (v_nft_holdings->>'has_bunnz')::boolean,
+    'has_megalio', (v_nft_holdings->>'has_megalio')::boolean
   );
 END;
 $$;
