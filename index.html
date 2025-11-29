@@ -4483,11 +4483,11 @@
       <!-- Market Bar (hidden - kept for compatibility) -->
       <div class="market-bar" id="viewShopBtn" style="display:none;"></div>
 
-      <!-- Campaign Banner (hidden for now) -->
-      <!-- <div class="campaign-banner" id="campaignBanner">
+      <!-- Campaign Banner -->
+      <div class="campaign-banner" id="campaignBanner">
         <div class="campaign-banner-header">
           <div class="campaign-banner-icon"></div>
-          <div class="campaign-banner-text">WHO WANTS TO BE A MILLIONAIRE</div>
+          <div class="campaign-banner-text">WHO WANTS TO BE A WARRIOR</div>
           <div class="campaign-banner-info"></div>
         </div>
         <div class="campaign-progress">
@@ -4499,7 +4499,7 @@
           </div>
           <div class="campaign-time-remaining" id="campaignTimeRemaining">Starting tomorrow</div>
         </div>
-      </div> -->
+      </div>
 
       <!-- About Section -->
       <div class="campaign-earn-section">
@@ -4552,9 +4552,9 @@
     </div>
 
     <!-- Campaign content (hidden initially) -->
-    <div class="campaign-container" id="campaignContent" role="region" aria-label="Millionaire campaign">
+    <div class="campaign-container" id="campaignContent" role="region" aria-label="Warrior campaign">
       <div class="campaign-header">
-        <div class="campaign-title">WHO WANTS TO BE A MILLIONAIRE</div>
+        <div class="campaign-title">WHO WANTS TO BE A WARRIOR</div>
         <button class="back-btn" id="backFromCampaignBtn" aria-label="Back to dashboard">BACK</button>
       </div>
 
@@ -5106,7 +5106,7 @@
 
       <!-- Disclaimer for Crash Game -->
       <div class="game-disclaimer">
-        ⚠️ <strong>Campaign Only:</strong> Fake tokens for Millionaire campaign • Not exchangeable • Play responsibly
+        ⚠️ <strong>Campaign Only:</strong> Fake tokens for Warrior campaign • Not exchangeable • Play responsibly
       </div>
     </div>
 
@@ -5181,7 +5181,7 @@
 
       <!-- Disclaimer for Mines Game -->
       <div class="game-disclaimer">
-        ⚠️ <strong>Campaign Only:</strong> Fake tokens for Millionaire campaign • Not exchangeable • Play responsibly
+        ⚠️ <strong>Campaign Only:</strong> Fake tokens for Warrior campaign • Not exchangeable • Play responsibly
       </div>
     </div>
 
@@ -5266,7 +5266,7 @@
 
       <!-- Disclaimer for Blackjack Game -->
       <div class="game-disclaimer">
-        ⚠️ <strong>Campaign Only:</strong> Fake tokens for Millionaire campaign • Not exchangeable • Play responsibly
+        ⚠️ <strong>Campaign Only:</strong> Fake tokens for Warrior campaign • Not exchangeable • Play responsibly
       </div>
     </div>
   </main>
@@ -10575,8 +10575,7 @@
     });
 
     // Campaign banner and page handlers
-    // DISABLED: Campaign starts 19th November
-    // document.getElementById('campaignBanner').addEventListener('click', () => swapContent('campaign'));
+    document.getElementById('campaignBanner').addEventListener('click', () => swapContent('campaign'));
     document.getElementById('backFromCampaignBtn').addEventListener('click', () => swapContent('dashboard'));
 
     // Leaderboard filter buttons
