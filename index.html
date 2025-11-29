@@ -5930,7 +5930,7 @@
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
       // Find currently visible element
-      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent, campaignContent, warriorCampaignContent, newCrashContent, newMinesContent, newBlackjackContent, newStakingContent, newFarmContent];
+      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent, campaignContent, warriorCampaignContent, newCrashContent, newMinesContent, newBlackjackContent, newStakingContent, newFarmContent].filter(el => el !== null);
       const currentVisible = allContainers.find(el => el.style.display !== 'none' && el.style.display !== '');
 
       // Add fade-out to current visible element
