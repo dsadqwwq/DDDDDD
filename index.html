@@ -10581,11 +10581,14 @@
     // Campaign banner and page handlers
     const campaignBannerEl = document.getElementById('campaignBanner');
     console.log('Campaign banner element:', campaignBannerEl);
+    console.log('swapContent function exists:', typeof swapContent === 'function');
     if (campaignBannerEl) {
       campaignBannerEl.addEventListener('click', () => {
         console.log('Campaign banner clicked!');
+        console.log('About to call swapContent("campaign")');
         swapContent('campaign');
       });
+      console.log('Event listener attached to campaign banner');
     } else {
       console.error('Campaign banner element not found!');
     }
