@@ -6556,6 +6556,7 @@
         initBlackjack();
 
       } else if (newContent === 'campaign') {
+        console.log('Switching to campaign content...');
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'none';
         if (campaignBanner) campaignBanner.style.display = 'none';
@@ -6571,6 +6572,7 @@
         blackjackContent.style.display = 'none';
         campaignContent.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        console.log('Campaign content should now be visible:', campaignContent.style.display);
         updateCampaignPage();
 
       } else if (newContent === 'leaderboard') {
@@ -10577,7 +10579,16 @@
     });
 
     // Campaign banner and page handlers
-    document.getElementById('campaignBanner').addEventListener('click', () => swapContent('campaign'));
+    const campaignBannerEl = document.getElementById('campaignBanner');
+    console.log('Campaign banner element:', campaignBannerEl);
+    if (campaignBannerEl) {
+      campaignBannerEl.addEventListener('click', () => {
+        console.log('Campaign banner clicked!');
+        swapContent('campaign');
+      });
+    } else {
+      console.error('Campaign banner element not found!');
+    }
     document.getElementById('backFromCampaignBtn').addEventListener('click', () => swapContent('dashboard'));
 
     // Leaderboard filter buttons
