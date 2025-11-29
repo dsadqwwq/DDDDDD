@@ -9952,12 +9952,13 @@
 
     let minesGameState = {
       isPlaying: false,
+      gameId: null,
       betAmount: 0,
       minesCount: 5,
       revealedCount: 0,
       grid: [],
       minePositions: [],
-      multiplier: 0
+      multiplier: 1.0
     };
 
     function initMinesGame() {
@@ -10011,9 +10012,16 @@
         return;
       }
 
-      // Deduct bet
-      updateUserGC(-betAmount, 'mines');
-      updateMinesGCDisplay();
+      // Call server-side function to start game
+      const { data, error } = await supabase.rpc('mines_start_game', {
+        p_bet_amount: betAmount,
+        p_mines_count: minesCount
+      });
+
+      if (error || !data || !data.success) {
+        Toast.error(error?.message || data?.error || 'Failed to start game', 'ERROR');
+        return;
+      }
 
       // Reset grid BEFORE setting isPlaying to true
       initMinesGame();
@@ -10021,11 +10029,12 @@
       // Initialize game state
       minesGameState = {
         isPlaying: true,
+        gameId: data.game_id,
         betAmount: betAmount,
         minesCount: minesCount,
         revealedCount: 0,
         grid: new Array(25).fill(false),
-        minePositions: generateMinePositions(minesCount),
+        minePositions: [], // Will be revealed by server when game ends
         multiplier: 1.0
       };
 
@@ -10035,23 +10044,15 @@
       document.getElementById('minesBetAmount').disabled = true;
       document.getElementById('minesCount').disabled = true;
 
+      // Update balance from server response
+      updateMinesGCDisplay();
       updateMinesStats();
 
       Toast.success(`Game started with ${minesCount} mines!`, 'MINES');
     }
 
-    function generateMinePositions(count) {
-      const positions = [];
-      while (positions.length < count) {
-        const pos = Math.floor(Math.random() * 25);
-        if (!positions.includes(pos)) {
-          positions.push(pos);
-        }
-      }
-      return positions;
-    }
 
-    function handleMinesTileClick(index) {
+    async function handleMinesTileClick(index) {
       if (!minesGameState.isPlaying) return;
       if (minesGameState.grid[index]) return; // Already revealed
 
@@ -10063,18 +10064,33 @@
         return;
       }
 
-      // Mark as clicked and revealed IMMEDIATELY
+      // Mark as clicked IMMEDIATELY to prevent double-clicks
       tile.dataset.clicked = 'true';
       minesGameState.grid[index] = true;
 
-      // Check if mine
-      if (minesGameState.minePositions.includes(index)) {
+      // Call server to validate the tile click
+      const { data, error } = await supabase.rpc('mines_click_tile', {
+        p_game_id: minesGameState.gameId,
+        p_tile_index: index
+      });
+
+      if (error || !data || !data.success) {
+        Toast.error(error?.message || data?.error || 'Failed to click tile', 'ERROR');
+        // Reset tile state on error
+        tile.dataset.clicked = 'false';
+        minesGameState.grid[index] = false;
+        return;
+      }
+
+      // Process server response
+      if (data.result === 'mine') {
         // Hit a mine!
         tile.classList.add('mine');
         tile.textContent = '💣';
 
-        // Reveal all mines
-        minesGameState.minePositions.forEach(pos => {
+        // Reveal all mines from server
+        minesGameState.minePositions = data.mine_positions;
+        data.mine_positions.forEach(pos => {
           const mineTile = document.querySelector(`.mines-tile[data-index="${pos}"]`);
           if (pos !== index) {
             mineTile.classList.add('mine');
@@ -10088,25 +10104,43 @@
         // Game over
         endMinesGame(false);
         Toast.error(`Hit a mine! Lost ${minesGameState.betAmount} GC`, 'GAME OVER');
-      } else {
+      } else if (data.result === 'safe') {
         // Safe tile!
         tile.classList.add('revealed');
         tile.textContent = '💎';
-        minesGameState.revealedCount++;
-
-        // Calculate multiplier
-        const safeTiles = 25 - minesGameState.minesCount;
-        const revealed = minesGameState.revealedCount;
-        minesGameState.multiplier = calculateMinesMultiplier(revealed, safeTiles, minesGameState.minesCount);
+        minesGameState.revealedCount = data.revealed_count;
+        minesGameState.multiplier = data.multiplier;
 
         updateMinesStats();
 
-        // Check if won (all safe tiles revealed)
-        if (minesGameState.revealedCount >= safeTiles) {
+        // Server will auto-cashout if all safe tiles revealed
+        if (data.game_over) {
+          // Perfect game!
+          minesGameState.minePositions = data.mine_positions;
+          data.mine_positions.forEach(pos => {
+            const mineTile = document.querySelector(`.mines-tile[data-index="${pos}"]`);
+            mineTile.classList.add('mine');
+            mineTile.textContent = '💣';
+          });
+
+          document.querySelectorAll('.mines-tile').forEach(t => t.classList.add('disabled'));
+          updateMinesGCDisplay();
           endMinesGame(true);
-          const profit = Math.floor(minesGameState.betAmount * minesGameState.multiplier);
-          Toast.success(`Perfect game! Won ${profit} GC!`, 'VICTORY');
+          Toast.success(`Perfect game! Won ${data.payout} GC at ${data.multiplier}x!`, 'VICTORY');
         }
+      } else if (data.result === 'cashout') {
+        // Auto-cashout on perfect game
+        minesGameState.minePositions = data.mine_positions;
+        data.mine_positions.forEach(pos => {
+          const mineTile = document.querySelector(`.mines-tile[data-index="${pos}"]`);
+          mineTile.classList.add('mine');
+          mineTile.textContent = '💣';
+        });
+
+        document.querySelectorAll('.mines-tile').forEach(t => t.classList.add('disabled'));
+        updateMinesGCDisplay();
+        endMinesGame(true);
+        Toast.success(`Perfect game! Won ${data.payout} GC at ${data.multiplier}x!`, 'VICTORY');
       }
     }
 
@@ -10119,17 +10153,27 @@
       return baseMultiplier + (revealed * 0.2 * growthRate);
     }
 
-    function cashoutMines() {
+    async function cashoutMines() {
       if (!minesGameState.isPlaying) return;
 
-      const profit = Math.floor(minesGameState.betAmount * minesGameState.multiplier);
-      updateUserGC(profit, 'mines');
+      // Call server to cashout
+      const { data, error } = await supabase.rpc('mines_cashout', {
+        p_game_id: minesGameState.gameId
+      });
+
+      if (error || !data || !data.success) {
+        Toast.error(error?.message || data?.error || 'Failed to cashout', 'ERROR');
+        return;
+      }
+
+      // Update balance
       updateMinesGCDisplay();
 
-      // Reveal all tiles
+      // Reveal all tiles from server
+      minesGameState.minePositions = data.mine_positions;
       for (let i = 0; i < 25; i++) {
         const tile = document.querySelector(`.mines-tile[data-index="${i}"]`);
-        if (minesGameState.minePositions.includes(i)) {
+        if (data.mine_positions.includes(i)) {
           tile.classList.add('mine');
           tile.textContent = '💣';
         } else if (!minesGameState.grid[i]) {
@@ -10140,11 +10184,12 @@
       }
 
       endMinesGame(true);
-      Toast.success(`Cashed out ${profit} GC at ${minesGameState.multiplier.toFixed(2)}x!`, 'CASHOUT');
+      Toast.success(`Cashed out ${data.payout} GC at ${data.multiplier.toFixed(2)}x!`, 'CASHOUT');
     }
 
     function endMinesGame(won) {
       minesGameState.isPlaying = false;
+      minesGameState.gameId = null;
 
       // Update UI
       document.getElementById('minesStartBtn').style.display = 'block';
@@ -10155,7 +10200,7 @@
       // Reset after delay
       setTimeout(() => {
         initMinesGame();
-        minesGameState.multiplier = 0;
+        minesGameState.multiplier = 1.0;
         minesGameState.revealedCount = 0;
         updateMinesStats();
       }, 3000);
