@@ -1674,6 +1674,25 @@
     background:rgba(24,16,16,0.3);
   }
 
+  .campaign-card.warrior{
+    border-color:rgba(138,43,226,0.4);
+    background:linear-gradient(135deg, rgba(75,0,130,0.15), rgba(138,43,226,0.1));
+  }
+
+  .campaign-card.warrior:hover{
+    border-color:rgba(255,214,77,0.8);
+    box-shadow:0 8px 28px rgba(138,43,226,0.3), 0 0 40px rgba(255,214,77,0.15);
+    background:linear-gradient(135deg, rgba(75,0,130,0.25), rgba(138,43,226,0.2));
+  }
+
+  .warrior-container{
+    display:none;
+    max-width:900px;
+    margin:0 auto;
+    padding:24px;
+    color:#fff;
+  }
+
   .campaign-card-title{
     font-family:'Press Start 2P', monospace;
     font-size:10px;
@@ -4647,6 +4666,19 @@
             </div>
           </div>
         </div>
+
+        <!-- Warrior Campaign Card -->
+        <div style="margin-top:24px;">
+          <div class="campaign-card warrior" id="openWarriorBtn" style="cursor:pointer;">
+            <div class="campaign-card-title">
+              WHO WANTS TO BE A <span style="text-decoration:line-through;">MILLIONAIRE</span> WARRIOR
+            </div>
+            <div class="campaign-card-content" style="text-align:center;padding:20px;">
+              <div style="color:var(--gold);font-size:14px;margin-bottom:8px;">Click to enter the arena</div>
+              <div style="color:#a0a8b0;font-size:11px;">⚔️ Battle your way to glory ⚔️</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -4832,6 +4864,70 @@
         <div class="coming-soon-overlay">
           <div class="coming-soon-badge">COMING SOON</div>
         </div>
+      </div>
+    </div>
+
+    <!-- Warrior Campaign Page (hidden initially) -->
+    <div class="warrior-container" id="warriorContent" role="region" aria-label="Warrior campaign">
+      <!-- Header with banner and user info -->
+      <div class="dashboard-header">
+        <!-- User Info Section -->
+        <div class="user-info">
+          <div class="user-name" id="warriorUserName">Champion</div>
+          <div class="user-stats">Level 0 • Falafel Enjoyer</div>
+        </div>
+
+        <!-- Stats & Logout Section -->
+        <div style="display:flex;align-items:center;gap:20px;">
+          <div class="stat-card">
+            <div class="stat-label">RANK</div>
+            <div class="stat-value" id="warriorRank">--</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">GC BALANCE</div>
+            <div class="stat-value" id="warriorGCBalance">0</div>
+          </div>
+          <button class="logout-btn" id="logoutFromWarriorBtn">LOGOUT</button>
+        </div>
+      </div>
+
+      <!-- Breadcrumb -->
+      <div class="breadcrumb" style="margin-bottom:24px;">
+        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item" onclick="swapContent('campaign')">Campaign</span>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item active">Warrior Arena</span>
+      </div>
+
+      <!-- Page Title -->
+      <div style="text-align:center;margin-bottom:32px;">
+        <div style="font-family:'Press Start 2P', monospace;font-size:20px;color:var(--gold);margin-bottom:12px;">
+          WHO WANTS TO BE A <span style="text-decoration:line-through;">MILLIONAIRE</span> WARRIOR
+        </div>
+        <div style="color:#a0a8b0;font-size:12px;">⚔️ Prove your worth in the arena ⚔️</div>
+      </div>
+
+      <!-- Leaderboard Button -->
+      <div style="display:flex;justify-content:center;margin-bottom:32px;">
+        <div class="stat-card" id="viewWarriorLeaderboardBtn" style="cursor:pointer;padding:20px 40px;min-width:200px;text-align:center;">
+          LEADERBOARD
+        </div>
+      </div>
+
+      <!-- Coming Soon Section -->
+      <div style="text-align:center;padding:40px 20px;background:rgba(212,175,55,0.1);border:2px solid rgba(212,175,55,0.3);border-radius:12px;">
+        <div style="font-size:48px;margin-bottom:16px;">⚔️</div>
+        <div style="color:var(--gold);font-family:'Press Start 2P', monospace;font-size:16px;margin-bottom:12px;">COMING SOON</div>
+        <div style="color:#a0a8b0;font-size:13px;line-height:1.6;">
+          Prepare for epic battles and legendary rewards.<br>
+          The warrior arena will open soon.
+        </div>
+      </div>
+
+      <!-- Back Button -->
+      <div style="margin-top:32px;text-align:center;">
+        <button class="back-btn" id="backFromWarriorBtn" aria-label="Back to campaign">BACK TO CAMPAIGN</button>
       </div>
     </div>
 
@@ -6128,6 +6224,7 @@
     const shopContent = document.getElementById('shopContent');
     const crashContent = document.getElementById('crashContent');
     const campaignContent = document.getElementById('campaignContent');
+    const warriorContent = document.getElementById('warriorContent');
     const campaignBanner = document.getElementById('campaignBanner');
 
     // Debug: Check if all elements exist
@@ -6163,7 +6260,7 @@
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
       // Find currently visible element
-      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent, campaignContent];
+      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent, campaignContent, warriorContent];
       const currentVisible = allContainers.find(el => el.style.display !== 'none' && el.style.display !== '');
 
       // Add fade-out to current visible element
@@ -6442,6 +6539,13 @@
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
         shopContent.style.display = 'none';
+        warriorContent.style.display = 'none';
+        campaignContent.style.display = 'none';
+        crashContent.style.display = 'none';
+        minesContent.style.display = 'none';
+        blackjackContent.style.display = 'none';
+        ovenContent.style.display = 'none';
+        farmContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         // Force refresh GC cache and display when loading dashboard
         gcCache.lastFetch = 0;
@@ -6466,6 +6570,11 @@
         shopContent.style.display = 'none';
         crashContent.style.display = 'none';
         ovenContent.style.display = 'none';
+        warriorContent.style.display = 'none';
+        campaignContent.style.display = 'none';
+        minesContent.style.display = 'none';
+        blackjackContent.style.display = 'none';
+        farmContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initChart();
 
@@ -6480,6 +6589,10 @@
         crashContent.style.display = 'none';
         farmContent.style.display = 'none';
         ovenContent.style.display = 'block';
+        warriorContent.style.display = 'none';
+        campaignContent.style.display = 'none';
+        minesContent.style.display = 'none';
+        blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initOven();
 
@@ -6495,6 +6608,9 @@
         ovenContent.style.display = 'none';
         minesContent.style.display = 'none';
         farmContent.style.display = 'block';
+        warriorContent.style.display = 'none';
+        campaignContent.style.display = 'none';
+        blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initFarm();
 
@@ -6512,6 +6628,8 @@
         ovenContent.style.display = 'none';
         farmContent.style.display = 'none';
         blackjackContent.style.display = 'none';
+        warriorContent.style.display = 'none';
+        campaignContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initCrashGame();
 
@@ -6529,6 +6647,8 @@
         farmContent.style.display = 'none';
         minesContent.style.display = 'block';
         blackjackContent.style.display = 'none';
+        warriorContent.style.display = 'none';
+        campaignContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         // Only init grid if not currently playing
         if (!minesGameState.isPlaying) {
@@ -6550,6 +6670,8 @@
         farmContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'block';
+        warriorContent.style.display = 'none';
+        campaignContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initBlackjack();
 
@@ -6567,9 +6689,29 @@
         crashContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
+        warriorContent.style.display = 'none';
         campaignContent.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         updateCampaignPage();
+
+      } else if (newContent === 'warrior') {
+        panelContent.style.display = 'none';
+        dashboardContent.style.display = 'none';
+        if (campaignBanner) campaignBanner.style.display = 'none';
+        gameContent.style.display = 'none';
+        leaderboardContent.style.display = 'none';
+        questContent.style.display = 'none';
+        inventoryContent.style.display = 'none';
+        shopContent.style.display = 'none';
+        ovenContent.style.display = 'none';
+        farmContent.style.display = 'none';
+        crashContent.style.display = 'none';
+        minesContent.style.display = 'none';
+        blackjackContent.style.display = 'none';
+        campaignContent.style.display = 'none';
+        warriorContent.style.display = 'block';
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        updateWarriorPage();
 
       } else if (newContent === 'leaderboard') {
         console.log('Switching to leaderboard...');
@@ -6586,6 +6728,7 @@
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
         campaignContent.style.display = 'none';
+        warriorContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         console.log('Leaderboard display set to block');
         loadLeaderboard('all');
@@ -6605,6 +6748,7 @@
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
         campaignContent.style.display = 'none';
+        warriorContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadQuests('daily');
 
@@ -6622,6 +6766,7 @@
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
         campaignContent.style.display = 'none';
+        warriorContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadInventory();
 
@@ -6639,6 +6784,7 @@
         campaignContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
+        warriorContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadInventory(); // Load shop items
       }
@@ -9618,6 +9764,38 @@
     }
 
     // ===============================================
+    // WARRIOR CAMPAIGN PAGE
+    // ===============================================
+    async function updateWarriorPage() {
+      // Get user data
+      const currentGC = await getUserGC();
+      const { data: userData, error } = await supabase
+        .from('users')
+        .select('username')
+        .eq('wallet_address', currentUser)
+        .single();
+
+      // Update username
+      const warriorUserNameEl = document.getElementById('warriorUserName');
+      if (warriorUserNameEl && userData) {
+        warriorUserNameEl.textContent = userData.username || 'Champion';
+      }
+
+      // Update GC Balance
+      const warriorGCBalanceEl = document.getElementById('warriorGCBalance');
+      if (warriorGCBalanceEl) {
+        warriorGCBalanceEl.textContent = formatGC(currentGC);
+      }
+
+      // Update Rank
+      const warriorRankEl = document.getElementById('warriorRank');
+      if (warriorRankEl) {
+        const rank = await getUserRank(currentUser);
+        warriorRankEl.textContent = rank ? `#${rank}` : '--';
+      }
+    }
+
+    // ===============================================
     // SERVER-SIDE STAKING SYSTEM (OVEN)
     // ===============================================
     let ovenUpdateInterval = null;
@@ -10553,6 +10731,18 @@
     document.getElementById('startGameBtn').addEventListener('click', startGame);
     document.getElementById('sellButton').addEventListener('click', handleSell);
     document.getElementById('resetGameBtn').addEventListener('click', resetGame);
+
+    // Warrior campaign handlers
+    document.getElementById('openWarriorBtn').addEventListener('click', () => {
+      console.log('Open Warrior page clicked');
+      swapContent('warrior');
+    });
+    document.getElementById('backFromWarriorBtn').addEventListener('click', () => swapContent('campaign'));
+    document.getElementById('logoutFromWarriorBtn').addEventListener('click', handleLogout);
+    document.getElementById('viewWarriorLeaderboardBtn').addEventListener('click', () => {
+      console.log('View Warrior Leaderboard clicked');
+      swapContent('leaderboard');
+    });
 
     // Invite code handlers
     document.getElementById('copyInviteCodeBtn').addEventListener('click', async () => {
