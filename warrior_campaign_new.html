@@ -1,0 +1,273 @@
+    <!-- WARRIOR CAMPAIGN PAGE -->
+    <div class="campaign-container" id="warriorCampaignContent" style="display:none;">
+      <div class="campaign-header">
+        <div class="campaign-title">⚔️ WHO WANTS TO BE A WARRIOR</div>
+        <button class="back-btn" id="backFromWarriorCampaignBtn">BACK</button>
+      </div>
+
+      <div style="text-align:center;margin-bottom:24px;">
+        <div style="font-family:'Press Start 2P',monospace;font-size:11px;color:#FFD700;margin-bottom:12px;">PROVE YOUR WORTH</div>
+        <div style="font-family:Inter,system-ui,Arial;font-size:13px;color:#e0e8f0;line-height:1.6;">
+          Battle through games of skill and strategy. Grow your GC through DeFi. Rise to the top of the leaderboard.
+        </div>
+      </div>
+
+      <!-- Games Section -->
+      <div class="campaign-earn-section">
+        <div class="campaign-earn-title">🎮 GAMES</div>
+        <div class="campaign-cards-row">
+          <div class="campaign-card gamble">
+            <div class="campaign-card-title">CRASH</div>
+            <div style="margin-bottom:12px;font-size:11px;color:#b0b8c0;">Cash out before the rocket crashes!</div>
+            <button class="action-btn btn-gamble" id="warriorPlayCrashBtn" style="width:100%;">PLAY CRASH</button>
+          </div>
+          <div class="campaign-card gamble">
+            <div class="campaign-card-title">MINES</div>
+            <div style="margin-bottom:12px;font-size:11px;color:#b0b8c0;">Reveal tiles, avoid bombs!</div>
+            <button class="action-btn btn-gamble" id="warriorPlayMinesBtn" style="width:100%;">PLAY MINES</button>
+          </div>
+        </div>
+        <div class="campaign-cards-row">
+          <div class="campaign-card gamble">
+            <div class="campaign-card-title">BLACKJACK</div>
+            <div style="margin-bottom:12px;font-size:11px;color:#b0b8c0;">Beat the dealer to 21!</div>
+            <button class="action-btn btn-gamble" id="warriorPlayBlackjackBtn" style="width:100%;">PLAY BLACKJACK</button>
+          </div>
+          <div class="campaign-card invest">
+            <div class="campaign-card-title">DEFI</div>
+            <div style="margin-bottom:8px;">
+              <button class="action-btn btn-invest" id="warriorOpenStakingBtn" style="width:100%;margin-bottom:8px;font-size:9px;">STAKING</button>
+              <button class="action-btn btn-invest" id="warriorOpenFarmBtn" style="width:100%;font-size:9px;">FARM</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CRASH GAME (NEW) -->
+    <div class="game-container" id="newCrashContent" style="display:none;">
+      <div class="game-header">
+        <div class="game-title">🚀 CRASH</div>
+        <button class="back-btn" id="backFromNewCrashBtn">BACK</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:300px 1fr;gap:24px;margin-bottom:20px;">
+        <!-- Sidebar -->
+        <div>
+          <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,214,77,.2);border-radius:8px;padding:16px;margin-bottom:16px;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:10px;color:#a0a8b0;margin-bottom:12px;">PLACE BET</div>
+            <input type="number" id="newCrashBetInput" placeholder="100" min="10" max="10000" value="100" style="width:100%;padding:10px;background:rgba(0,0,0,.4);border:1px solid rgba(255,214,77,.2);border-radius:6px;color:#e6ecf1;font-family:'Press Start 2P',monospace;font-size:11px;margin-bottom:12px;">
+            <button class="action-btn btn-primary" id="newCrashBetBtn" style="width:100%;">PLACE BET</button>
+          </div>
+          <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,214,77,.2);border-radius:8px;padding:16px;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:9px;color:#a0a8b0;margin-bottom:8px;">YOUR GC</div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:16px;color:var(--gold);" id="newCrashBalance">0</div>
+          </div>
+        </div>
+
+        <!-- Game Area -->
+        <div style="background:rgba(16,24,16,.3);border:2px solid rgba(255,214,77,.2);border-radius:12px;padding:32px;min-height:400px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;">
+          <div style="font-size:64px;margin-bottom:16px;" id="newCrashRocket">🚀</div>
+          <div style="font-family:'Press Start 2P',monospace;font-size:48px;color:#FFD700;margin-bottom:16px;" id="newCrashMultiplier">1.00x</div>
+          <div style="font-family:Inter,system-ui,Arial;font-size:14px;color:#b0b8c0;margin-bottom:24px;" id="newCrashStatus">Place a bet to start</div>
+          <button class="action-btn btn-gamble" id="newCrashCashoutBtn" style="padding:16px 48px;font-size:14px;display:none;">CASH OUT</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MINES GAME (NEW) -->
+    <div class="game-container" id="newMinesContent" style="display:none;">
+      <div class="game-header">
+        <div class="game-title">💣 MINES</div>
+        <button class="back-btn" id="backFromNewMinesBtn">BACK</button>
+      </div>
+
+      <div style="max-width:600px;margin:0 auto;">
+        <!-- Bet Section -->
+        <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,214,77,.2);border-radius:8px;padding:16px;margin-bottom:20px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+            <div>
+              <label style="font-family:'Press Start 2P',monospace;font-size:9px;color:#a0a8b0;display:block;margin-bottom:8px;">BET AMOUNT</label>
+              <input type="number" id="newMinesBetInput" placeholder="100" min="10" max="10000" value="100" style="width:100%;padding:10px;background:rgba(0,0,0,.4);border:1px solid rgba(255,214,77,.2);border-radius:6px;color:#e6ecf1;font-family:'Press Start 2P',monospace;font-size:11px;">
+            </div>
+            <div>
+              <label style="font-family:'Press Start 2P',monospace;font-size:9px;color:#a0a8b0;display:block;margin-bottom:8px;">MINES</label>
+              <select id="newMinesMineCount" style="width:100%;padding:10px;background:rgba(0,0,0,.4);border:1px solid rgba(255,214,77,.2);border-radius:6px;color:#e6ecf1;font-family:'Press Start 2P',monospace;font-size:11px;">
+                <option value="3">3 Mines</option>
+                <option value="5" selected>5 Mines</option>
+                <option value="10">10 Mines</option>
+                <option value="15">15 Mines</option>
+              </select>
+            </div>
+          </div>
+          <button class="action-btn btn-invest" id="newMinesStartBtn" style="width:100%;margin-bottom:8px;">START GAME</button>
+          <button class="action-btn btn-gamble" id="newMinesCashoutBtn" style="width:100%;display:none;">CASH OUT</button>
+        </div>
+
+        <!-- Stats -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+          <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,214,77,.2);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#a0a8b0;margin-bottom:6px;">YOUR GC</div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:var(--gold);" id="newMinesBalance">0</div>
+          </div>
+          <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,214,77,.2);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#a0a8b0;margin-bottom:6px;">MULTIPLIER</div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:var(--gold);" id="newMinesMultiplier">0.00x</div>
+          </div>
+          <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,214,77,.2);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#a0a8b0;margin-bottom:6px;">PROFIT</div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:var(--gold);" id="newMinesProfit">0</div>
+          </div>
+          <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,214,77,.2);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#a0a8b0;margin-bottom:6px;">REVEALED</div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:var(--gold);" id="newMinesRevealed">0/25</div>
+          </div>
+        </div>
+
+        <!-- Grid -->
+        <div id="newMinesGrid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:20px;max-width:400px;margin-left:auto;margin-right:auto;">
+          <!-- Tiles generated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- BLACKJACK GAME (NEW) -->
+    <div class="game-container" id="newBlackjackContent" style="display:none;">
+      <div class="game-header">
+        <div class="game-title">♠️ BLACKJACK</div>
+        <button class="back-btn" id="backFromNewBlackjackBtn">BACK</button>
+      </div>
+
+      <div style="max-width:700px;margin:0 auto;">
+        <!-- Bet Section -->
+        <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,214,77,.2);border-radius:8px;padding:16px;margin-bottom:20px;display:flex;gap:12px;">
+          <input type="number" id="newBlackjackBetInput" placeholder="100" min="10" max="10000" value="100" style="flex:1;padding:10px;background:rgba(0,0,0,.4);border:1px solid rgba(255,214,77,.2);border-radius:6px;color:#e6ecf1;font-family:'Press Start 2P',monospace;font-size:11px;">
+          <button class="action-btn btn-invest" id="newBlackjackDealBtn">DEAL</button>
+        </div>
+
+        <!-- Stats -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+          <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,214,77,.2);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#a0a8b0;margin-bottom:6px;">YOUR GC</div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:var(--gold);" id="newBlackjackBalance">0</div>
+          </div>
+          <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,214,77,.2);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#a0a8b0;margin-bottom:6px;">YOUR HAND</div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:var(--gold);" id="newBlackjackPlayerValue">0</div>
+          </div>
+          <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,214,77,.2);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#a0a8b0;margin-bottom:6px;">DEALER</div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:var(--gold);" id="newBlackjackDealerValue">?</div>
+          </div>
+          <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,214,77,.2);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#a0a8b0;margin-bottom:6px;">BET</div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:var(--gold);" id="newBlackjackCurrentBet">0</div>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div style="background:rgba(16,24,16,.3);border:2px solid rgba(255,214,77,.2);border-radius:12px;padding:24px;min-height:300px;">
+          <!-- Dealer -->
+          <div style="margin-bottom:24px;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:10px;color:#a0a8b0;margin-bottom:12px;text-align:center;">DEALER</div>
+            <div id="newBlackjackDealerCards" style="display:flex;gap:10px;justify-content:center;min-height:84px;"></div>
+          </div>
+          <!-- Player -->
+          <div style="border-top:1px solid rgba(255,214,77,.1);padding-top:24px;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:10px;color:#a0a8b0;margin-bottom:12px;text-align:center;">YOU</div>
+            <div id="newBlackjackPlayerCards" style="display:flex;gap:10px;justify-content:center;min-height:84px;"></div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div id="newBlackjackActions" style="display:none;gap:12px;margin-top:20px;">
+          <button class="action-btn btn-invest" id="newBlackjackHitBtn" style="flex:1;">HIT</button>
+          <button class="action-btn btn-gamble" id="newBlackjackStandBtn" style="flex:1;">STAND</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STAKING (NEW) -->
+    <div class="oven-container" id="newStakingContent" style="display:none;">
+      <div class="oven-header">
+        <div class="oven-title">💰 STAKING</div>
+        <button class="back-btn" id="backFromNewStakingBtn">BACK</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;">
+        <div class="oven-stat-box">
+          <div class="oven-stat-label">YOUR BALANCE</div>
+          <div class="oven-stat-value" id="newStakingBalance">0 GC</div>
+        </div>
+        <div class="oven-stat-box">
+          <div class="oven-stat-label">STAKED</div>
+          <div class="oven-stat-value" id="newStakingStaked">0 GC</div>
+        </div>
+        <div class="oven-stat-box">
+          <div class="oven-stat-label">CURRENT VALUE</div>
+          <div class="oven-stat-value highlight" id="newStakingValue">0 GC</div>
+        </div>
+      </div>
+
+      <div class="oven-timer-box" id="newStakingTimer">No active stake</div>
+
+      <div class="oven-action-section">
+        <div class="oven-section-title">DEPOSIT</div>
+        <div class="oven-input-row">
+          <input type="number" class="oven-input" id="newStakingDepositInput" placeholder="Amount" min="100">
+          <button class="action-btn btn-invest" id="newStakingDepositBtn">DEPOSIT</button>
+        </div>
+      </div>
+
+      <div class="oven-action-section">
+        <div class="oven-section-title">WITHDRAW</div>
+        <button class="action-btn btn-gamble" id="newStakingWithdrawBtn">WITHDRAW ALL</button>
+      </div>
+
+      <div class="oven-info">
+        <strong>10% Hourly Compound Interest</strong><br>
+        Watch your GC grow in real-time! Withdraw anytime.
+      </div>
+    </div>
+
+    <!-- FARM (NEW) -->
+    <div class="oven-container" id="newFarmContent" style="display:none;">
+      <div class="oven-header">
+        <div class="oven-title">🌾 FARM</div>
+        <button class="back-btn" id="backFromNewFarmBtn">BACK</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;">
+        <div class="oven-stat-box">
+          <div class="oven-stat-label">TOTAL FARMED</div>
+          <div class="oven-stat-value" id="newFarmTotal">0 GC</div>
+        </div>
+        <div class="oven-stat-box">
+          <div class="oven-stat-label">TODAY</div>
+          <div class="oven-stat-value" id="newFarmToday">0 GC</div>
+        </div>
+        <div class="oven-stat-box">
+          <div class="oven-stat-label">CLICKS</div>
+          <div class="oven-stat-value" id="newFarmClicks">0</div>
+        </div>
+      </div>
+
+      <div class="farm-button-container">
+        <button class="farm-btn" id="newFarmBtn">
+          <div class="farm-btn-text">FARM</div>
+        </button>
+        <div class="farm-cooldown" id="newFarmCooldown" style="display:none;">
+          <div class="farm-cooldown-text">Next click in <span id="newFarmCooldownTimer">5</span>s</div>
+          <div class="farm-cooldown-bar">
+            <div class="farm-cooldown-fill" id="newFarmCooldownFill"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="farm-result" id="newFarmResult"></div>
+
+      <div class="oven-info">
+        <strong>Click to Farm!</strong><br>
+        Click every 5 seconds for a chance to earn GC.
+      </div>
+    </div>

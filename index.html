@@ -4502,6 +4502,25 @@
       </div> -->
 
       <!-- About Section -->
+      <!-- Warrior Campaign Card -->
+      <div style="background:linear-gradient(135deg, rgba(255,69,0,0.15) 0%, rgba(255,140,0,0.20) 100%);border:3px solid rgba(255,140,0,0.6);border-radius:12px;padding:24px;margin-bottom:24px;cursor:pointer;transition:all 0.3s ease;box-shadow:0 4px 20px rgba(255,140,0,0.25);" id="warriorCampaignCard" onclick="swapContent('warriorCampaign')">
+        <div style="text-align:center;">
+          <div style="font-size:32px;margin-bottom:12px;">⚔️</div>
+          <div style="font-family:'Press Start 2P',monospace;font-size:16px;color:#FFD700;margin-bottom:16px;text-shadow:0 2px 4px rgba(0,0,0,0.5);">
+            WHO WANTS TO BE A WARRIOR
+          </div>
+          <div style="font-family:'Courier New',monospace;font-size:14px;line-height:1.8;color:#ffffff;text-shadow:0 1px 3px rgba(0,0,0,0.8);">
+            Battle through games of skill and strategy. Grow your GC through DeFi.<br>
+            Rise to the top of the leaderboard and prove your worth.
+          </div>
+          <div style="margin-top:20px;">
+            <button class="action-btn btn-gamble" style="font-size:12px;padding:12px 32px;" onclick="event.stopPropagation(); swapContent('warriorCampaign')">
+              ENTER THE ARENA ⚔️
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div class="campaign-earn-section">
         <div class="campaign-earn-title">ABOUT</div>
 
@@ -4551,102 +4570,278 @@
 
     </div>
 
-    <!-- Campaign content (hidden initially) -->
-    <div class="campaign-container" id="campaignContent" role="region" aria-label="Millionaire campaign">
+    <!-- WARRIOR CAMPAIGN CONTENT WILL BE ADDED HERE -->
+    <!-- WARRIOR CAMPAIGN PAGE -->
+    <div class="campaign-container" id="warriorCampaignContent" style="display:none;">
       <div class="campaign-header">
-        <div class="campaign-title">WHO WANTS TO BE A MILLIONAIRE</div>
-        <button class="back-btn" id="backFromCampaignBtn" aria-label="Back to dashboard">BACK</button>
+        <div class="campaign-title">⚔️ WHO WANTS TO BE A WARRIOR</div>
+        <button class="back-btn" id="backFromWarriorCampaignBtn">BACK</button>
       </div>
 
-      <!-- Breadcrumb -->
-      <div class="breadcrumb">
-        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item active">Campaign</span>
-      </div>
-
-      <!-- Progress Section -->
-      <div class="campaign-progress-section">
-        <div class="campaign-progress-header">
-          <div class="campaign-progress-title">CAMPAIGN PROGRESS</div>
-          <div class="campaign-progress-percentage" id="campaignProgressPercentage">0%</div>
-        </div>
-        <div class="campaign-progress-bar-large">
-          <div class="campaign-progress-fill-large" id="campaignProgressFillLarge" style="width:0%"></div>
-        </div>
-        <div class="campaign-progress-info">
-          <span id="campaignCurrentGCPage">0</span> / 1,000,000 GC
+      <div style="text-align:center;margin-bottom:24px;">
+        <div style="font-family:'Press Start 2P',monospace;font-size:11px;color:#FFD700;margin-bottom:12px;">PROVE YOUR WORTH</div>
+        <div style="font-family:Inter,system-ui,Arial;font-size:13px;color:#e0e8f0;line-height:1.6;">
+          Battle through games of skill and strategy. Grow your GC through DeFi. Rise to the top of the leaderboard.
         </div>
       </div>
 
-      <!-- Campaign Info -->
-      <div class="campaign-info-section">
-        <div class="campaign-info-title">CAMPAIGN RULES</div>
-        <div class="campaign-info-content">
-          <div class="campaign-info-item">
-            <span class="campaign-info-bullet">•</span>
-            <span>Reach 1,000,000 GC to qualify for Founder's Sword mint eligibility</span>
-          </div>
-          <div class="campaign-info-item">
-            <span class="campaign-info-bullet">•</span>
-            <span>Earn GC through gambling, farming, and staking</span>
-          </div>
-          <div class="campaign-info-item">
-            <span class="campaign-info-bullet">•</span>
-            <span>All GC accumulates toward your campaign total</span>
-          </div>
-          <div class="campaign-info-item">
-            <span class="campaign-info-bullet">•</span>
-            <span>Campaign ends when all Founder's Swords are distributed</span>
-          </div>
-        </div>
-
-        <div class="campaign-disclaimer-section" style="background:rgba(255,69,0,0.1);border:2px solid rgba(255,69,0,0.3);border-radius:8px;padding:16px;margin-top:16px;">
-          <div style="font-family:'Press Start 2P',monospace;font-size:10px;color:#FF4500;margin-bottom:12px;text-align:center;">IMPORTANT DISCLAIMER</div>
-          <div style="font-family:'Courier New',monospace;font-size:12px;line-height:1.7;color:#e0e8f0;">
-            <strong>This pre-launch campaign is NOT the main game.</strong> These mechanics are for fun only. Campaign GC is temporary and has no monetary value.
-            <br><br>
-            <strong>The actual Duel PVP game launching in 2026 will be a fully on-chain MMO</strong> with completely different mechanics, progression systems, and gameplay. Think RuneScape meets blockchain - not a casino.
-            <br><br>
-            Campaign GC does not carry over to the main game.
-          </div>
-        </div>
-      </div>
-
-      <!-- Time Remaining -->
-      <div class="campaign-time-section">
-        <div class="campaign-time-label">TIME REMAINING</div>
-        <div class="campaign-time-value" id="campaignTimeRemainingPage">Starting tomorrow</div>
-      </div>
-
-      <!-- Ways to Earn GC Section -->
+      <!-- Games Section -->
       <div class="campaign-earn-section">
-        <div class="campaign-earn-title">WAYS TO EARN GC</div>
-
-        <!-- Two-column card layout -->
+        <div class="campaign-earn-title">🎮 GAMES</div>
         <div class="campaign-cards-row">
-          <!-- Left: DeFi -->
+          <div class="campaign-card gamble">
+            <div class="campaign-card-title">CRASH</div>
+            <div style="margin-bottom:12px;font-size:11px;color:#b0b8c0;">Cash out before the rocket crashes!</div>
+            <button class="action-btn btn-gamble" id="warriorPlayCrashBtn" style="width:100%;">PLAY CRASH</button>
+          </div>
+          <div class="campaign-card gamble">
+            <div class="campaign-card-title">MINES</div>
+            <div style="margin-bottom:12px;font-size:11px;color:#b0b8c0;">Reveal tiles, avoid bombs!</div>
+            <button class="action-btn btn-gamble" id="warriorPlayMinesBtn" style="width:100%;">PLAY MINES</button>
+          </div>
+        </div>
+        <div class="campaign-cards-row">
+          <div class="campaign-card gamble">
+            <div class="campaign-card-title">BLACKJACK</div>
+            <div style="margin-bottom:12px;font-size:11px;color:#b0b8c0;">Beat the dealer to 21!</div>
+            <button class="action-btn btn-gamble" id="warriorPlayBlackjackBtn" style="width:100%;">PLAY BLACKJACK</button>
+          </div>
           <div class="campaign-card invest">
             <div class="campaign-card-title">DEFI</div>
-            <div class="campaign-card-content">
-              <button class="action-btn btn-invest" id="openOvenBtn" aria-label="Open Staking" style="width:100%;margin-bottom:12px;">STAKING</button>
-              <button class="action-btn btn-invest" id="openFarmBtn" aria-label="Open Airdrop Farm" style="width:100%;margin-bottom:12px;">FARM</button>
-              <button class="action-btn btn-invest" disabled style="width:100%;margin-bottom:12px;opacity:0.5;cursor:not-allowed;">SWAP</button>
-              <button class="action-btn btn-invest" disabled style="width:100%;opacity:0.5;cursor:not-allowed;">YIELD FARMING</button>
-            </div>
-          </div>
-
-          <!-- Right: Gambling -->
-          <div class="campaign-card gamble">
-            <div class="campaign-card-title">GAMBLING</div>
-            <div class="campaign-card-content">
-              <button class="action-btn btn-gamble" id="playCrashBtn" aria-label="Play crash rocket game" style="width:100%;margin-bottom:12px;">CRASH</button>
-              <button class="action-btn btn-gamble" id="playMinesBtn" aria-label="Play mines game" style="width:100%;margin-bottom:12px;">MINES</button>
-              <button class="action-btn btn-gamble" id="playBlackjackBtn" aria-label="Play blackjack game" style="width:100%;margin-bottom:12px;">BLACKJACK</button>
-              <button class="action-btn btn-gamble" disabled style="width:100%;opacity:0.5;cursor:not-allowed;">TRADING SIM</button>
+            <div style="margin-bottom:8px;">
+              <button class="action-btn btn-invest" id="warriorOpenStakingBtn" style="width:100%;margin-bottom:8px;font-size:9px;">STAKING</button>
+              <button class="action-btn btn-invest" id="warriorOpenFarmBtn" style="width:100%;font-size:9px;">FARM</button>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- CRASH GAME (NEW) -->
+    <div class="game-container" id="newCrashContent" style="display:none;">
+      <div class="game-header">
+        <div class="game-title">🚀 CRASH</div>
+        <button class="back-btn" id="backFromNewCrashBtn">BACK</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:300px 1fr;gap:24px;margin-bottom:20px;">
+        <!-- Sidebar -->
+        <div>
+          <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,214,77,.2);border-radius:8px;padding:16px;margin-bottom:16px;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:10px;color:#a0a8b0;margin-bottom:12px;">PLACE BET</div>
+            <input type="number" id="newCrashBetInput" placeholder="100" min="10" max="10000" value="100" style="width:100%;padding:10px;background:rgba(0,0,0,.4);border:1px solid rgba(255,214,77,.2);border-radius:6px;color:#e6ecf1;font-family:'Press Start 2P',monospace;font-size:11px;margin-bottom:12px;">
+            <button class="action-btn btn-primary" id="newCrashBetBtn" style="width:100%;">PLACE BET</button>
+          </div>
+          <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,214,77,.2);border-radius:8px;padding:16px;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:9px;color:#a0a8b0;margin-bottom:8px;">YOUR GC</div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:16px;color:var(--gold);" id="newCrashBalance">0</div>
+          </div>
+        </div>
+
+        <!-- Game Area -->
+        <div style="background:rgba(16,24,16,.3);border:2px solid rgba(255,214,77,.2);border-radius:12px;padding:32px;min-height:400px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;">
+          <div style="font-size:64px;margin-bottom:16px;" id="newCrashRocket">🚀</div>
+          <div style="font-family:'Press Start 2P',monospace;font-size:48px;color:#FFD700;margin-bottom:16px;" id="newCrashMultiplier">1.00x</div>
+          <div style="font-family:Inter,system-ui,Arial;font-size:14px;color:#b0b8c0;margin-bottom:24px;" id="newCrashStatus">Place a bet to start</div>
+          <button class="action-btn btn-gamble" id="newCrashCashoutBtn" style="padding:16px 48px;font-size:14px;display:none;">CASH OUT</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MINES GAME (NEW) -->
+    <div class="game-container" id="newMinesContent" style="display:none;">
+      <div class="game-header">
+        <div class="game-title">💣 MINES</div>
+        <button class="back-btn" id="backFromNewMinesBtn">BACK</button>
+      </div>
+
+      <div style="max-width:600px;margin:0 auto;">
+        <!-- Bet Section -->
+        <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,214,77,.2);border-radius:8px;padding:16px;margin-bottom:20px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+            <div>
+              <label style="font-family:'Press Start 2P',monospace;font-size:9px;color:#a0a8b0;display:block;margin-bottom:8px;">BET AMOUNT</label>
+              <input type="number" id="newMinesBetInput" placeholder="100" min="10" max="10000" value="100" style="width:100%;padding:10px;background:rgba(0,0,0,.4);border:1px solid rgba(255,214,77,.2);border-radius:6px;color:#e6ecf1;font-family:'Press Start 2P',monospace;font-size:11px;">
+            </div>
+            <div>
+              <label style="font-family:'Press Start 2P',monospace;font-size:9px;color:#a0a8b0;display:block;margin-bottom:8px;">MINES</label>
+              <select id="newMinesMineCount" style="width:100%;padding:10px;background:rgba(0,0,0,.4);border:1px solid rgba(255,214,77,.2);border-radius:6px;color:#e6ecf1;font-family:'Press Start 2P',monospace;font-size:11px;">
+                <option value="3">3 Mines</option>
+                <option value="5" selected>5 Mines</option>
+                <option value="10">10 Mines</option>
+                <option value="15">15 Mines</option>
+              </select>
+            </div>
+          </div>
+          <button class="action-btn btn-invest" id="newMinesStartBtn" style="width:100%;margin-bottom:8px;">START GAME</button>
+          <button class="action-btn btn-gamble" id="newMinesCashoutBtn" style="width:100%;display:none;">CASH OUT</button>
+        </div>
+
+        <!-- Stats -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+          <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,214,77,.2);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#a0a8b0;margin-bottom:6px;">YOUR GC</div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:var(--gold);" id="newMinesBalance">0</div>
+          </div>
+          <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,214,77,.2);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#a0a8b0;margin-bottom:6px;">MULTIPLIER</div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:var(--gold);" id="newMinesMultiplier">0.00x</div>
+          </div>
+          <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,214,77,.2);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#a0a8b0;margin-bottom:6px;">PROFIT</div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:var(--gold);" id="newMinesProfit">0</div>
+          </div>
+          <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,214,77,.2);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#a0a8b0;margin-bottom:6px;">REVEALED</div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:var(--gold);" id="newMinesRevealed">0/25</div>
+          </div>
+        </div>
+
+        <!-- Grid -->
+        <div id="newMinesGrid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:20px;max-width:400px;margin-left:auto;margin-right:auto;">
+          <!-- Tiles generated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- BLACKJACK GAME (NEW) -->
+    <div class="game-container" id="newBlackjackContent" style="display:none;">
+      <div class="game-header">
+        <div class="game-title">♠️ BLACKJACK</div>
+        <button class="back-btn" id="backFromNewBlackjackBtn">BACK</button>
+      </div>
+
+      <div style="max-width:700px;margin:0 auto;">
+        <!-- Bet Section -->
+        <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,214,77,.2);border-radius:8px;padding:16px;margin-bottom:20px;display:flex;gap:12px;">
+          <input type="number" id="newBlackjackBetInput" placeholder="100" min="10" max="10000" value="100" style="flex:1;padding:10px;background:rgba(0,0,0,.4);border:1px solid rgba(255,214,77,.2);border-radius:6px;color:#e6ecf1;font-family:'Press Start 2P',monospace;font-size:11px;">
+          <button class="action-btn btn-invest" id="newBlackjackDealBtn">DEAL</button>
+        </div>
+
+        <!-- Stats -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+          <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,214,77,.2);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#a0a8b0;margin-bottom:6px;">YOUR GC</div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:var(--gold);" id="newBlackjackBalance">0</div>
+          </div>
+          <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,214,77,.2);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#a0a8b0;margin-bottom:6px;">YOUR HAND</div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:var(--gold);" id="newBlackjackPlayerValue">0</div>
+          </div>
+          <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,214,77,.2);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#a0a8b0;margin-bottom:6px;">DEALER</div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:var(--gold);" id="newBlackjackDealerValue">?</div>
+          </div>
+          <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,214,77,.2);border-radius:8px;padding:12px;text-align:center;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#a0a8b0;margin-bottom:6px;">BET</div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:var(--gold);" id="newBlackjackCurrentBet">0</div>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div style="background:rgba(16,24,16,.3);border:2px solid rgba(255,214,77,.2);border-radius:12px;padding:24px;min-height:300px;">
+          <!-- Dealer -->
+          <div style="margin-bottom:24px;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:10px;color:#a0a8b0;margin-bottom:12px;text-align:center;">DEALER</div>
+            <div id="newBlackjackDealerCards" style="display:flex;gap:10px;justify-content:center;min-height:84px;"></div>
+          </div>
+          <!-- Player -->
+          <div style="border-top:1px solid rgba(255,214,77,.1);padding-top:24px;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:10px;color:#a0a8b0;margin-bottom:12px;text-align:center;">YOU</div>
+            <div id="newBlackjackPlayerCards" style="display:flex;gap:10px;justify-content:center;min-height:84px;"></div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div id="newBlackjackActions" style="display:none;gap:12px;margin-top:20px;">
+          <button class="action-btn btn-invest" id="newBlackjackHitBtn" style="flex:1;">HIT</button>
+          <button class="action-btn btn-gamble" id="newBlackjackStandBtn" style="flex:1;">STAND</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STAKING (NEW) -->
+    <div class="oven-container" id="newStakingContent" style="display:none;">
+      <div class="oven-header">
+        <div class="oven-title">💰 STAKING</div>
+        <button class="back-btn" id="backFromNewStakingBtn">BACK</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;">
+        <div class="oven-stat-box">
+          <div class="oven-stat-label">YOUR BALANCE</div>
+          <div class="oven-stat-value" id="newStakingBalance">0 GC</div>
+        </div>
+        <div class="oven-stat-box">
+          <div class="oven-stat-label">STAKED</div>
+          <div class="oven-stat-value" id="newStakingStaked">0 GC</div>
+        </div>
+        <div class="oven-stat-box">
+          <div class="oven-stat-label">CURRENT VALUE</div>
+          <div class="oven-stat-value highlight" id="newStakingValue">0 GC</div>
+        </div>
+      </div>
+
+      <div class="oven-timer-box" id="newStakingTimer">No active stake</div>
+
+      <div class="oven-action-section">
+        <div class="oven-section-title">DEPOSIT</div>
+        <div class="oven-input-row">
+          <input type="number" class="oven-input" id="newStakingDepositInput" placeholder="Amount" min="100">
+          <button class="action-btn btn-invest" id="newStakingDepositBtn">DEPOSIT</button>
+        </div>
+      </div>
+
+      <div class="oven-action-section">
+        <div class="oven-section-title">WITHDRAW</div>
+        <button class="action-btn btn-gamble" id="newStakingWithdrawBtn">WITHDRAW ALL</button>
+      </div>
+
+      <div class="oven-info">
+        <strong>10% Hourly Compound Interest</strong><br>
+        Watch your GC grow in real-time! Withdraw anytime.
+      </div>
+    </div>
+
+    <!-- FARM (NEW) -->
+    <div class="oven-container" id="newFarmContent" style="display:none;">
+      <div class="oven-header">
+        <div class="oven-title">🌾 FARM</div>
+        <button class="back-btn" id="backFromNewFarmBtn">BACK</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;">
+        <div class="oven-stat-box">
+          <div class="oven-stat-label">TOTAL FARMED</div>
+          <div class="oven-stat-value" id="newFarmTotal">0 GC</div>
+        </div>
+        <div class="oven-stat-box">
+          <div class="oven-stat-label">TODAY</div>
+          <div class="oven-stat-value" id="newFarmToday">0 GC</div>
+        </div>
+        <div class="oven-stat-box">
+          <div class="oven-stat-label">CLICKS</div>
+          <div class="oven-stat-value" id="newFarmClicks">0</div>
+        </div>
+      </div>
+
+      <div class="farm-button-container">
+        <button class="farm-btn" id="newFarmBtn">
+          <div class="farm-btn-text">FARM</div>
+        </button>
+        <div class="farm-cooldown" id="newFarmCooldown" style="display:none;">
+          <div class="farm-cooldown-text">Next click in <span id="newFarmCooldownTimer">5</span>s</div>
+          <div class="farm-cooldown-bar">
+            <div class="farm-cooldown-fill" id="newFarmCooldownFill"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="farm-result" id="newFarmResult"></div>
+
+      <div class="oven-info">
+        <strong>Click to Farm!</strong><br>
+        Click every 5 seconds for a chance to earn GC.
       </div>
     </div>
 
@@ -4835,440 +5030,6 @@
       </div>
     </div>
 
-    <!-- Staking Investment content (hidden initially) -->
-    <div class="oven-container" id="ovenContent" role="region" aria-label="Staking investment">
-      <div class="oven-header">
-        <div class="oven-title">STAKING</div>
-        <button class="back-btn" id="backFromOvenBtn" aria-label="Back to dashboard">BACK</button>
-      </div>
-
-      <!-- Breadcrumb -->
-      <div class="breadcrumb">
-        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item">DeFi</span>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item active">Staking</span>
-      </div>
-
-      <!-- Main stats display -->
-      <div class="oven-stats-row">
-        <div class="oven-stat-box">
-          <div class="oven-stat-label">YOUR BALANCE</div>
-          <div class="oven-stat-value" id="ovenUserBalance">0 GC</div>
-        </div>
-        <div class="oven-stat-box">
-          <div class="oven-stat-label">INVESTED</div>
-          <div class="oven-stat-value" id="ovenInvested">0 GC</div>
-        </div>
-        <div class="oven-stat-box">
-          <div class="oven-stat-label">CURRENT VALUE</div>
-          <div class="oven-stat-value highlight" id="ovenCurrentValue">0 GC</div>
-        </div>
-      </div>
-
-      <!-- Timer -->
-      <div class="oven-timer-box" id="ovenTimer">
-        No active investment
-      </div>
-
-      <!-- Deposit section -->
-      <div class="oven-action-section">
-        <div class="oven-section-title">DEPOSIT</div>
-        <div class="oven-input-row">
-          <input type="number" class="oven-input" id="ovenDepositAmount" placeholder="Amount" min="1" step="1">
-          <button class="action-btn btn-invest" id="ovenDepositBtn">DEPOSIT</button>
-        </div>
-      </div>
-
-      <!-- Withdraw section -->
-      <div class="oven-action-section">
-        <div class="oven-section-title">WITHDRAW</div>
-        <div class="oven-button-row">
-          <button class="action-btn btn-gamble" id="ovenWithdrawBtn">WITHDRAW ALL</button>
-        </div>
-      </div>
-
-      <!-- Info box -->
-      <div class="oven-info">
-        <strong>10% Hourly Compound Interest (Continuous)</strong><br>
-        Your investment compounds every second at 10% per hour. Watch it grow in real-time! Withdraw anytime.
-      </div>
-
-      <!-- Disclaimer for Oven -->
-      <div class="game-disclaimer success">
-        💡 <strong>Simulated Investment:</strong> This is a campaign feature with simulated returns. All GC earned counts toward your 1M GC goal for the special badge.
-      </div>
-    </div>
-
-    <!-- Airdrop Farm content (hidden initially) -->
-    <div class="oven-container" id="farmContent" role="region" aria-label="Airdrop farm">
-      <div class="oven-header">
-        <div class="oven-title">🪂 AIRDROP FARM</div>
-        <button class="back-btn" id="backFromFarmBtn" aria-label="Back to dashboard">BACK</button>
-      </div>
-
-      <!-- Breadcrumb -->
-      <div class="breadcrumb">
-        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item">DeFi</span>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item active">Farm</span>
-      </div>
-
-      <!-- Stats display -->
-      <div class="oven-stats-row">
-        <div class="oven-stat-box">
-          <div class="oven-stat-label">TOTAL FARMED</div>
-          <div class="oven-stat-value" id="farmTotalEarned">0 GC</div>
-        </div>
-        <div class="oven-stat-box">
-          <div class="oven-stat-label">TODAY</div>
-          <div class="oven-stat-value" id="farmTodayEarned">0 GC</div>
-        </div>
-        <div class="oven-stat-box">
-          <div class="oven-stat-label">CLICKS</div>
-          <div class="oven-stat-value" id="farmTotalClicks">0</div>
-        </div>
-      </div>
-
-      <!-- Main farm button area -->
-      <div class="farm-button-container">
-        <button class="farm-btn" id="farmClickBtn">
-          <div class="farm-btn-text">FARM</div>
-        </button>
-        <div class="farm-cooldown" id="farmCooldown" style="display:none;">
-          <div class="farm-cooldown-text">Next click in <span id="farmCooldownTimer">5</span>s</div>
-          <div class="farm-cooldown-bar">
-            <div class="farm-cooldown-fill" id="farmCooldownFill"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Result display -->
-      <div class="farm-result" id="farmResult"></div>
-
-      <!-- Info -->
-      <div class="oven-info">
-        <strong>Click to Farm Airdrops!</strong><br>
-        Click every 5 seconds for a chance to earn GC. Keep farming for 3 days to maximize your rewards!
-      </div>
-
-      <!-- Disclaimer for Farm -->
-      <div class="game-disclaimer info">
-        ⚠️ <strong>Campaign Event:</strong> 3-day farming challenge. Campaign tokens only • Not exchangeable • Counts toward 1M GC goal
-      </div>
-    </div>
-
-    <!-- Reaction Game content (hidden initially) -->
-    <div class="game-container" id="gameContent" role="region" aria-label="Memecoin trading simulator">
-      <div class="game-header">
-        <div class="game-title">📈 MEMECOIN TRADING SIMULATOR</div>
-        <button class="back-btn" id="backToDashBtn" aria-label="Back to dashboard">BACK</button>
-      </div>
-
-      <!-- Breadcrumb -->
-      <div class="breadcrumb">
-        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item">Skills</span>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item active">Memecoin Trading Simulator</span>
-      </div>
-
-      <div class="game-layout">
-        <!-- Left sidebar with instructions -->
-        <div class="game-sidebar">
-          <div class="instructions">
-            <div class="instructions-title">HOW TO PLAY</div>
-            <div class="instructions-text">
-              Watch the memecoin chart pump and dump! When it turns RED and starts crashing, hit SELL as fast as you can!
-              React under 1000ms to earn 300 GC. Free to play, unlimited attempts!
-            </div>
-          </div>
-
-          <div class="attempts-counter">
-            <span class="attempts-label">BEST TIME</span>
-            <span class="attempts-value" id="attemptsLeft">-- ms</span>
-          </div>
-
-          <div class="results-grid" id="resultsGrid">
-            <!-- Results will be added here dynamically -->
-          </div>
-        </div>
-
-        <!-- Main game area -->
-        <div class="game-main">
-          <div class="game-status" id="gameStatus">Click START to begin</div>
-
-          <div class="chart-container" id="chartContainer">
-            <canvas class="canvas-chart" id="chartCanvas"></canvas>
-            <div class="price-display" id="priceDisplay">$42,156</div>
-          </div>
-
-          <button class="sell-button" id="sellButton" disabled>SELL</button>
-
-          <div class="action-buttons" style="margin-top:16px;">
-            <button class="action-btn btn-primary" id="startGameBtn">START TRADE</button>
-            <button class="action-btn btn-secondary" id="resetGameBtn">RESET STATS</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Crash Rocket Game content (hidden initially) -->
-    <div class="game-container" id="crashContent" role="region" aria-label="Crash rocket game">
-      <div class="game-header">
-        <div class="game-title">ROCKET CRASH</div>
-        <button class="back-btn" id="backFromCrashBtn" aria-label="Back to dashboard">BACK</button>
-      </div>
-
-      <!-- Breadcrumb -->
-      <div class="breadcrumb">
-        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item">Gambling</span>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item active">Rocket Crash</span>
-      </div>
-
-      <div class="game-layout">
-        <!-- Left sidebar -->
-        <div class="game-sidebar">
-          <div class="crash-bet-section">
-            <div class="instructions-title">PLACE BET</div>
-            <div style="margin-bottom:12px;">
-              <label style="font-size:10px;color:#a0a8b0;display:block;margin-bottom:4px;">BET AMOUNT</label>
-              <input type="number" id="crashBetAmount" class="crash-input" placeholder="100" min="10" value="100">
-              <div style="font-size:9px;color:#a0a8b0;margin-top:4px;">Min: 10 GC • Max: 10,000 GC</div>
-            </div>
-            <div style="margin-bottom:12px;">
-              <label style="font-size:10px;color:#a0a8b0;display:block;margin-bottom:4px;">AUTO CASHOUT (Optional)</label>
-              <input type="number" id="crashAutoCashout" class="crash-input" placeholder="2.00" min="1.01" step="0.01">
-              <div style="font-size:9px;color:#a0a8b0;margin-top:4px;">Auto-cashout at multiplier</div>
-            </div>
-            <button class="action-btn btn-primary" id="crashPlaceBetBtn" style="width:100%;">PLACE BET</button>
-          </div>
-
-          <div class="crash-info-section">
-            <div class="crash-stat">
-              <div class="stat-label">YOUR GC</div>
-              <div class="stat-value" id="crashGCDisplay">0</div>
-            </div>
-            <div class="crash-stat">
-              <div class="stat-label">CURRENT BET</div>
-              <div class="stat-value" id="crashCurrentBet">0</div>
-            </div>
-            <div class="crash-stat">
-              <div class="stat-label">POTENTIAL WIN</div>
-              <div class="stat-value" id="crashPotentialWin">0</div>
-            </div>
-          </div>
-
-          <div class="crash-history" id="crashHistory">
-            <div class="instructions-title">CRASH HISTORY</div>
-            <div id="crashHistoryList" class="crash-history-list">
-              <!-- History items will appear here -->
-            </div>
-          </div>
-        </div>
-
-        <!-- Main game area -->
-        <div class="game-main">
-          <div class="crash-game-area">
-            <!-- Provably Fair Hash Display -->
-            <div class="crash-hash-display" id="crashHashDisplay">
-              <div style="font-size:9px;color:#a0a8b0;margin-bottom:4px;">PROVABLY FAIR HASH</div>
-              <div style="font-family:monospace;font-size:10px;color:var(--gold);word-break:break-all;" id="crashHash">Waiting for next round...</div>
-            </div>
-
-            <!-- Rocket Animation Area -->
-            <div class="crash-rocket-container" id="crashRocketContainer">
-              <div class="crash-multiplier-display" id="crashMultiplierDisplay">
-                <div class="crash-multiplier-value" id="crashMultiplierValue">1.00x</div>
-                <div class="crash-status-text" id="crashStatusText">Waiting for bets...</div>
-              </div>
-              <div class="crash-rocket" id="crashRocket">🚀</div>
-              <canvas class="crash-trail-canvas" id="crashTrailCanvas"></canvas>
-            </div>
-
-            <!-- Cashout Button -->
-            <button class="crash-cashout-btn" id="crashCashoutBtn" disabled>CASH OUT</button>
-
-            <!-- Game Status -->
-            <div class="crash-game-status" id="crashGameStatus">
-              Next round starts in <span id="crashCountdown">3</span>s
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Disclaimer for Crash Game -->
-      <div class="game-disclaimer">
-        ⚠️ <strong>Campaign Only:</strong> Fake tokens for Millionaire campaign • Not exchangeable • Play responsibly
-      </div>
-    </div>
-
-    <!-- Mines Game content (hidden initially) -->
-    <div class="game-container" id="minesContent" role="region" aria-label="Mines game">
-      <div class="game-header">
-        <div class="game-title">💣 MINES</div>
-        <button class="back-btn" id="backFromMinesBtn" aria-label="Back to dashboard">BACK</button>
-      </div>
-
-      <!-- Breadcrumb -->
-      <div class="breadcrumb">
-        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item">Gambling</span>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item active">Mines</span>
-      </div>
-
-      <div class="mines-game-area">
-        <!-- Betting Section -->
-        <div class="mines-bet-section">
-          <div class="mines-bet-row">
-            <div class="mines-input-group">
-              <label class="mines-label">BET AMOUNT</label>
-              <input type="number" class="mines-input" id="minesBetAmount" placeholder="10" min="10" max="10000" value="100">
-            </div>
-            <div class="mines-input-group">
-              <label class="mines-label">MINES</label>
-              <select class="mines-input" id="minesCount">
-                <option value="3">3 Mines</option>
-                <option value="5" selected>5 Mines</option>
-                <option value="10">10 Mines</option>
-                <option value="15">15 Mines</option>
-              </select>
-            </div>
-          </div>
-          <button class="action-btn btn-invest" id="minesStartBtn" style="width:100%;margin-top:12px;">START GAME</button>
-          <button class="action-btn btn-gamble" id="minesCashoutBtn" style="width:100%;margin-top:12px;display:none;">CASH OUT</button>
-        </div>
-
-        <!-- Stats Display -->
-        <div class="mines-stats-display">
-          <div class="mines-stat">
-            <div class="mines-stat-label">YOUR GC</div>
-            <div class="mines-stat-value" id="minesGCDisplay">0</div>
-          </div>
-          <div class="mines-stat">
-            <div class="mines-stat-label">MULTIPLIER</div>
-            <div class="mines-stat-value" id="minesMultiplier">0.00x</div>
-          </div>
-          <div class="mines-stat">
-            <div class="mines-stat-label">PROFIT</div>
-            <div class="mines-stat-value" id="minesProfit">0 GC</div>
-          </div>
-          <div class="mines-stat">
-            <div class="mines-stat-label">REVEALED</div>
-            <div class="mines-stat-value" id="minesRevealed">0 / 25</div>
-          </div>
-        </div>
-
-        <!-- Mines Grid (5x5) -->
-        <div class="mines-grid" id="minesGrid">
-          <!-- Grid tiles will be generated by JavaScript -->
-        </div>
-
-        <!-- Game Info -->
-        <div class="mines-info">
-          Click tiles to reveal. Avoid the mines! Cash out anytime to secure your winnings.
-        </div>
-      </div>
-
-      <!-- Disclaimer for Mines Game -->
-      <div class="game-disclaimer">
-        ⚠️ <strong>Campaign Only:</strong> Fake tokens for Millionaire campaign • Not exchangeable • Play responsibly
-      </div>
-    </div>
-
-    <!-- Blackjack Game content (hidden initially) -->
-    <div class="game-container" id="blackjackContent" role="region" aria-label="Blackjack game">
-      <div class="game-header">
-        <div class="game-title">♠️ BLACKJACK</div>
-        <button class="back-btn" id="backFromBlackjackBtn" aria-label="Back to dashboard">BACK</button>
-      </div>
-
-      <!-- Breadcrumb -->
-      <div class="breadcrumb">
-        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item">Gambling</span>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item active">Blackjack</span>
-      </div>
-
-      <div class="blackjack-game-area">
-        <!-- Betting Section -->
-        <div class="blackjack-bet-section">
-          <div class="blackjack-bet-row">
-            <div class="blackjack-input-group">
-              <label class="blackjack-label">BET AMOUNT</label>
-              <input type="number" class="blackjack-input" id="blackjackBetAmount" placeholder="10" min="10" max="10000" value="100">
-            </div>
-            <button class="action-btn btn-invest" id="blackjackDealBtn" style="flex:1;">DEAL</button>
-          </div>
-        </div>
-
-        <!-- Stats Display -->
-        <div class="blackjack-stats-display">
-          <div class="blackjack-stat">
-            <div class="blackjack-stat-label">YOUR GC</div>
-            <div class="blackjack-stat-value" id="blackjackGCDisplay">0</div>
-          </div>
-          <div class="blackjack-stat">
-            <div class="blackjack-stat-label">YOUR HAND</div>
-            <div class="blackjack-stat-value" id="blackjackPlayerValue">0</div>
-          </div>
-          <div class="blackjack-stat">
-            <div class="blackjack-stat-label">DEALER HAND</div>
-            <div class="blackjack-stat-value" id="blackjackDealerValue">0</div>
-          </div>
-          <div class="blackjack-stat">
-            <div class="blackjack-stat-label">BET</div>
-            <div class="blackjack-stat-value" id="blackjackCurrentBet">0 GC</div>
-          </div>
-        </div>
-
-        <!-- Game Table -->
-        <div class="blackjack-table">
-          <!-- Dealer's Hand -->
-          <div class="blackjack-hand-section">
-            <div class="blackjack-hand-title">DEALER</div>
-            <div class="blackjack-cards" id="blackjackDealerCards">
-              <!-- Cards will be added here -->
-            </div>
-          </div>
-
-          <!-- Player's Hand -->
-          <div class="blackjack-hand-section player">
-            <div class="blackjack-hand-title">YOU</div>
-            <div class="blackjack-cards" id="blackjackPlayerCards">
-              <!-- Cards will be added here -->
-            </div>
-          </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="blackjack-actions" id="blackjackActions" style="display:none;">
-          <button class="action-btn btn-invest" id="blackjackHitBtn">HIT</button>
-          <button class="action-btn btn-gamble" id="blackjackStandBtn">STAND</button>
-        </div>
-
-        <!-- Game Info -->
-        <div class="blackjack-info" id="blackjackGameInfo">
-          Place your bet and click DEAL to start. Get closer to 21 than the dealer without going over!
-        </div>
-      </div>
-
-      <!-- Disclaimer for Blackjack Game -->
-      <div class="game-disclaimer">
-        ⚠️ <strong>Campaign Only:</strong> Fake tokens for Millionaire campaign • Not exchangeable • Play responsibly
-      </div>
-    </div>
   </main>
 
   <!-- Custom Modal System -->
@@ -6128,6 +5889,12 @@
     const shopContent = document.getElementById('shopContent');
     const crashContent = document.getElementById('crashContent');
     const campaignContent = document.getElementById('campaignContent');
+    const warriorCampaignContent = document.getElementById("warriorCampaignContent");
+    const newCrashContent = document.getElementById("newCrashContent");
+    const newMinesContent = document.getElementById("newMinesContent");
+    const newBlackjackContent = document.getElementById("newBlackjackContent");
+    const newStakingContent = document.getElementById("newStakingContent");
+    const newFarmContent = document.getElementById("newFarmContent");
     const campaignBanner = document.getElementById('campaignBanner');
 
     // Debug: Check if all elements exist
@@ -6163,7 +5930,7 @@
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
       // Find currently visible element
-      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent, campaignContent];
+      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent, campaignContent, warriorCampaignContent, newCrashContent, newMinesContent, newBlackjackContent, newStakingContent, newFarmContent];
       const currentVisible = allContainers.find(el => el.style.display !== 'none' && el.style.display !== '');
 
       // Add fade-out to current visible element
@@ -6634,6 +6401,30 @@
         inventoryContent.style.display = 'none';
         shopContent.style.display = 'block';
         ovenContent.style.display = 'none';
+} else if (newContent === 'warriorCampaign') {
+  allContainers.forEach(el => el.style.display = 'none');
+  warriorCampaignContent.style.display = 'block';
+  warriorCampaignContent.classList.add('fade-in');
+} else if (newContent === 'newCrash') {
+  allContainers.forEach(el => el.style.display = 'none');
+  newCrashContent.style.display = 'block';
+  newCrashContent.classList.add('fade-in');
+} else if (newContent === 'newMines') {
+  allContainers.forEach(el => el.style.display = 'none');
+  newMinesContent.style.display = 'block';
+  newMinesContent.classList.add('fade-in');
+} else if (newContent === 'newBlackjack') {
+  allContainers.forEach(el => el.style.display = 'none');
+  newBlackjackContent.style.display = 'block';
+  newBlackjackContent.classList.add('fade-in');
+} else if (newContent === 'newStaking') {
+  allContainers.forEach(el => el.style.display = 'none');
+  newStakingContent.style.display = 'block';
+  newStakingContent.classList.add('fade-in');
+} else if (newContent === 'newFarm') {
+  allContainers.forEach(el => el.style.display = 'none');
+  newFarmContent.style.display = 'block';
+  newFarmContent.classList.add('fade-in');
         farmContent.style.display = 'none';
         crashContent.style.display = 'none';
         campaignContent.style.display = 'none';
@@ -10630,6 +10421,776 @@
         if (brandTitle) brandTitle.style.cursor = 'pointer';
       }
     } catch (e) {}
+// ========================================
+// WARRIOR CAMPAIGN - NEW GAMES & DEFI
+// All server-side validated for security
+// ========================================
+
+let newGameState = {
+  crash: { sessionId: null, playing: false },
+  mines: { sessionId: null, playing: false, revealedTiles: [] },
+  blackjack: { sessionId: null, playing: false },
+  staking: { updateInterval: null },
+  farm: { cooldownInterval: null, stats: { total: 0, today: 0, clicks: 0 } }
+};
+
+// ========================================
+// UTILITY: Get current user balance
+// ========================================
+async function refreshUserBalance() {
+  if (!currentUser) return 0;
+  const { data, error } = await supabase
+    .from('users')
+    .select('gc_balance')
+    .eq('id', currentUser.id)
+    .single();
+
+  if (data) {
+    currentUser.gc_balance = data.gc_balance;
+    return data.gc_balance;
+  }
+  return 0;
+}
+
+// ========================================
+// CRASH GAME (NEW - SERVER-SIDE)
+// ========================================
+async function initNewCrash() {
+  const balance = await refreshUserBalance();
+  document.getElementById('newCrashBalance').textContent = balance.toLocaleString();
+  document.getElementById('newCrashMultiplier').textContent = '1.00x';
+  document.getElementById('newCrashStatus').textContent = 'Place a bet to start';
+  document.getElementById('newCrashCashoutBtn').style.display = 'none';
+  document.getElementById('newCrashBetBtn').disabled = false;
+}
+
+async function startNewCrash() {
+  const betAmount = parseInt(document.getElementById('newCrashBetInput').value);
+
+  if (!betAmount || betAmount < 10 || betAmount > 10000) {
+    showToast('Bet must be between 10-10,000 GC', 'error');
+    return;
+  }
+
+  if (betAmount > currentUser.gc_balance) {
+    showToast('Insufficient balance', 'error');
+    return;
+  }
+
+  try {
+    const { data, error } = await supabase.rpc('crash_start_round', {
+      p_user_id: currentUser.id,
+      p_bet_amount: betAmount,
+      p_auto_cashout: null
+    });
+
+    if (error) throw error;
+    if (!data.success) {
+      showToast(data.error, 'error');
+      return;
+    }
+
+    newGameState.crash.sessionId = data.session_id;
+    newGameState.crash.playing = true;
+
+    document.getElementById('newCrashBalance').textContent = data.new_balance.toLocaleString();
+    currentUser.gc_balance = data.new_balance;
+    document.getElementById('newCrashBetBtn').disabled = true;
+    document.getElementById('newCrashCashoutBtn').style.display = 'block';
+    document.getElementById('newCrashStatus').textContent = 'Rising...';
+
+    // Animate multiplier to crash point
+    animateNewCrash(data.crash_point);
+  } catch (error) {
+    console.error('Crash start error:', error);
+    showToast('Failed to start game', 'error');
+  }
+}
+
+function animateNewCrash(crashPoint) {
+  let multiplier = 1.00;
+  const increment = 0.01;
+  const speed = 50; // ms per tick
+
+  const interval = setInterval(() => {
+    if (!newGameState.crash.playing) {
+      clearInterval(interval);
+      return;
+    }
+
+    multiplier += increment;
+    document.getElementById('newCrashMultiplier').textContent = multiplier.toFixed(2) + 'x';
+
+    if (multiplier >= crashPoint) {
+      clearInterval(interval);
+      crashNewGame();
+    }
+  }, speed);
+}
+
+async function crashNewGame() {
+  newGameState.crash.playing = false;
+  document.getElementById('newCrashStatus').textContent = 'CRASHED!';
+  document.getElementById('newCrashCashoutBtn').style.display = 'none';
+  document.getElementById('newCrashBetBtn').disabled = false;
+
+  await refreshUserBalance();
+  document.getElementById('newCrashBalance').textContent = currentUser.gc_balance.toLocaleString();
+
+  showToast('Crashed! Better luck next time', 'error');
+
+  setTimeout(() => {
+    document.getElementById('newCrashMultiplier').textContent = '1.00x';
+    document.getElementById('newCrashStatus').textContent = 'Place a bet to start';
+  }, 2000);
+}
+
+async function cashoutNewCrash() {
+  if (!newGameState.crash.playing || !newGameState.crash.sessionId) return;
+
+  const currentMultiplier = parseFloat(document.getElementById('newCrashMultiplier').textContent);
+
+  try {
+    const { data, error } = await supabase.rpc('crash_cashout', {
+      p_session_id: newGameState.crash.sessionId,
+      p_cashout_multiplier: currentMultiplier
+    });
+
+    if (error) throw error;
+    if (!data.success) {
+      showToast(data.error, 'error');
+      return;
+    }
+
+    newGameState.crash.playing = false;
+    newGameState.crash.sessionId = null;
+
+    document.getElementById('newCrashBalance').textContent = data.new_balance.toLocaleString();
+    currentUser.gc_balance = data.new_balance;
+    document.getElementById('newCrashCashoutBtn').style.display = 'none';
+    document.getElementById('newCrashBetBtn').disabled = false;
+
+    if (data.result === 'win') {
+      document.getElementById('newCrashStatus').textContent = `Cashed out at ${currentMultiplier.toFixed(2)}x!`;
+      showToast(`Won ${data.profit} GC!`, 'success');
+    } else {
+      document.getElementById('newCrashStatus').textContent = 'Crashed before cashout!';
+      showToast('Too late!', 'error');
+    }
+
+    setTimeout(() => {
+      document.getElementById('newCrashMultiplier').textContent = '1.00x';
+      document.getElementById('newCrashStatus').textContent = 'Place a bet to start';
+    }, 3000);
+  } catch (error) {
+    console.error('Cashout error:', error);
+    showToast('Cashout failed', 'error');
+  }
+}
+
+// ========================================
+// MINES GAME (NEW - SERVER-SIDE)
+// ========================================
+async function initNewMines() {
+  const balance = await refreshUserBalance();
+  document.getElementById('newMinesBalance').textContent = balance.toLocaleString();
+  document.getElementById('newMinesMultiplier').textContent = '0.00x';
+  document.getElementById('newMinesProfit').textContent = '0';
+  document.getElementById('newMinesRevealed').textContent = '0/25';
+
+  // Generate grid
+  const grid = document.getElementById('newMinesGrid');
+  grid.innerHTML = '';
+  for (let i = 0; i < 25; i++) {
+    const tile = document.createElement('div');
+    tile.style.cssText = 'aspect-ratio:1;background:rgba(255,214,77,.1);border:2px solid rgba(255,214,77,.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;transition:all 0.2s;user-select:none;';
+    tile.dataset.index = i;
+    tile.addEventListener('click', () => revealNewMinesTile(i));
+    grid.appendChild(tile);
+  }
+
+  newGameState.mines.revealedTiles = [];
+  document.getElementById('newMinesStartBtn').style.display = 'block';
+  document.getElementById('newMinesCashoutBtn').style.display = 'none';
+}
+
+async function startNewMines() {
+  const betAmount = parseInt(document.getElementById('newMinesBetInput').value);
+  const mineCount = parseInt(document.getElementById('newMinesMineCount').value);
+
+  if (!betAmount || betAmount < 10 || betAmount > 10000) {
+    showToast('Bet must be between 10-10,000 GC', 'error');
+    return;
+  }
+
+  if (betAmount > currentUser.gc_balance) {
+    showToast('Insufficient balance', 'error');
+    return;
+  }
+
+  try {
+    const { data, error } = await supabase.rpc('mines_start_game', {
+      p_user_id: currentUser.id,
+      p_bet_amount: betAmount,
+      p_mine_count: mineCount
+    });
+
+    if (error) throw error;
+    if (!data.success) {
+      showToast(data.error, 'error');
+      return;
+    }
+
+    newGameState.mines.sessionId = data.session_id;
+    newGameState.mines.playing = true;
+    newGameState.mines.revealedTiles = [];
+
+    document.getElementById('newMinesBalance').textContent = data.new_balance.toLocaleString();
+    currentUser.gc_balance = data.new_balance;
+    document.getElementById('newMinesStartBtn').style.display = 'none';
+    document.getElementById('newMinesCashoutBtn').style.display = 'block';
+
+    // Reset all tiles
+    const tiles = document.querySelectorAll('#newMinesGrid > div');
+    tiles.forEach(tile => {
+      tile.style.background = 'rgba(255,214,77,.1)';
+      tile.style.cursor = 'pointer';
+      tile.style.pointerEvents = 'auto';
+      tile.textContent = '';
+    });
+  } catch (error) {
+    console.error('Mines start error:', error);
+    showToast('Failed to start game', 'error');
+  }
+}
+
+async function revealNewMinesTile(index) {
+  if (!newGameState.mines.playing || newGameState.mines.revealedTiles.includes(index)) return;
+
+  try {
+    const { data, error } = await supabase.rpc('mines_reveal_tile', {
+      p_session_id: newGameState.mines.sessionId,
+      p_tile_index: index
+    });
+
+    if (error) throw error;
+    if (!data.success) {
+      showToast(data.error, 'error');
+      return;
+    }
+
+    const tile = document.querySelector(`#newMinesGrid > div[data-index="${index}"]`);
+
+    if (data.hit_mine) {
+      // HIT MINE - GAME OVER
+      tile.textContent = '💣';
+      tile.style.background = 'rgba(244,67,54,.3)';
+      tile.style.borderColor = 'rgba(244,67,54,.6)';
+
+      newGameState.mines.playing = false;
+
+      // Reveal all mines
+      data.mine_positions.forEach(pos => {
+        const mineTile = document.querySelector(`#newMinesGrid > div[data-index="${pos}"]`);
+        if (mineTile && pos !== index) {
+          mineTile.textContent = '💣';
+          mineTile.style.background = 'rgba(244,67,54,.2)';
+        }
+      });
+
+      // Disable all tiles
+      const allTiles = document.querySelectorAll('#newMinesGrid > div');
+      allTiles.forEach(t => {
+        t.style.cursor = 'not-allowed';
+        t.style.pointerEvents = 'none';
+      });
+
+      document.getElementById('newMinesCashoutBtn').style.display = 'none';
+      document.getElementById('newMinesStartBtn').style.display = 'block';
+
+      showToast('Hit a mine! Game over', 'error');
+
+      await refreshUserBalance();
+      document.getElementById('newMinesBalance').textContent = currentUser.gc_balance.toLocaleString();
+    } else {
+      // SAFE TILE
+      tile.textContent = '💎';
+      tile.style.background = 'rgba(76,175,80,.2)';
+      tile.style.borderColor = 'rgba(76,175,80,.4)';
+      tile.style.cursor = 'not-allowed';
+      tile.style.pointerEvents = 'none';
+
+      newGameState.mines.revealedTiles.push(index);
+
+      document.getElementById('newMinesMultiplier').textContent = data.multiplier.toFixed(2) + 'x';
+      document.getElementById('newMinesRevealed').textContent = `${data.safe_tiles_count}/25`;
+
+      const betAmount = parseInt(document.getElementById('newMinesBetInput').value);
+      const profit = Math.floor(betAmount * data.multiplier) - betAmount;
+      document.getElementById('newMinesProfit').textContent = profit.toLocaleString() + ' GC';
+    }
+  } catch (error) {
+    console.error('Reveal tile error:', error);
+    showToast('Failed to reveal tile', 'error');
+  }
+}
+
+async function cashoutNewMines() {
+  if (!newGameState.mines.playing || !newGameState.mines.sessionId) return;
+
+  try {
+    const { data, error } = await supabase.rpc('mines_cashout', {
+      p_session_id: newGameState.mines.sessionId
+    });
+
+    if (error) throw error;
+    if (!data.success) {
+      showToast(data.error, 'error');
+      return;
+    }
+
+    newGameState.mines.playing = false;
+    newGameState.mines.sessionId = null;
+
+    document.getElementById('newMinesBalance').textContent = data.new_balance.toLocaleString();
+    currentUser.gc_balance = data.new_balance;
+    document.getElementById('newMinesCashoutBtn').style.display = 'none';
+    document.getElementById('newMinesStartBtn').style.display = 'block';
+
+    showToast(`Won ${data.profit} GC at ${data.multiplier}x!`, 'success');
+
+    // Disable all tiles
+    const allTiles = document.querySelectorAll('#newMinesGrid > div');
+    allTiles.forEach(t => {
+      t.style.cursor = 'not-allowed';
+      t.style.pointerEvents = 'none';
+    });
+  } catch (error) {
+    console.error('Cashout error:', error);
+    showToast('Cashout failed', 'error');
+  }
+}
+
+// ========================================
+// BLACKJACK GAME (NEW - SERVER-SIDE)
+// ========================================
+async function initNewBlackjack() {
+  const balance = await refreshUserBalance();
+  document.getElementById('newBlackjackBalance').textContent = balance.toLocaleString();
+  document.getElementById('newBlackjackPlayerValue').textContent = '0';
+  document.getElementById('newBlackjackDealerValue').textContent = '?';
+  document.getElementById('newBlackjackCurrentBet').textContent = '0';
+  document.getElementById('newBlackjackPlayerCards').innerHTML = '';
+  document.getElementById('newBlackjackDealerCards').innerHTML = '';
+  document.getElementById('newBlackjackActions').style.display = 'none';
+  document.getElementById('newBlackjackDealBtn').disabled = false;
+}
+
+function createNewBlackjackCard(value, isHidden = false) {
+  const card = document.createElement('div');
+  card.style.cssText = 'width:60px;height:84px;background:#fff;border:2px solid #333;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:"Press Start 2P",monospace;font-size:18px;box-shadow:0 4px 8px rgba(0,0,0,.3);';
+
+  if (isHidden) {
+    card.style.background = 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)';
+    card.style.color = '#fff';
+    card.textContent = '?';
+  } else {
+    const suits = ['♠', '♣', '♥', '♦'];
+    const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+    const isRed = value > 13 || (value > 0 && value <= 13 && Math.floor((value - 1) / 13) % 2 === 1);
+    card.style.color = isRed ? '#dc143c' : '#000';
+
+    const displayValue = values[(value - 1) % 13];
+    card.textContent = displayValue;
+  }
+
+  return card;
+}
+
+async function dealNewBlackjack() {
+  const betAmount = parseInt(document.getElementById('newBlackjackBetInput').value);
+
+  if (!betAmount || betAmount < 10 || betAmount > 10000) {
+    showToast('Bet must be between 10-10,000 GC', 'error');
+    return;
+  }
+
+  if (betAmount > currentUser.gc_balance) {
+    showToast('Insufficient balance', 'error');
+    return;
+  }
+
+  try {
+    const { data, error } = await supabase.rpc('blackjack_start_game', {
+      p_user_id: currentUser.id,
+      p_bet_amount: betAmount
+    });
+
+    if (error) throw error;
+    if (!data.success) {
+      showToast(data.error, 'error');
+      return;
+    }
+
+    newGameState.blackjack.sessionId = data.session_id;
+    newGameState.blackjack.playing = true;
+
+    document.getElementById('newBlackjackBalance').textContent = data.new_balance.toLocaleString();
+    currentUser.gc_balance = data.new_balance;
+    document.getElementById('newBlackjackCurrentBet').textContent = betAmount.toLocaleString();
+    document.getElementById('newBlackjackPlayerValue').textContent = data.player_value;
+    document.getElementById('newBlackjackDealerValue').textContent = '?';
+
+    // Display cards
+    const playerCardsDiv = document.getElementById('newBlackjackPlayerCards');
+    const dealerCardsDiv = document.getElementById('newBlackjackDealerCards');
+
+    playerCardsDiv.innerHTML = '';
+    dealerCardsDiv.innerHTML = '';
+
+    data.player_hand.forEach(card => playerCardsDiv.appendChild(createNewBlackjackCard(card)));
+    data.dealer_hand.forEach((card, i) => {
+      dealerCardsDiv.appendChild(createNewBlackjackCard(card, i === 1)); // Hide second dealer card
+    });
+
+    if (data.player_value === 21) {
+      // Blackjack! Auto-stand
+      setTimeout(() => standNewBlackjack(), 1000);
+    } else {
+      document.getElementById('newBlackjackActions').style.display = 'flex';
+      document.getElementById('newBlackjackDealBtn').disabled = true;
+    }
+  } catch (error) {
+    console.error('Deal error:', error);
+    showToast('Failed to deal', 'error');
+  }
+}
+
+async function hitNewBlackjack() {
+  if (!newGameState.blackjack.playing || !newGameState.blackjack.sessionId) return;
+
+  try {
+    const { data, error } = await supabase.rpc('blackjack_hit', {
+      p_session_id: newGameState.blackjack.sessionId
+    });
+
+    if (error) throw error;
+    if (!data.success) {
+      showToast(data.error, 'error');
+      return;
+    }
+
+    document.getElementById('newBlackjackPlayerValue').textContent = data.player_value;
+
+    // Update player cards
+    const playerCardsDiv = document.getElementById('newBlackjackPlayerCards');
+    playerCardsDiv.innerHTML = '';
+    data.player_hand.forEach(card => playerCardsDiv.appendChild(createNewBlackjackCard(card)));
+
+    if (data.busted) {
+      await finishNewBlackjack();
+    }
+  } catch (error) {
+    console.error('Hit error:', error);
+    showToast('Failed to hit', 'error');
+  }
+}
+
+async function standNewBlackjack() {
+  if (!newGameState.blackjack.playing || !newGameState.blackjack.sessionId) return;
+  await finishNewBlackjack();
+}
+
+async function finishNewBlackjack() {
+  try {
+    const { data, error } = await supabase.rpc('blackjack_stand', {
+      p_session_id: newGameState.blackjack.sessionId
+    });
+
+    if (error) throw error;
+    if (!data.success) {
+      showToast(data.error, 'error');
+      return;
+    }
+
+    newGameState.blackjack.playing = false;
+    newGameState.blackjack.sessionId = null;
+
+    document.getElementById('newBlackjackDealerValue').textContent = data.dealer_value;
+    document.getElementById('newBlackjackBalance').textContent = data.new_balance.toLocaleString();
+    currentUser.gc_balance = data.new_balance;
+    document.getElementById('newBlackjackActions').style.display = 'none';
+    document.getElementById('newBlackjackDealBtn').disabled = false;
+
+    // Show all dealer cards
+    const dealerCardsDiv = document.getElementById('newBlackjackDealerCards');
+    dealerCardsDiv.innerHTML = '';
+    data.dealer_hand.forEach(card => dealerCardsDiv.appendChild(createNewBlackjackCard(card)));
+
+    // Show result
+    if (data.result === 'win') {
+      showToast(`You win! +${data.profit} GC`, 'success');
+    } else if (data.result === 'push') {
+      showToast('Push! Bet returned', 'info');
+    } else {
+      showToast('Dealer wins', 'error');
+    }
+  } catch (error) {
+    console.error('Stand error:', error);
+    showToast('Failed to stand', 'error');
+  }
+}
+
+// ========================================
+// STAKING (NEW - SERVER-SIDE)
+// ========================================
+async function initNewStaking() {
+  const balance = await refreshUserBalance();
+  document.getElementById('newStakingBalance').textContent = balance.toLocaleString() + ' GC';
+
+  // Get stake info from server
+  try {
+    const { data, error } = await supabase.rpc('get_stake_value', {
+      p_user_id: currentUser.id
+    });
+
+    if (error) throw error;
+
+    if (data && data.length > 0) {
+      const stake = data[0];
+      document.getElementById('newStakingStaked').textContent = stake.staked_amount.toLocaleString() + ' GC';
+      document.getElementById('newStakingValue').textContent = stake.current_value.toLocaleString() + ' GC';
+      document.getElementById('newStakingTimer').textContent = `Profit: +${stake.profit.toLocaleString()} GC`;
+
+      // Start auto-update
+      if (newGameState.staking.updateInterval) clearInterval(newGameState.staking.updateInterval);
+      newGameState.staking.updateInterval = setInterval(() => updateNewStakingDisplay(), 1000);
+    } else {
+      document.getElementById('newStakingStaked').textContent = '0 GC';
+      document.getElementById('newStakingValue').textContent = '0 GC';
+      document.getElementById('newStakingTimer').textContent = 'No active stake';
+    }
+  } catch (error) {
+    console.error('Get stake error:', error);
+  }
+}
+
+async function updateNewStakingDisplay() {
+  try {
+    const { data, error } = await supabase.rpc('get_stake_value', {
+      p_user_id: currentUser.id
+    });
+
+    if (error) throw error;
+
+    if (data && data.length > 0) {
+      const stake = data[0];
+      document.getElementById('newStakingValue').textContent = stake.current_value.toLocaleString() + ' GC';
+      document.getElementById('newStakingTimer').textContent = `Profit: +${stake.profit.toLocaleString()} GC`;
+    }
+  } catch (error) {
+    console.error('Update stake display error:', error);
+  }
+}
+
+async function depositNewStaking() {
+  const amount = parseInt(document.getElementById('newStakingDepositInput').value);
+
+  if (!amount || amount < 100) {
+    showToast('Minimum deposit is 100 GC', 'error');
+    return;
+  }
+
+  if (amount > currentUser.gc_balance) {
+    showToast('Insufficient balance', 'error');
+    return;
+  }
+
+  try {
+    const { data, error } = await supabase.rpc('stake_deposit', {
+      p_user_id: currentUser.id,
+      p_amount: amount
+    });
+
+    if (error) throw error;
+
+    if (data && data.length > 0 && data[0].success) {
+      showToast('Deposited successfully!', 'success');
+      await initNewStaking();
+    } else {
+      showToast(data[0].message || 'Deposit failed', 'error');
+    }
+  } catch (error) {
+    console.error('Deposit error:', error);
+    showToast('Deposit failed', 'error');
+  }
+}
+
+async function withdrawNewStaking() {
+  try {
+    const { data, error } = await supabase.rpc('stake_withdraw', {
+      p_user_id: currentUser.id
+    });
+
+    if (error) throw error;
+
+    if (data && data.length > 0 && data[0].success) {
+      showToast(`Withdrew ${data[0].withdrawn_amount.toLocaleString()} GC!`, 'success');
+
+      if (newGameState.staking.updateInterval) {
+        clearInterval(newGameState.staking.updateInterval);
+        newGameState.staking.updateInterval = null;
+      }
+
+      await initNewStaking();
+    } else {
+      showToast(data[0].message || 'No active stake', 'error');
+    }
+  } catch (error) {
+    console.error('Withdraw error:', error);
+    showToast('Withdraw failed', 'error');
+  }
+}
+
+// ========================================
+// FARM (NEW - SERVER-SIDE)
+// ========================================
+function initNewFarm() {
+  // Load from localStorage
+  const saved = localStorage.getItem('newFarmState');
+  if (saved) {
+    newGameState.farm.stats = JSON.parse(saved);
+  }
+
+  document.getElementById('newFarmTotal').textContent = newGameState.farm.stats.total.toLocaleString() + ' GC';
+  document.getElementById('newFarmToday').textContent = newGameState.farm.stats.today.toLocaleString() + ' GC';
+  document.getElementById('newFarmClicks').textContent = newGameState.farm.stats.clicks;
+}
+
+async function clickNewFarm() {
+  const btn = document.getElementById('newFarmBtn');
+  if (btn.disabled) return;
+
+  btn.disabled = true;
+
+  // Random reward 0-100 GC
+  const reward = Math.floor(Math.random() * 101);
+
+  try {
+    const { data, error } = await supabase.rpc('secure_update_gc', {
+      p_user_id: currentUser.id,
+      p_amount: reward,
+      p_transaction_type: 'farm',
+      p_reference_id: 'farm_click_' + Date.now(),
+      p_description: `Farm click: +${reward} GC`
+    });
+
+    if (error) throw error;
+
+    if (data && data.success) {
+      currentUser.gc_balance = data.new_balance;
+
+      newGameState.farm.stats.total += reward;
+      newGameState.farm.stats.today += reward;
+      newGameState.farm.stats.clicks++;
+
+      localStorage.setItem('newFarmState', JSON.stringify(newGameState.farm.stats));
+
+      document.getElementById('newFarmTotal').textContent = newGameState.farm.stats.total.toLocaleString() + ' GC';
+      document.getElementById('newFarmToday').textContent = newGameState.farm.stats.today.toLocaleString() + ' GC';
+      document.getElementById('newFarmClicks').textContent = newGameState.farm.stats.clicks;
+
+      const resultDiv = document.getElementById('newFarmResult');
+      resultDiv.textContent = `+${reward} GC`;
+      resultDiv.className = 'farm-result flash-green';
+
+      setTimeout(() => resultDiv.textContent = '', 2000);
+    }
+  } catch (error) {
+    console.error('Farm click error:', error);
+    showToast('Farm failed', 'error');
+  }
+
+  // 5 second cooldown
+
+// ========================================
+// WARRIOR CAMPAIGN EVENT LISTENERS
+// ========================================
+
+// Navigation
+document.getElementById('warriorPlayCrashBtn')?.addEventListener('click', () => {
+  swapContent('newCrash');
+  initNewCrash();
+});
+document.getElementById('warriorPlayMinesBtn')?.addEventListener('click', () => {
+  swapContent('newMines');
+  initNewMines();
+});
+document.getElementById('warriorPlayBlackjackBtn')?.addEventListener('click', () => {
+  swapContent('newBlackjack');
+  initNewBlackjack();
+});
+document.getElementById('warriorOpenStakingBtn')?.addEventListener('click', () => {
+  swapContent('newStaking');
+  initNewStaking();
+});
+document.getElementById('warriorOpenFarmBtn')?.addEventListener('click', () => {
+  swapContent('newFarm');
+  initNewFarm();
+});
+
+// Back buttons
+document.getElementById('backFromWarriorCampaignBtn')?.addEventListener('click', () => swapContent('dashboard'));
+document.getElementById('backFromNewCrashBtn')?.addEventListener('click', () => swapContent('warriorCampaign'));
+document.getElementById('backFromNewMinesBtn')?.addEventListener('click', () => swapContent('warriorCampaign'));
+document.getElementById('backFromNewBlackjackBtn')?.addEventListener('click', () => swapContent('warriorCampaign'));
+document.getElementById('backFromNewStakingBtn')?.addEventListener('click', () => swapContent('warriorCampaign'));
+document.getElementById('backFromNewFarmBtn')?.addEventListener('click', () => swapContent('warriorCampaign'));
+
+// Crash game
+document.getElementById('newCrashBetBtn')?.addEventListener('click', startNewCrash);
+document.getElementById('newCrashCashoutBtn')?.addEventListener('click', cashoutNewCrash);
+
+// Mines game
+document.getElementById('newMinesStartBtn')?.addEventListener('click', startNewMines);
+document.getElementById('newMinesCashoutBtn')?.addEventListener('click', cashoutNewMines);
+
+// Blackjack game
+document.getElementById('newBlackjackDealBtn')?.addEventListener('click', dealNewBlackjack);
+document.getElementById('newBlackjackHitBtn')?.addEventListener('click', hitNewBlackjack);
+document.getElementById('newBlackjackStandBtn')?.addEventListener('click', standNewBlackjack);
+
+// Staking
+document.getElementById('newStakingDepositBtn')?.addEventListener('click', depositNewStaking);
+document.getElementById('newStakingWithdrawBtn')?.addEventListener('click', withdrawNewStaking);
+
+// Farm
+document.getElementById('newFarmBtn')?.addEventListener('click', clickNewFarm);
+  startNewFarmCooldown(5);
+}
+
+function startNewFarmCooldown(seconds) {
+  let remaining = seconds;
+  document.getElementById('newFarmCooldown').style.display = 'block';
+  document.getElementById('newFarmCooldownTimer').textContent = remaining;
+
+  const fill = document.getElementById('newFarmCooldownFill');
+  fill.style.width = '100%';
+
+  if (newGameState.farm.cooldownInterval) clearInterval(newGameState.farm.cooldownInterval);
+
+  newGameState.farm.cooldownInterval = setInterval(() => {
+    remaining--;
+    document.getElementById('newFarmCooldownTimer').textContent = remaining;
+    fill.style.width = ((remaining / seconds) * 100) + '%';
+
+    if (remaining <= 0) {
+      clearInterval(newGameState.farm.cooldownInterval);
+      document.getElementById('newFarmCooldown').style.display = 'none';
+      document.getElementById('newFarmBtn').disabled = false;
+    }
+  }, 1000);
+}
   </script>
 </body>
 </html>
