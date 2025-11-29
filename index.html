@@ -10453,493 +10453,611 @@ async function refreshUserBalance() {
 }
 
 // ========================================
-// CRASH GAME (NEW - SERVER-SIDE)
+// WARRIOR CAMPAIGN - GAME LOGIC (REBUILT FROM SCRATCH)
 // ========================================
-async function initNewCrash() {
-  const balance = await refreshUserBalance();
-  document.getElementById('newCrashBalance').textContent = balance.toLocaleString();
-  document.getElementById('newCrashMultiplier').textContent = '1.00x';
-  document.getElementById('newCrashStatus').textContent = 'Place a bet to start';
-  document.getElementById('newCrashCashoutBtn').style.display = 'none';
-  document.getElementById('newCrashBetBtn').disabled = false;
-}
 
-async function startNewCrash() {
-  const betAmount = parseInt(document.getElementById('newCrashBetInput').value);
+// ========================================
+// 1. CRASH GAME
+// ========================================
+const CrashGame = {
+  state: {
+    sessionId: null,
+    playing: false,
+    animationInterval: null,
+    crashPoint: null
+  },
 
-  if (!betAmount || betAmount < 10 || betAmount > 10000) {
-    showToast('Bet must be between 10-10,000 GC', 'error');
-    return;
-  }
+  async init() {
+    this.reset();
+    const balance = await refreshUserBalance();
+    document.getElementById('newCrashBalance').textContent = balance.toLocaleString();
+  },
 
-  if (betAmount > currentUser.gc_balance) {
-    showToast('Insufficient balance', 'error');
-    return;
-  }
-
-  try {
-    const { data, error } = await supabase.rpc('crash_start_round', {
-      p_user_id: currentUser.id,
-      p_bet_amount: betAmount,
-      p_auto_cashout: null
-    });
-
-    if (error) throw error;
-    if (!data.success) {
-      showToast(data.error, 'error');
-      return;
+  reset() {
+    if (this.state.animationInterval) {
+      clearInterval(this.state.animationInterval);
+      this.state.animationInterval = null;
     }
+    this.state.sessionId = null;
+    this.state.playing = false;
+    this.state.crashPoint = null;
 
-    newGameState.crash.sessionId = data.session_id;
-    newGameState.crash.playing = true;
-
-    document.getElementById('newCrashBalance').textContent = data.new_balance.toLocaleString();
-    currentUser.gc_balance = data.new_balance;
-    document.getElementById('newCrashBetBtn').disabled = true;
-    document.getElementById('newCrashCashoutBtn').style.display = 'block';
-    document.getElementById('newCrashStatus').textContent = 'Rising...';
-
-    // Animate multiplier to crash point
-    animateNewCrash(data.crash_point);
-  } catch (error) {
-    console.error('Crash start error:', error);
-    showToast('Failed to start game', 'error');
-  }
-}
-
-function animateNewCrash(crashPoint) {
-  let multiplier = 1.00;
-  const increment = 0.01;
-  const speed = 50; // ms per tick
-
-  const interval = setInterval(() => {
-    if (!newGameState.crash.playing) {
-      clearInterval(interval);
-      return;
-    }
-
-    multiplier += increment;
-    document.getElementById('newCrashMultiplier').textContent = multiplier.toFixed(2) + 'x';
-
-    if (multiplier >= crashPoint) {
-      clearInterval(interval);
-      crashNewGame();
-    }
-  }, speed);
-}
-
-async function crashNewGame() {
-  newGameState.crash.playing = false;
-  document.getElementById('newCrashStatus').textContent = 'CRASHED!';
-  document.getElementById('newCrashCashoutBtn').style.display = 'none';
-  document.getElementById('newCrashBetBtn').disabled = false;
-
-  await refreshUserBalance();
-  document.getElementById('newCrashBalance').textContent = currentUser.gc_balance.toLocaleString();
-
-  showToast('Crashed! Better luck next time', 'error');
-
-  setTimeout(() => {
     document.getElementById('newCrashMultiplier').textContent = '1.00x';
     document.getElementById('newCrashStatus').textContent = 'Place a bet to start';
-  }, 2000);
-}
+    document.getElementById('newCrashCashoutBtn').style.display = 'none';
+    document.getElementById('newCrashBetBtn').disabled = false;
+  },
 
-async function cashoutNewCrash() {
-  if (!newGameState.crash.playing || !newGameState.crash.sessionId) return;
+  async start() {
+    const betAmount = parseInt(document.getElementById('newCrashBetInput').value);
 
-  const currentMultiplier = parseFloat(document.getElementById('newCrashMultiplier').textContent);
-
-  try {
-    const { data, error } = await supabase.rpc('crash_cashout', {
-      p_session_id: newGameState.crash.sessionId,
-      p_cashout_multiplier: currentMultiplier
-    });
-
-    if (error) throw error;
-    if (!data.success) {
-      showToast(data.error, 'error');
+    // Validation
+    if (!betAmount || betAmount < 10 || betAmount > 10000) {
+      showToast('Bet must be between 10-10,000 GC', 'error');
       return;
     }
 
-    newGameState.crash.playing = false;
-    newGameState.crash.sessionId = null;
+    if (betAmount > currentUser.gc_balance) {
+      showToast('Insufficient balance', 'error');
+      return;
+    }
 
-    document.getElementById('newCrashBalance').textContent = data.new_balance.toLocaleString();
-    currentUser.gc_balance = data.new_balance;
+    try {
+      const { data, error } = await supabase.rpc('crash_start_round', {
+        p_user_id: currentUser.id,
+        p_bet_amount: betAmount,
+        p_auto_cashout: null
+      });
+
+      if (error) throw error;
+      if (!data.success) {
+        showToast(data.error, 'error');
+        return;
+      }
+
+      // Update state
+      this.state.sessionId = data.session_id;
+      this.state.playing = true;
+      this.state.crashPoint = data.crash_point;
+
+      // Update UI
+      document.getElementById('newCrashBalance').textContent = data.new_balance.toLocaleString();
+      currentUser.gc_balance = data.new_balance;
+      document.getElementById('newCrashBetBtn').disabled = true;
+      document.getElementById('newCrashCashoutBtn').style.display = 'block';
+      document.getElementById('newCrashStatus').textContent = 'Rising...';
+
+      // Start animation
+      this.animate();
+    } catch (error) {
+      console.error('Crash start error:', error);
+      showToast('Failed to start game', 'error');
+    }
+  },
+
+  animate() {
+    let multiplier = 1.00;
+    const increment = 0.01;
+    const speed = 50;
+
+    this.state.animationInterval = setInterval(() => {
+      if (!this.state.playing) {
+        clearInterval(this.state.animationInterval);
+        this.state.animationInterval = null;
+        return;
+      }
+
+      multiplier += increment;
+      document.getElementById('newCrashMultiplier').textContent = multiplier.toFixed(2) + 'x';
+
+      if (multiplier >= this.state.crashPoint) {
+        clearInterval(this.state.animationInterval);
+        this.state.animationInterval = null;
+        this.crash();
+      }
+    }, speed);
+  },
+
+  async crash() {
+    this.state.playing = false;
+    document.getElementById('newCrashStatus').textContent = 'CRASHED!';
     document.getElementById('newCrashCashoutBtn').style.display = 'none';
     document.getElementById('newCrashBetBtn').disabled = false;
 
-    if (data.result === 'win') {
-      document.getElementById('newCrashStatus').textContent = `Cashed out at ${currentMultiplier.toFixed(2)}x!`;
-      showToast(`Won ${data.profit} GC!`, 'success');
-    } else {
-      document.getElementById('newCrashStatus').textContent = 'Crashed before cashout!';
-      showToast('Too late!', 'error');
-    }
+    await refreshUserBalance();
+    document.getElementById('newCrashBalance').textContent = currentUser.gc_balance.toLocaleString();
 
-    setTimeout(() => {
-      document.getElementById('newCrashMultiplier').textContent = '1.00x';
-      document.getElementById('newCrashStatus').textContent = 'Place a bet to start';
-    }, 3000);
-  } catch (error) {
-    console.error('Cashout error:', error);
-    showToast('Cashout failed', 'error');
-  }
-}
+    showToast('Crashed! Better luck next time', 'error');
 
-// ========================================
-// MINES GAME (NEW - SERVER-SIDE)
-// ========================================
-async function initNewMines() {
-  const balance = await refreshUserBalance();
-  document.getElementById('newMinesBalance').textContent = balance.toLocaleString();
-  document.getElementById('newMinesMultiplier').textContent = '0.00x';
-  document.getElementById('newMinesProfit').textContent = '0';
-  document.getElementById('newMinesRevealed').textContent = '0/25';
+    setTimeout(() => this.reset(), 2000);
+  },
 
-  // Generate grid
-  const grid = document.getElementById('newMinesGrid');
-  grid.innerHTML = '';
-  for (let i = 0; i < 25; i++) {
-    const tile = document.createElement('div');
-    tile.style.cssText = 'aspect-ratio:1;background:rgba(255,214,77,.1);border:2px solid rgba(255,214,77,.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;transition:all 0.2s;user-select:none;';
-    tile.dataset.index = i;
-    tile.addEventListener('click', () => revealNewMinesTile(i));
-    grid.appendChild(tile);
-  }
+  async cashout() {
+    if (!this.state.playing || !this.state.sessionId) return;
 
-  newGameState.mines.revealedTiles = [];
-  document.getElementById('newMinesStartBtn').style.display = 'block';
-  document.getElementById('newMinesCashoutBtn').style.display = 'none';
-}
+    const currentMultiplier = parseFloat(document.getElementById('newCrashMultiplier').textContent);
 
-async function startNewMines() {
-  const betAmount = parseInt(document.getElementById('newMinesBetInput').value);
-  const mineCount = parseInt(document.getElementById('newMinesMineCount').value);
-
-  if (!betAmount || betAmount < 10 || betAmount > 10000) {
-    showToast('Bet must be between 10-10,000 GC', 'error');
-    return;
-  }
-
-  if (betAmount > currentUser.gc_balance) {
-    showToast('Insufficient balance', 'error');
-    return;
-  }
-
-  try {
-    const { data, error } = await supabase.rpc('mines_start_game', {
-      p_user_id: currentUser.id,
-      p_bet_amount: betAmount,
-      p_mine_count: mineCount
-    });
-
-    if (error) throw error;
-    if (!data.success) {
-      showToast(data.error, 'error');
-      return;
-    }
-
-    newGameState.mines.sessionId = data.session_id;
-    newGameState.mines.playing = true;
-    newGameState.mines.revealedTiles = [];
-
-    document.getElementById('newMinesBalance').textContent = data.new_balance.toLocaleString();
-    currentUser.gc_balance = data.new_balance;
-    document.getElementById('newMinesStartBtn').style.display = 'none';
-    document.getElementById('newMinesCashoutBtn').style.display = 'block';
-
-    // Reset all tiles
-    const tiles = document.querySelectorAll('#newMinesGrid > div');
-    tiles.forEach(tile => {
-      tile.style.background = 'rgba(255,214,77,.1)';
-      tile.style.cursor = 'pointer';
-      tile.style.pointerEvents = 'auto';
-      tile.textContent = '';
-    });
-  } catch (error) {
-    console.error('Mines start error:', error);
-    showToast('Failed to start game', 'error');
-  }
-}
-
-async function revealNewMinesTile(index) {
-  if (!newGameState.mines.playing || newGameState.mines.revealedTiles.includes(index)) return;
-
-  try {
-    const { data, error } = await supabase.rpc('mines_reveal_tile', {
-      p_session_id: newGameState.mines.sessionId,
-      p_tile_index: index
-    });
-
-    if (error) throw error;
-    if (!data.success) {
-      showToast(data.error, 'error');
-      return;
-    }
-
-    const tile = document.querySelector(`#newMinesGrid > div[data-index="${index}"]`);
-
-    if (data.hit_mine) {
-      // HIT MINE - GAME OVER
-      tile.textContent = '💣';
-      tile.style.background = 'rgba(244,67,54,.3)';
-      tile.style.borderColor = 'rgba(244,67,54,.6)';
-
-      newGameState.mines.playing = false;
-
-      // Reveal all mines
-      data.mine_positions.forEach(pos => {
-        const mineTile = document.querySelector(`#newMinesGrid > div[data-index="${pos}"]`);
-        if (mineTile && pos !== index) {
-          mineTile.textContent = '💣';
-          mineTile.style.background = 'rgba(244,67,54,.2)';
-        }
+    try {
+      const { data, error } = await supabase.rpc('crash_cashout', {
+        p_session_id: this.state.sessionId,
+        p_cashout_multiplier: currentMultiplier
       });
 
-      // Disable all tiles
-      const allTiles = document.querySelectorAll('#newMinesGrid > div');
-      allTiles.forEach(t => {
-        t.style.cursor = 'not-allowed';
-        t.style.pointerEvents = 'none';
-      });
+      if (error) throw error;
+      if (!data.success) {
+        showToast(data.error, 'error');
+        return;
+      }
 
-      document.getElementById('newMinesCashoutBtn').style.display = 'none';
-      document.getElementById('newMinesStartBtn').style.display = 'block';
+      // Stop animation
+      this.state.playing = false;
+      if (this.state.animationInterval) {
+        clearInterval(this.state.animationInterval);
+        this.state.animationInterval = null;
+      }
 
-      showToast('Hit a mine! Game over', 'error');
+      // Update UI
+      document.getElementById('newCrashBalance').textContent = data.new_balance.toLocaleString();
+      currentUser.gc_balance = data.new_balance;
+      document.getElementById('newCrashCashoutBtn').style.display = 'none';
+      document.getElementById('newCrashBetBtn').disabled = false;
 
-      await refreshUserBalance();
-      document.getElementById('newMinesBalance').textContent = currentUser.gc_balance.toLocaleString();
-    } else {
-      // SAFE TILE
-      tile.textContent = '💎';
-      tile.style.background = 'rgba(76,175,80,.2)';
-      tile.style.borderColor = 'rgba(76,175,80,.4)';
-      tile.style.cursor = 'not-allowed';
-      tile.style.pointerEvents = 'none';
+      if (data.result === 'win') {
+        document.getElementById('newCrashStatus').textContent = `Cashed out at ${currentMultiplier.toFixed(2)}x!`;
+        showToast(`Won ${data.profit} GC!`, 'success');
+      } else {
+        document.getElementById('newCrashStatus').textContent = 'Crashed before cashout!';
+        showToast('Too late!', 'error');
+      }
 
-      newGameState.mines.revealedTiles.push(index);
-
-      document.getElementById('newMinesMultiplier').textContent = data.multiplier.toFixed(2) + 'x';
-      document.getElementById('newMinesRevealed').textContent = `${data.safe_tiles_count}/25`;
-
-      const betAmount = parseInt(document.getElementById('newMinesBetInput').value);
-      const profit = Math.floor(betAmount * data.multiplier) - betAmount;
-      document.getElementById('newMinesProfit').textContent = profit.toLocaleString() + ' GC';
+      setTimeout(() => this.reset(), 3000);
+    } catch (error) {
+      console.error('Cashout error:', error);
+      showToast('Cashout failed', 'error');
     }
-  } catch (error) {
-    console.error('Reveal tile error:', error);
-    showToast('Failed to reveal tile', 'error');
   }
-}
+};
 
-async function cashoutNewMines() {
-  if (!newGameState.mines.playing || !newGameState.mines.sessionId) return;
+// Wrapper functions for backward compatibility
+async function initNewCrash() { await CrashGame.init(); }
+async function startNewCrash() { await CrashGame.start(); }
+async function cashoutNewCrash() { await CrashGame.cashout(); }
 
-  try {
-    const { data, error } = await supabase.rpc('mines_cashout', {
-      p_session_id: newGameState.mines.sessionId
-    });
+// ========================================
+// 2. MINES GAME (COMPLETELY REBUILT)
+// ========================================
+const MinesGame = {
+  state: {
+    sessionId: null,
+    playing: false,
+    tiles: [],
+    revealedIndices: new Set()
+  },
 
-    if (error) throw error;
-    if (!data.success) {
-      showToast(data.error, 'error');
+  async init() {
+    this.reset();
+    const balance = await refreshUserBalance();
+    document.getElementById('newMinesBalance').textContent = balance.toLocaleString();
+    this.createGrid();
+  },
+
+  reset() {
+    this.state.sessionId = null;
+    this.state.playing = false;
+    this.state.tiles = [];
+    this.state.revealedIndices.clear();
+
+    document.getElementById('newMinesMultiplier').textContent = '0.00x';
+    document.getElementById('newMinesProfit').textContent = '0';
+    document.getElementById('newMinesRevealed').textContent = '0/25';
+    document.getElementById('newMinesStartBtn').style.display = 'block';
+    document.getElementById('newMinesCashoutBtn').style.display = 'none';
+  },
+
+  createGrid() {
+    const grid = document.getElementById('newMinesGrid');
+    grid.innerHTML = '';
+    this.state.tiles = [];
+
+    for (let i = 0; i < 25; i++) {
+      const tile = document.createElement('div');
+      tile.className = 'mines-tile';
+      tile.style.cssText = 'aspect-ratio:1;background:rgba(255,214,77,.1);border:2px solid rgba(255,214,77,.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;transition:all 0.2s;user-select:none;';
+
+      // Store tile reference
+      this.state.tiles[i] = {
+        element: tile,
+        index: i,
+        revealed: false,
+        isMine: false
+      };
+
+      tile.onclick = () => this.revealTile(i);
+      grid.appendChild(tile);
+    }
+  },
+
+  async start() {
+    const betAmount = parseInt(document.getElementById('newMinesBetInput').value);
+    const mineCount = parseInt(document.getElementById('newMinesMineCount').value);
+
+    // Validation
+    if (!betAmount || betAmount < 10 || betAmount > 10000) {
+      showToast('Bet must be between 10-10,000 GC', 'error');
       return;
     }
 
-    newGameState.mines.playing = false;
-    newGameState.mines.sessionId = null;
+    if (betAmount > currentUser.gc_balance) {
+      showToast('Insufficient balance', 'error');
+      return;
+    }
 
-    document.getElementById('newMinesBalance').textContent = data.new_balance.toLocaleString();
-    currentUser.gc_balance = data.new_balance;
+    try {
+      const { data, error } = await supabase.rpc('mines_start_game', {
+        p_user_id: currentUser.id,
+        p_bet_amount: betAmount,
+        p_mine_count: mineCount
+      });
+
+      if (error) throw error;
+      if (!data.success) {
+        showToast(data.error, 'error');
+        return;
+      }
+
+      // Update state
+      this.state.sessionId = data.session_id;
+      this.state.playing = true;
+      this.state.revealedIndices.clear();
+
+      // Update UI
+      document.getElementById('newMinesBalance').textContent = data.new_balance.toLocaleString();
+      currentUser.gc_balance = data.new_balance;
+      document.getElementById('newMinesStartBtn').style.display = 'none';
+      document.getElementById('newMinesCashoutBtn').style.display = 'block';
+
+      // Reset all tiles completely
+      this.state.tiles.forEach(tileData => {
+        tileData.revealed = false;
+        tileData.isMine = false;
+        tileData.element.textContent = '';
+        tileData.element.style.background = 'rgba(255,214,77,.1)';
+        tileData.element.style.borderColor = 'rgba(255,214,77,.3)';
+        tileData.element.style.cursor = 'pointer';
+        tileData.element.style.pointerEvents = 'auto';
+      });
+
+      // Reset stats
+      document.getElementById('newMinesMultiplier').textContent = '0.00x';
+      document.getElementById('newMinesProfit').textContent = '0';
+      document.getElementById('newMinesRevealed').textContent = '0/25';
+    } catch (error) {
+      console.error('Mines start error:', error);
+      showToast('Failed to start game', 'error');
+    }
+  },
+
+  async revealTile(index) {
+    // Prevent revealing if not playing or already revealed
+    if (!this.state.playing) return;
+    if (this.state.revealedIndices.has(index)) return;
+    if (this.state.tiles[index].revealed) return;
+
+    const tileData = this.state.tiles[index];
+
+    try {
+      const { data, error } = await supabase.rpc('mines_reveal_tile', {
+        p_session_id: this.state.sessionId,
+        p_tile_index: index
+      });
+
+      if (error) throw error;
+      if (!data.success) {
+        showToast(data.error, 'error');
+        return;
+      }
+
+      // Mark as revealed
+      tileData.revealed = true;
+      this.state.revealedIndices.add(index);
+
+      if (data.hit_mine) {
+        // HIT MINE - GAME OVER
+        this.gameOver(index, data.mine_positions);
+      } else {
+        // SAFE TILE
+        this.revealSafeTile(tileData, data);
+      }
+    } catch (error) {
+      console.error('Reveal tile error:', error);
+      showToast('Failed to reveal tile', 'error');
+    }
+  },
+
+  revealSafeTile(tileData, data) {
+    tileData.element.textContent = '💎';
+    tileData.element.style.background = 'rgba(76,175,80,.2)';
+    tileData.element.style.borderColor = 'rgba(76,175,80,.4)';
+    tileData.element.style.cursor = 'not-allowed';
+    tileData.element.style.pointerEvents = 'none';
+
+    document.getElementById('newMinesMultiplier').textContent = data.multiplier.toFixed(2) + 'x';
+    document.getElementById('newMinesRevealed').textContent = `${data.safe_tiles_count}/25`;
+
+    const betAmount = parseInt(document.getElementById('newMinesBetInput').value);
+    const profit = Math.floor(betAmount * data.multiplier) - betAmount;
+    document.getElementById('newMinesProfit').textContent = profit.toLocaleString() + ' GC';
+  },
+
+  async gameOver(hitIndex, minePositions) {
+    this.state.playing = false;
+
+    // Show the mine that was hit
+    const hitTile = this.state.tiles[hitIndex];
+    hitTile.element.textContent = '💣';
+    hitTile.element.style.background = 'rgba(244,67,54,.3)';
+    hitTile.element.style.borderColor = 'rgba(244,67,54,.6)';
+    hitTile.isMine = true;
+
+    // Reveal all other mines
+    minePositions.forEach(pos => {
+      if (pos !== hitIndex && pos < this.state.tiles.length) {
+        const tile = this.state.tiles[pos];
+        tile.element.textContent = '💣';
+        tile.element.style.background = 'rgba(244,67,54,.2)';
+        tile.element.style.borderColor = 'rgba(244,67,54,.4)';
+        tile.isMine = true;
+      }
+    });
+
+    // Disable all tiles
+    this.state.tiles.forEach(tile => {
+      tile.element.style.cursor = 'not-allowed';
+      tile.element.style.pointerEvents = 'none';
+    });
+
     document.getElementById('newMinesCashoutBtn').style.display = 'none';
     document.getElementById('newMinesStartBtn').style.display = 'block';
 
-    showToast(`Won ${data.profit} GC at ${data.multiplier}x!`, 'success');
+    showToast('Hit a mine! Game over', 'error');
 
-    // Disable all tiles
-    const allTiles = document.querySelectorAll('#newMinesGrid > div');
-    allTiles.forEach(t => {
-      t.style.cursor = 'not-allowed';
-      t.style.pointerEvents = 'none';
-    });
-  } catch (error) {
-    console.error('Cashout error:', error);
-    showToast('Cashout failed', 'error');
-  }
-}
+    await refreshUserBalance();
+    document.getElementById('newMinesBalance').textContent = currentUser.gc_balance.toLocaleString();
+  },
 
-// ========================================
-// BLACKJACK GAME (NEW - SERVER-SIDE)
-// ========================================
-async function initNewBlackjack() {
-  const balance = await refreshUserBalance();
-  document.getElementById('newBlackjackBalance').textContent = balance.toLocaleString();
-  document.getElementById('newBlackjackPlayerValue').textContent = '0';
-  document.getElementById('newBlackjackDealerValue').textContent = '?';
-  document.getElementById('newBlackjackCurrentBet').textContent = '0';
-  document.getElementById('newBlackjackPlayerCards').innerHTML = '';
-  document.getElementById('newBlackjackDealerCards').innerHTML = '';
-  document.getElementById('newBlackjackActions').style.display = 'none';
-  document.getElementById('newBlackjackDealBtn').disabled = false;
-}
+  async cashout() {
+    if (!this.state.playing || !this.state.sessionId) return;
 
-function createNewBlackjackCard(value, isHidden = false) {
-  const card = document.createElement('div');
-  card.style.cssText = 'width:60px;height:84px;background:#fff;border:2px solid #333;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:"Press Start 2P",monospace;font-size:18px;box-shadow:0 4px 8px rgba(0,0,0,.3);';
+    try {
+      const { data, error } = await supabase.rpc('mines_cashout', {
+        p_session_id: this.state.sessionId
+      });
 
-  if (isHidden) {
-    card.style.background = 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)';
-    card.style.color = '#fff';
-    card.textContent = '?';
-  } else {
-    const suits = ['♠', '♣', '♥', '♦'];
-    const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
-    const isRed = value > 13 || (value > 0 && value <= 13 && Math.floor((value - 1) / 13) % 2 === 1);
-    card.style.color = isRed ? '#dc143c' : '#000';
+      if (error) throw error;
+      if (!data.success) {
+        showToast(data.error, 'error');
+        return;
+      }
 
-    const displayValue = values[(value - 1) % 13];
-    card.textContent = displayValue;
-  }
+      this.state.playing = false;
+      this.state.sessionId = null;
 
-  return card;
-}
+      document.getElementById('newMinesBalance').textContent = data.new_balance.toLocaleString();
+      currentUser.gc_balance = data.new_balance;
+      document.getElementById('newMinesCashoutBtn').style.display = 'none';
+      document.getElementById('newMinesStartBtn').style.display = 'block';
 
-async function dealNewBlackjack() {
-  const betAmount = parseInt(document.getElementById('newBlackjackBetInput').value);
+      showToast(`Won ${data.profit} GC at ${data.multiplier}x!`, 'success');
 
-  if (!betAmount || betAmount < 10 || betAmount > 10000) {
-    showToast('Bet must be between 10-10,000 GC', 'error');
-    return;
-  }
-
-  if (betAmount > currentUser.gc_balance) {
-    showToast('Insufficient balance', 'error');
-    return;
-  }
-
-  try {
-    const { data, error } = await supabase.rpc('blackjack_start_game', {
-      p_user_id: currentUser.id,
-      p_bet_amount: betAmount
-    });
-
-    if (error) throw error;
-    if (!data.success) {
-      showToast(data.error, 'error');
-      return;
+      // Disable all tiles
+      this.state.tiles.forEach(tile => {
+        tile.element.style.cursor = 'not-allowed';
+        tile.element.style.pointerEvents = 'none';
+      });
+    } catch (error) {
+      console.error('Cashout error:', error);
+      showToast('Cashout failed', 'error');
     }
+  }
+};
 
-    newGameState.blackjack.sessionId = data.session_id;
-    newGameState.blackjack.playing = true;
+// Wrapper functions for backward compatibility
+async function initNewMines() { await MinesGame.init(); }
+async function startNewMines() { await MinesGame.start(); }
+async function cashoutNewMines() { await MinesGame.cashout(); }
 
-    document.getElementById('newBlackjackBalance').textContent = data.new_balance.toLocaleString();
-    currentUser.gc_balance = data.new_balance;
-    document.getElementById('newBlackjackCurrentBet').textContent = betAmount.toLocaleString();
-    document.getElementById('newBlackjackPlayerValue').textContent = data.player_value;
+// ========================================
+// 3. BLACKJACK GAME (COMPLETELY REBUILT)
+// ========================================
+const BlackjackGame = {
+  state: {
+    sessionId: null,
+    playing: false
+  },
+
+  async init() {
+    this.reset();
+    const balance = await refreshUserBalance();
+    document.getElementById('newBlackjackBalance').textContent = balance.toLocaleString();
+  },
+
+  reset() {
+    this.state.sessionId = null;
+    this.state.playing = false;
+
+    document.getElementById('newBlackjackPlayerValue').textContent = '0';
     document.getElementById('newBlackjackDealerValue').textContent = '?';
-
-    // Display cards
-    const playerCardsDiv = document.getElementById('newBlackjackPlayerCards');
-    const dealerCardsDiv = document.getElementById('newBlackjackDealerCards');
-
-    playerCardsDiv.innerHTML = '';
-    dealerCardsDiv.innerHTML = '';
-
-    data.player_hand.forEach(card => playerCardsDiv.appendChild(createNewBlackjackCard(card)));
-    data.dealer_hand.forEach((card, i) => {
-      dealerCardsDiv.appendChild(createNewBlackjackCard(card, i === 1)); // Hide second dealer card
-    });
-
-    if (data.player_value === 21) {
-      // Blackjack! Auto-stand
-      setTimeout(() => standNewBlackjack(), 1000);
-    } else {
-      document.getElementById('newBlackjackActions').style.display = 'flex';
-      document.getElementById('newBlackjackDealBtn').disabled = true;
-    }
-  } catch (error) {
-    console.error('Deal error:', error);
-    showToast('Failed to deal', 'error');
-  }
-}
-
-async function hitNewBlackjack() {
-  if (!newGameState.blackjack.playing || !newGameState.blackjack.sessionId) return;
-
-  try {
-    const { data, error } = await supabase.rpc('blackjack_hit', {
-      p_session_id: newGameState.blackjack.sessionId
-    });
-
-    if (error) throw error;
-    if (!data.success) {
-      showToast(data.error, 'error');
-      return;
-    }
-
-    document.getElementById('newBlackjackPlayerValue').textContent = data.player_value;
-
-    // Update player cards
-    const playerCardsDiv = document.getElementById('newBlackjackPlayerCards');
-    playerCardsDiv.innerHTML = '';
-    data.player_hand.forEach(card => playerCardsDiv.appendChild(createNewBlackjackCard(card)));
-
-    if (data.busted) {
-      await finishNewBlackjack();
-    }
-  } catch (error) {
-    console.error('Hit error:', error);
-    showToast('Failed to hit', 'error');
-  }
-}
-
-async function standNewBlackjack() {
-  if (!newGameState.blackjack.playing || !newGameState.blackjack.sessionId) return;
-  await finishNewBlackjack();
-}
-
-async function finishNewBlackjack() {
-  try {
-    const { data, error } = await supabase.rpc('blackjack_stand', {
-      p_session_id: newGameState.blackjack.sessionId
-    });
-
-    if (error) throw error;
-    if (!data.success) {
-      showToast(data.error, 'error');
-      return;
-    }
-
-    newGameState.blackjack.playing = false;
-    newGameState.blackjack.sessionId = null;
-
-    document.getElementById('newBlackjackDealerValue').textContent = data.dealer_value;
-    document.getElementById('newBlackjackBalance').textContent = data.new_balance.toLocaleString();
-    currentUser.gc_balance = data.new_balance;
+    document.getElementById('newBlackjackCurrentBet').textContent = '0';
+    document.getElementById('newBlackjackPlayerCards').innerHTML = '';
+    document.getElementById('newBlackjackDealerCards').innerHTML = '';
     document.getElementById('newBlackjackActions').style.display = 'none';
     document.getElementById('newBlackjackDealBtn').disabled = false;
+  },
 
-    // Show all dealer cards
-    const dealerCardsDiv = document.getElementById('newBlackjackDealerCards');
-    dealerCardsDiv.innerHTML = '';
-    data.dealer_hand.forEach(card => dealerCardsDiv.appendChild(createNewBlackjackCard(card)));
+  createCard(value, isHidden = false) {
+    const card = document.createElement('div');
+    card.style.cssText = 'width:60px;height:84px;background:#fff;border:2px solid #333;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:"Press Start 2P",monospace;font-size:18px;box-shadow:0 4px 8px rgba(0,0,0,.3);';
 
-    // Show result
-    if (data.result === 'win') {
-      showToast(`You win! +${data.profit} GC`, 'success');
-    } else if (data.result === 'push') {
-      showToast('Push! Bet returned', 'info');
+    if (isHidden) {
+      card.style.background = 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)';
+      card.style.color = '#fff';
+      card.textContent = '?';
     } else {
-      showToast('Dealer wins', 'error');
+      const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+      const isRed = value > 13 || (value > 0 && value <= 13 && Math.floor((value - 1) / 13) % 2 === 1);
+      card.style.color = isRed ? '#dc143c' : '#000';
+      card.textContent = values[(value - 1) % 13];
     }
-  } catch (error) {
-    console.error('Stand error:', error);
-    showToast('Failed to stand', 'error');
+
+    return card;
+  },
+
+  async deal() {
+    const betAmount = parseInt(document.getElementById('newBlackjackBetInput').value);
+
+    // Validation
+    if (!betAmount || betAmount < 10 || betAmount > 10000) {
+      showToast('Bet must be between 10-10,000 GC', 'error');
+      return;
+    }
+
+    if (betAmount > currentUser.gc_balance) {
+      showToast('Insufficient balance', 'error');
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase.rpc('blackjack_start_game', {
+        p_user_id: currentUser.id,
+        p_bet_amount: betAmount
+      });
+
+      if (error) throw error;
+      if (!data.success) {
+        showToast(data.error, 'error');
+        return;
+      }
+
+      // Update state
+      this.state.sessionId = data.session_id;
+      this.state.playing = true;
+
+      // Update UI
+      document.getElementById('newBlackjackBalance').textContent = data.new_balance.toLocaleString();
+      currentUser.gc_balance = data.new_balance;
+      document.getElementById('newBlackjackCurrentBet').textContent = betAmount.toLocaleString();
+      document.getElementById('newBlackjackPlayerValue').textContent = data.player_value;
+      document.getElementById('newBlackjackDealerValue').textContent = '?';
+
+      // Display cards
+      const playerCardsDiv = document.getElementById('newBlackjackPlayerCards');
+      const dealerCardsDiv = document.getElementById('newBlackjackDealerCards');
+
+      playerCardsDiv.innerHTML = '';
+      dealerCardsDiv.innerHTML = '';
+
+      data.player_hand.forEach(card => playerCardsDiv.appendChild(this.createCard(card)));
+      data.dealer_hand.forEach((card, i) => {
+        dealerCardsDiv.appendChild(this.createCard(card, i === 1));
+      });
+
+      if (data.player_value === 21) {
+        // Blackjack! Auto-stand
+        setTimeout(() => this.stand(), 1000);
+      } else {
+        document.getElementById('newBlackjackActions').style.display = 'flex';
+        document.getElementById('newBlackjackDealBtn').disabled = true;
+      }
+    } catch (error) {
+      console.error('Deal error:', error);
+      showToast('Failed to deal', 'error');
+    }
+  },
+
+  async hit() {
+    if (!this.state.playing || !this.state.sessionId) return;
+
+    try {
+      const { data, error } = await supabase.rpc('blackjack_hit', {
+        p_session_id: this.state.sessionId
+      });
+
+      if (error) throw error;
+      if (!data.success) {
+        showToast(data.error, 'error');
+        return;
+      }
+
+      document.getElementById('newBlackjackPlayerValue').textContent = data.player_value;
+
+      // Update player cards
+      const playerCardsDiv = document.getElementById('newBlackjackPlayerCards');
+      playerCardsDiv.innerHTML = '';
+      data.player_hand.forEach(card => playerCardsDiv.appendChild(this.createCard(card)));
+
+      if (data.busted) {
+        await this.finish();
+      }
+    } catch (error) {
+      console.error('Hit error:', error);
+      showToast('Failed to hit', 'error');
+    }
+  },
+
+  async stand() {
+    if (!this.state.playing || !this.state.sessionId) return;
+    await this.finish();
+  },
+
+  async finish() {
+    try {
+      const { data, error } = await supabase.rpc('blackjack_stand', {
+        p_session_id: this.state.sessionId
+      });
+
+      if (error) throw error;
+      if (!data.success) {
+        showToast(data.error, 'error');
+        return;
+      }
+
+      // Update state
+      this.state.playing = false;
+      this.state.sessionId = null;
+
+      // Update UI
+      document.getElementById('newBlackjackDealerValue').textContent = data.dealer_value;
+      document.getElementById('newBlackjackBalance').textContent = data.new_balance.toLocaleString();
+      currentUser.gc_balance = data.new_balance;
+      document.getElementById('newBlackjackActions').style.display = 'none';
+      document.getElementById('newBlackjackDealBtn').disabled = false;
+
+      // Show all dealer cards
+      const dealerCardsDiv = document.getElementById('newBlackjackDealerCards');
+      dealerCardsDiv.innerHTML = '';
+      data.dealer_hand.forEach(card => dealerCardsDiv.appendChild(this.createCard(card)));
+
+      // Show result
+      if (data.result === 'win') {
+        showToast(`You win! +${data.profit} GC`, 'success');
+      } else if (data.result === 'push') {
+        showToast('Push! Bet returned', 'info');
+      } else {
+        showToast('Dealer wins', 'error');
+      }
+    } catch (error) {
+      console.error('Stand error:', error);
+      showToast('Failed to stand', 'error');
+    }
   }
-}
+};
+
+// Wrapper functions for backward compatibility
+async function initNewBlackjack() { await BlackjackGame.init(); }
+async function dealNewBlackjack() { await BlackjackGame.deal(); }
+async function hitNewBlackjack() { await BlackjackGame.hit(); }
+async function standNewBlackjack() { await BlackjackGame.stand(); }
+function createNewBlackjackCard(value, isHidden = false) { return BlackjackGame.createCard(value, isHidden); }
 
 // ========================================
 // STAKING (NEW - SERVER-SIDE)
