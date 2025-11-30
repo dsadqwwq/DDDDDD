@@ -6171,14 +6171,14 @@
       window.scrollTo({ top: 0, behavior: 'instant' });
       if (pageContainer) pageContainer.scrollTop = 0;
 
-      // Track navigation history for games
+      // Track navigation history for games and campaign
       if (currentPage === 'dashboard' || currentPage === 'campaign') {
-        if (newContent === 'crash' || newContent === 'mines' || newContent === 'blackjack') {
+        if (newContent === 'crash' || newContent === 'mines' || newContent === 'blackjack' || newContent === 'campaign') {
           previousPage = currentPage;
         }
       }
       // Update current page
-      if (newContent !== 'crash' && newContent !== 'mines' && newContent !== 'blackjack') {
+      if (newContent !== 'crash' && newContent !== 'mines' && newContent !== 'blackjack' && newContent !== 'campaign') {
         currentPage = newContent;
       }
 
@@ -10606,7 +10606,7 @@
     } else {
       console.error('Campaign banner element not found!');
     }
-    document.getElementById('backFromCampaignBtn').addEventListener('click', () => swapContent('dashboard'));
+    document.getElementById('backFromCampaignBtn').addEventListener('click', () => swapContent(previousPage));
 
     // Leaderboard filter buttons
     document.querySelectorAll('.filter-btn').forEach(btn => {
