@@ -10576,7 +10576,16 @@
     });
 
     // Campaign banner and page handlers
-    document.getElementById('campaignBanner').addEventListener('click', () => swapContent('campaign'));
+    const campaignBannerElement = document.getElementById('campaignBanner');
+    if (campaignBannerElement) {
+      console.log('Campaign banner found, adding click listener');
+      campaignBannerElement.addEventListener('click', () => {
+        console.log('Campaign banner clicked!');
+        swapContent('campaign');
+      });
+    } else {
+      console.error('Campaign banner element not found!');
+    }
     document.getElementById('backFromCampaignBtn').addEventListener('click', () => swapContent('dashboard'));
 
     // Leaderboard filter buttons
