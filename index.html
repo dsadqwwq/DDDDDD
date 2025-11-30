@@ -6167,6 +6167,10 @@
 
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
+      // Scroll to top immediately when navigation starts
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      if (pageContainer) pageContainer.scrollTop = 0;
+
       // Track navigation history for games
       if (currentPage === 'dashboard' || currentPage === 'campaign') {
         if (newContent === 'crash' || newContent === 'mines' || newContent === 'blackjack') {
