@@ -6161,8 +6161,23 @@
       termsAccepted: false
     };
 
+    // Track previous page for back navigation
+    let previousPage = 'dashboard';
+    let currentPage = 'login';
+
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
+      // Track navigation history for games
+      if (currentPage === 'dashboard' || currentPage === 'campaign') {
+        if (newContent === 'crash' || newContent === 'mines' || newContent === 'blackjack') {
+          previousPage = currentPage;
+        }
+      }
+      // Update current page
+      if (newContent !== 'crash' && newContent !== 'mines' && newContent !== 'blackjack') {
+        currentPage = newContent;
+      }
+
       // Find currently visible element
       const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent, campaignContent];
       const currentVisible = allContainers.find(el => el.style.display !== 'none' && el.style.display !== '');
@@ -6177,6 +6192,7 @@
       setTimeout(() => {
         // Scroll to top immediately when swapping content
         window.scrollTo(0, 0);
+        pageContainer.scrollTop = 0;
 
         if (newContent === 'login') {
           panelContent.style.display = 'block';
@@ -6659,6 +6675,7 @@
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
             window.scrollTo({ top: 0, behavior: 'instant' });
+            pageContainer.scrollTop = 0;
           });
         });
       }, currentVisible ? 200 : 0); // 200ms matches fade-out animation duration
@@ -10539,11 +10556,11 @@
       swapContent('leaderboard');
     });
     document.getElementById('backToDashBtn').addEventListener('click', () => swapContent('dashboard'));
-    document.getElementById('backFromCrashBtn').addEventListener('click', () => swapContent('dashboard'));
-    document.getElementById('backFromMinesBtn').addEventListener('click', () => swapContent('dashboard'));
+    document.getElementById('backFromCrashBtn').addEventListener('click', () => swapContent(previousPage));
+    document.getElementById('backFromMinesBtn').addEventListener('click', () => swapContent(previousPage));
     document.getElementById('minesStartBtn').addEventListener('click', startMinesGame);
     document.getElementById('minesCashoutBtn').addEventListener('click', cashoutMines);
-    document.getElementById('backFromBlackjackBtn').addEventListener('click', () => swapContent('dashboard'));
+    document.getElementById('backFromBlackjackBtn').addEventListener('click', () => swapContent(previousPage));
     document.getElementById('blackjackDealBtn').addEventListener('click', dealBlackjack);
     document.getElementById('blackjackHitBtn').addEventListener('click', blackjackHit);
     document.getElementById('blackjackStandBtn').addEventListener('click', blackjackStand);
