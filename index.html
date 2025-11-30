@@ -6175,6 +6175,9 @@
 
       // Wait for fade-out animation, then swap content
       setTimeout(() => {
+        // Scroll to top immediately when swapping content
+        window.scrollTo(0, 0);
+
         if (newContent === 'login') {
           panelContent.style.display = 'block';
           dashboardContent.style.display = 'none';
