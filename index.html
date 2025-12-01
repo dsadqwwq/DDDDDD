@@ -4492,7 +4492,7 @@
       <div class="market-bar" id="viewShopBtn" style="display:none;"></div>
 
       <!-- Campaign Banner -->
-      <div class="campaign-banner" id="campaignBanner">
+      <div class="campaign-banner" id="campaignBanner" onclick="swapContent('campaign')" style="cursor:pointer;">
         <div class="campaign-banner-header">
           <div class="campaign-banner-icon"></div>
           <div class="campaign-banner-text">WHO WANTS TO BE A MILLIONAIRE</div>
@@ -10588,7 +10588,15 @@
     });
 
     // Campaign banner and page handlers
-    document.getElementById('campaignBanner').addEventListener('click', () => swapContent('campaign'));
+    const campaignBannerElement = document.getElementById('campaignBanner');
+    if (campaignBannerElement) {
+      campaignBannerElement.addEventListener('click', () => {
+        console.log('Campaign banner clicked!');
+        swapContent('campaign');
+      });
+    } else {
+      console.error('Campaign banner element not found!');
+    }
     document.getElementById('backFromCampaignBtn').addEventListener('click', () => swapContent('dashboard'));
 
     // Leaderboard filter buttons
