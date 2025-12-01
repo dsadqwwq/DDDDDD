@@ -4489,8 +4489,8 @@
       <!-- Market Bar (hidden - kept for compatibility) -->
       <div class="market-bar" id="viewShopBtn" style="display:none;"></div>
 
-      <!-- Campaign Banner (hidden for now) -->
-      <!-- <div class="campaign-banner" id="campaignBanner">
+      <!-- Campaign Banner -->
+      <div class="campaign-banner" id="campaignBanner">
         <div class="campaign-banner-header">
           <div class="campaign-banner-icon"></div>
           <div class="campaign-banner-text">WHO WANTS TO BE A MILLIONAIRE</div>
@@ -4505,7 +4505,7 @@
           </div>
           <div class="campaign-time-remaining" id="campaignTimeRemaining">Starting tomorrow</div>
         </div>
-      </div> -->
+      </div>
 
       <!-- About Section -->
       <div class="campaign-earn-section">
@@ -10586,8 +10586,7 @@
     });
 
     // Campaign banner and page handlers
-    // DISABLED: Campaign starts 19th November
-    // document.getElementById('campaignBanner').addEventListener('click', () => swapContent('campaign'));
+    document.getElementById('campaignBanner').addEventListener('click', () => swapContent('campaign'));
     document.getElementById('backFromCampaignBtn').addEventListener('click', () => swapContent('dashboard'));
 
     // Leaderboard filter buttons
