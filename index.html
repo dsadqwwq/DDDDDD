@@ -205,20 +205,11 @@
   }
 
   /* Page container */
-  .page-container{position:fixed;inset:0;padding:20px;padding-top:120px;overflow-y:auto;text-align:center; z-index:4}
-  .page-container > * {
-    display:inline-block;
-    text-align:left;
-    vertical-align:top;
-  }
+  .page-container{position:fixed;inset:0;display:grid;place-items:center center;padding:20px;overflow-y:auto; z-index:4}
 
   /* Bottom-aligned for access code screen */
   .page-container.bottom-aligned{
-    display:flex;
-    flex-direction:column;
-    justify-content:flex-end;
-    align-items:center;
-    padding-top:20px !important;
+    place-items:end center;
     padding-bottom:40px;
   }
 
