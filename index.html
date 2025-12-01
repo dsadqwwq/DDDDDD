@@ -6589,6 +6589,8 @@
         blackjackContent.style.display = 'none';
         campaignContent.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        // Force top alignment for campaign page
+        pageContainer.style.placeItems = 'start center';
         updateCampaignPage();
 
       } else if (newContent === 'leaderboard') {
