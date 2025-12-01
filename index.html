@@ -205,17 +205,18 @@
   }
 
   /* Page container */
-  .page-container{position:fixed;inset:0;display:grid;place-items:center center;padding:20px;overflow-y:auto; z-index:4}
+  .page-container{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;padding:20px;padding-top:120px;overflow-y:auto; z-index:4}
 
   /* Bottom-aligned for access code screen */
   .page-container.bottom-aligned{
-    place-items:end center;
+    justify-content:flex-end;
+    padding-top:20px;
     padding-bottom:40px;
   }
 
   /* Top-aligned for content pages like campaign, leaderboard, etc */
   .page-container.top-aligned{
-    place-items:start center;
+    justify-content:flex-start;
     padding-top:120px;
   }
 
