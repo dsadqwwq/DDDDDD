@@ -213,6 +213,12 @@
     padding-bottom:40px;
   }
 
+  /* Top-aligned for content pages like campaign, leaderboard, etc */
+  .page-container.top-aligned{
+    place-items:start center;
+    padding-top:20px;
+  }
+
   /* Modern panel styles matching dashboard */
   .panel{
     position:relative;
@@ -6442,7 +6448,7 @@
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
         shopContent.style.display = 'none';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
         // Force refresh GC cache and display when loading dashboard
         gcCache.lastFetch = 0;
         updateDashboardStats();
@@ -6466,7 +6472,7 @@
         shopContent.style.display = 'none';
         crashContent.style.display = 'none';
         ovenContent.style.display = 'none';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
         initChart();
 
       } else if (newContent === 'oven') {
@@ -6480,7 +6486,7 @@
         crashContent.style.display = 'none';
         farmContent.style.display = 'none';
         ovenContent.style.display = 'block';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
         initOven();
 
       } else if (newContent === 'farm') {
@@ -6495,7 +6501,7 @@
         ovenContent.style.display = 'none';
         minesContent.style.display = 'none';
         farmContent.style.display = 'block';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
         initFarm();
 
       } else if (newContent === 'crash') {
@@ -6512,7 +6518,7 @@
         ovenContent.style.display = 'none';
         farmContent.style.display = 'none';
         blackjackContent.style.display = 'none';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
         initCrashGame();
 
       } else if (newContent === 'mines') {
@@ -6529,7 +6535,7 @@
         farmContent.style.display = 'none';
         minesContent.style.display = 'block';
         blackjackContent.style.display = 'none';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
         // Only init grid if not currently playing
         if (!minesGameState.isPlaying) {
           initMinesGame();
@@ -6550,7 +6556,7 @@
         farmContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'block';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
         initBlackjack();
 
       } else if (newContent === 'campaign') {
@@ -6569,6 +6575,7 @@
         blackjackContent.style.display = 'none';
         campaignContent.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.add('top-aligned');
         updateCampaignPage();
 
       } else if (newContent === 'leaderboard') {
@@ -6587,6 +6594,7 @@
         blackjackContent.style.display = 'none';
         campaignContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.add('top-aligned');
         console.log('Leaderboard display set to block');
         loadLeaderboard('all');
         console.log('loadLeaderboard called');
@@ -6606,6 +6614,7 @@
         blackjackContent.style.display = 'none';
         campaignContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.add('top-aligned');
         loadQuests('daily');
 
       } else if (newContent === 'inventory') {
@@ -6623,6 +6632,7 @@
         blackjackContent.style.display = 'none';
         campaignContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.add('top-aligned');
         loadInventory();
 
       } else if (newContent === 'shop') {
@@ -6640,6 +6650,7 @@
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.add('top-aligned');
         loadInventory(); // Load shop items
       }
 
