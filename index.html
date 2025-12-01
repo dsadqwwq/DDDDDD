@@ -6520,7 +6520,8 @@
         ovenContent.style.display = 'none';
         farmContent.style.display = 'none';
         blackjackContent.style.display = 'none';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.add('top-aligned');
         initCrashGame();
 
       } else if (newContent === 'mines') {
@@ -6537,7 +6538,8 @@
         farmContent.style.display = 'none';
         minesContent.style.display = 'block';
         blackjackContent.style.display = 'none';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.add('top-aligned');
         // Only init grid if not currently playing
         if (!minesGameState.isPlaying) {
           initMinesGame();
@@ -6558,7 +6560,8 @@
         farmContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'block';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.add('top-aligned');
         initBlackjack();
 
       } else if (newContent === 'campaign') {
