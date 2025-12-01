@@ -6677,6 +6677,7 @@
         // Scroll to top AFTER content is fully laid out
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
+            pageContainer.scrollTop = 0;
             window.scrollTo({ top: 0, behavior: 'instant' });
           });
         });
