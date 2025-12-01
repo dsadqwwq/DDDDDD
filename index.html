@@ -6170,6 +6170,10 @@
 
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
+      // Scroll to top immediately when switching content
+      pageContainer.scrollTop = 0;
+      window.scrollTo(0, 0);
+
       // Find currently visible element
       const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent, campaignContent];
       const currentVisible = allContainers.find(el => el.style.display !== 'none' && el.style.display !== '');
