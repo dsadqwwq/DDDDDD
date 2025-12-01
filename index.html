@@ -6474,7 +6474,8 @@
         shopContent.style.display = 'none';
         crashContent.style.display = 'none';
         ovenContent.style.display = 'none';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.add('top-aligned');
         initChart();
 
       } else if (newContent === 'oven') {
@@ -6488,7 +6489,8 @@
         crashContent.style.display = 'none';
         farmContent.style.display = 'none';
         ovenContent.style.display = 'block';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.add('top-aligned');
         initOven();
 
       } else if (newContent === 'farm') {
@@ -6503,7 +6505,8 @@
         ovenContent.style.display = 'none';
         minesContent.style.display = 'none';
         farmContent.style.display = 'block';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.add('top-aligned');
         initFarm();
 
       } else if (newContent === 'crash') {
@@ -10537,25 +10540,25 @@
       console.log('Open Oven clicked');
       swapContent('oven');
     });
-    document.getElementById('backFromOvenBtn').addEventListener('click', () => swapContent('dashboard'));
+    document.getElementById('backFromOvenBtn').addEventListener('click', () => swapContent('campaign'));
     document.getElementById('ovenDepositBtn').addEventListener('click', depositToOven);
     document.getElementById('ovenWithdrawBtn').addEventListener('click', withdrawFromOven);
     document.getElementById('openFarmBtn').addEventListener('click', () => {
       console.log('Open Farm clicked');
       swapContent('farm');
     });
-    document.getElementById('backFromFarmBtn').addEventListener('click', () => swapContent('dashboard'));
+    document.getElementById('backFromFarmBtn').addEventListener('click', () => swapContent('campaign'));
     document.getElementById('farmClickBtn').addEventListener('click', clickFarm);
     document.getElementById('viewLeaderboardBtn').addEventListener('click', () => {
       console.log('View Leaderboard clicked');
       swapContent('leaderboard');
     });
     document.getElementById('backToDashBtn').addEventListener('click', () => swapContent('dashboard'));
-    document.getElementById('backFromCrashBtn').addEventListener('click', () => swapContent('dashboard'));
-    document.getElementById('backFromMinesBtn').addEventListener('click', () => swapContent('dashboard'));
+    document.getElementById('backFromCrashBtn').addEventListener('click', () => swapContent('campaign'));
+    document.getElementById('backFromMinesBtn').addEventListener('click', () => swapContent('campaign'));
     document.getElementById('minesStartBtn').addEventListener('click', startMinesGame);
     document.getElementById('minesCashoutBtn').addEventListener('click', cashoutMines);
-    document.getElementById('backFromBlackjackBtn').addEventListener('click', () => swapContent('dashboard'));
+    document.getElementById('backFromBlackjackBtn').addEventListener('click', () => swapContent('campaign'));
     document.getElementById('blackjackDealBtn').addEventListener('click', dealBlackjack);
     document.getElementById('blackjackHitBtn').addEventListener('click', blackjackHit);
     document.getElementById('blackjackStandBtn').addEventListener('click', blackjackStand);
