@@ -138,6 +138,10 @@
     gap: 12px;
     margin-bottom: 12px;
     position: relative;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
   }
 
   .brand-logo{
@@ -6236,6 +6240,40 @@
       termsAccepted: false
     };
 
+    // Referral system functions
+    async function loadReferralStats() {
+      const session = getSession();
+      const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
+      const username = session?.username || localStorage.getItem('duelpvp_username') || 'warrior';
+
+      // Set referral link
+      const referralLink = `${window.location.origin}?ref=${username.toLowerCase()}`;
+      const linkInput = document.getElementById('referralLinkInput');
+      if (linkInput) {
+        linkInput.value = referralLink;
+        console.log('Referral link set to:', referralLink);
+      }
+
+      // TODO: Load stats from database
+      // For now, show placeholder values
+      const lifetimeEarnings = document.getElementById('lifetimeEarnings');
+      const weekEarnings = document.getElementById('weekEarnings');
+      const todayEarnings = document.getElementById('todayEarnings');
+      const activeReferrals = document.getElementById('activeReferrals');
+      const topEarner = document.getElementById('topEarner');
+
+      if (lifetimeEarnings) lifetimeEarnings.textContent = '0 GC';
+      if (weekEarnings) weekEarnings.textContent = '0 GC';
+      if (todayEarnings) todayEarnings.textContent = '0 GC';
+      if (activeReferrals) activeReferrals.textContent = '0';
+      if (topEarner) topEarner.textContent = '—';
+    }
+
+    // Helper function for breadcrumb navigation
+    function showDashboard() {
+      swapContent('dashboard');
+    }
+
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
       // Scroll to top immediately when switching content
@@ -10786,30 +10824,6 @@
         }
       });
 
-      // Helper function for breadcrumb navigation
-      function showDashboard() {
-        swapContent('dashboard');
-      }
-
-      // Referral system functions
-      async function loadReferralStats() {
-        const session = getSession();
-        const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
-        const username = session?.username || localStorage.getItem('duelpvp_username') || 'warrior';
-
-        // Set referral link
-        const referralLink = `${window.location.origin}?ref=${username.toLowerCase()}`;
-        document.getElementById('referralLinkInput').value = referralLink;
-
-        // TODO: Load stats from database
-        // For now, show placeholder values
-        document.getElementById('lifetimeEarnings').textContent = '0 GC';
-        document.getElementById('weekEarnings').textContent = '0 GC';
-        document.getElementById('todayEarnings').textContent = '0 GC';
-        document.getElementById('activeReferrals').textContent = '0';
-        document.getElementById('topEarner').textContent = '—';
-      }
-
       // Copy referral link to clipboard
       const copyReferralBtn = document.getElementById('copyReferralLinkBtn');
       if (copyReferralBtn) {
@@ -10869,6 +10883,8 @@
         });
         // Add cursor pointer style
         brandTitle.style.cursor = 'pointer';
+        brandTitle.style.userSelect = 'none';
+        brandTitle.style.webkitUserSelect = 'none';
         console.log('Cursor style applied to logo');
       } else {
         console.error('Brand title element not found!');
