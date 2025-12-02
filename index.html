@@ -205,11 +205,11 @@
   }
 
   /* Page container */
-  .page-container{position:fixed;inset:0;display:grid;place-items:center center;padding:20px;overflow-y:auto; z-index:4}
+  .page-container{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;padding:12px;padding-top:15px;overflow-y:auto; z-index:4}
 
   /* Bottom-aligned for access code screen */
   .page-container.bottom-aligned{
-    place-items:end center;
+    justify-content:flex-end;
     padding-bottom:40px;
   }
 
@@ -1228,15 +1228,17 @@
     border-radius:12px;
     padding:20px 24px;
     margin-bottom:24px;
-    cursor:not-allowed;
-    opacity:0.7;
+    cursor:pointer;
+    opacity:1;
     transition:all 0.3s ease;
     box-shadow:0 4px 20px rgba(255,215,0,0.15);
   }
 
-  /* Disabled - campaign not started yet */
   .campaign-banner:hover{
-    /* No hover effect */
+    background:linear-gradient(135deg, rgba(255,215,0,0.2) 0%, rgba(255,165,0,0.25) 100%);
+    border-color:rgba(255,215,0,0.6);
+    box-shadow:0 6px 24px rgba(255,215,0,0.25);
+    transform:translateY(-2px);
   }
 
   .campaign-banner-header{
@@ -2938,14 +2940,10 @@
     .panel{
       width:96vw;
       padding:20px 16px;
-      max-height:88vh;
-      overflow-y:auto;
     }
     .dashboard-container, .quest-container, .leaderboard-container, .game-container, .inventory-container, .campaign-container{
       width:96vw;
       padding:16px 12px;
-      max-height:88vh;
-      overflow-y:auto;
     }
 
     /* Typography adjustments - improved readability */
@@ -3270,8 +3268,6 @@
   .inventory-container{
     display:none;
     width:min(600px,92vw);
-    max-height:85vh;
-    overflow-y:auto;
     background:linear-gradient(135deg, rgba(20,25,30,.95) 0%, rgba(12,16,20,.98) 100%);
     border:2px solid rgba(255,214,77,.4);
     border-radius:16px;
@@ -4364,9 +4360,7 @@
       font-size:8px;
     }
 
-    .panel, .dashboard-container, .quest-container, .leaderboard-container, .game-container, .inventory-container, .campaign-container{
-      max-height:85vh;
-    }
+    /* Removed max-height to allow page-container to handle scrolling */
 
     .chart-container{
       height:200px;
@@ -4483,8 +4477,8 @@
       <!-- Market Bar (hidden - kept for compatibility) -->
       <div class="market-bar" id="viewShopBtn" style="display:none;"></div>
 
-      <!-- Campaign Banner (hidden for now) -->
-      <!-- <div class="campaign-banner" id="campaignBanner">
+      <!-- Campaign Banner -->
+      <div class="campaign-banner" id="campaignBanner" onclick="swapContent('campaign')" style="cursor:pointer;">
         <div class="campaign-banner-header">
           <div class="campaign-banner-icon"></div>
           <div class="campaign-banner-text">WHO WANTS TO BE A MILLIONAIRE</div>
@@ -4497,9 +4491,9 @@
           <div class="campaign-progress-bar">
             <div class="campaign-progress-fill" id="campaignProgressFill" style="width:0%"></div>
           </div>
-          <div class="campaign-time-remaining" id="campaignTimeRemaining">Starting tomorrow</div>
+          <div class="campaign-time-remaining" id="campaignTimeRemaining">Campaign Active - Click to Play!</div>
         </div>
-      </div> -->
+      </div>
 
       <!-- About Section -->
       <div class="campaign-earn-section">
@@ -4616,7 +4610,7 @@
       <!-- Time Remaining -->
       <div class="campaign-time-section">
         <div class="campaign-time-label">TIME REMAINING</div>
-        <div class="campaign-time-value" id="campaignTimeRemainingPage">Starting tomorrow</div>
+        <div class="campaign-time-value" id="campaignTimeRemainingPage">Ends when all Founder's Swords are claimed</div>
       </div>
 
       <!-- Ways to Earn GC Section -->
@@ -6162,6 +6156,10 @@
 
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
+      // Scroll to top immediately when switching content
+      pageContainer.scrollTop = 0;
+      window.scrollTo(0, 0);
+
       // Find currently visible element
       const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent, campaignContent];
       const currentVisible = allContainers.find(el => el.style.display !== 'none' && el.style.display !== '');
@@ -6442,7 +6440,7 @@
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
         shopContent.style.display = 'none';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
         // Force refresh GC cache and display when loading dashboard
         gcCache.lastFetch = 0;
         updateDashboardStats();
@@ -6466,7 +6464,7 @@
         shopContent.style.display = 'none';
         crashContent.style.display = 'none';
         ovenContent.style.display = 'none';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
         initChart();
 
       } else if (newContent === 'oven') {
@@ -6480,7 +6478,7 @@
         crashContent.style.display = 'none';
         farmContent.style.display = 'none';
         ovenContent.style.display = 'block';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
         initOven();
 
       } else if (newContent === 'farm') {
@@ -6495,7 +6493,7 @@
         ovenContent.style.display = 'none';
         minesContent.style.display = 'none';
         farmContent.style.display = 'block';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
         initFarm();
 
       } else if (newContent === 'crash') {
@@ -6512,7 +6510,7 @@
         ovenContent.style.display = 'none';
         farmContent.style.display = 'none';
         blackjackContent.style.display = 'none';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
         initCrashGame();
 
       } else if (newContent === 'mines') {
@@ -6529,7 +6527,7 @@
         farmContent.style.display = 'none';
         minesContent.style.display = 'block';
         blackjackContent.style.display = 'none';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
         // Only init grid if not currently playing
         if (!minesGameState.isPlaying) {
           initMinesGame();
@@ -6550,7 +6548,7 @@
         farmContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'block';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
         initBlackjack();
 
       } else if (newContent === 'campaign') {
@@ -6568,7 +6566,7 @@
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
         campaignContent.style.display = 'block';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
         updateCampaignPage();
 
       } else if (newContent === 'leaderboard') {
@@ -6586,7 +6584,8 @@
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
         campaignContent.style.display = 'none';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
+        
         console.log('Leaderboard display set to block');
         loadLeaderboard('all');
         console.log('loadLeaderboard called');
@@ -6605,7 +6604,8 @@
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
         campaignContent.style.display = 'none';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
+        
         loadQuests('daily');
 
       } else if (newContent === 'inventory') {
@@ -6622,7 +6622,8 @@
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
         campaignContent.style.display = 'none';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
+        
         loadInventory();
 
       } else if (newContent === 'shop') {
@@ -6639,7 +6640,8 @@
         campaignContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
+        
         loadInventory(); // Load shop items
       }
 
@@ -6654,6 +6656,7 @@
         // Scroll to top AFTER content is fully laid out
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
+            pageContainer.scrollTop = 0;
             window.scrollTo({ top: 0, behavior: 'instant' });
           });
         });
@@ -10521,25 +10524,25 @@
       console.log('Open Oven clicked');
       swapContent('oven');
     });
-    document.getElementById('backFromOvenBtn').addEventListener('click', () => swapContent('dashboard'));
+    document.getElementById('backFromOvenBtn').addEventListener('click', () => swapContent('campaign'));
     document.getElementById('ovenDepositBtn').addEventListener('click', depositToOven);
     document.getElementById('ovenWithdrawBtn').addEventListener('click', withdrawFromOven);
     document.getElementById('openFarmBtn').addEventListener('click', () => {
       console.log('Open Farm clicked');
       swapContent('farm');
     });
-    document.getElementById('backFromFarmBtn').addEventListener('click', () => swapContent('dashboard'));
+    document.getElementById('backFromFarmBtn').addEventListener('click', () => swapContent('campaign'));
     document.getElementById('farmClickBtn').addEventListener('click', clickFarm);
     document.getElementById('viewLeaderboardBtn').addEventListener('click', () => {
       console.log('View Leaderboard clicked');
       swapContent('leaderboard');
     });
     document.getElementById('backToDashBtn').addEventListener('click', () => swapContent('dashboard'));
-    document.getElementById('backFromCrashBtn').addEventListener('click', () => swapContent('dashboard'));
-    document.getElementById('backFromMinesBtn').addEventListener('click', () => swapContent('dashboard'));
+    document.getElementById('backFromCrashBtn').addEventListener('click', () => swapContent('campaign'));
+    document.getElementById('backFromMinesBtn').addEventListener('click', () => swapContent('campaign'));
     document.getElementById('minesStartBtn').addEventListener('click', startMinesGame);
     document.getElementById('minesCashoutBtn').addEventListener('click', cashoutMines);
-    document.getElementById('backFromBlackjackBtn').addEventListener('click', () => swapContent('dashboard'));
+    document.getElementById('backFromBlackjackBtn').addEventListener('click', () => swapContent('campaign'));
     document.getElementById('blackjackDealBtn').addEventListener('click', dealBlackjack);
     document.getElementById('blackjackHitBtn').addEventListener('click', blackjackHit);
     document.getElementById('blackjackStandBtn').addEventListener('click', blackjackStand);
@@ -10575,8 +10578,15 @@
     });
 
     // Campaign banner and page handlers
-    // DISABLED: Campaign starts 19th November
-    // document.getElementById('campaignBanner').addEventListener('click', () => swapContent('campaign'));
+    const campaignBannerElement = document.getElementById('campaignBanner');
+    if (campaignBannerElement) {
+      campaignBannerElement.addEventListener('click', () => {
+        console.log('Campaign banner clicked!');
+        swapContent('campaign');
+      });
+    } else {
+      console.error('Campaign banner element not found!');
+    }
     document.getElementById('backFromCampaignBtn').addEventListener('click', () => swapContent('dashboard'));
 
     // Leaderboard filter buttons
