@@ -4466,13 +4466,16 @@
         </div>
       </div>
 
-      <div class="stats-grid">
+      <div class="stats-grid" style="grid-template-columns:repeat(2,1fr);">
         <div class="stat-card" style="cursor:pointer;display:flex;align-items:center;justify-content:center;" id="viewLeaderboardBtn">
           <div class="stat-label" style="margin:0;">LEADERBOARD</div>
         </div>
         <div class="stat-card" style="cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;" id="viewQuestsBtn">
           <div class="stat-label" style="margin:0;">QUESTS</div>
           <span style="position:absolute;top:-5px;right:-5px;background:#ff4444;color:white;font-size:12px;font-weight:bold;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 4px rgba(0,0,0,0.3);">!</span>
+        </div>
+        <div class="stat-card" style="cursor:pointer;display:flex;align-items:center;justify-content:center;" id="viewReferralsBtn">
+          <div class="stat-label" style="margin:0;">💰 REFERRALS</div>
         </div>
         <div class="stat-card" style="cursor:pointer;display:flex;align-items:center;justify-content:center;" id="viewInventoryBtn">
           <div class="stat-label" style="margin:0;">INVENTORY</div>
@@ -4728,6 +4731,79 @@
           <div class="empty-state-icon">📋</div>
           <div class="empty-state-title">No Quests Available</div>
           <div class="empty-state-message">Check back later for new quests to complete and earn rewards!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Referrals content (hidden initially) -->
+    <div class="quest-container" id="referralsContent" role="region" aria-label="Referral program">
+      <div class="quest-header">
+        <div class="quest-title">💰 REFERRALS</div>
+        <button class="back-btn" id="backFromReferralsBtn" aria-label="Back to dashboard">BACK</button>
+      </div>
+
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item active">Referrals</span>
+      </div>
+
+      <!-- Info box -->
+      <div style="text-align:center;padding:16px 20px;margin-bottom:24px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);border-radius:8px;">
+        <div style="font-size:14px;color:#FFD64D;">Earn 5% of everything your referrals earn - FOREVER!</div>
+      </div>
+
+      <!-- Referral link section -->
+      <div style="background:rgba(16,20,24,0.6);border:2px solid rgba(255,214,77,0.3);border-radius:8px;padding:20px;margin-bottom:24px;">
+        <div style="font-size:12px;color:#a0a8b0;margin-bottom:8px;">YOUR REFERRAL LINK</div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:16px;">
+          <input type="text" id="referralLinkInput" readonly value="Loading..." style="flex:1;background:rgba(0,0,0,0.4);border:1px solid rgba(255,214,77,0.2);border-radius:4px;padding:10px;color:#FFD64D;font-family:monospace;font-size:13px;">
+          <button class="action-btn btn-secondary" id="copyReferralLinkBtn" style="padding:10px 20px;">📋 COPY</button>
+        </div>
+        <button class="action-btn btn-primary" id="shareOnXBtn" style="width:100%;">🐦 SHARE ON X</button>
+      </div>
+
+      <!-- Stats section -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+        <!-- Earnings -->
+        <div style="background:rgba(16,20,24,0.6);border:2px solid rgba(76,175,80,0.3);border-radius:8px;padding:20px;">
+          <div style="font-size:12px;color:#4CAF50;margin-bottom:12px;font-weight:bold;">💵 EARNINGS</div>
+          <div style="margin-bottom:8px;">
+            <div style="font-size:11px;color:#a0a8b0;">Lifetime</div>
+            <div style="font-size:20px;color:#FFD64D;font-weight:bold;" id="lifetimeEarnings">0 GC</div>
+          </div>
+          <div style="margin-bottom:8px;">
+            <div style="font-size:11px;color:#a0a8b0;">This week</div>
+            <div style="font-size:16px;color:#FFD64D;" id="weekEarnings">0 GC</div>
+          </div>
+          <div>
+            <div style="font-size:11px;color:#a0a8b0;">Today</div>
+            <div style="font-size:16px;color:#FFD64D;" id="todayEarnings">0 GC</div>
+          </div>
+        </div>
+
+        <!-- Network -->
+        <div style="background:rgba(16,20,24,0.6);border:2px solid rgba(33,150,243,0.3);border-radius:8px;padding:20px;">
+          <div style="font-size:12px;color:#2196F3;margin-bottom:12px;font-weight:bold;">👥 NETWORK</div>
+          <div style="margin-bottom:8px;">
+            <div style="font-size:11px;color:#a0a8b0;">Active referrals</div>
+            <div style="font-size:20px;color:#FFD64D;font-weight:bold;" id="activeReferrals">0</div>
+          </div>
+          <div>
+            <div style="font-size:11px;color:#a0a8b0;">Top earner</div>
+            <div style="font-size:14px;color:#FFD64D;" id="topEarner">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent activity -->
+      <div style="background:rgba(16,20,24,0.6);border:2px solid rgba(255,214,77,0.3);border-radius:8px;padding:20px;">
+        <div style="font-size:12px;color:#FFD64D;margin-bottom:16px;font-weight:bold;">RECENT ACTIVITY</div>
+        <div id="recentActivityList" style="max-height:200px;overflow-y:auto;">
+          <div style="text-align:center;padding:20px;color:#a0a8b0;font-size:12px;">
+            No activity yet. Share your referral link to start earning!
+          </div>
         </div>
       </div>
     </div>
@@ -6123,6 +6199,7 @@
     const blackjackContent = document.getElementById('blackjackContent');
     const leaderboardContent = document.getElementById('leaderboardContent');
     const questContent = document.getElementById('questContent');
+    const referralsContent = document.getElementById('referralsContent');
     const inventoryContent = document.getElementById('inventoryContent');
     const shopContent = document.getElementById('shopContent');
     const crashContent = document.getElementById('crashContent');
@@ -6166,7 +6243,7 @@
       window.scrollTo(0, 0);
 
       // Find currently visible element
-      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent, campaignContent];
+      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, referralsContent, inventoryContent, shopContent, crashContent, campaignContent];
       const currentVisible = allContainers.find(el => el.style.display !== 'none' && el.style.display !== '');
 
       // Add fade-out to current visible element
@@ -6618,6 +6695,25 @@
         pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
         
         loadQuests('daily');
+
+      } else if (newContent === 'referrals') {
+        panelContent.style.display = 'none';
+        dashboardContent.style.display = 'none';
+        gameContent.style.display = 'none';
+        leaderboardContent.style.display = 'none';
+        questContent.style.display = 'none';
+        inventoryContent.style.display = 'none';
+        shopContent.style.display = 'none';
+        ovenContent.style.display = 'none';
+        farmContent.style.display = 'none';
+        crashContent.style.display = 'none';
+        minesContent.style.display = 'none';
+        blackjackContent.style.display = 'none';
+        campaignContent.style.display = 'none';
+        referralsContent.style.display = 'block';
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
+
+        loadReferralStats();
 
       } else if (newContent === 'inventory') {
         panelContent.style.display = 'none';
@@ -10559,9 +10655,11 @@
     document.getElementById('blackjackStandBtn').addEventListener('click', blackjackStand);
     document.getElementById('backFromLeaderboardBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('backFromQuestsBtn').addEventListener('click', () => swapContent('dashboard'));
+    document.getElementById('backFromReferralsBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('backFromInventoryBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('backFromShopBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('viewQuestsBtn').addEventListener('click', () => swapContent('quests'));
+    document.getElementById('viewReferralsBtn').addEventListener('click', () => swapContent('referrals'));
     document.getElementById('viewInventoryBtn').addEventListener('click', () => swapContent('inventory'));
     document.getElementById('viewShopBtn').addEventListener('click', () => swapContent('shop'));
     document.getElementById('startGameBtn').addEventListener('click', startGame);
@@ -10631,6 +10729,57 @@
     function showDashboard() {
       swapContent('dashboard');
     }
+
+    // Referral system functions
+    async function loadReferralStats() {
+      const session = getSession();
+      const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
+      const username = session?.username || localStorage.getItem('duelpvp_username') || 'warrior';
+
+      // Set referral link
+      const referralLink = `${window.location.origin}?ref=${username.toLowerCase()}`;
+      document.getElementById('referralLinkInput').value = referralLink;
+
+      // TODO: Load stats from database
+      // For now, show placeholder values
+      document.getElementById('lifetimeEarnings').textContent = '0 GC';
+      document.getElementById('weekEarnings').textContent = '0 GC';
+      document.getElementById('todayEarnings').textContent = '0 GC';
+      document.getElementById('activeReferrals').textContent = '0';
+      document.getElementById('topEarner').textContent = '—';
+    }
+
+    // Copy referral link to clipboard
+    document.getElementById('copyReferralLinkBtn').addEventListener('click', () => {
+      const linkInput = document.getElementById('referralLinkInput');
+      linkInput.select();
+      linkInput.setSelectionRange(0, 99999); // For mobile
+
+      try {
+        document.execCommand('copy');
+        Toast.success('Link copied to clipboard!', 'COPIED');
+      } catch (err) {
+        // Fallback for modern browsers
+        navigator.clipboard.writeText(linkInput.value).then(() => {
+          Toast.success('Link copied to clipboard!', 'COPIED');
+        }).catch(() => {
+          Toast.error('Failed to copy link', 'ERROR');
+        });
+      }
+    });
+
+    // Share on X (Twitter)
+    document.getElementById('shareOnXBtn').addEventListener('click', () => {
+      const session = getSession();
+      const username = session?.username || localStorage.getItem('duelpvp_username') || 'warrior';
+      const refLink = `${window.location.origin}?ref=${username.toLowerCase()}`;
+
+      const tweetText = `Just joined Duel PVP - the first fully on-chain MMO! 🎮⚔️\n\nReal-time PvP, DeFi yields, and provably fair games all on the blockchain.\n\nJoin here:`;
+
+      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(refLink)}`;
+
+      window.open(twitterUrl, '_blank', 'width=550,height=420');
+    });
 
     // Make DUEL PVP logo clickable when logged in
     const brandTitle = document.querySelector('.brand .title');
