@@ -10649,10 +10649,11 @@
       document.getElementById('blackjackCurrentBet').textContent = blackjackGameState.betAmount + ' GC';
     }
 
-    // Initial event listeners
-    document.getElementById('joinBtn').addEventListener('click', handleJoin);
-    document.getElementById('loginLink').addEventListener('click', () => swapContent('login'));
-    document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+    // Initial event listeners - wrap in DOMContentLoaded to ensure elements exist
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('joinBtn').addEventListener('click', handleJoin);
+      document.getElementById('loginLink').addEventListener('click', () => swapContent('login'));
+      document.getElementById('logoutBtn').addEventListener('click', handleLogout);
 
     // Only add listener if button exists (Trading Sim is disabled)
     const playReactionBtn = document.getElementById('playReactionBtn');
@@ -10829,16 +10830,21 @@
       window.open(twitterUrl, '_blank', 'width=550,height=420');
     });
 
-    // Make DUEL PVP logo clickable when logged in
+    // Make DUEL PVP logo clickable - go to home/dashboard
     const brandTitle = document.querySelector('.brand .title');
     if (brandTitle) {
       brandTitle.addEventListener('click', () => {
         const savedEmail = localStorage.getItem('duelpvp_email');
         if (savedEmail) {
-          swapContent('dashboard');
+          swapContent('dashboard'); // Logged in → dashboard
+        } else {
+          swapContent('home'); // Not logged in → landing page
         }
       });
+      // Add cursor pointer style
+      brandTitle.style.cursor = 'pointer';
     }
+    }); // End DOMContentLoaded for event listeners
 
     // Check if user is already logged in
     try {
