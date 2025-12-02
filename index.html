@@ -10749,7 +10749,15 @@
       } else {
         console.error('Campaign banner element not found!');
       }
-      document.getElementById('backFromCampaignBtn').addEventListener('click', () => swapContent('dashboard'));
+      const backFromCampaignBtn = document.getElementById('backFromCampaignBtn');
+      if (backFromCampaignBtn) {
+        backFromCampaignBtn.addEventListener('click', () => {
+          console.log('Campaign back button clicked!');
+          swapContent('dashboard');
+        });
+      } else {
+        console.error('backFromCampaignBtn not found!');
+      }
 
       // Leaderboard filter buttons
       document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -10803,23 +10811,33 @@
       }
 
       // Copy referral link to clipboard
-      document.getElementById('copyReferralLinkBtn').addEventListener('click', () => {
-        const linkInput = document.getElementById('referralLinkInput');
-        linkInput.select();
-        linkInput.setSelectionRange(0, 99999); // For mobile
+      const copyReferralBtn = document.getElementById('copyReferralLinkBtn');
+      if (copyReferralBtn) {
+        copyReferralBtn.addEventListener('click', () => {
+          console.log('Copy button clicked!');
+          const linkInput = document.getElementById('referralLinkInput');
+          linkInput.select();
+          linkInput.setSelectionRange(0, 99999); // For mobile
 
-        try {
-          document.execCommand('copy');
-          Toast.success('Link copied to clipboard!', 'COPIED');
-        } catch (err) {
-          // Fallback for modern browsers
-          navigator.clipboard.writeText(linkInput.value).then(() => {
+          try {
+            document.execCommand('copy');
+            console.log('Copy succeeded (execCommand)');
             Toast.success('Link copied to clipboard!', 'COPIED');
-          }).catch(() => {
-            Toast.error('Failed to copy link', 'ERROR');
-          });
-        }
-      });
+          } catch (err) {
+            console.log('execCommand failed, trying clipboard API');
+            // Fallback for modern browsers
+            navigator.clipboard.writeText(linkInput.value).then(() => {
+              console.log('Copy succeeded (clipboard API)');
+              Toast.success('Link copied to clipboard!', 'COPIED');
+            }).catch(() => {
+              console.error('Copy failed');
+              Toast.error('Failed to copy link', 'ERROR');
+            });
+          }
+        });
+      } else {
+        console.error('copyReferralLinkBtn not found!');
+      }
 
       // Share on X (Twitter)
       document.getElementById('shareOnXBtn').addEventListener('click', () => {
@@ -10837,16 +10855,23 @@
       // Make DUEL PVP logo clickable - go to home/dashboard
       const brandTitle = document.querySelector('.brand .title');
       if (brandTitle) {
+        console.log('Brand title element found, attaching click listener');
         brandTitle.addEventListener('click', () => {
+          console.log('Logo clicked!');
           const savedEmail = localStorage.getItem('duelpvp_email');
           if (savedEmail) {
+            console.log('User logged in, going to dashboard');
             swapContent('dashboard'); // Logged in → dashboard
           } else {
+            console.log('User not logged in, going to home');
             swapContent('home'); // Not logged in → landing page
           }
         });
         // Add cursor pointer style
         brandTitle.style.cursor = 'pointer';
+        console.log('Cursor style applied to logo');
+      } else {
+        console.error('Brand title element not found!');
       }
     }); // End DOMContentLoaded for event listeners
 
