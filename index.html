@@ -10655,195 +10655,195 @@
       document.getElementById('loginLink').addEventListener('click', () => swapContent('login'));
       document.getElementById('logoutBtn').addEventListener('click', handleLogout);
 
-    // Only add listener if button exists (Trading Sim is disabled)
-    const playReactionBtn = document.getElementById('playReactionBtn');
-    if (playReactionBtn) {
-      playReactionBtn.addEventListener('click', () => {
-        console.log('Play Reaction clicked');
-        swapContent('game');
-      });
-    }
-
-    document.getElementById('playCrashBtn').addEventListener('click', () => {
-      console.log('Play Crash clicked');
-      swapContent('crash');
-    });
-    document.getElementById('playMinesBtn').addEventListener('click', () => {
-      console.log('Play Mines clicked');
-      swapContent('mines');
-    });
-    document.getElementById('playBlackjackBtn').addEventListener('click', () => {
-      console.log('Play Blackjack clicked');
-      swapContent('blackjack');
-    });
-    document.getElementById('openOvenBtn').addEventListener('click', () => {
-      console.log('Open Oven clicked');
-      swapContent('oven');
-    });
-    document.getElementById('backFromOvenBtn').addEventListener('click', () => swapContent('campaign'));
-    document.getElementById('ovenDepositBtn').addEventListener('click', depositToOven);
-    document.getElementById('ovenWithdrawBtn').addEventListener('click', withdrawFromOven);
-    document.getElementById('openFarmBtn').addEventListener('click', () => {
-      console.log('Open Farm clicked');
-      swapContent('farm');
-    });
-    document.getElementById('backFromFarmBtn').addEventListener('click', () => swapContent('campaign'));
-    document.getElementById('farmClickBtn').addEventListener('click', clickFarm);
-    document.getElementById('viewLeaderboardBtn').addEventListener('click', () => {
-      console.log('View Leaderboard clicked');
-      swapContent('leaderboard');
-    });
-    document.getElementById('backToDashBtn').addEventListener('click', () => swapContent('dashboard'));
-    document.getElementById('backFromCrashBtn').addEventListener('click', () => swapContent('campaign'));
-    document.getElementById('backFromMinesBtn').addEventListener('click', () => swapContent('campaign'));
-    document.getElementById('minesStartBtn').addEventListener('click', startMinesGame);
-    document.getElementById('minesCashoutBtn').addEventListener('click', cashoutMines);
-    document.getElementById('backFromBlackjackBtn').addEventListener('click', () => swapContent('campaign'));
-    document.getElementById('blackjackDealBtn').addEventListener('click', dealBlackjack);
-    document.getElementById('blackjackHitBtn').addEventListener('click', blackjackHit);
-    document.getElementById('blackjackStandBtn').addEventListener('click', blackjackStand);
-    document.getElementById('backFromLeaderboardBtn').addEventListener('click', () => swapContent('dashboard'));
-    document.getElementById('backFromQuestsBtn').addEventListener('click', () => swapContent('dashboard'));
-    document.getElementById('backFromReferralsBtn').addEventListener('click', () => swapContent('dashboard'));
-    document.getElementById('backFromInventoryBtn').addEventListener('click', () => swapContent('dashboard'));
-    document.getElementById('backFromShopBtn').addEventListener('click', () => swapContent('dashboard'));
-    document.getElementById('viewQuestsBtn').addEventListener('click', () => swapContent('quests'));
-    document.getElementById('viewReferralsBtn').addEventListener('click', () => swapContent('referrals'));
-    document.getElementById('viewInventoryBtn').addEventListener('click', () => swapContent('inventory'));
-    document.getElementById('viewShopBtn').addEventListener('click', () => swapContent('shop'));
-    document.getElementById('startGameBtn').addEventListener('click', startGame);
-    document.getElementById('sellButton').addEventListener('click', handleSell);
-    document.getElementById('resetGameBtn').addEventListener('click', resetGame);
-
-    // Invite code handlers
-    document.getElementById('copyInviteCodeBtn').addEventListener('click', async () => {
-      const codeText = document.getElementById('userInviteCode').textContent;
-      if (codeText && codeText !== 'Loading...' && codeText !== 'No code') {
-        try {
-          await navigator.clipboard.writeText(codeText);
-          Toast.success('Invite code copied!', 'Share it with friends');
-        } catch (err) {
-          // Fallback for older browsers
-          const textArea = document.createElement('textarea');
-          textArea.value = codeText;
-          document.body.appendChild(textArea);
-          textArea.select();
-          document.execCommand('copy');
-          document.body.removeChild(textArea);
-          Toast.success('Invite code copied!', 'Share it with friends');
-        }
-      }
-    });
-
-    // Campaign banner and page handlers
-    const campaignBannerElement = document.getElementById('campaignBanner');
-    if (campaignBannerElement) {
-      campaignBannerElement.addEventListener('click', () => {
-        console.log('Campaign banner clicked!');
-        swapContent('campaign');
-      });
-    } else {
-      console.error('Campaign banner element not found!');
-    }
-    document.getElementById('backFromCampaignBtn').addEventListener('click', () => swapContent('dashboard'));
-
-    // Leaderboard filter buttons
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const filter = this.getAttribute('data-filter');
-        handleFilterChange(filter);
-      });
-    });
-
-
-    // Add keyboard navigation support
-    document.addEventListener('keydown', (e) => {
-      // ESC key to go back
-      if (e.key === 'Escape') {
-        if (gameContent.style.display === 'block') {
-          swapContent('dashboard');
-        } else if (leaderboardContent.style.display === 'block') {
-          swapContent('dashboard');
-        } else if (questContent.style.display === 'block') {
-          swapContent('dashboard');
-        } else if (inventoryContent.style.display === 'block') {
-          swapContent('dashboard');
-        } else if (shopContent.style.display === 'block') {
-          swapContent('dashboard');
-        }
-      }
-    });
-
-    // Helper function for breadcrumb navigation
-    function showDashboard() {
-      swapContent('dashboard');
-    }
-
-    // Referral system functions
-    async function loadReferralStats() {
-      const session = getSession();
-      const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
-      const username = session?.username || localStorage.getItem('duelpvp_username') || 'warrior';
-
-      // Set referral link
-      const referralLink = `${window.location.origin}?ref=${username.toLowerCase()}`;
-      document.getElementById('referralLinkInput').value = referralLink;
-
-      // TODO: Load stats from database
-      // For now, show placeholder values
-      document.getElementById('lifetimeEarnings').textContent = '0 GC';
-      document.getElementById('weekEarnings').textContent = '0 GC';
-      document.getElementById('todayEarnings').textContent = '0 GC';
-      document.getElementById('activeReferrals').textContent = '0';
-      document.getElementById('topEarner').textContent = '—';
-    }
-
-    // Copy referral link to clipboard
-    document.getElementById('copyReferralLinkBtn').addEventListener('click', () => {
-      const linkInput = document.getElementById('referralLinkInput');
-      linkInput.select();
-      linkInput.setSelectionRange(0, 99999); // For mobile
-
-      try {
-        document.execCommand('copy');
-        Toast.success('Link copied to clipboard!', 'COPIED');
-      } catch (err) {
-        // Fallback for modern browsers
-        navigator.clipboard.writeText(linkInput.value).then(() => {
-          Toast.success('Link copied to clipboard!', 'COPIED');
-        }).catch(() => {
-          Toast.error('Failed to copy link', 'ERROR');
+      // Only add listener if button exists (Trading Sim is disabled)
+      const playReactionBtn = document.getElementById('playReactionBtn');
+      if (playReactionBtn) {
+        playReactionBtn.addEventListener('click', () => {
+          console.log('Play Reaction clicked');
+          swapContent('game');
         });
       }
-    });
 
-    // Share on X (Twitter)
-    document.getElementById('shareOnXBtn').addEventListener('click', () => {
-      const session = getSession();
-      const username = session?.username || localStorage.getItem('duelpvp_username') || 'warrior';
-      const refLink = `${window.location.origin}?ref=${username.toLowerCase()}`;
+      document.getElementById('playCrashBtn').addEventListener('click', () => {
+        console.log('Play Crash clicked');
+        swapContent('crash');
+      });
+      document.getElementById('playMinesBtn').addEventListener('click', () => {
+        console.log('Play Mines clicked');
+        swapContent('mines');
+      });
+      document.getElementById('playBlackjackBtn').addEventListener('click', () => {
+        console.log('Play Blackjack clicked');
+        swapContent('blackjack');
+      });
+      document.getElementById('openOvenBtn').addEventListener('click', () => {
+        console.log('Open Oven clicked');
+        swapContent('oven');
+      });
+      document.getElementById('backFromOvenBtn').addEventListener('click', () => swapContent('campaign'));
+      document.getElementById('ovenDepositBtn').addEventListener('click', depositToOven);
+      document.getElementById('ovenWithdrawBtn').addEventListener('click', withdrawFromOven);
+      document.getElementById('openFarmBtn').addEventListener('click', () => {
+        console.log('Open Farm clicked');
+        swapContent('farm');
+      });
+      document.getElementById('backFromFarmBtn').addEventListener('click', () => swapContent('campaign'));
+      document.getElementById('farmClickBtn').addEventListener('click', clickFarm);
+      document.getElementById('viewLeaderboardBtn').addEventListener('click', () => {
+        console.log('View Leaderboard clicked');
+        swapContent('leaderboard');
+      });
+      document.getElementById('backToDashBtn').addEventListener('click', () => swapContent('dashboard'));
+      document.getElementById('backFromCrashBtn').addEventListener('click', () => swapContent('campaign'));
+      document.getElementById('backFromMinesBtn').addEventListener('click', () => swapContent('campaign'));
+      document.getElementById('minesStartBtn').addEventListener('click', startMinesGame);
+      document.getElementById('minesCashoutBtn').addEventListener('click', cashoutMines);
+      document.getElementById('backFromBlackjackBtn').addEventListener('click', () => swapContent('campaign'));
+      document.getElementById('blackjackDealBtn').addEventListener('click', dealBlackjack);
+      document.getElementById('blackjackHitBtn').addEventListener('click', blackjackHit);
+      document.getElementById('blackjackStandBtn').addEventListener('click', blackjackStand);
+      document.getElementById('backFromLeaderboardBtn').addEventListener('click', () => swapContent('dashboard'));
+      document.getElementById('backFromQuestsBtn').addEventListener('click', () => swapContent('dashboard'));
+      document.getElementById('backFromReferralsBtn').addEventListener('click', () => swapContent('dashboard'));
+      document.getElementById('backFromInventoryBtn').addEventListener('click', () => swapContent('dashboard'));
+      document.getElementById('backFromShopBtn').addEventListener('click', () => swapContent('dashboard'));
+      document.getElementById('viewQuestsBtn').addEventListener('click', () => swapContent('quests'));
+      document.getElementById('viewReferralsBtn').addEventListener('click', () => swapContent('referrals'));
+      document.getElementById('viewInventoryBtn').addEventListener('click', () => swapContent('inventory'));
+      document.getElementById('viewShopBtn').addEventListener('click', () => swapContent('shop'));
+      document.getElementById('startGameBtn').addEventListener('click', startGame);
+      document.getElementById('sellButton').addEventListener('click', handleSell);
+      document.getElementById('resetGameBtn').addEventListener('click', resetGame);
 
-      const tweetText = `Just joined Duel PVP - the first fully on-chain MMO! 🎮⚔️\n\nReal-time PvP, DeFi yields, and provably fair games all on the blockchain.\n\nJoin here:`;
-
-      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(refLink)}`;
-
-      window.open(twitterUrl, '_blank', 'width=550,height=420');
-    });
-
-    // Make DUEL PVP logo clickable - go to home/dashboard
-    const brandTitle = document.querySelector('.brand .title');
-    if (brandTitle) {
-      brandTitle.addEventListener('click', () => {
-        const savedEmail = localStorage.getItem('duelpvp_email');
-        if (savedEmail) {
-          swapContent('dashboard'); // Logged in → dashboard
-        } else {
-          swapContent('home'); // Not logged in → landing page
+      // Invite code handlers
+      document.getElementById('copyInviteCodeBtn').addEventListener('click', async () => {
+        const codeText = document.getElementById('userInviteCode').textContent;
+        if (codeText && codeText !== 'Loading...' && codeText !== 'No code') {
+          try {
+            await navigator.clipboard.writeText(codeText);
+            Toast.success('Invite code copied!', 'Share it with friends');
+          } catch (err) {
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = codeText;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            Toast.success('Invite code copied!', 'Share it with friends');
+          }
         }
       });
-      // Add cursor pointer style
-      brandTitle.style.cursor = 'pointer';
-    }
+
+      // Campaign banner and page handlers
+      const campaignBannerElement = document.getElementById('campaignBanner');
+      if (campaignBannerElement) {
+        campaignBannerElement.addEventListener('click', () => {
+          console.log('Campaign banner clicked!');
+          swapContent('campaign');
+        });
+      } else {
+        console.error('Campaign banner element not found!');
+      }
+      document.getElementById('backFromCampaignBtn').addEventListener('click', () => swapContent('dashboard'));
+
+      // Leaderboard filter buttons
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const filter = this.getAttribute('data-filter');
+          handleFilterChange(filter);
+        });
+      });
+
+
+      // Add keyboard navigation support
+      document.addEventListener('keydown', (e) => {
+        // ESC key to go back
+        if (e.key === 'Escape') {
+          if (gameContent.style.display === 'block') {
+            swapContent('dashboard');
+          } else if (leaderboardContent.style.display === 'block') {
+            swapContent('dashboard');
+          } else if (questContent.style.display === 'block') {
+            swapContent('dashboard');
+          } else if (inventoryContent.style.display === 'block') {
+            swapContent('dashboard');
+          } else if (shopContent.style.display === 'block') {
+            swapContent('dashboard');
+          }
+        }
+      });
+
+      // Helper function for breadcrumb navigation
+      function showDashboard() {
+        swapContent('dashboard');
+      }
+
+      // Referral system functions
+      async function loadReferralStats() {
+        const session = getSession();
+        const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
+        const username = session?.username || localStorage.getItem('duelpvp_username') || 'warrior';
+
+        // Set referral link
+        const referralLink = `${window.location.origin}?ref=${username.toLowerCase()}`;
+        document.getElementById('referralLinkInput').value = referralLink;
+
+        // TODO: Load stats from database
+        // For now, show placeholder values
+        document.getElementById('lifetimeEarnings').textContent = '0 GC';
+        document.getElementById('weekEarnings').textContent = '0 GC';
+        document.getElementById('todayEarnings').textContent = '0 GC';
+        document.getElementById('activeReferrals').textContent = '0';
+        document.getElementById('topEarner').textContent = '—';
+      }
+
+      // Copy referral link to clipboard
+      document.getElementById('copyReferralLinkBtn').addEventListener('click', () => {
+        const linkInput = document.getElementById('referralLinkInput');
+        linkInput.select();
+        linkInput.setSelectionRange(0, 99999); // For mobile
+
+        try {
+          document.execCommand('copy');
+          Toast.success('Link copied to clipboard!', 'COPIED');
+        } catch (err) {
+          // Fallback for modern browsers
+          navigator.clipboard.writeText(linkInput.value).then(() => {
+            Toast.success('Link copied to clipboard!', 'COPIED');
+          }).catch(() => {
+            Toast.error('Failed to copy link', 'ERROR');
+          });
+        }
+      });
+
+      // Share on X (Twitter)
+      document.getElementById('shareOnXBtn').addEventListener('click', () => {
+        const session = getSession();
+        const username = session?.username || localStorage.getItem('duelpvp_username') || 'warrior';
+        const refLink = `${window.location.origin}?ref=${username.toLowerCase()}`;
+
+        const tweetText = `Just joined Duel PVP - the first fully on-chain MMO! 🎮⚔️\n\nReal-time PvP, DeFi yields, and provably fair games all on the blockchain.\n\nJoin here:`;
+
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(refLink)}`;
+
+        window.open(twitterUrl, '_blank', 'width=550,height=420');
+      });
+
+      // Make DUEL PVP logo clickable - go to home/dashboard
+      const brandTitle = document.querySelector('.brand .title');
+      if (brandTitle) {
+        brandTitle.addEventListener('click', () => {
+          const savedEmail = localStorage.getItem('duelpvp_email');
+          if (savedEmail) {
+            swapContent('dashboard'); // Logged in → dashboard
+          } else {
+            swapContent('home'); // Not logged in → landing page
+          }
+        });
+        // Add cursor pointer style
+        brandTitle.style.cursor = 'pointer';
+      }
     }); // End DOMContentLoaded for event listeners
 
     // Check if user is already logged in
