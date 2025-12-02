@@ -205,11 +205,11 @@
   }
 
   /* Page container */
-  .page-container{position:fixed;inset:0;display:grid;place-items:start center;align-content:start;padding:20px;padding-top:120px;overflow-y:auto; z-index:4}
+  .page-container{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;padding:20px;padding-top:120px;overflow-y:auto; z-index:4}
 
   /* Bottom-aligned for access code screen */
   .page-container.bottom-aligned{
-    place-items:end center;
+    justify-content:flex-end;
     padding-bottom:40px;
   }
 
