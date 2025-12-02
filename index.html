@@ -205,7 +205,7 @@
   }
 
   /* Page container */
-  .page-container{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:12px;padding-top:15px;overflow-y:auto; z-index:4}
+  .page-container{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:12px;padding-top:110px;overflow-y:auto; z-index:4}
 
   /* Bottom-aligned for access code screen */
   .page-container.bottom-aligned{
@@ -1432,11 +1432,22 @@
   .campaign-container{
     display:none;
     width:min(720px,92vw);
+    margin:0;
+    flex-shrink:0;
     background:rgba(12,16,20,.10);
     border:2px solid rgba(255,214,77,.3);
     border-radius:12px;
     padding:24px;
     backdrop-filter:blur(8px);
+  }
+
+  .campaign-container[style*="display: none"],
+  .campaign-container[style*="display:none"]{
+    display:none !important;
+    height:0 !important;
+    margin:0 !important;
+    padding:0 !important;
+    visibility:hidden !important;
   }
 
   .campaign-header{
@@ -2032,6 +2043,7 @@
   .game-container{
     display:none;
     width:min(900px,92vw);
+    margin:0;
     background:rgba(12,16,20,.10);
     border:2px solid rgba(255,214,77,.3);
     border-radius:12px;
@@ -3047,6 +3059,7 @@
     /* Page container */
     .page-container{
       padding:20px 12px;
+      padding-top:110px;
     }
     .page-container.bottom-aligned{
       padding-bottom:30px;
