@@ -6520,8 +6520,15 @@
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
+        referralsContent.style.display = 'none';
         inventoryContent.style.display = 'none';
         shopContent.style.display = 'none';
+        campaignContent.style.display = 'none';
+        crashContent.style.display = 'none';
+        minesContent.style.display = 'none';
+        blackjackContent.style.display = 'none';
+        ovenContent.style.display = 'none';
+        farmContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
         // Force refresh GC cache and display when loading dashboard
         gcCache.lastFetch = 0;
@@ -6542,6 +6549,7 @@
         gameContent.style.display = 'block';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
+        referralsContent.style.display = 'none';
         inventoryContent.style.display = 'none';
         shopContent.style.display = 'none';
         crashContent.style.display = 'none';
@@ -6646,6 +6654,7 @@
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
+        referralsContent.style.display = 'none';
         inventoryContent.style.display = 'none';
         shopContent.style.display = 'none';
         ovenContent.style.display = 'none';
@@ -6664,6 +6673,7 @@
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'block';
         questContent.style.display = 'none';
+        referralsContent.style.display = 'none';
         inventoryContent.style.display = 'none';
         shopContent.style.display = 'none';
         ovenContent.style.display = 'none';
@@ -6673,7 +6683,7 @@
         blackjackContent.style.display = 'none';
         campaignContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
-        
+
         console.log('Leaderboard display set to block');
         loadLeaderboard('all');
         console.log('loadLeaderboard called');
@@ -6721,6 +6731,7 @@
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
+        referralsContent.style.display = 'none';
         inventoryContent.style.display = 'block';
         shopContent.style.display = 'none';
         ovenContent.style.display = 'none';
@@ -6730,7 +6741,7 @@
         blackjackContent.style.display = 'none';
         campaignContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned', 'top-aligned');
-        
+
         loadInventory();
 
       } else if (newContent === 'shop') {
@@ -6739,6 +6750,7 @@
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
+        referralsContent.style.display = 'none';
         inventoryContent.style.display = 'none';
         shopContent.style.display = 'block';
         ovenContent.style.display = 'none';
