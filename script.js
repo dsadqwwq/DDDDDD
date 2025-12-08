@@ -5189,7 +5189,8 @@
       document.getElementById('blackjackCurrentBet').textContent = blackjackGameState.betAmount + ' GC';
     }
 
-    // Initial event listeners
+    // Initial event listeners - wrapped in DOMContentLoaded to ensure DOM is ready
+    document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('joinBtn').addEventListener('click', handleJoin);
     document.getElementById('loginLink').addEventListener('click', () => swapContent('login'));
     document.getElementById('logoutBtn').addEventListener('click', handleLogout);
@@ -5388,8 +5389,11 @@
     const brandTitle = document.querySelector('.brand .title');
     if (brandTitle) {
       brandTitle.addEventListener('click', () => {
+        const session = getSession();
         const savedEmail = localStorage.getItem('duelpvp_email');
-        if (savedEmail) {
+
+        // Check if user is logged in via session OR legacy email
+        if ((session && isSessionValid(session)) || savedEmail) {
           swapContent('dashboard');
         }
       });
@@ -5397,9 +5401,16 @@
 
     // Check if user is already logged in
     try {
+      const session = getSession();
       const savedEmail = localStorage.getItem('duelpvp_email');
-      if (savedEmail) {
-        document.getElementById('userName').textContent = savedEmail.split('@')[0].toUpperCase();
+
+      if ((session && isSessionValid(session)) || savedEmail) {
+        // Get display name from session or email
+        const displayName = session?.displayName || savedEmail?.split('@')[0];
+        if (displayName) {
+          document.getElementById('userName').textContent = displayName.toUpperCase();
+        }
         if (brandTitle) brandTitle.style.cursor = 'pointer';
       }
     } catch (e) {}
+    }); // End DOMContentLoaded
