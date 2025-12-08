@@ -1247,6 +1247,7 @@
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
+        referralsContent.style.display = 'none';
         inventoryContent.style.display = 'none';
         shopContent.style.display = 'none';
         ovenContent.style.display = 'none';
