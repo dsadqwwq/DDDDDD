@@ -5189,73 +5189,79 @@
       document.getElementById('blackjackCurrentBet').textContent = blackjackGameState.betAmount + ' GC';
     }
 
-    // Initial event listeners
-    document.getElementById('joinBtn').addEventListener('click', handleJoin);
-    document.getElementById('loginLink').addEventListener('click', () => swapContent('login'));
-    document.getElementById('logoutBtn').addEventListener('click', handleLogout);
-
-    // Only add listener if button exists (Trading Sim is disabled)
-    const playReactionBtn = document.getElementById('playReactionBtn');
-    if (playReactionBtn) {
-      playReactionBtn.addEventListener('click', () => {
-        console.log('Play Reaction clicked');
-        swapContent('game');
-      });
+    // Helper function to safely add event listeners
+    function addListener(id, event, handler) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener(event, handler);
+      } else {
+        console.warn(`Element not found: ${id}`);
+      }
     }
 
-    document.getElementById('playCrashBtn').addEventListener('click', () => {
+    // Initial event listeners - with null checks to prevent errors
+    addListener('joinBtn', 'click', handleJoin);
+    addListener('loginLink', 'click', () => swapContent('login'));
+    addListener('logoutBtn', 'click', handleLogout);
+
+    // Game buttons
+    addListener('playReactionBtn', 'click', () => {
+      console.log('Play Reaction clicked');
+      swapContent('game');
+    });
+    addListener('playCrashBtn', 'click', () => {
       console.log('Play Crash clicked');
       swapContent('crash');
     });
-    document.getElementById('playMinesBtn').addEventListener('click', () => {
+    addListener('playMinesBtn', 'click', () => {
       console.log('Play Mines clicked');
       swapContent('mines');
     });
-    document.getElementById('playBlackjackBtn').addEventListener('click', () => {
+    addListener('playBlackjackBtn', 'click', () => {
       console.log('Play Blackjack clicked');
       swapContent('blackjack');
     });
-    document.getElementById('openOvenBtn').addEventListener('click', () => {
+    addListener('openOvenBtn', 'click', () => {
       console.log('Open Oven clicked');
       swapContent('oven');
     });
-    document.getElementById('backFromOvenBtn').addEventListener('click', () => swapContent('dashboard'));
-    document.getElementById('ovenDepositBtn').addEventListener('click', depositToOven);
-    document.getElementById('ovenWithdrawBtn').addEventListener('click', withdrawFromOven);
-    document.getElementById('openFarmBtn').addEventListener('click', () => {
+    addListener('backFromOvenBtn', 'click', () => swapContent('dashboard'));
+    addListener('ovenDepositBtn', 'click', depositToOven);
+    addListener('ovenWithdrawBtn', 'click', withdrawFromOven);
+    addListener('openFarmBtn', 'click', () => {
       console.log('Open Farm clicked');
       swapContent('farm');
     });
-    document.getElementById('backFromFarmBtn').addEventListener('click', () => swapContent('dashboard'));
-    document.getElementById('farmClickBtn').addEventListener('click', clickFarm);
-    document.getElementById('viewLeaderboardBtn').addEventListener('click', () => {
+    addListener('backFromFarmBtn', 'click', () => swapContent('dashboard'));
+    addListener('farmClickBtn', 'click', clickFarm);
+    addListener('viewLeaderboardBtn', 'click', () => {
       console.log('View Leaderboard clicked');
       swapContent('leaderboard');
     });
-    document.getElementById('backToDashBtn').addEventListener('click', () => swapContent('dashboard'));
-    document.getElementById('backFromCrashBtn').addEventListener('click', () => swapContent('dashboard'));
-    document.getElementById('backFromMinesBtn').addEventListener('click', () => swapContent('dashboard'));
-    document.getElementById('minesStartBtn').addEventListener('click', startMinesGame);
-    document.getElementById('minesCashoutBtn').addEventListener('click', cashoutMines);
-    document.getElementById('backFromBlackjackBtn').addEventListener('click', () => swapContent('dashboard'));
-    document.getElementById('blackjackDealBtn').addEventListener('click', dealBlackjack);
-    document.getElementById('blackjackHitBtn').addEventListener('click', blackjackHit);
-    document.getElementById('blackjackStandBtn').addEventListener('click', blackjackStand);
-    document.getElementById('backFromLeaderboardBtn').addEventListener('click', () => swapContent('dashboard'));
-    document.getElementById('backFromQuestsBtn').addEventListener('click', () => swapContent('dashboard'));
-    document.getElementById('backFromReferralsBtn').addEventListener('click', () => swapContent('dashboard'));
-    document.getElementById('backFromInventoryBtn').addEventListener('click', () => swapContent('dashboard'));
-    document.getElementById('backFromShopBtn').addEventListener('click', () => swapContent('dashboard'));
-    document.getElementById('viewQuestsBtn').addEventListener('click', () => swapContent('quests'));
-    document.getElementById('viewReferralsBtn').addEventListener('click', () => swapContent('referrals'));
-    document.getElementById('viewInventoryBtn').addEventListener('click', () => swapContent('inventory'));
-    document.getElementById('viewShopBtn').addEventListener('click', () => swapContent('shop'));
-    document.getElementById('startGameBtn').addEventListener('click', startGame);
-    document.getElementById('sellButton').addEventListener('click', handleSell);
-    document.getElementById('resetGameBtn').addEventListener('click', resetGame);
+    addListener('backToDashBtn', 'click', () => swapContent('dashboard'));
+    addListener('backFromCrashBtn', 'click', () => swapContent('dashboard'));
+    addListener('backFromMinesBtn', 'click', () => swapContent('dashboard'));
+    addListener('minesStartBtn', 'click', startMinesGame);
+    addListener('minesCashoutBtn', 'click', cashoutMines);
+    addListener('backFromBlackjackBtn', 'click', () => swapContent('dashboard'));
+    addListener('blackjackDealBtn', 'click', dealBlackjack);
+    addListener('blackjackHitBtn', 'click', blackjackHit);
+    addListener('blackjackStandBtn', 'click', blackjackStand);
+    addListener('backFromLeaderboardBtn', 'click', () => swapContent('dashboard'));
+    addListener('backFromQuestsBtn', 'click', () => swapContent('dashboard'));
+    addListener('backFromReferralsBtn', 'click', () => swapContent('dashboard'));
+    addListener('backFromInventoryBtn', 'click', () => swapContent('dashboard'));
+    addListener('backFromShopBtn', 'click', () => swapContent('dashboard'));
+    addListener('viewQuestsBtn', 'click', () => swapContent('quests'));
+    addListener('viewReferralsBtn', 'click', () => swapContent('referrals'));
+    addListener('viewInventoryBtn', 'click', () => swapContent('inventory'));
+    addListener('viewShopBtn', 'click', () => swapContent('shop'));
+    addListener('startGameBtn', 'click', startGame);
+    addListener('sellButton', 'click', handleSell);
+    addListener('resetGameBtn', 'click', resetGame);
 
     // Invite code handlers
-    document.getElementById('copyInviteCodeBtn').addEventListener('click', async () => {
+    addListener('copyInviteCodeBtn', 'click', async () => {
       const codeText = document.getElementById('userInviteCode').textContent;
       if (codeText && codeText !== 'Loading...' && codeText !== 'No code') {
         try {
@@ -5274,23 +5280,11 @@
       }
     });
 
-    // Campaign banner and page handlers
-    // DISABLED: Campaign starts 19th November
-    // document.getElementById('campaignBanner').addEventListener('click', () => swapContent('campaign'));
-    const backFromCampaignBtn = document.getElementById('backFromCampaignBtn');
-    console.log('[DEBUG] backFromCampaignBtn element:', backFromCampaignBtn);
-    if (backFromCampaignBtn) {
-      console.log('[DEBUG] Adding click listener to back button');
-      backFromCampaignBtn.addEventListener('click', (e) => {
-        console.log('[DEBUG] Back button clicked!', e);
-        console.log('[DEBUG] Button computed style:', window.getComputedStyle(backFromCampaignBtn));
-        console.log('[DEBUG] Button rect:', backFromCampaignBtn.getBoundingClientRect());
-        swapContent('dashboard');
-      });
-      console.log('[DEBUG] Click listener added successfully');
-    } else {
-      console.error('[DEBUG] backFromCampaignBtn element NOT FOUND!');
-    }
+    // Campaign back button
+    addListener('backFromCampaignBtn', 'click', () => {
+      console.log('[DEBUG] Campaign back button clicked!');
+      swapContent('dashboard');
+    });
 
     // Leaderboard filter buttons
     document.querySelectorAll('.filter-btn').forEach(btn => {
