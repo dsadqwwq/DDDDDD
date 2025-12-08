@@ -6571,6 +6571,26 @@
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         updateCampaignPage();
 
+        // Debug: Check button after campaign is shown
+        setTimeout(() => {
+          const btn = document.getElementById('backFromCampaignBtn');
+          if (btn) {
+            const rect = btn.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            const elementAtPoint = document.elementFromPoint(centerX, centerY);
+            console.log('[DEBUG CAMPAIGN] Button rect:', rect);
+            console.log('[DEBUG CAMPAIGN] Element at button center:', elementAtPoint);
+            console.log('[DEBUG CAMPAIGN] Is button?:', elementAtPoint === btn);
+            console.log('[DEBUG CAMPAIGN] Button z-index:', window.getComputedStyle(btn).zIndex);
+            console.log('[DEBUG CAMPAIGN] Button pointer-events:', window.getComputedStyle(btn).pointerEvents);
+            if (elementAtPoint !== btn) {
+              console.error('[DEBUG CAMPAIGN] Button is BLOCKED by:', elementAtPoint);
+              console.error('[DEBUG CAMPAIGN] Blocking element z-index:', window.getComputedStyle(elementAtPoint).zIndex);
+            }
+          }
+        }, 100);
+
       } else if (newContent === 'leaderboard') {
         console.log('Switching to leaderboard...');
         panelContent.style.display = 'none';
@@ -10577,7 +10597,20 @@
     // Campaign banner and page handlers
     // DISABLED: Campaign starts 19th November
     // document.getElementById('campaignBanner').addEventListener('click', () => swapContent('campaign'));
-    document.getElementById('backFromCampaignBtn').addEventListener('click', () => swapContent('dashboard'));
+    const backFromCampaignBtn = document.getElementById('backFromCampaignBtn');
+    console.log('[DEBUG] backFromCampaignBtn element:', backFromCampaignBtn);
+    if (backFromCampaignBtn) {
+      console.log('[DEBUG] Adding click listener to back button');
+      backFromCampaignBtn.addEventListener('click', (e) => {
+        console.log('[DEBUG] Back button clicked!', e);
+        console.log('[DEBUG] Button computed style:', window.getComputedStyle(backFromCampaignBtn));
+        console.log('[DEBUG] Button rect:', backFromCampaignBtn.getBoundingClientRect());
+        swapContent('dashboard');
+      });
+      console.log('[DEBUG] Click listener added successfully');
+    } else {
+      console.error('[DEBUG] backFromCampaignBtn element NOT FOUND!');
+    }
 
     // Leaderboard filter buttons
     document.querySelectorAll('.filter-btn').forEach(btn => {
