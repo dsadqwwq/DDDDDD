@@ -5386,16 +5386,23 @@
 
     // Make DUEL PVP logo clickable when logged in
     const brandTitle = document.querySelector('.brand .title');
+    console.log('[DEBUG] brandTitle element:', brandTitle);
     if (brandTitle) {
       brandTitle.addEventListener('click', () => {
+        console.log('[DEBUG] Logo clicked!');
         const session = getSession();
         const savedEmail = localStorage.getItem('duelpvp_email');
+        console.log('[DEBUG] Session:', session, 'Email:', savedEmail);
 
         // Check if user is logged in via session OR legacy email
         if ((session && isSessionValid(session)) || savedEmail) {
+          console.log('[DEBUG] User is logged in, calling swapContent');
           swapContent('dashboard');
+        } else {
+          console.log('[DEBUG] User not logged in, logo click ignored');
         }
       });
+      console.log('[DEBUG] Logo click listener added');
     }
 
     // Check if user is already logged in
