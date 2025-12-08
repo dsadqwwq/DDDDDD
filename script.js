@@ -846,6 +846,24 @@
       signature: '',
       termsAccepted: false
     };
+    // Helper function to hide all content containers
+    function hideAllContainers() {
+      panelContent.style.display = 'none';
+      dashboardContent.style.display = 'none';
+      gameContent.style.display = 'none';
+      ovenContent.style.display = 'none';
+      farmContent.style.display = 'none';
+      minesContent.style.display = 'none';
+      blackjackContent.style.display = 'none';
+      leaderboardContent.style.display = 'none';
+      questContent.style.display = 'none';
+      referralsContent.style.display = 'none';
+      inventoryContent.style.display = 'none';
+      shopContent.style.display = 'none';
+      crashContent.style.display = 'none';
+      campaignContent.style.display = 'none';
+    }
+
 
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
@@ -1121,14 +1139,9 @@
         });
 
       } else if (newContent === 'dashboard') {
-        panelContent.style.display = 'none';
+        hideAllContainers();
         dashboardContent.style.display = 'block';
         if (campaignBanner) campaignBanner.style.display = 'block';
-        gameContent.style.display = 'none';
-        leaderboardContent.style.display = 'none';
-        questContent.style.display = 'none';
-        inventoryContent.style.display = 'none';
-        shopContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         // Force refresh GC cache and display when loading dashboard
         gcCache.lastFetch = 0;
@@ -1186,36 +1199,16 @@
         initFarm();
 
       } else if (newContent === 'crash') {
-        panelContent.style.display = 'none';
-        dashboardContent.style.display = 'none';
+        hideAllContainers();
         if (campaignBanner) campaignBanner.style.display = 'none';
-        gameContent.style.display = 'none';
-        leaderboardContent.style.display = 'none';
-        questContent.style.display = 'none';
-        inventoryContent.style.display = 'none';
-        shopContent.style.display = 'none';
         crashContent.style.display = 'block';
-        minesContent.style.display = 'none';
-        ovenContent.style.display = 'none';
-        farmContent.style.display = 'none';
-        blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initCrashGame();
 
       } else if (newContent === 'mines') {
-        panelContent.style.display = 'none';
-        dashboardContent.style.display = 'none';
+        hideAllContainers();
         if (campaignBanner) campaignBanner.style.display = 'none';
-        gameContent.style.display = 'none';
-        leaderboardContent.style.display = 'none';
-        questContent.style.display = 'none';
-        inventoryContent.style.display = 'none';
-        shopContent.style.display = 'none';
-        crashContent.style.display = 'none';
-        ovenContent.style.display = 'none';
-        farmContent.style.display = 'none';
         minesContent.style.display = 'block';
-        blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         // Only init grid if not currently playing
         if (!minesGameState.isPlaying) {
@@ -1224,37 +1217,15 @@
         updateMinesGCDisplay();
 
       } else if (newContent === 'blackjack') {
-        panelContent.style.display = 'none';
-        dashboardContent.style.display = 'none';
+        hideAllContainers();
         if (campaignBanner) campaignBanner.style.display = 'none';
-        gameContent.style.display = 'none';
-        leaderboardContent.style.display = 'none';
-        questContent.style.display = 'none';
-        inventoryContent.style.display = 'none';
-        shopContent.style.display = 'none';
-        crashContent.style.display = 'none';
-        ovenContent.style.display = 'none';
-        farmContent.style.display = 'none';
-        minesContent.style.display = 'none';
         blackjackContent.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initBlackjack();
 
       } else if (newContent === 'campaign') {
-        panelContent.style.display = 'none';
-        dashboardContent.style.display = 'none';
+        hideAllContainers();
         if (campaignBanner) campaignBanner.style.display = 'none';
-        gameContent.style.display = 'none';
-        leaderboardContent.style.display = 'none';
-        questContent.style.display = 'none';
-        referralsContent.style.display = 'none';
-        inventoryContent.style.display = 'none';
-        shopContent.style.display = 'none';
-        ovenContent.style.display = 'none';
-        farmContent.style.display = 'none';
-        crashContent.style.display = 'none';
-        minesContent.style.display = 'none';
-        blackjackContent.style.display = 'none';
         campaignContent.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         updateCampaignPage();
