@@ -5189,8 +5189,7 @@
       document.getElementById('blackjackCurrentBet').textContent = blackjackGameState.betAmount + ' GC';
     }
 
-    // Initial event listeners - wrapped in DOMContentLoaded to ensure DOM is ready
-    document.addEventListener('DOMContentLoaded', () => {
+    // Initial event listeners
     document.getElementById('joinBtn').addEventListener('click', handleJoin);
     document.getElementById('loginLink').addEventListener('click', () => swapContent('login'));
     document.getElementById('logoutBtn').addEventListener('click', handleLogout);
@@ -5413,4 +5412,3 @@
         if (brandTitle) brandTitle.style.cursor = 'pointer';
       }
     } catch (e) {}
-    }); // End DOMContentLoaded
