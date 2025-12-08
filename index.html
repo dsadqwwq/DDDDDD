@@ -6202,6 +6202,7 @@
     const blackjackContent = document.getElementById('blackjackContent');
     const leaderboardContent = document.getElementById('leaderboardContent');
     const questContent = document.getElementById('questContent');
+    const referralsContent = document.getElementById('referralsContent');
     const inventoryContent = document.getElementById('inventoryContent');
     const shopContent = document.getElementById('shopContent');
     const crashContent = document.getElementById('crashContent');
@@ -6241,7 +6242,7 @@
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
       // Find currently visible element
-      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, inventoryContent, shopContent, crashContent, campaignContent];
+      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, referralsContent, inventoryContent, shopContent, crashContent, campaignContent];
       const currentVisible = allContainers.find(el => el.style.display !== 'none' && el.style.display !== '');
 
       // Add fade-out to current visible element
@@ -6695,6 +6696,7 @@
         gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'block';
+        referralsContent.style.display = 'none';
         inventoryContent.style.display = 'none';
         shopContent.style.display = 'none';
         ovenContent.style.display = 'none';
@@ -6705,6 +6707,24 @@
         campaignContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadQuests('daily');
+
+      } else if (newContent === 'referrals') {
+        panelContent.style.display = 'none';
+        dashboardContent.style.display = 'none';
+        gameContent.style.display = 'none';
+        leaderboardContent.style.display = 'none';
+        questContent.style.display = 'none';
+        referralsContent.style.display = 'block';
+        inventoryContent.style.display = 'none';
+        shopContent.style.display = 'none';
+        ovenContent.style.display = 'none';
+        farmContent.style.display = 'none';
+        crashContent.style.display = 'none';
+        minesContent.style.display = 'none';
+        blackjackContent.style.display = 'none';
+        campaignContent.style.display = 'none';
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+        loadReferralStats();
 
       } else if (newContent === 'inventory') {
         panelContent.style.display = 'none';
@@ -10643,9 +10663,11 @@
     document.getElementById('blackjackStandBtn').addEventListener('click', blackjackStand);
     document.getElementById('backFromLeaderboardBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('backFromQuestsBtn').addEventListener('click', () => swapContent('dashboard'));
+    document.getElementById('backFromReferralsBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('backFromInventoryBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('backFromShopBtn').addEventListener('click', () => swapContent('dashboard'));
     document.getElementById('viewQuestsBtn').addEventListener('click', () => swapContent('quests'));
+    document.getElementById('viewReferralsBtn').addEventListener('click', () => swapContent('referrals'));
     document.getElementById('viewInventoryBtn').addEventListener('click', () => swapContent('inventory'));
     document.getElementById('viewShopBtn').addEventListener('click', () => swapContent('shop'));
     document.getElementById('startGameBtn').addEventListener('click', startGame);
@@ -10720,6 +10742,66 @@
     // Helper function for breadcrumb navigation
     function showDashboard() {
       swapContent('dashboard');
+    }
+
+    // Load referral stats
+    async function loadReferralStats() {
+      const session = getSession();
+      const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
+      const username = session?.username || localStorage.getItem('duelpvp_username') || 'warrior';
+
+      // Set referral link
+      const referralLink = `${window.location.origin}?ref=${username.toLowerCase()}`;
+      const linkInput = document.getElementById('referralLinkInput');
+      if (linkInput) {
+        linkInput.value = referralLink;
+        console.log('Referral link set to:', referralLink);
+      }
+
+      // TODO: Load stats from database
+      // For now, show placeholder values
+      const lifetimeEarnings = document.getElementById('lifetimeEarnings');
+      const weekEarnings = document.getElementById('weekEarnings');
+      const todayEarnings = document.getElementById('todayEarnings');
+      const activeReferrals = document.getElementById('activeReferrals');
+      const topEarner = document.getElementById('topEarner');
+
+      if (lifetimeEarnings) lifetimeEarnings.textContent = '0 GC';
+      if (weekEarnings) weekEarnings.textContent = '0 GC';
+      if (todayEarnings) todayEarnings.textContent = '0 GC';
+      if (activeReferrals) activeReferrals.textContent = '0';
+      if (topEarner) topEarner.textContent = '—';
+    }
+
+    // Referral link copy button
+    const copyReferralLinkBtn = document.getElementById('copyReferralLinkBtn');
+    if (copyReferralLinkBtn) {
+      copyReferralLinkBtn.addEventListener('click', async () => {
+        const linkInput = document.getElementById('referralLinkInput');
+        if (linkInput && linkInput.value && linkInput.value !== 'Loading...') {
+          try {
+            await navigator.clipboard.writeText(linkInput.value);
+            Toast.success('Referral link copied!', 'Share it to earn 5%');
+          } catch (err) {
+            // Fallback
+            linkInput.select();
+            document.execCommand('copy');
+            Toast.success('Referral link copied!', 'Share it to earn 5%');
+          }
+        }
+      });
+    }
+
+    // Share on X button
+    const shareOnXBtn = document.getElementById('shareOnXBtn');
+    if (shareOnXBtn) {
+      shareOnXBtn.addEventListener('click', () => {
+        const linkInput = document.getElementById('referralLinkInput');
+        const link = linkInput ? linkInput.value : '';
+        const text = `Join me on Duel PVP and earn game currency! Use my referral link:`;
+        const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(link)}`;
+        window.open(url, '_blank');
+      });
     }
 
     // Make DUEL PVP logo clickable when logged in
