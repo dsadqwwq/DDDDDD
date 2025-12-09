@@ -1228,6 +1228,17 @@
         if (campaignBanner) campaignBanner.style.display = 'none';
         campaignContent.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+
+        // Debug: Check which containers are still visible
+        setTimeout(() => {
+          console.log('[DEBUG] Container visibility check:');
+          [panelContent, dashboardContent, gameContent, crashContent, minesContent, blackjackContent, ovenContent, farmContent, leaderboardContent, questContent, referralsContent, inventoryContent, shopContent].forEach(container => {
+            if (container && container.style.display !== 'none') {
+              console.error(`[DEBUG] ${container.id} is NOT hidden! display=${container.style.display}, height=${container.offsetHeight}px`);
+            }
+          });
+        }, 50);
+
         updateCampaignPage();
 
         // Debug: Check button after campaign is shown
