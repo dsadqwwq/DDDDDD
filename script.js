@@ -1170,30 +1170,15 @@
         initChart();
 
       } else if (newContent === 'oven') {
-        panelContent.style.display = 'none';
-        dashboardContent.style.display = 'none';
-        gameContent.style.display = 'none';
-        leaderboardContent.style.display = 'none';
-        questContent.style.display = 'none';
-        inventoryContent.style.display = 'none';
-        shopContent.style.display = 'none';
-        crashContent.style.display = 'none';
-        farmContent.style.display = 'none';
+        hideAllContainers();
+        if (campaignBanner) campaignBanner.style.display = 'none';
         ovenContent.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initOven();
 
       } else if (newContent === 'farm') {
-        panelContent.style.display = 'none';
-        dashboardContent.style.display = 'none';
-        gameContent.style.display = 'none';
-        leaderboardContent.style.display = 'none';
-        questContent.style.display = 'none';
-        inventoryContent.style.display = 'none';
-        shopContent.style.display = 'none';
-        crashContent.style.display = 'none';
-        ovenContent.style.display = 'none';
-        minesContent.style.display = 'none';
+        hideAllContainers();
+        if (campaignBanner) campaignBanner.style.display = 'none';
         farmContent.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initFarm();
