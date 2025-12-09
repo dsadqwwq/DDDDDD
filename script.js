@@ -5252,6 +5252,8 @@
     addListener('viewReferralsBtn', 'click', () => swapContent('referrals'));
     addListener('viewInventoryBtn', 'click', () => swapContent('inventory'));
     addListener('viewShopBtn', 'click', () => swapContent('shop'));
+    addListener('viewQuestsFromCampaignBtn', 'click', () => swapContent('quests'));
+    addListener('viewReferralsFromCampaignBtn', 'click', () => swapContent('referrals'));
     addListener('startGameBtn', 'click', startGame);
     addListener('sellButton', 'click', handleSell);
     addListener('resetGameBtn', 'click', resetGame);
