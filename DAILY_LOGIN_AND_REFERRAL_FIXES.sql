@@ -316,18 +316,21 @@ BEGIN
   SELECT v_user_id, qt.id,
          CASE
            WHEN qt.id = 'first_steps' THEN 1
+           WHEN qt.id = 'daily_login' THEN 1
            WHEN qt.id = 'fluffle_holder' AND (v_nft_holdings->>'has_fluffle')::boolean THEN 1
            WHEN qt.id = 'bunnz_holder' AND (v_nft_holdings->>'has_bunnz')::boolean THEN 1
            ELSE 0
          END,
          CASE
            WHEN qt.id = 'first_steps' THEN TRUE
+           WHEN qt.id = 'daily_login' THEN TRUE
            WHEN qt.id = 'fluffle_holder' AND (v_nft_holdings->>'has_fluffle')::boolean THEN TRUE
            WHEN qt.id = 'bunnz_holder' AND (v_nft_holdings->>'has_bunnz')::boolean THEN TRUE
            ELSE FALSE
          END,
          CASE
            WHEN qt.id = 'first_steps' THEN NOW()
+           WHEN qt.id = 'daily_login' THEN NOW()
            WHEN qt.id = 'fluffle_holder' AND (v_nft_holdings->>'has_fluffle')::boolean THEN NOW()
            WHEN qt.id = 'bunnz_holder' AND (v_nft_holdings->>'has_bunnz')::boolean THEN NOW()
            ELSE NULL
