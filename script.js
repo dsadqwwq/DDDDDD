@@ -1018,6 +1018,12 @@
           </div>
 
           <div class="input-group">
+            <label class="input-label" style="font-size:12px;color:#888;">Referral Code (Optional)</label>
+            <input id="referralCode" class="warrior-input" type="text" placeholder="Friend's username..." maxlength="16" autocomplete="off">
+            <div class="error-msg" id="referralCodeError"></div>
+          </div>
+
+          <div class="input-group">
             <button class="btn-submit" id="confirmNameBtn" style="width:100%;">ENTER THE ARENA</button>
           </div>
         `;
@@ -1106,16 +1112,11 @@
         panelContent.innerHTML = `
           <div class="panel-header">
             <div class="sys">Welcome to the arena<span class="blink">.</span></div>
-            <div class="sub-text">Enter your exclusive access code to begin</div>
+            <div class="sub-text">Connect your wallet to enter the battlefield</div>
           </div>
 
           <div class="input-group">
-            <label class="input-label">Access Code</label>
-            <div class="bar">
-              <input id="code" class="input-field" type="text" placeholder="XXXX-XXXX-XXXX" autocomplete="off">
-              <button class="btn-submit" id="joinBtn">JOIN</button>
-            </div>
-            <div class="error-msg" id="codeError"></div>
+            <button class="btn-submit" id="registerBtn" style="width:100%;">CONNECT WALLET</button>
           </div>
 
           <div class="helper">
@@ -1124,7 +1125,7 @@
         `;
 
         // Re-attach event listeners
-        document.getElementById('joinBtn').addEventListener('click', handleJoin);
+        document.getElementById('registerBtn').addEventListener('click', () => swapContent('connectWalletForReg'));
         const loginLink = document.getElementById('loginLink');
         loginLink.addEventListener('click', () => swapContent('login'));
         loginLink.addEventListener('keypress', (e) => {
@@ -1132,10 +1133,6 @@
             e.preventDefault();
             swapContent('login');
           }
-        });
-        // Allow enter key to submit
-        document.getElementById('code').addEventListener('keypress', (e) => {
-          if (e.key === 'Enter') handleJoin();
         });
 
       } else if (newContent === 'dashboard') {
@@ -1725,9 +1722,11 @@
 
     async function handleNameWarrior() {
       const warriorName = document.getElementById('warriorName').value.trim();
+      const referralCode = document.getElementById('referralCode').value.trim() || null;
 
       // Clear previous errors
       clearError('warriorNameError');
+      clearError('referralCodeError');
 
       if (!warriorName) {
         showError('warriorNameError', 'Warrior name is required');
@@ -1751,13 +1750,13 @@
         console.log('Calling register_user_with_wallet with:', {
           wallet: tempRegistrationData.walletAddress,
           name: warriorName,
-          code: tempRegistrationData.inviteCode
+          code: referralCode
         });
 
         const { data, error } = await supabase.rpc('register_user_with_wallet', {
           p_wallet_address: tempRegistrationData.walletAddress,
           p_display_name: warriorName,
-          p_invite_code: tempRegistrationData.inviteCode
+          p_invite_code: referralCode
         });
 
         console.log('register_user_with_wallet response:', { data, error });
@@ -1771,6 +1770,10 @@
             showError('warriorNameError', 'Display name already taken');
           } else if (errorMsg.includes('Wallet already registered')) {
             Modal.alert('This wallet is already registered', 'Registration Failed');
+          } else if (errorMsg.includes('Invalid invite code') || errorMsg.includes('username not found')) {
+            showError('referralCodeError', 'Invalid referral code - username not found');
+          } else if (errorMsg.includes('Cannot use your own username')) {
+            showError('referralCodeError', 'Cannot use your own username as referral code');
           } else {
             Modal.alert(errorMsg, 'Error');
           }
@@ -3433,7 +3436,10 @@
             `;
 
             // Action button
-            if (isComplete) {
+            if (quest.id === 'daily_login') {
+              // Daily login quest - always show claim button (can be claimed once per day)
+              html += `<button class="action-btn btn-primary" style="width:100%;margin-top:8px;" onclick="claimDailyLogin()">CLAIM ${quest.gc_reward} GC</button>`;
+            } else if (isComplete) {
               html += `<button class="action-btn btn-primary" style="width:100%;margin-top:8px;" onclick="claimQuestReward('${quest.id}')">CLAIM ${quest.gc_reward} GC</button>`;
             } else if (quest.id === 'invite_3_friends') {
               html += `<button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="showInventory()">VIEW INVITE CODES</button>`;
@@ -3456,6 +3462,45 @@
       } catch (err) {
         console.error('Quest system error:', err);
         questGrid.innerHTML = '<div class="no-data">Error loading quests</div>';
+      }
+    }
+
+    // Claim daily login reward
+    async function claimDailyLogin() {
+      const session = getSession();
+      const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
+
+      Loading.show('Claiming daily reward...');
+
+      try {
+        const { data, error } = await supabase.rpc('claim_daily_login', {
+          p_user_id: userId
+        });
+
+        Loading.hide();
+
+        if (error || !data?.success) {
+          console.error('Daily login claim error:', error || data?.error);
+          Toast.error(data?.error || 'Failed to claim daily reward', 'ERROR');
+          return;
+        }
+
+        // Clear GC cache and update display
+        gcCache.lastFetch = 0;
+        const newGP = await getUserGC();
+        updateGCDisplay(newGP, data.reward);
+
+        Toast.success(`+${data.reward} GC earned!`, 'DAILY REWARD CLAIMED');
+
+        // Reload current tab
+        const activeTab = document.querySelector('.quest-tab.active');
+        const tabType = activeTab ? activeTab.getAttribute('data-quest-tab') : 'daily';
+        loadQuests(tabType);
+
+      } catch (err) {
+        Loading.hide();
+        console.error('Daily login claim error:', err);
+        Toast.error('An error occurred', 'ERROR');
       }
     }
 
