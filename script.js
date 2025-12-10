@@ -4529,16 +4529,19 @@
       }
 
       try {
-        // Use same approach as leaderboard - get rank data
         const { data: userRankData } = await supabase.rpc('get_user_rank', {
           p_user_id: userId
         });
+
+        console.log('[CAMPAIGN RANK] Raw response:', userRankData);
+        console.log('[CAMPAIGN RANK] Has rank?', userRankData?.rank);
+        console.log('[CAMPAIGN RANK] Has user_gc_balance?', userRankData?.user_gc_balance);
+        console.log('[CAMPAIGN RANK] Has gc_balance?', userRankData?.gc_balance);
 
         const pageRankEl = document.getElementById('userRankPage');
         const pageGCEl = document.getElementById('userGCPage');
 
         if (userRankData && userRankData.rank) {
-          // User has a rank
           if (pageRankEl) {
             pageRankEl.textContent = `#${userRankData.rank}`;
           }
