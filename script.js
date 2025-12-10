@@ -4529,27 +4529,25 @@
       }
 
       try {
-        const { data: userRankData } = await supabase.rpc('get_user_rank', {
+        const { data: rankData } = await supabase.rpc('get_user_rank', {
           p_user_id: userId
         });
-
-        console.log('[CAMPAIGN RANK] Raw response:', userRankData);
-        console.log('[CAMPAIGN RANK] Has rank?', userRankData?.rank);
-        console.log('[CAMPAIGN RANK] Has user_gc_balance?', userRankData?.user_gc_balance);
-        console.log('[CAMPAIGN RANK] Has gc_balance?', userRankData?.gc_balance);
 
         const pageRankEl = document.getElementById('userRankPage');
         const pageGCEl = document.getElementById('userGCPage');
 
-        if (userRankData && userRankData.rank) {
+        // Same as dashboard - rankData might be array or object
+        const rankInfo = Array.isArray(rankData) ? rankData[0] : rankData;
+
+        if (rankInfo && rankInfo.rank) {
           if (pageRankEl) {
-            pageRankEl.textContent = `#${userRankData.rank}`;
+            pageRankEl.textContent = `#${rankInfo.rank}`;
           }
           if (pageGCEl) {
-            pageGCEl.textContent = `${userRankData.user_gc_balance?.toLocaleString() || 0} GC`;
+            const balance = rankInfo.user_gc_balance || rankInfo.gc_balance || 0;
+            pageGCEl.textContent = `${balance.toLocaleString()} GC`;
           }
         } else {
-          // No rank data - show dash
           if (pageRankEl) {
             pageRankEl.textContent = '-';
           }
