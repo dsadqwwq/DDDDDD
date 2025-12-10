@@ -3528,12 +3528,8 @@
     const QUESTS = {
       daily: [
         {id: 'first_login', name: 'First Steps', desc: 'Log in for the first time', target: 1, reward: 500, icon: '🗡️', type: 'regular'},
-        {id: 'invite_used', name: 'Recruit Warriors', desc: 'Have 3 friends use your invite codes', target: 3, reward: 1500, icon: '👥', type: 'regular', action: 'openInventory'},
         {id: 'retweet_jan_2025', name: 'Retweet & Earn', desc: 'Retweet our latest post on X', target: 1, reward: 1000, icon: '🔄', type: 'manual'},
-        {id: 'twitter_follow', name: 'Follow Us', desc: 'Follow @Duelpvp on X', target: 1, reward: 500, icon: '➕', type: 'manual'},
-        {id: 'bunnz_holder', name: 'BAD BUNNZ Holder', desc: 'Own a BAD BUNNZ NFT', target: 1, reward: 500, icon: '🐰', type: 'nft'},
-        {id: 'fluffle_holder', name: 'FLUFFLE Holder', desc: 'Own a FLUFFLE NFT', target: 1, reward: 2500, icon: '🐇', type: 'nft'},
-        {id: 'megalio_holder', name: 'MEGALIO Holder', desc: 'Own a MEGALIO NFT', target: 1, reward: 2000, icon: '🦁', type: 'nft'}
+        {id: 'twitter_follow', name: 'Follow Us', desc: 'Follow @Duelpvp on X', target: 1, reward: 500, icon: '➕', type: 'manual'}
       ],
       weekly: [],
       special: []
