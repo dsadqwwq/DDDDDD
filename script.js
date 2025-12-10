@@ -3866,51 +3866,27 @@
 
       console.log('Loading inventory for user:', userId);
 
-      // Get user's invite codes using RPC function (only returns unused codes)
-      const { data: codesData, error: codesError } = await supabase
-        .rpc('get_user_invite_codes', { p_user_id: userId });
-
-      console.log('Codes response:', { codesData, codesError });
-
-      if (codesError) {
-        console.error('Failed to get codes:', codesError);
-      }
-
-      // Map invite codes (only unused ones are returned)
-      let inviteCodes = codesData && codesData.length > 0
-        ? codesData.map(c => ({
-            code: c.code,
-            created_at: c.created_at
-          }))
-        : [];
-
-      // Get special items (NFTs, rewards, etc.)
-      const { data: specialItems, error: itemsError } = await supabase
+      // Get inventory items (NFTs, rewards, etc.)
+      const { data: inventoryItems, error: itemsError } = await supabase
         .from('inventory_items')
         .select('*')
         .eq('user_id', userId);
 
       if (itemsError) {
-        console.error('Failed to get special items:', itemsError);
+        console.error('Failed to get inventory items:', itemsError);
       }
 
-      console.log('Special items:', specialItems);
+      console.log('Inventory items:', inventoryItems);
 
       // Render inventory
       const inventoryGrid = document.getElementById('inventoryGrid');
       inventoryGrid.innerHTML = '';
 
-      // Show special items first (NFTs, swords, etc.)
-      if (specialItems && specialItems.length > 0) {
-        const nftSection = document.createElement('div');
-        nftSection.className = 'inventory-section-title';
-        nftSection.style.marginBottom = '12px';
-        nftSection.textContent = 'SPECIAL ITEMS';
-        inventoryGrid.appendChild(nftSection);
-
-        specialItems.forEach(item => {
+      // Show inventory items
+      if (inventoryItems && inventoryItems.length > 0) {
+        inventoryItems.forEach(item => {
           const slot = document.createElement('div');
-          slot.className = `inventory-slot special-item rarity-${item.item_rarity}`;
+          slot.className = `inventory-slot rarity-${item.item_rarity}`;
 
           const iconSrc = item.metadata?.svg_icon === 'katana'
             ? 'katana.svg'
@@ -3918,60 +3894,21 @@
 
           slot.innerHTML = `
             <div class="item-icon">
-              <img src="${iconSrc}" alt="${item.item_name}" style="width:40px;height:40px;">
+              <img src="${iconSrc}" alt="${item.item_name}" style="width:48px;height:48px;">
             </div>
             <div class="item-name" style="color:#FFD700;font-weight:bold;">${item.item_name}</div>
-            <div class="item-rarity" style="font-size:8px;color:#FFD700;margin-top:4px;">${item.item_rarity.toUpperCase()}</div>
           `;
           slot.title = item.item_description || item.item_name;
           slot.style.border = '2px solid #FFD700';
           slot.style.background = 'rgba(255, 215, 0, 0.1)';
           inventoryGrid.appendChild(slot);
         });
-
-        // Add spacing
-        const spacer = document.createElement('div');
-        spacer.style.height = '20px';
-        inventoryGrid.appendChild(spacer);
-
-        const codesSection = document.createElement('div');
-        codesSection.className = 'inventory-section-title';
-        codesSection.style.marginBottom = '12px';
-        codesSection.textContent = 'INVITE CODES';
-        inventoryGrid.appendChild(codesSection);
-      }
-
-      // Show 3 slots for invite codes (user gets 3 codes)
-      const numSlots = 3;
-      for (let i = 0; i < numSlots; i++) {
-        const item = inviteCodes[i];
-        const slot = document.createElement('div');
-
-        if (item) {
-          // Invite code item (only unused codes shown)
-          slot.className = 'inventory-slot invite-code';
-          slot.innerHTML = `
-            <div class="item-icon">
-              <img src="duelpvp-logo.svg" alt="Invite Code" style="width:28px;height:28px;">
-            </div>
-            <div class="item-name">${item.code}</div>
-          `;
-          // Tooltip
-          slot.title = `Invite Code\nClick to copy!\nShare this code with friends!`;
-
-          // Add click-to-copy
-          slot.style.cursor = 'pointer';
-          slot.addEventListener('click', () => {
-            copyToClipboard(item.code);
-            Toast.success(`Code ${item.code} copied!`, 'SHARE WITH FRIENDS');
-          });
-        } else {
-          // Empty slot (code was used)
-          slot.className = 'inventory-slot empty';
-          slot.innerHTML = '<div style="opacity:0.3;font-size:10px;">USED</div>';
+      } else {
+        // Show empty state
+        const emptyState = document.getElementById('inventoryEmpty');
+        if (emptyState) {
+          emptyState.style.display = 'block';
         }
-
-        inventoryGrid.appendChild(slot);
       }
 
       // Get user data for shop
