@@ -3884,9 +3884,62 @@
           }))
         : [];
 
+      // Get special items (NFTs, rewards, etc.)
+      const { data: specialItems, error: itemsError } = await supabase
+        .from('inventory_items')
+        .select('*')
+        .eq('user_id', userId);
+
+      if (itemsError) {
+        console.error('Failed to get special items:', itemsError);
+      }
+
+      console.log('Special items:', specialItems);
+
       // Render inventory
       const inventoryGrid = document.getElementById('inventoryGrid');
       inventoryGrid.innerHTML = '';
+
+      // Show special items first (NFTs, swords, etc.)
+      if (specialItems && specialItems.length > 0) {
+        const nftSection = document.createElement('div');
+        nftSection.className = 'inventory-section-title';
+        nftSection.style.marginBottom = '12px';
+        nftSection.textContent = 'SPECIAL ITEMS';
+        inventoryGrid.appendChild(nftSection);
+
+        specialItems.forEach(item => {
+          const slot = document.createElement('div');
+          slot.className = `inventory-slot special-item rarity-${item.item_rarity}`;
+
+          const iconSrc = item.metadata?.svg_icon === 'katana'
+            ? 'katana.svg'
+            : 'duelpvp-logo.svg';
+
+          slot.innerHTML = `
+            <div class="item-icon">
+              <img src="${iconSrc}" alt="${item.item_name}" style="width:40px;height:40px;">
+            </div>
+            <div class="item-name" style="color:#FFD700;font-weight:bold;">${item.item_name}</div>
+            <div class="item-rarity" style="font-size:8px;color:#FFD700;margin-top:4px;">${item.item_rarity.toUpperCase()}</div>
+          `;
+          slot.title = item.item_description || item.item_name;
+          slot.style.border = '2px solid #FFD700';
+          slot.style.background = 'rgba(255, 215, 0, 0.1)';
+          inventoryGrid.appendChild(slot);
+        });
+
+        // Add spacing
+        const spacer = document.createElement('div');
+        spacer.style.height = '20px';
+        inventoryGrid.appendChild(spacer);
+
+        const codesSection = document.createElement('div');
+        codesSection.className = 'inventory-section-title';
+        codesSection.style.marginBottom = '12px';
+        codesSection.textContent = 'INVITE CODES';
+        inventoryGrid.appendChild(codesSection);
+      }
 
       // Show 3 slots for invite codes (user gets 3 codes)
       const numSlots = 3;
