@@ -4094,20 +4094,22 @@
 
         // Try secure JWT-based function first
         const transactionType = amount > 0 ? 'game_win' : 'game_loss';
-        console.log('[GP Update] Calling secure_update_gp with:', { amount, transactionType, gameType });
-        let result = await supabase.rpc('secure_update_gp', {
+        console.log('[GC Update] Calling secure_update_gc with:', { amount, transactionType, gameType });
+        let result = await supabase.rpc('secure_update_gc', {
           p_amount: amount,
           p_transaction_type: transactionType,
           p_game_type: gameType
         });
-        console.log('[GP Update] RPC result:', result);
+        console.log('[GC Update] RPC result:', result);
 
         // If secure function fails, fallback to old function
         if (result.error) {
           console.log('Secure update failed, using fallback:', result.error);
-          result = await supabase.rpc('update_user_gp', {
+          result = await supabase.rpc('update_user_gc', {
             p_user_id: userId,
-            p_amount: amount
+            p_amount: amount,
+            p_transaction_type: transactionType,
+            p_game_type: gameType
           });
         }
 
