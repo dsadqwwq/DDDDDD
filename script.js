@@ -610,20 +610,9 @@
       Loading.init();
 
       // Set up event listeners for initial home page
-      const registerBtn = document.getElementById('registerBtn');
-      if (registerBtn) {
-        registerBtn.addEventListener('click', () => swapContent('connectWalletForReg'));
-      }
-
-      const loginLink = document.getElementById('loginLink');
-      if (loginLink) {
-        loginLink.addEventListener('click', () => swapContent('login'));
-        loginLink.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            swapContent('login');
-          }
-        });
+      const connectWalletBtn = document.getElementById('connectWalletBtn');
+      if (connectWalletBtn) {
+        connectWalletBtn.addEventListener('click', handleUnifiedWalletConnect);
       }
 
       // Initialize app - check for existing session (Blur-style auto-reconnect)
@@ -1186,28 +1175,16 @@
         panelContent.innerHTML = `
           <div class="panel-header">
             <div class="sys">Welcome to the arena<span class="blink">.</span></div>
-            <div class="sub-text">Connect your wallet to enter the battlefield</div>
+            <div class="sub-text">Connect your wallet to begin</div>
           </div>
 
           <div class="input-group">
-            <button class="btn-submit" id="registerBtn" style="width:100%;">CONNECT WALLET</button>
-          </div>
-
-          <div class="helper">
-            Already have an account? <a id="loginLink">Sign in</a>
+            <button class="btn-submit" id="connectWalletBtnHome" style="width:100%;">CONNECT WALLET</button>
           </div>
         `;
 
-        // Re-attach event listeners
-        document.getElementById('registerBtn').addEventListener('click', () => swapContent('connectWalletForReg'));
-        const loginLink = document.getElementById('loginLink');
-        loginLink.addEventListener('click', () => swapContent('login'));
-        loginLink.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            swapContent('login');
-          }
-        });
+        // Re-attach event listener
+        document.getElementById('connectWalletBtnHome').addEventListener('click', handleUnifiedWalletConnect);
 
       } else if (newContent === 'dashboard') {
         hideAllContainers();
@@ -2227,6 +2204,155 @@
       // Auto-redirect to dashboard
       swapContent('dashboard');
       Toast.success(`Welcome back, ${session.displayName}!`, `${gp} GC`);
+    }
+
+    // Unified wallet connect - handles both login and registration
+    async function handleUnifiedWalletConnect() {
+      try {
+        Loading.show('Connecting to wallet...');
+
+        // Connect wallet using Web3Modal
+        const walletAddress = (await getWalletAddress()).toLowerCase();
+
+        // Check if wallet exists in database using RPC function (bypasses RLS)
+        const { data: loginData, error: loginError } = await supabase.rpc('login_with_wallet', {
+          p_wallet_address: walletAddress
+        });
+
+        console.log('login_with_wallet response:', { loginData, loginError });
+
+        // If wallet is not registered, go to naming screen
+        if (loginError || !loginData || !loginData.success) {
+          console.log('Wallet not registered, proceeding to registration...');
+
+          // Store wallet address for registration
+          tempRegistrationData.walletAddress = walletAddress;
+          tempRegistrationData.inviteCode = null; // No invite code needed
+
+          Loading.hide();
+          Toast.success('Wallet connected!', 'SUCCESS');
+
+          // Go directly to warrior naming screen
+          swapContent('nameWarrior');
+          return;
+        }
+
+        // Wallet is registered - proceed with login
+        console.log('Wallet registered, logging in...');
+
+        // Extract user data from RPC response
+        const userData = {
+          id: loginData.user_id,
+          display_name: loginData.display_name,
+          gc_balance: loginData.gc_balance,
+          auth_user_id: loginData.auth_user_id
+        };
+
+        // Verify ownership with signature
+        const message = `Sign in to Duel PVP\nWallet: ${walletAddress}\nTimestamp: ${Date.now()}`;
+
+        const signature = await signMessage(message);
+
+        // Create Supabase Auth session using anonymous authentication
+        Loading.show('Creating secure session...');
+
+        // Check if user already has an auth session linked
+        let authResult;
+        if (userData.auth_user_id) {
+          // Try to get existing session (may have been created before)
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session && session.user.id === userData.auth_user_id) {
+            authResult = { data: { user: session.user }, error: null };
+          }
+        }
+
+        // If no existing session, create new anonymous auth session
+        if (!authResult || authResult.error) {
+          console.log('Creating new anonymous auth session...');
+          authResult = await supabase.auth.signInAnonymously({
+            options: {
+              data: {
+                wallet_address: walletAddress,
+                display_name: userData.display_name,
+                user_id: userData.id
+              }
+            }
+          });
+          console.log('Anonymous auth result:', authResult);
+
+          // Explicitly set the session to ensure client uses it immediately for all requests
+          if (authResult.data?.session) {
+            await supabase.auth.setSession({
+              access_token: authResult.data.session.access_token,
+              refresh_token: authResult.data.session.refresh_token
+            });
+            console.log('Session explicitly set on Supabase client');
+          }
+
+          // Link anonymous auth user to existing user record
+          if (authResult.data?.user) {
+            console.log('Linking auth user to database user...');
+            const linkResult = await supabase.rpc('link_auth_to_user', {
+              p_user_id: userData.id
+            });
+            console.log('Link result:', linkResult);
+          }
+        }
+
+        if (authResult.error) {
+          console.error('Auth session error:', authResult.error);
+          Loading.hide();
+          Modal.alert('Failed to create auth session: ' + authResult.error.message + '\n\nPlease ensure anonymous authentication is enabled in Supabase dashboard.', 'Authentication Error');
+          return;
+        }
+
+        if (!authResult.data?.user) {
+          console.error('No auth user created');
+          Loading.hide();
+          Modal.alert('Failed to create auth session. Please check browser console.', 'Authentication Error');
+          return;
+        }
+
+        // Verify session is active and client is using it
+        console.log('Verifying session is active...');
+        const { data: { session: verifySession } } = await supabase.auth.getSession();
+        console.log('Session verification:', verifySession ? 'Active' : 'None');
+
+        if (!verifySession) {
+          console.error('Session not active after creation');
+          Loading.hide();
+          Modal.alert('Session creation failed. Please try again.', 'Authentication Error');
+          return;
+        }
+
+        // Store user info in localStorage (legacy support)
+        createSession(userData.id, walletAddress, userData.display_name);
+        finishWalletConnection(); // Allow wallet event handlers to reload page now
+
+        document.getElementById('userName').textContent = userData.display_name.toUpperCase();
+
+        // Check NFT holder status and auto-complete quests
+        await checkNFTHolderQuests(walletAddress);
+
+        // Initialize GC cache and update display
+        await initializeGCCache();
+        const gp = await getUserGC();
+        const displayGC = gp >= 1000000 ? `${(gp/1000000).toFixed(1)}M` : gp >= 1000 ? `${(gp/1000).toFixed(1)}K` : gp;
+        document.getElementById('dashboardGCBalance').textContent = displayGC;
+
+        Loading.hide();
+        Toast.success(`Welcome back, ${userData.display_name}!`, `${gp} GC`);
+        swapContent('dashboard');
+
+      } catch (error) {
+        Loading.hide();
+        console.error('Wallet connect error:', error);
+        if (error.code === 4001) {
+          Toast.warning('You cancelled the wallet connection', 'Connection Cancelled');
+        } else {
+          Modal.alert('Failed to connect wallet: ' + error.message, 'Connection Error');
+        }
+      }
     }
 
     async function handleWalletLogin() {
