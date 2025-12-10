@@ -4542,10 +4542,14 @@
           p_user_id: userId
         });
 
+        console.log('Rank data received:', rankData, 'Error:', error);
+
         if (error) {
           console.error('Error fetching rank:', error);
           // Still show GC balance even if rank fetch fails
+          const pageRankEl = document.getElementById('userRankPage');
           const pageGCEl = document.getElementById('userGCPage');
+          if (pageRankEl) pageRankEl.textContent = '-';
           if (pageGCEl) {
             pageGCEl.textContent = `${currentGC.toLocaleString()} GC`;
           }
@@ -4555,21 +4559,31 @@
         const pageRankEl = document.getElementById('userRankPage');
         const pageGCEl = document.getElementById('userGCPage');
 
-        if (rankData && rankData.rank) {
+        // Check if we have valid rank data (rank can be 0, so check for null/undefined)
+        if (rankData && rankData.rank != null) {
           // User has a rank
           if (pageRankEl) {
             pageRankEl.textContent = `#${rankData.rank}`;
           }
           if (pageGCEl) {
-            pageGCEl.textContent = `${(rankData.user_gc_balance || 0).toLocaleString()} GC`;
+            pageGCEl.textContent = `${(rankData.user_gc_balance || currentGC).toLocaleString()} GC`;
           }
-        } else {
-          // User has 0 GC or no rank yet
+        } else if (currentGC > 0) {
+          // User has GC but no rank data returned - shouldn't happen, show GC anyway
+          console.warn('User has GC but no rank data returned');
           if (pageRankEl) {
             pageRankEl.textContent = '-';
           }
           if (pageGCEl) {
             pageGCEl.textContent = `${currentGC.toLocaleString()} GC`;
+          }
+        } else {
+          // User has 0 GC
+          if (pageRankEl) {
+            pageRankEl.textContent = '-';
+          }
+          if (pageGCEl) {
+            pageGCEl.textContent = '0 GC';
           }
         }
       } catch (err) {
