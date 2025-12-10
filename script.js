@@ -4525,65 +4525,34 @@
     async function updateCampaignRank() {
       const userId = localStorage.getItem('duelpvp_user_id');
       if (!userId) {
-        // Not logged in - hide rank display
-        const pageRankEl = document.getElementById('userRankPage');
-        const pageGCEl = document.getElementById('userGCPage');
-        if (pageRankEl) pageRankEl.textContent = '-';
-        if (pageGCEl) pageGCEl.textContent = '0 GC';
         return;
       }
 
       try {
-        // Get current GC balance first
-        const currentGC = await getUserGC();
-
-        // Get rank data
-        const { data: rankData, error } = await supabase.rpc('get_user_rank', {
+        // Use same approach as leaderboard - get rank data
+        const { data: userRankData } = await supabase.rpc('get_user_rank', {
           p_user_id: userId
         });
-
-        console.log('Rank data received:', rankData, 'Error:', error);
-
-        if (error) {
-          console.error('Error fetching rank:', error);
-          // Still show GC balance even if rank fetch fails
-          const pageRankEl = document.getElementById('userRankPage');
-          const pageGCEl = document.getElementById('userGCPage');
-          if (pageRankEl) pageRankEl.textContent = '-';
-          if (pageGCEl) {
-            pageGCEl.textContent = `${currentGC.toLocaleString()} GC`;
-          }
-          return;
-        }
 
         const pageRankEl = document.getElementById('userRankPage');
         const pageGCEl = document.getElementById('userGCPage');
 
-        // Check if we have valid rank data (rank can be 0, so check for null/undefined)
-        if (rankData && rankData.rank != null) {
+        if (userRankData && userRankData.rank) {
           // User has a rank
           if (pageRankEl) {
-            pageRankEl.textContent = `#${rankData.rank}`;
+            pageRankEl.textContent = `#${userRankData.rank}`;
           }
           if (pageGCEl) {
-            pageGCEl.textContent = `${(rankData.user_gc_balance || currentGC).toLocaleString()} GC`;
-          }
-        } else if (currentGC > 0) {
-          // User has GC but no rank data returned - shouldn't happen, show GC anyway
-          console.warn('User has GC but no rank data returned');
-          if (pageRankEl) {
-            pageRankEl.textContent = '-';
-          }
-          if (pageGCEl) {
-            pageGCEl.textContent = `${currentGC.toLocaleString()} GC`;
+            pageGCEl.textContent = `${userRankData.user_gc_balance?.toLocaleString() || 0} GC`;
           }
         } else {
-          // User has 0 GC
+          // No rank data - show dash
           if (pageRankEl) {
             pageRankEl.textContent = '-';
           }
           if (pageGCEl) {
-            pageGCEl.textContent = '0 GC';
+            const currentGC = await getUserGC();
+            pageGCEl.textContent = `${currentGC.toLocaleString()} GC`;
           }
         }
       } catch (err) {
