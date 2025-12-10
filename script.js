@@ -4524,42 +4524,52 @@
     // Update campaign rank display
     async function updateCampaignRank() {
       const userId = localStorage.getItem('duelpvp_user_id');
-      if (!userId) return;
+      if (!userId) {
+        // Not logged in - hide rank display
+        const pageRankEl = document.getElementById('userRankPage');
+        const pageGCEl = document.getElementById('userGCPage');
+        if (pageRankEl) pageRankEl.textContent = '-';
+        if (pageGCEl) pageGCEl.textContent = '0 GC';
+        return;
+      }
 
       try {
+        // Get current GC balance first
+        const currentGC = await getUserGC();
+
+        // Get rank data
         const { data: rankData, error } = await supabase.rpc('get_user_rank', {
           p_user_id: userId
         });
 
         if (error) {
           console.error('Error fetching rank:', error);
+          // Still show GC balance even if rank fetch fails
+          const pageGCEl = document.getElementById('userGCPage');
+          if (pageGCEl) {
+            pageGCEl.textContent = `${currentGC.toLocaleString()} GC`;
+          }
           return;
         }
 
+        const pageRankEl = document.getElementById('userRankPage');
+        const pageGCEl = document.getElementById('userGCPage');
+
         if (rankData && rankData.rank) {
-          const rank = rankData.rank;
-          const gcBalance = rankData.user_gc_balance || 0;
-
-          // Update campaign page rank (formatted as #1, #2, etc)
-          const pageRankEl = document.getElementById('userRankPage');
+          // User has a rank
           if (pageRankEl) {
-            pageRankEl.textContent = `#${rank}`;
+            pageRankEl.textContent = `#${rankData.rank}`;
           }
-
-          const pageGCEl = document.getElementById('userGCPage');
           if (pageGCEl) {
-            pageGCEl.textContent = `${gcBalance.toLocaleString()} GC`;
+            pageGCEl.textContent = `${(rankData.user_gc_balance || 0).toLocaleString()} GC`;
           }
         } else {
-          // User has no rank yet (no GC balance)
-          const pageRankEl = document.getElementById('userRankPage');
+          // User has 0 GC or no rank yet
           if (pageRankEl) {
-            pageRankEl.textContent = 'Unranked';
+            pageRankEl.textContent = '-';
           }
-
-          const pageGCEl = document.getElementById('userGCPage');
           if (pageGCEl) {
-            pageGCEl.textContent = '0 GC';
+            pageGCEl.textContent = `${currentGC.toLocaleString()} GC`;
           }
         }
       } catch (err) {

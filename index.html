@@ -181,17 +181,17 @@
 
       <!-- Leaderboard Section -->
       <div class="campaign-progress-section">
-        <div class="campaign-rank-container">
-          <div class="campaign-rank-left">
-            <div class="campaign-progress-title">YOUR LEADERBOARD RANK</div>
-            <div class="campaign-rank-info">
-              <div class="campaign-rank-number" id="userRankPage">Loading...</div>
-              <div class="campaign-rank-gc" id="userGCPage">0 GC</div>
-            </div>
+        <div style="text-align:center;">
+          <div class="campaign-progress-title" style="margin-bottom:16px;">YOUR LEADERBOARD RANK</div>
+          <div style="display:inline-block;background:rgba(0,0,0,0.4);border:2px solid rgba(255,214,77,0.3);border-radius:12px;padding:24px 48px;margin-bottom:20px;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:42px;color:#FFD700;text-shadow:0 0 20px rgba(255,215,0,0.4);margin-bottom:8px;" id="userRankPage">-</div>
+            <div style="font-family:'Courier New',monospace;font-size:16px;color:#888;" id="userGCPage">0 GC</div>
           </div>
-          <button class="action-btn btn-primary" onclick="swapContent('leaderboard')">
-            VIEW FULL LEADERBOARD →
-          </button>
+          <div>
+            <button class="action-btn btn-primary" onclick="swapContent('leaderboard')" style="padding:12px 32px;">
+              VIEW FULL LEADERBOARD →
+            </button>
+          </div>
         </div>
       </div>
 
@@ -363,7 +363,8 @@
 
       <!-- Info box -->
       <div style="text-align:center;padding:16px 20px;margin-bottom:24px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);border-radius:8px;">
-        <div style="font-size:14px;color:#FFD64D;">Earn 500 GC when your referral completes 5 quests!</div>
+        <div style="font-size:14px;color:#FFD64D;margin-bottom:8px;">Earn 500 GC when your referral completes 5 quests!</div>
+        <div style="font-size:13px;color:#4CAF50;font-weight:bold;">Plus earn 5% of all fees your referrals generate. Forever.</div>
       </div>
 
       <!-- Referral link section -->
