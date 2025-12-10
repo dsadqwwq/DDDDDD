@@ -943,7 +943,7 @@
           </div>
 
           <div class="helper">
-            Don't have an account? <a id="backLink">Enter access code</a>
+            Don't have an account? <a id="backLink">Create account</a>
           </div>
         `;
 
@@ -1114,6 +1114,63 @@
 
         document.getElementById('connectWalletForRegBtn').addEventListener('click', handleWalletConnectForRegistration);
         document.getElementById('backToCodeLink').addEventListener('click', () => swapContent('home'));
+
+      } else if (newContent === 'connectWalletForReg') {
+        panelContent.style.display = 'block';
+        dashboardContent.style.display = 'none';
+        gameContent.style.display = 'none';
+        leaderboardContent.style.display = 'none';
+        questContent.style.display = 'none';
+        inventoryContent.style.display = 'none';
+        pageContainer.classList.add('center-aligned');
+        pageContainer.classList.remove('bottom-aligned');
+        panelContent.classList.remove('panel-transparent');
+
+        panelContent.innerHTML = `
+          <div class="panel-header">
+            <div class="warrior-title">CREATE ACCOUNT</div>
+            <div class="sub-text">Connect your wallet to begin your journey</div>
+          </div>
+
+          <div class="wallet-connect-container" style="text-align:center;padding:40px 20px;">
+            <div style="margin-bottom:20px;">
+              <svg width="64" height="64" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="50,5 90,27.5 90,72.5 50,95 10,72.5 10,27.5"
+                         fill="none"
+                         stroke="url(#walletRegGradient)"
+                         stroke-width="4"/>
+                <circle cx="40" cy="50" r="10" fill="#22c55e"/>
+                <circle cx="60" cy="50" r="10" fill="#ef4444"/>
+                <defs>
+                  <linearGradient id="walletRegGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#FFD64D;stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:#D4AF37;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#D4A033;stop-opacity:1" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:12px;color:var(--gold);margin-bottom:12px;">
+              NEW WARRIOR REGISTRATION
+            </div>
+            <div style="font-family:Inter,system-ui,Arial;font-size:14px;color:#a0a8b0;margin-bottom:30px;line-height:1.6;">
+              Connect your wallet to create a new account.<br>
+              You'll be asked to sign a message to prove ownership.<br>
+              <strong style="color:var(--gold);">No transaction, no gas fees.</strong>
+            </div>
+            <button class="btn-submit" id="connectWalletRegBtn" style="width:100%;max-width:300px;">
+              CONNECT WALLET
+            </button>
+            <div style="margin-top:20px;">
+              <a id="backToHomeLink" style="color:#6b7280;font-size:12px;cursor:pointer;text-decoration:underline;">
+                ← Back
+              </a>
+            </div>
+          </div>
+        `;
+
+        document.getElementById('connectWalletRegBtn').addEventListener('click', handleWalletConnectForRegistration);
+        document.getElementById('backToHomeLink').addEventListener('click', () => swapContent('home'));
 
       } else if (newContent === 'home') {
         panelContent.style.display = 'block';
