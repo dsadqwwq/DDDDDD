@@ -5460,10 +5460,11 @@
       console.log('Play Reaction clicked');
       swapContent('game');
     });
-    addListener('playCrashBtn', 'click', () => {
-      console.log('Play Crash clicked');
-      swapContent('crash');
-    });
+    // CRASH and DEFI disabled for now
+    // addListener('playCrashBtn', 'click', () => {
+    //   console.log('Play Crash clicked');
+    //   swapContent('crash');
+    // });
     addListener('playMinesBtn', 'click', () => {
       console.log('Play Mines clicked');
       swapContent('mines');
@@ -5472,17 +5473,17 @@
       console.log('Play Blackjack clicked');
       swapContent('blackjack');
     });
-    addListener('openOvenBtn', 'click', () => {
-      console.log('Open Oven clicked');
-      swapContent('oven');
-    });
+    // addListener('openOvenBtn', 'click', () => {
+    //   console.log('Open Oven clicked');
+    //   swapContent('oven');
+    // });
     addListener('backFromOvenBtn', 'click', () => swapContent('dashboard'));
     addListener('ovenDepositBtn', 'click', depositToOven);
     addListener('ovenWithdrawBtn', 'click', withdrawFromOven);
-    addListener('openFarmBtn', 'click', () => {
-      console.log('Open Farm clicked');
-      swapContent('farm');
-    });
+    // addListener('openFarmBtn', 'click', () => {
+    //   console.log('Open Farm clicked');
+    //   swapContent('farm');
+    // });
     addListener('backFromFarmBtn', 'click', () => swapContent('dashboard'));
     addListener('farmClickBtn', 'click', clickFarm);
     addListener('viewLeaderboardBtn', 'click', () => {

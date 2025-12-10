@@ -182,13 +182,13 @@
       <!-- Leaderboard Section -->
       <div class="campaign-progress-section">
         <div style="text-align:center;">
-          <div class="campaign-progress-title" style="margin-bottom:16px;">YOUR LEADERBOARD RANK</div>
-          <div style="display:inline-block;background:rgba(0,0,0,0.4);border:2px solid rgba(255,214,77,0.3);border-radius:12px;padding:24px 48px;margin-bottom:20px;">
-            <div style="font-family:'Press Start 2P',monospace;font-size:42px;color:#FFD700;text-shadow:0 0 20px rgba(255,215,0,0.4);margin-bottom:8px;" id="userRankPage">-</div>
-            <div style="font-family:'Courier New',monospace;font-size:16px;color:#888;" id="userGCPage">0 GC</div>
+          <div class="campaign-progress-title" style="margin-bottom:12px;">YOUR LEADERBOARD RANK</div>
+          <div style="display:inline-block;background:rgba(0,0,0,0.4);border:2px solid rgba(255,214,77,0.3);border-radius:8px;padding:12px 24px;margin-bottom:12px;">
+            <div style="font-family:'Press Start 2P',monospace;font-size:24px;color:#FFD700;text-shadow:0 0 20px rgba(255,215,0,0.4);margin-bottom:4px;" id="userRankPage">-</div>
+            <div style="font-family:'Courier New',monospace;font-size:13px;color:#888;" id="userGCPage">0 GC</div>
           </div>
           <div>
-            <button class="action-btn btn-primary" onclick="swapContent('leaderboard')" style="padding:12px 32px;">
+            <button class="action-btn btn-primary" onclick="swapContent('leaderboard')" style="padding:8px 24px;">
               VIEW FULL LEADERBOARD →
             </button>
           </div>
@@ -203,10 +203,10 @@
         <div class="campaign-cards-row">
           <!-- Left: DeFi -->
           <div class="campaign-card invest">
-            <div class="campaign-card-title">DEFI</div>
+            <div class="campaign-card-title" style="opacity:0.5;">DEFI</div>
             <div class="campaign-card-content">
-              <button class="action-btn btn-invest" id="openOvenBtn" aria-label="Open Staking" style="width:100%;margin-bottom:12px;">STAKING</button>
-              <button class="action-btn btn-invest" id="openFarmBtn" aria-label="Open Airdrop Farm" style="width:100%;margin-bottom:12px;">FARM</button>
+              <button class="action-btn btn-invest" disabled style="width:100%;margin-bottom:12px;opacity:0.3;cursor:not-allowed;background:rgba(0,0,0,0.5);">STAKING</button>
+              <button class="action-btn btn-invest" disabled style="width:100%;margin-bottom:12px;opacity:0.3;cursor:not-allowed;background:rgba(0,0,0,0.5);">FARM</button>
               <button class="action-btn btn-invest" id="viewQuestsFromCampaignBtn" aria-label="View Quests" style="width:100%;margin-bottom:12px;">QUESTS</button>
               <button class="action-btn btn-invest" id="viewReferralsFromCampaignBtn" aria-label="View Referrals" style="width:100%;">REFERRALS</button>
             </div>
@@ -216,7 +216,7 @@
           <div class="campaign-card gamble">
             <div class="campaign-card-title">GAMBLING</div>
             <div class="campaign-card-content">
-              <button class="action-btn btn-gamble" id="playCrashBtn" aria-label="Play crash rocket game" style="width:100%;margin-bottom:12px;">CRASH</button>
+              <button class="action-btn btn-gamble" disabled style="width:100%;margin-bottom:12px;opacity:0.3;cursor:not-allowed;background:rgba(0,0,0,0.5);">CRASH</button>
               <button class="action-btn btn-gamble" id="playMinesBtn" aria-label="Play mines game" style="width:100%;margin-bottom:12px;">MINES</button>
               <button class="action-btn btn-gamble" id="playBlackjackBtn" aria-label="Play blackjack game" style="width:100%;margin-bottom:12px;">BLACKJACK</button>
               <button class="action-btn btn-gamble" disabled style="width:100%;opacity:0.5;cursor:not-allowed;">TRADING SIM</button>
