@@ -1252,6 +1252,16 @@
     opacity:0.8;
   }
 
+  .campaign-banner-subtitle{
+    font-family:'Courier New', monospace;
+    font-size:13px;
+    color:#4CAF50;
+    text-align:center;
+    font-weight:bold;
+    letter-spacing:0.5px;
+    margin-top:-8px;
+  }
+
   .campaign-progress{
     margin-bottom:8px;
   }
@@ -1302,6 +1312,42 @@
     align-items:center;
     gap:4px;
     font-family:'Press Start 2P', monospace;
+  }
+
+  .campaign-rank-container{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:24px;
+  }
+
+  .campaign-rank-left{
+    flex:1;
+    min-width:280px;
+  }
+
+  .campaign-rank-info{
+    display:flex;
+    align-items:baseline;
+    gap:16px;
+    margin-top:16px;
+  }
+
+  .campaign-rank-number{
+    font-family:'Press Start 2P', monospace;
+    font-size:48px;
+    color:#FFD700;
+    font-weight:bold;
+    text-shadow:0 0 20px rgba(255,215,0,0.4);
+    line-height:1;
+  }
+
+  .campaign-rank-gc{
+    font-family:'Courier New', monospace;
+    font-size:18px;
+    color:#888;
+    font-weight:normal;
   }
 
   /* About Section Styles */

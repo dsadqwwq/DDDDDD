@@ -4327,21 +4327,20 @@
       if (!userId) return;
 
       try {
-        const { data: rankData } = await supabase.rpc('get_user_rank', {
+        const { data: rankData, error } = await supabase.rpc('get_user_rank', {
           p_user_id: userId
         });
 
-        if (rankData) {
-          const rank = rankData.rank || '-';
+        if (error) {
+          console.error('Error fetching rank:', error);
+          return;
+        }
+
+        if (rankData && rankData.rank) {
+          const rank = rankData.rank;
           const gcBalance = rankData.user_gc_balance || 0;
 
-          // Update banner rank
-          const bannerRankEl = document.getElementById('userRankBanner');
-          if (bannerRankEl) {
-            bannerRankEl.textContent = `#${rank}`;
-          }
-
-          // Update campaign page rank
+          // Update campaign page rank (formatted as #1, #2, etc)
           const pageRankEl = document.getElementById('userRankPage');
           if (pageRankEl) {
             pageRankEl.textContent = `#${rank}`;
@@ -4350,6 +4349,17 @@
           const pageGCEl = document.getElementById('userGCPage');
           if (pageGCEl) {
             pageGCEl.textContent = `${gcBalance.toLocaleString()} GC`;
+          }
+        } else {
+          // User has no rank yet (no GC balance)
+          const pageRankEl = document.getElementById('userRankPage');
+          if (pageRankEl) {
+            pageRankEl.textContent = 'Unranked';
+          }
+
+          const pageGCEl = document.getElementById('userGCPage');
+          if (pageGCEl) {
+            pageGCEl.textContent = '0 GC';
           }
         }
       } catch (err) {
