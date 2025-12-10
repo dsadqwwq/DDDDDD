@@ -609,6 +609,23 @@
       Toast.init();
       Loading.init();
 
+      // Set up event listeners for initial home page
+      const registerBtn = document.getElementById('registerBtn');
+      if (registerBtn) {
+        registerBtn.addEventListener('click', () => swapContent('connectWalletForReg'));
+      }
+
+      const loginLink = document.getElementById('loginLink');
+      if (loginLink) {
+        loginLink.addEventListener('click', () => swapContent('login'));
+        loginLink.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            swapContent('login');
+          }
+        });
+      }
+
       // Initialize app - check for existing session (Blur-style auto-reconnect)
       await initializeApp();
     });
