@@ -1115,8 +1115,10 @@
           </div>
         `;
 
-        // Store the code for later use
-        tempRegistrationData.inviteCode = data;
+        // Store the code for later use (only if explicitly provided)
+        if (data !== undefined) {
+          tempRegistrationData.inviteCode = data;
+        }
 
         document.getElementById('connectWalletForRegBtn').addEventListener('click', handleWalletConnectForRegistration);
         document.getElementById('backToCodeLink').addEventListener('click', () => swapContent('home'));
@@ -2244,7 +2246,10 @@
 
           // Store wallet address for registration
           tempRegistrationData.walletAddress = walletAddress;
-          tempRegistrationData.inviteCode = null; // No invite code needed
+          // Only clear invite code if it wasn't set from URL parameter
+          if (!tempRegistrationData.inviteCode) {
+            tempRegistrationData.inviteCode = null; // No invite code needed
+          }
 
           Loading.hide();
           Toast.success('Wallet connected!', 'SUCCESS');
@@ -3524,7 +3529,7 @@
       daily: [
         {id: 'first_login', name: 'First Steps', desc: 'Log in for the first time', target: 1, reward: 500, icon: '🗡️', type: 'regular'},
         {id: 'invite_used', name: 'Recruit Warriors', desc: 'Have 3 friends use your invite codes', target: 3, reward: 1500, icon: '👥', type: 'regular', action: 'openInventory'},
-        {id: 'like_retweet', name: 'Like & Retweet', desc: 'Like and retweet our post on X', target: 1, reward: 500, icon: '❤️', type: 'manual'},
+        {id: 'retweet_jan_2025', name: 'Retweet & Earn', desc: 'Retweet our latest post on X', target: 1, reward: 1000, icon: '🔄', type: 'manual'},
         {id: 'twitter_follow', name: 'Follow Us', desc: 'Follow @Duelpvp on X', target: 1, reward: 500, icon: '➕', type: 'manual'},
         {id: 'bunnz_holder', name: 'BAD BUNNZ Holder', desc: 'Own a BAD BUNNZ NFT', target: 1, reward: 500, icon: '🐰', type: 'nft'},
         {id: 'fluffle_holder', name: 'FLUFFLE Holder', desc: 'Own a FLUFFLE NFT', target: 1, reward: 2500, icon: '🐇', type: 'nft'},
@@ -3613,6 +3618,7 @@
           'bunnz_holder': '🔥',
           'megalio_holder': '🦁',
           'like_retweet': '❤️',
+          'retweet_jan_2025': '🔄',
           'twitter_follow': '➕',
           'post_wallet': '💳'
         };
@@ -3664,6 +3670,8 @@
               html += `<button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="showInventory()">VIEW INVITE CODES</button>`;
             } else if (quest.id === 'like_retweet') {
               html += `<button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="openLikeRetweetQuest()">START QUEST</button>`;
+            } else if (quest.id === 'retweet_jan_2025') {
+              html += `<button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="openRetweetJan2025Quest()">START QUEST</button>`;
             } else if (quest.id === 'twitter_follow') {
               html += `<button class="action-btn btn-secondary" style="width:100%;margin-top:8px;" onclick="openTwitterFollowQuest()">START QUEST</button>`;
             } else if (quest.id === 'post_wallet') {
@@ -3870,7 +3878,7 @@
       }
     }
 
-    // Like & Retweet quest
+    // Like & Retweet quest (OLD - kept for users who already completed it)
     async function openLikeRetweetQuest() {
       // Open the specific X post to like and retweet
       const postUrl = 'https://x.com/Duelpvp/status/1991226071639798202';
@@ -3918,6 +3926,82 @@
         // Complete and claim the quest in one call
         const { data, error } = await supabase.rpc('complete_manual_quest', {
           p_quest_id: 'like_retweet',
+          p_user_id: userId
+        });
+
+        Loading.hide();
+
+        if (error || !data?.success) {
+          console.error('Quest error:', error || data?.error);
+          Toast.error(data?.error || 'Failed to complete quest', 'ERROR');
+        } else {
+          // Clear GC cache and update display
+          gcCache.lastFetch = 0;
+          const newGC = await getUserGC();
+          updateGCDisplay(newGC, data.reward);
+          Toast.success(`+${data.reward} GC earned!`, 'QUEST COMPLETED');
+        }
+
+        // Reload quests
+        const activeTab = document.querySelector('.quest-tab.active');
+        const tabType = activeTab ? activeTab.getAttribute('data-quest-tab') : 'daily';
+        loadQuests(tabType);
+
+      } catch (err) {
+        Loading.hide();
+        console.error('Quest submission error:', err);
+        Toast.error('Failed to submit', 'ERROR');
+      }
+    }
+
+    // NEW Retweet quest (January 2025)
+    async function openRetweetJan2025Quest() {
+      // Open the specific X post to retweet
+      const postUrl = 'https://x.com/Duelpvp/status/1998705426238509128';
+      window.open(postUrl, '_blank');
+
+      // Show modal to submit link
+      const modalHtml = `
+        <div style="text-align:center;">
+          <p style="margin-bottom:16px;color:#e6ecf1;font-size:12px;">
+            1. Retweet our post on X<br>
+            2. Copy the link to your retweet<br>
+            3. Paste it below to complete the quest
+          </p>
+          <input type="text" id="retweetJan2025LinkInput" placeholder="Paste your retweet link here..."
+            style="width:100%;padding:12px;background:rgba(0,0,0,.4);border:2px solid rgba(255,214,77,.3);border-radius:8px;color:#e6ecf1;font-family:monospace;font-size:12px;margin-bottom:16px;">
+          <div style="background:rgba(255,193,7,.1);border:1px solid rgba(255,193,7,.3);border-radius:8px;padding:12px;margin-bottom:16px;">
+            <p style="color:#ffc107;font-size:10px;margin:0;">
+              Note: Your submission will be manually verified. GC will be granted immediately but may be revoked if the retweet is not valid.
+            </p>
+          </div>
+        </div>
+      `;
+
+      const confirmed = await Modal.show({ html: modalHtml, title: 'Retweet & Earn Quest', type: 'confirm' });
+      if (!confirmed) return;
+
+      const retweetLink = document.getElementById('retweetJan2025LinkInput')?.value?.trim();
+      if (!retweetLink) {
+        Toast.error('Please paste your retweet link', 'ERROR');
+        return;
+      }
+
+      // Validate it looks like an X/Twitter link
+      if (!retweetLink.includes('x.com/') && !retweetLink.includes('twitter.com/')) {
+        Toast.error('Please paste a valid X/Twitter link', 'ERROR');
+        return;
+      }
+
+      Loading.show('Submitting...');
+
+      try {
+        const session = getSession();
+        const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
+
+        // Complete and claim the quest in one call
+        const { data, error } = await supabase.rpc('complete_manual_quest', {
+          p_quest_id: 'retweet_jan_2025',
           p_user_id: userId
         });
 
