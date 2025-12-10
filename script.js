@@ -5312,7 +5312,7 @@
     async function loadReferralStats() {
       const session = getSession();
       const userId = session?.userId || localStorage.getItem('duelpvp_user_id');
-      const username = session?.username || localStorage.getItem('duelpvp_username') || 'warrior';
+      const username = session?.displayName || localStorage.getItem('duelpvp_username') || 'Loading...';
 
       // Set referral link
       const referralLink = `${window.location.origin}?ref=${username.toLowerCase()}`;
@@ -5345,12 +5345,12 @@
         if (linkInput && linkInput.value && linkInput.value !== 'Loading...') {
           try {
             await navigator.clipboard.writeText(linkInput.value);
-            Toast.success('Referral link copied!', 'Share it to earn 5%');
+            Toast.success('Referral link copied!', 'COPIED');
           } catch (err) {
             // Fallback
             linkInput.select();
             document.execCommand('copy');
-            Toast.success('Referral link copied!', 'Share it to earn 5%');
+            Toast.success('Referral link copied!', 'COPIED');
           }
         }
       });
