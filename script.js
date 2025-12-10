@@ -609,6 +609,13 @@
       Toast.init();
       Loading.init();
 
+      // Parse URL parameters for referral code
+      const urlParams = new URLSearchParams(window.location.search);
+      const refCode = urlParams.get('ref');
+      if (refCode) {
+        tempRegistrationData.inviteCode = refCode;
+      }
+
       // Set up event listeners for initial home page
       const connectWalletBtn = document.getElementById('connectWalletBtn');
       if (connectWalletBtn) {
@@ -1014,18 +1021,18 @@
 
         panelContent.innerHTML = `
           <div class="panel-header">
-            <div class="warrior-title">NAME YOUR WARRIOR</div>
+            <div class="warrior-title">your legend begins here</div>
             <div class="sub-text">Choose a name that strikes fear into your enemies</div>
           </div>
 
           <div class="input-group">
-            <input id="warriorName" class="warrior-input" type="text" placeholder="Your legend begins here..." maxlength="16" autocomplete="off">
+            <input id="warriorName" class="warrior-input" type="text" placeholder="NAME YOUR WARRIOR" maxlength="16" autocomplete="off">
             <div class="error-msg" id="warriorNameError"></div>
           </div>
 
           <div class="input-group">
             <label class="input-label" style="font-size:12px;color:#888;">Referral Code (Optional)</label>
-            <input id="referralCode" class="warrior-input" type="text" placeholder="Friend's username..." maxlength="16" autocomplete="off">
+            <input id="referralCode" class="warrior-input" type="text" placeholder="enter code" maxlength="16" autocomplete="off">
             <div class="error-msg" id="referralCodeError"></div>
           </div>
 
@@ -1037,6 +1044,16 @@
         panelContent.classList.remove('fade-in', 'warrior-naming');
         void panelContent.offsetWidth;
         panelContent.classList.add('warrior-naming');
+
+        // Prefill referral code if available from URL
+        if (tempRegistrationData.inviteCode) {
+          setTimeout(() => {
+            const referralInput = document.getElementById('referralCode');
+            if (referralInput) {
+              referralInput.value = tempRegistrationData.inviteCode;
+            }
+          }, 100);
+        }
 
         // Re-attach event listeners
         document.getElementById('confirmNameBtn').addEventListener('click', handleNameWarrior);
