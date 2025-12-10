@@ -1151,6 +1151,8 @@
           const displayGP = gp >= 1000000 ? `${(gp/1000000).toFixed(1)}M` : gp >= 1000 ? `${(gp/1000).toFixed(1)}K` : gp;
           document.getElementById('dashboardGCBalance').textContent = displayGP;
           console.log('[Dashboard] GC display updated:', gp);
+          // Update campaign rank display
+          updateCampaignRank();
         })();
 
       } else if (newContent === 'game') {
@@ -4270,14 +4272,8 @@
         }, 300);
       }
 
-      // Update campaign progress
-      const campaignCurrentGC = document.getElementById('campaignCurrentGC');
-      const campaignProgressFill = document.getElementById('campaignProgressFill');
-      if (campaignCurrentGC && campaignProgressFill) {
-        campaignCurrentGC.textContent = newGP.toLocaleString();
-        const progress = Math.min((newGP / 1000000) * 100, 100);
-        campaignProgressFill.style.width = progress + '%';
-      }
+      // Update campaign rank
+      updateCampaignRank();
     }
 
     // Initialize GC cache on login/page load
@@ -4325,27 +4321,45 @@
       }
     }
 
+    // Update campaign rank display
+    async function updateCampaignRank() {
+      const userId = localStorage.getItem('duelpvp_user_id');
+      if (!userId) return;
+
+      try {
+        const { data: rankData } = await supabase.rpc('get_user_rank', {
+          p_user_id: userId
+        });
+
+        if (rankData) {
+          const rank = rankData.rank || '-';
+          const gcBalance = rankData.user_gc_balance || 0;
+
+          // Update banner rank
+          const bannerRankEl = document.getElementById('userRankBanner');
+          if (bannerRankEl) {
+            bannerRankEl.textContent = `#${rank}`;
+          }
+
+          // Update campaign page rank
+          const pageRankEl = document.getElementById('userRankPage');
+          if (pageRankEl) {
+            pageRankEl.textContent = `#${rank}`;
+          }
+
+          const pageGCEl = document.getElementById('userGCPage');
+          if (pageGCEl) {
+            pageGCEl.textContent = `${gcBalance.toLocaleString()} GC`;
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch user rank:', err);
+      }
+    }
+
     // Update campaign page with current stats
     async function updateCampaignPage() {
-      const currentGP = await getUserGC();
-
-      // Update current GC on page
-      const currentGPPageEl = document.getElementById('campaignCurrentGCPage');
-      if (currentGPPageEl) {
-        currentGPPageEl.textContent = currentGP.toLocaleString();
-      }
-
-      // Update progress bar and percentage
-      const progress = Math.min((currentGP / 1000000) * 100, 100);
-      const progressFillEl = document.getElementById('campaignProgressFillLarge');
-      if (progressFillEl) {
-        progressFillEl.style.width = progress + '%';
-      }
-
-      const progressPercentageEl = document.getElementById('campaignProgressPercentage');
-      if (progressPercentageEl) {
-        progressPercentageEl.textContent = progress.toFixed(1) + '%';
-      }
+      await updateCampaignRank();
     }
 
     // ===============================================

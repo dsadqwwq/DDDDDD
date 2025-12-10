@@ -1289,6 +1289,21 @@
     margin-top:8px;
   }
 
+  .campaign-leaderboard-link{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+    margin-bottom:8px;
+  }
+
+  .campaign-rank-display{
+    display:flex;
+    align-items:center;
+    gap:4px;
+    font-family:'Press Start 2P', monospace;
+  }
+
   /* About Section Styles */
   .about-section{
     width:min(720px,92vw);
