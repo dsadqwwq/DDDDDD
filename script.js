@@ -1260,15 +1260,10 @@
         initCrashGame();
 
       } else if (newContent === 'mines') {
-        hideAllContainers();
-        if (campaignBanner) campaignBanner.style.display = 'none';
-        minesContent.style.display = 'block';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
-        // Only init grid if not currently playing
-        if (!minesGameState.isPlaying) {
-          initMinesGame();
-        }
-        updateMinesGCDisplay();
+        // DISABLED: Mines game temporarily unavailable
+        Toast.error('Mines game is temporarily unavailable', 'GAME DISABLED');
+        swapContent('dashboard');
+        return;
 
       } else if (newContent === 'blackjack') {
         hideAllContainers();
@@ -5562,10 +5557,11 @@
     //   console.log('Play Crash clicked');
     //   swapContent('crash');
     // });
-    addListener('playMinesBtn', 'click', () => {
-      console.log('Play Mines clicked');
-      swapContent('mines');
-    });
+    // DISABLED: Mines game temporarily unavailable
+    // addListener('playMinesBtn', 'click', () => {
+    //   console.log('Play Mines clicked');
+    //   swapContent('mines');
+    // });
     addListener('playBlackjackBtn', 'click', () => {
       console.log('Play Blackjack clicked');
       swapContent('blackjack');
