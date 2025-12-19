@@ -131,7 +131,7 @@ VALUES
   ('twitter_follow', 'Follow Us', 'Follow @Duelpvp on X.', 500, 1, 'one_time', FALSE, 4),
   ('post_wallet', 'Post Your EVM Wallet', 'Post your EVM wallet address under our tweet.', 1000, 1, 'one_time', FALSE, 5),
   ('fluffle_holder', 'FLUFFLE Holder', 'Hold a FLUFFLE NFT in your wallet.', 5000, 1, 'one_time', FALSE, 6),
-  ('bunnz_holder', 'BAD BUNNZ Holder', 'Hold a BAD BUNNZ NFT in your wallet.', 1500, 1, 'one_time', FALSE, 7)
+  ('bunnz_holder', 'BAD BUNNZ Holder', 'Hold a BAD BUNNZ NFT in your wallet.', 850, 1, 'one_time', FALSE, 7)
 ON CONFLICT (id) DO UPDATE SET
   name = EXCLUDED.name,
   description = EXCLUDED.description,
