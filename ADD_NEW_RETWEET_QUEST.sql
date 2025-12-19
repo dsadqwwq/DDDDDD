@@ -2,28 +2,28 @@
 -- Run this in Supabase SQL Editor
 
 INSERT INTO quest_templates (
-  quest_id,
-  quest_name,
+  id,
+  name,
   description,
   quest_type,
   gc_reward,
   target_count,
   is_active,
-  created_at
+  sort_order
 )
 VALUES (
   'retweet_dec_2024',
   'Spread the Word',
   'Retweet our announcement on X',
-  'manual',
+  'one_time',
   1000,
   1,
   true,
-  NOW()
+  4
 )
-ON CONFLICT (quest_id)
+ON CONFLICT (id)
 DO UPDATE SET
-  quest_name = EXCLUDED.quest_name,
+  name = EXCLUDED.name,
   description = EXCLUDED.description,
   gc_reward = EXCLUDED.gc_reward,
   is_active = EXCLUDED.is_active;
