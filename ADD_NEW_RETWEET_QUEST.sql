@@ -14,7 +14,7 @@ INSERT INTO quest_templates (
 VALUES (
   'retweet_dec_2024',
   'Spread the Word',
-  'Retweet our announcement on X',
+  'Retweet our discord announcement',
   'one_time',
   1000,
   1,

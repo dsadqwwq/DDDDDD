@@ -3524,7 +3524,7 @@
       daily: [
         {id: 'first_login', name: 'First Steps', desc: 'Log in for the first time', target: 1, reward: 500, icon: '🗡️', type: 'regular'},
         {id: 'retweet_jan_2025', name: 'Retweet & Earn', desc: 'Retweet our latest post on X', target: 1, reward: 1000, icon: '🔄', type: 'manual'},
-        {id: 'retweet_dec_2024', name: 'Spread the Word', desc: 'Retweet our announcement on X', target: 1, reward: 1000, icon: '🔄', type: 'manual'},
+        {id: 'retweet_dec_2024', name: 'Spread the Word', desc: 'Retweet our discord announcement', target: 1, reward: 1000, icon: '🔄', type: 'manual'},
         {id: 'twitter_follow', name: 'Follow Us', desc: 'Follow @Duelpvp on X', target: 1, reward: 500, icon: '➕', type: 'manual'}
       ],
       weekly: [],
