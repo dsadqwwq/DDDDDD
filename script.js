@@ -1202,32 +1202,9 @@
           updateCampaignRank();
         })();
 
-      } else if (newContent === 'game') {
-        panelContent.style.display = 'none';
-        dashboardContent.style.display = 'none';
-        leaderboardContent.style.display = 'none';
-        questContent.style.display = 'none';
-        inventoryContent.style.display = 'none';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
-        initChart();
 
-      } else if (newContent === 'oven') {
-        hideAllContainers();
-        if (campaignBanner) campaignBanner.style.display = 'none';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
-        initOven();
 
-      } else if (newContent === 'farm') {
-        hideAllContainers();
-        if (campaignBanner) campaignBanner.style.display = 'none';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
-        initFarm();
 
-      } else if (newContent === 'crash') {
-        hideAllContainers();
-        if (campaignBanner) campaignBanner.style.display = 'none';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
-        initCrashGame();
 
       } else if (newContent === 'mines') {
         // DISABLED: Mines game temporarily unavailable
@@ -1235,61 +1212,34 @@
         swapContent('dashboard');
         return;
 
-      } else if (newContent === 'blackjack') {
-        hideAllContainers();
-        if (campaignBanner) campaignBanner.style.display = 'none';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
-        initBlackjack();
 
       } else if (newContent === 'leaderboard') {
         console.log('Switching to leaderboard...');
-        panelContent.style.display = 'none';
-        dashboardContent.style.display = 'none';
+        hideAllContainers();
         leaderboardContent.style.display = 'block';
-        questContent.style.display = 'none';
-        inventoryContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         console.log('Leaderboard display set to block');
         loadLeaderboard('all');
         console.log('loadLeaderboard called');
 
       } else if (newContent === 'quests') {
-        panelContent.style.display = 'none';
-        dashboardContent.style.display = 'none';
-        leaderboardContent.style.display = 'none';
+        hideAllContainers();
         questContent.style.display = 'block';
-        referralsContent.style.display = 'none';
-        inventoryContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadQuests('daily');
 
       } else if (newContent === 'referrals') {
-        panelContent.style.display = 'none';
-        dashboardContent.style.display = 'none';
-        leaderboardContent.style.display = 'none';
-        questContent.style.display = 'none';
+        hideAllContainers();
         referralsContent.style.display = 'block';
-        inventoryContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadReferralStats();
 
       } else if (newContent === 'inventory') {
-        panelContent.style.display = 'none';
-        dashboardContent.style.display = 'none';
-        leaderboardContent.style.display = 'none';
-        questContent.style.display = 'none';
+        hideAllContainers();
         inventoryContent.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadInventory();
 
-      } else if (newContent === 'shop') {
-        panelContent.style.display = 'none';
-        dashboardContent.style.display = 'none';
-        leaderboardContent.style.display = 'none';
-        questContent.style.display = 'none';
-        inventoryContent.style.display = 'none';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
-        loadInventory(); // Load shop items
       }
 
         // Add fade-in animation to newly visible element
