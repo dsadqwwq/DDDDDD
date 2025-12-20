@@ -862,9 +862,11 @@
 
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
+      console.log('[swapContent] Switching to:', newContent);
       // Find currently visible element
       const allContainers = [panelContent, dashboardContent, leaderboardContent, questContent, referralsContent, inventoryContent];
       const currentVisible = allContainers.find(el => el.style.display !== 'none' && el.style.display !== '');
+      console.log('[swapContent] Current visible:', currentVisible?.id || 'none');
 
       // Add fade-out to current visible element
       if (currentVisible) {
@@ -874,6 +876,7 @@
 
       // Wait for fade-out animation, then swap content
       setTimeout(() => {
+        console.log('[swapContent] Timeout fired, executing case:', newContent);
         if (newContent === 'login') {
           panelContent.style.display = 'block';
           dashboardContent.style.display = 'none';
@@ -1183,8 +1186,13 @@
         document.getElementById('connectWalletBtnHome').addEventListener('click', handleUnifiedWalletConnect);
 
       } else if (newContent === 'dashboard') {
+        console.log('[dashboard case] Starting dashboard case');
         hideAllContainers();
+        console.log('[dashboard case] hideAllContainers called');
         dashboardContent.style.display = 'block';
+        console.log('[dashboard case] dashboardContent.style.display set to block');
+        console.log('[dashboard case] dashboardContent element:', dashboardContent);
+        console.log('[dashboard case] dashboardContent computed display:', window.getComputedStyle(dashboardContent).display);
         if (campaignBanner) campaignBanner.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         // Force refresh GC cache and display when loading dashboard
@@ -1244,10 +1252,14 @@
 
         // Add fade-in animation to newly visible element
         const newVisible = allContainers.find(el => el.style.display === 'block');
+        console.log('[swapContent] After all cases, newVisible:', newVisible?.id || 'NONE FOUND');
+        console.log('[swapContent] All container states:', allContainers.map(el => `${el.id}: ${el.style.display}`).join(', '));
         if (newVisible) {
           newVisible.classList.remove('fade-out', 'fade-in-delayed');
           void newVisible.offsetWidth; // Force reflow
           newVisible.classList.add('fade-in');
+        } else {
+          console.error('[swapContent] ERROR: No visible container found after swap!');
         }
 
         // Scroll to top AFTER content is fully laid out
