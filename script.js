@@ -1179,19 +1179,26 @@
         pageContainer.classList.remove('center-aligned');
         panelContent.classList.add('panel-transparent');
 
-        panelContent.innerHTML = `
-          <!-- Campaign Ended Banner -->
-          <div style="background:linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(255,214,77,0.1) 100%);border:2px solid rgba(255,214,77,0.5);border-radius:12px;padding:28px 32px;margin-bottom:24px;text-align:center;box-shadow:0 4px 16px rgba(255,214,77,0.2);">
+        // Add campaign end banner before panel if it doesn't exist
+        let existingBanner = pageContainer.querySelector('.campaign-end-banner');
+        if (!existingBanner) {
+          const banner = document.createElement('div');
+          banner.className = 'campaign-end-banner';
+          banner.style.cssText = 'background:linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(255,214,77,0.1) 100%);border:2px solid rgba(255,214,77,0.5);border-radius:12px;padding:28px 32px;margin-bottom:24px;text-align:center;box-shadow:0 4px 16px rgba(255,214,77,0.2);width:min(800px,92vw);margin-left:auto;margin-right:auto;';
+          banner.innerHTML = `
             <div style="font-size:32px;margin-bottom:12px;">⚔️</div>
             <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:#FFD700;margin-bottom:16px;line-height:1.6;text-shadow:0 2px 4px rgba(0,0,0,0.5);">PRE-SEASON COMPLETE</div>
             <div style="font-family:'Courier New',monospace;font-size:15px;color:#ffffff;line-height:1.8;margin-bottom:8px;">
               Thank you for participating in the campaign!
             </div>
             <div style="font-family:'Courier New',monospace;font-size:14px;color:#4CAF50;line-height:1.8;">
-              Founder's Swords minting Monday • Season 1 coming soon
+              Founder's Swords minting Monday, December 22 • Season 1 coming soon
             </div>
-          </div>
+          `;
+          pageContainer.insertBefore(banner, panelContent);
+        }
 
+        panelContent.innerHTML = `
           <!-- About Section -->
           <div class="campaign-earn-section">
             <div class="campaign-earn-title">ABOUT</div>
