@@ -1198,9 +1198,13 @@
           pageContainer.insertBefore(banner, panelContent);
         }
 
-        panelContent.innerHTML = `
-          <!-- About Section -->
-          <div class="campaign-earn-section">
+        // Add About section before panel if it doesn't exist
+        let existingAbout = pageContainer.querySelector('.campaign-earn-section');
+        if (!existingAbout) {
+          const aboutSection = document.createElement('div');
+          aboutSection.className = 'campaign-earn-section';
+          aboutSection.style.cssText = 'width:min(800px,92vw);margin-left:auto;margin-right:auto;margin-bottom:24px;';
+          aboutSection.innerHTML = `
             <div class="campaign-earn-title">ABOUT</div>
 
             <!-- Main Description -->
@@ -1245,9 +1249,12 @@
             <div style="text-align:center;margin-top:20px;">
               <span style="color:#FFD700;font-size:13px;font-family:'Courier New',monospace;">Launch planned 2026 (subject to change)</span>
             </div>
-          </div>
+          `;
+          pageContainer.insertBefore(aboutSection, panelContent);
+        }
 
-          <div class="panel-header" style="margin-top:32px;">
+        panelContent.innerHTML = `
+          <div class="panel-header" style="margin-top:0px;">
             <div class="sys" style="font-size:12px;color:#888;">Campaign has ended<span class="blink">.</span></div>
             <div class="sub-text" style="font-size:11px;color:#666;">Login temporarily disabled</div>
           </div>
