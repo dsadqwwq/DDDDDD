@@ -827,8 +827,6 @@
     const inventoryContent = document.getElementById('inventoryContent');
     const shopContent = document.getElementById('shopContent');
     const crashContent = document.getElementById('crashContent');
-    const campaignContent = document.getElementById('campaignContent');
-    const campaignBanner = document.getElementById('campaignBanner');
 
     // Debug: Check if all elements exist
     console.log('Elements loaded:', {
@@ -874,14 +872,13 @@
       inventoryContent.style.display = 'none';
       shopContent.style.display = 'none';
       crashContent.style.display = 'none';
-      campaignContent.style.display = 'none';
     }
 
 
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
       // Find currently visible element
-      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, referralsContent, inventoryContent, shopContent, crashContent, campaignContent];
+      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, referralsContent, inventoryContent, shopContent, crashContent];
       const currentVisible = allContainers.find(el => el.style.display !== 'none' && el.style.display !== '');
 
       // Add fade-out to current visible element
@@ -1272,44 +1269,6 @@
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initBlackjack();
 
-      } else if (newContent === 'campaign') {
-        hideAllContainers();
-        if (campaignBanner) campaignBanner.style.display = 'none';
-        campaignContent.style.display = 'block';
-        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
-
-        // Debug: Check which containers are still visible
-        setTimeout(() => {
-          console.log('[DEBUG] Container visibility check:');
-          [panelContent, dashboardContent, gameContent, crashContent, minesContent, blackjackContent, ovenContent, farmContent, leaderboardContent, questContent, referralsContent, inventoryContent, shopContent].forEach(container => {
-            if (container && container.style.display !== 'none') {
-              console.error(`[DEBUG] ${container.id} is NOT hidden! display=${container.style.display}, height=${container.offsetHeight}px`);
-            }
-          });
-        }, 50);
-
-        updateCampaignPage();
-
-        // Debug: Check button after campaign is shown
-        setTimeout(() => {
-          const btn = document.getElementById('backFromCampaignBtn');
-          if (btn) {
-            const rect = btn.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-            const elementAtPoint = document.elementFromPoint(centerX, centerY);
-            console.log('[DEBUG CAMPAIGN] Button rect:', rect);
-            console.log('[DEBUG CAMPAIGN] Element at button center:', elementAtPoint);
-            console.log('[DEBUG CAMPAIGN] Is button?:', elementAtPoint === btn);
-            console.log('[DEBUG CAMPAIGN] Button z-index:', window.getComputedStyle(btn).zIndex);
-            console.log('[DEBUG CAMPAIGN] Button pointer-events:', window.getComputedStyle(btn).pointerEvents);
-            if (elementAtPoint !== btn) {
-              console.error('[DEBUG CAMPAIGN] Button is BLOCKED by:', elementAtPoint);
-              console.error('[DEBUG CAMPAIGN] Blocking element z-index:', window.getComputedStyle(elementAtPoint).zIndex);
-            }
-          }
-        }, 100);
-
       } else if (newContent === 'leaderboard') {
         console.log('Switching to leaderboard...');
         panelContent.style.display = 'none';
@@ -1324,7 +1283,6 @@
         crashContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
-        campaignContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         console.log('Leaderboard display set to block');
         loadLeaderboard('all');
@@ -1344,7 +1302,6 @@
         crashContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
-        campaignContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadQuests('daily');
 
@@ -1362,7 +1319,6 @@
         crashContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
-        campaignContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadReferralStats();
 
@@ -1379,7 +1335,6 @@
         crashContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
-        campaignContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadInventory();
 
@@ -1394,7 +1349,6 @@
         ovenContent.style.display = 'none';
         farmContent.style.display = 'none';
         crashContent.style.display = 'none';
-        campaignContent.style.display = 'none';
         minesContent.style.display = 'none';
         blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
