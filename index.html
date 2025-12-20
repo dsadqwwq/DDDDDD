@@ -54,67 +54,6 @@
   <main class="page-container bottom-aligned" id="pageContainer" role="main" aria-label="Main content">
     <!-- Initial page content -->
     <section class="panel panel-transparent fade-in-delayed" id="panelContent">
-      <div class="panel-header">
-        <div class="sys">Welcome to the arena<span class="blink">.</span></div>
-        <div class="sub-text">Connect your wallet to begin</div>
-      </div>
-
-      <div class="input-group">
-        <button class="btn-submit" id="connectWalletBtn" style="width:100%;">CONNECT WALLET</button>
-      </div>
-    </section>
-
-    <!-- Dashboard content (hidden initially) -->
-    <div class="dashboard-content" id="dashboardContent" role="region" aria-label="User dashboard">
-      <div class="dashboard-header">
-        <div class="user-info">
-          <div class="user-name" id="userName" aria-label="User name">Champion</div>
-          <div class="user-stats" aria-label="User level and rank">Level 0 • Falafel Enjoyer</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:20px;">
-          <div class="stat-card" style="margin:0;padding:8px 16px;">
-            <div class="stat-label" style="font-size:10px;">RANK</div>
-            <div class="stat-value" style="font-size:16px;" id="dashboardRank">--</div>
-          </div>
-          <div class="stat-card" style="margin:0;padding:8px 16px;">
-            <div class="stat-label" style="font-size:10px;">GC BALANCE</div>
-            <div class="stat-value" style="font-size:16px;" id="dashboardGCBalance">0</div>
-          </div>
-          <button class="logout-btn" id="logoutBtn" aria-label="Logout from account">LOGOUT</button>
-        </div>
-      </div>
-
-      <div class="stats-grid" style="grid-template-columns:repeat(2,1fr);">
-        <div class="stat-card" style="cursor:pointer;display:flex;align-items:center;justify-content:center;" id="viewLeaderboardBtn">
-          <div class="stat-label" style="margin:0;">LEADERBOARD</div>
-        </div>
-        <div class="stat-card" style="cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;" id="viewQuestsBtn">
-          <div class="stat-label" style="margin:0;">QUESTS</div>
-          <span style="position:absolute;top:-5px;right:-5px;background:#ff4444;color:white;font-size:12px;font-weight:bold;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 4px rgba(0,0,0,0.3);">!</span>
-        </div>
-        <div class="stat-card" style="cursor:pointer;display:flex;align-items:center;justify-content:center;" id="viewReferralsBtn">
-          <div class="stat-label" style="margin:0;">REFERRALS</div>
-        </div>
-        <div class="stat-card" style="cursor:pointer;display:flex;align-items:center;justify-content:center;" id="viewInventoryBtn">
-          <div class="stat-label" style="margin:0;">INVENTORY</div>
-        </div>
-      </div>
-
-      <!-- Market Bar (hidden - kept for compatibility) -->
-      <div class="market-bar" id="viewShopBtn" style="display:none;"></div>
-
-      <!-- Campaign Banner -->
-      <div class="campaign-banner" id="campaignBanner" onclick="swapContent('campaign')" style="cursor:pointer;">
-        <div class="campaign-banner-header">
-          <div class="campaign-banner-icon"></div>
-          <div class="campaign-banner-text">WHO WANTS TO BE A WARRIOR</div>
-          <div class="campaign-banner-info"></div>
-        </div>
-        <div class="campaign-banner-subtitle">
-          CAMPAIGN LIVE. START EARNING $GC
-        </div>
-      </div>
-
       <!-- About Section -->
       <div class="campaign-earn-section">
         <div class="campaign-earn-title">ABOUT</div>
@@ -163,105 +102,54 @@
         </div>
       </div>
 
-    </div>
-
-    <!-- Campaign content (hidden initially) -->
-    <div class="campaign-container" id="campaignContent" role="region" aria-label="Warrior campaign">
-      <div class="campaign-header">
-        <div class="campaign-title">WHO WANTS TO BE A WARRIOR</div>
-        <button class="back-btn" id="backFromCampaignBtn" aria-label="Back to dashboard">BACK</button>
+      <div class="panel-header">
+        <div class="sys">Welcome to the arena<span class="blink">.</span></div>
+        <div class="sub-text">Connect your wallet to begin</div>
       </div>
 
-      <!-- Breadcrumb -->
-      <div class="breadcrumb">
-        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item active">Campaign</span>
+      <div class="input-group">
+        <button class="btn-submit" id="connectWalletBtn" style="width:100%;">CONNECT WALLET</button>
       </div>
+    </section>
 
-      <!-- Leaderboard Section -->
-      <div class="campaign-progress-section">
-        <div style="text-align:center;">
-          <div class="campaign-progress-title" style="margin-bottom:12px;">YOUR LEADERBOARD RANK</div>
-          <div style="display:inline-block;background:rgba(0,0,0,0.4);border:2px solid rgba(255,214,77,0.3);border-radius:8px;padding:12px 24px;margin-bottom:12px;">
-            <div style="font-family:'Press Start 2P',monospace;font-size:24px;color:#FFD700;text-shadow:0 0 20px rgba(255,215,0,0.4);margin-bottom:4px;" id="userRankPage">-</div>
-            <div style="font-family:'Courier New',monospace;font-size:13px;color:#888;" id="userGCPage">0 GC</div>
+    <!-- Dashboard content (hidden initially) -->
+    <div class="dashboard-content" id="dashboardContent" role="region" aria-label="User dashboard">
+      <div class="dashboard-header">
+        <div class="user-info">
+          <div class="user-name" id="userName" aria-label="User name">Champion</div>
+          <div class="user-stats" aria-label="User level and rank">Level 0 • Falafel Enjoyer</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:20px;">
+          <div class="stat-card" style="margin:0;padding:8px 16px;">
+            <div class="stat-label" style="font-size:10px;">RANK</div>
+            <div class="stat-value" style="font-size:16px;" id="dashboardRank">--</div>
           </div>
-          <div>
-            <button class="action-btn btn-primary" onclick="swapContent('leaderboard')" style="padding:8px 24px;">
-              VIEW FULL LEADERBOARD →
-            </button>
+          <div class="stat-card" style="margin:0;padding:8px 16px;">
+            <div class="stat-label" style="font-size:10px;">GC BALANCE</div>
+            <div class="stat-value" style="font-size:16px;" id="dashboardGCBalance">0</div>
           </div>
+          <button class="logout-btn" id="logoutBtn" aria-label="Logout from account">LOGOUT</button>
         </div>
       </div>
 
-      <!-- Ways to Earn GC Section (MOVED ABOVE RULES) -->
-      <div class="campaign-earn-section">
-        <div class="campaign-earn-title">WAYS TO EARN GC</div>
-
-        <!-- Two-column card layout -->
-        <div class="campaign-cards-row">
-          <!-- Left: DeFi -->
-          <div class="campaign-card invest">
-            <div class="campaign-card-title" style="opacity:0.5;">DEFI</div>
-            <div class="campaign-card-content">
-              <button class="action-btn btn-invest" id="viewQuestsFromCampaignBtn" aria-label="View Quests" style="width:100%;margin-bottom:12px;">QUESTS</button>
-              <button class="action-btn btn-invest" id="viewReferralsFromCampaignBtn" aria-label="View Referrals" style="width:100%;margin-bottom:12px;">REFERRALS</button>
-              <button class="action-btn btn-invest" disabled style="width:100%;margin-bottom:12px;opacity:0.3;cursor:not-allowed;background:rgba(0,0,0,0.5);">STAKING</button>
-              <button class="action-btn btn-invest" disabled style="width:100%;opacity:0.3;cursor:not-allowed;background:rgba(0,0,0,0.5);">FARM</button>
-            </div>
-          </div>
-
-          <!-- Right: Gambling -->
-          <div class="campaign-card gamble">
-            <div class="campaign-card-title">GAMBLING</div>
-            <div class="campaign-card-content">
-              <button class="action-btn btn-gamble" id="playBlackjackBtn" aria-label="Play blackjack game" style="width:100%;margin-bottom:12px;">BLACKJACK</button>
-              <button class="action-btn btn-gamble" disabled style="width:100%;margin-bottom:12px;opacity:0.3;cursor:not-allowed;background:rgba(0,0,0,0.5);">MINES</button>
-              <button class="action-btn btn-gamble" disabled style="width:100%;margin-bottom:12px;opacity:0.3;cursor:not-allowed;background:rgba(0,0,0,0.5);">CRASH</button>
-              <button class="action-btn btn-gamble" disabled style="width:100%;opacity:0.5;cursor:not-allowed;">TRADING SIM</button>
-            </div>
-          </div>
+      <div class="stats-grid" style="grid-template-columns:repeat(2,1fr);">
+        <div class="stat-card" style="cursor:pointer;display:flex;align-items:center;justify-content:center;" id="viewLeaderboardBtn">
+          <div class="stat-label" style="margin:0;">LEADERBOARD</div>
+        </div>
+        <div class="stat-card" style="cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;" id="viewQuestsBtn">
+          <div class="stat-label" style="margin:0;">QUESTS</div>
+          <span style="position:absolute;top:-5px;right:-5px;background:#ff4444;color:white;font-size:12px;font-weight:bold;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 4px rgba(0,0,0,0.3);">!</span>
+        </div>
+        <div class="stat-card" style="cursor:pointer;display:flex;align-items:center;justify-content:center;" id="viewReferralsBtn">
+          <div class="stat-label" style="margin:0;">REFERRALS</div>
+        </div>
+        <div class="stat-card" style="cursor:pointer;display:flex;align-items:center;justify-content:center;" id="viewInventoryBtn">
+          <div class="stat-label" style="margin:0;">INVENTORY</div>
         </div>
       </div>
 
-      <!-- Campaign Info -->
-      <div class="campaign-info-section">
-        <div class="campaign-info-title">CAMPAIGN RULES</div>
-        <div class="campaign-info-content">
-          <div class="campaign-info-item">
-            <span class="campaign-info-bullet">•</span>
-            <span>Participants with sufficient activity will be considered for $GC airdrop (Sybil wallets excluded)</span>
-          </div>
-          <div class="campaign-info-item">
-            <span class="campaign-info-bullet">•</span>
-            <span><strong>Top 100 participants</strong> qualify for a guaranteed Founder's Sword mint (0.02 ETH)</span>
-          </div>
-          <div class="campaign-info-item">
-            <span class="campaign-info-bullet">•</span>
-            <span><strong style="color:#FFD700;">Top 3 participants</strong> receive a free 1/1 Legendary Founder's Sword</span>
-          </div>
-          <div class="campaign-info-item">
-            <span class="campaign-info-bullet">•</span>
-            <span>Earn GC through gambling, farming, staking, quests, and referrals</span>
-          </div>
-        </div>
-
-        <div class="campaign-disclaimer-section" style="background:rgba(255,69,0,0.1);border:2px solid rgba(255,69,0,0.3);border-radius:8px;padding:16px;margin-top:16px;">
-          <div style="font-family:'Press Start 2P',monospace;font-size:10px;color:#FF4500;margin-bottom:12px;text-align:center;">IMPORTANT INFORMATION</div>
-          <div style="font-family:'Courier New',monospace;font-size:12px;line-height:1.8;color:#e0e8f0;">
-            Campaign GC is temporary and has no monetary value. The mechanics presented here are for entertainment purposes only.
-            <br><br>
-            Duel PVP will launch in 2026 as a fully on-chain MMORPG with unique mechanics, progression systems, and gameplay distinct from this campaign.
-          </div>
-        </div>
-      </div>
-
-      <!-- Time Remaining -->
-      <div class="campaign-time-section">
-        <div class="campaign-time-label">TIME REMAINING</div>
-        <div class="campaign-time-value" id="campaignTimeRemainingPage">Starting tomorrow</div>
-      </div>
+      <!-- Market Bar (hidden - kept for compatibility) -->
+      <div class="market-bar" id="viewShopBtn" style="display:none;"></div>
     </div>
 
     <!-- Leaderboard content (hidden initially) -->
@@ -696,259 +584,6 @@
             <button class="action-btn btn-secondary" id="resetGameBtn">RESET STATS</button>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- Crash Rocket Game content (hidden initially) -->
-    <div class="game-container" id="crashContent" role="region" aria-label="Crash rocket game">
-      <div class="game-header">
-        <div class="game-title">ROCKET CRASH</div>
-        <button class="back-btn" id="backFromCrashBtn" aria-label="Back to dashboard">BACK</button>
-      </div>
-
-      <!-- Breadcrumb -->
-      <div class="breadcrumb">
-        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item">Gambling</span>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item active">Rocket Crash</span>
-      </div>
-
-      <div class="game-layout">
-        <!-- Left sidebar -->
-        <div class="game-sidebar">
-          <div class="crash-bet-section">
-            <div class="instructions-title">PLACE BET</div>
-            <div style="margin-bottom:12px;">
-              <label style="font-size:10px;color:#a0a8b0;display:block;margin-bottom:4px;">BET AMOUNT</label>
-              <input type="number" id="crashBetAmount" class="crash-input" placeholder="100" min="10" value="100">
-              <div style="font-size:9px;color:#a0a8b0;margin-top:4px;">Min: 10 GC • Max: 10,000 GC</div>
-            </div>
-            <div style="margin-bottom:12px;">
-              <label style="font-size:10px;color:#a0a8b0;display:block;margin-bottom:4px;">AUTO CASHOUT (Optional)</label>
-              <input type="number" id="crashAutoCashout" class="crash-input" placeholder="2.00" min="1.01" step="0.01">
-              <div style="font-size:9px;color:#a0a8b0;margin-top:4px;">Auto-cashout at multiplier</div>
-            </div>
-            <button class="action-btn btn-primary" id="crashPlaceBetBtn" style="width:100%;">PLACE BET</button>
-          </div>
-
-          <div class="crash-info-section">
-            <div class="crash-stat">
-              <div class="stat-label">YOUR GC</div>
-              <div class="stat-value" id="crashGCDisplay">0</div>
-            </div>
-            <div class="crash-stat">
-              <div class="stat-label">CURRENT BET</div>
-              <div class="stat-value" id="crashCurrentBet">0</div>
-            </div>
-            <div class="crash-stat">
-              <div class="stat-label">POTENTIAL WIN</div>
-              <div class="stat-value" id="crashPotentialWin">0</div>
-            </div>
-          </div>
-
-          <div class="crash-history" id="crashHistory">
-            <div class="instructions-title">CRASH HISTORY</div>
-            <div id="crashHistoryList" class="crash-history-list">
-              <!-- History items will appear here -->
-            </div>
-          </div>
-        </div>
-
-        <!-- Main game area -->
-        <div class="game-main">
-          <div class="crash-game-area">
-            <!-- Provably Fair Hash Display -->
-            <div class="crash-hash-display" id="crashHashDisplay">
-              <div style="font-size:9px;color:#a0a8b0;margin-bottom:4px;">PROVABLY FAIR HASH</div>
-              <div style="font-family:monospace;font-size:10px;color:var(--gold);word-break:break-all;" id="crashHash">Waiting for next round...</div>
-            </div>
-
-            <!-- Rocket Animation Area -->
-            <div class="crash-rocket-container" id="crashRocketContainer">
-              <div class="crash-multiplier-display" id="crashMultiplierDisplay">
-                <div class="crash-multiplier-value" id="crashMultiplierValue">1.00x</div>
-                <div class="crash-status-text" id="crashStatusText">Waiting for bets...</div>
-              </div>
-              <div class="crash-rocket" id="crashRocket">🚀</div>
-              <canvas class="crash-trail-canvas" id="crashTrailCanvas"></canvas>
-            </div>
-
-            <!-- Cashout Button -->
-            <button class="crash-cashout-btn" id="crashCashoutBtn" disabled>CASH OUT</button>
-
-            <!-- Game Status -->
-            <div class="crash-game-status" id="crashGameStatus">
-              Next round starts in <span id="crashCountdown">3</span>s
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Disclaimer for Crash Game -->
-      <div class="game-disclaimer">
-        ⚠️ <strong>Campaign Only:</strong> Fake tokens for Warrior campaign • Not exchangeable • Play responsibly
-      </div>
-    </div>
-
-    <!-- Mines Game content (hidden initially) -->
-    <div class="game-container" id="minesContent" role="region" aria-label="Mines game">
-      <div class="game-header">
-        <div class="game-title">💣 MINES</div>
-        <button class="back-btn" id="backFromMinesBtn" aria-label="Back to dashboard">BACK</button>
-      </div>
-
-      <!-- Breadcrumb -->
-      <div class="breadcrumb">
-        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item">Gambling</span>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item active">Mines</span>
-      </div>
-
-      <div class="mines-game-area">
-        <!-- Betting Section -->
-        <div class="mines-bet-section">
-          <div class="mines-bet-row">
-            <div class="mines-input-group">
-              <label class="mines-label">BET AMOUNT</label>
-              <input type="number" class="mines-input" id="minesBetAmount" placeholder="10" min="10" max="10000" value="100">
-            </div>
-            <div class="mines-input-group">
-              <label class="mines-label">MINES</label>
-              <select class="mines-input" id="minesCount">
-                <option value="3">3 Mines</option>
-                <option value="5" selected>5 Mines</option>
-                <option value="10">10 Mines</option>
-                <option value="15">15 Mines</option>
-              </select>
-            </div>
-          </div>
-          <button class="action-btn btn-invest" id="minesStartBtn" style="width:100%;margin-top:12px;">START GAME</button>
-          <button class="action-btn btn-gamble" id="minesCashoutBtn" style="width:100%;margin-top:12px;display:none;">CASH OUT</button>
-        </div>
-
-        <!-- Stats Display -->
-        <div class="mines-stats-display">
-          <div class="mines-stat">
-            <div class="mines-stat-label">YOUR GC</div>
-            <div class="mines-stat-value" id="minesGCDisplay">0</div>
-          </div>
-          <div class="mines-stat">
-            <div class="mines-stat-label">MULTIPLIER</div>
-            <div class="mines-stat-value" id="minesMultiplier">0.00x</div>
-          </div>
-          <div class="mines-stat">
-            <div class="mines-stat-label">PROFIT</div>
-            <div class="mines-stat-value" id="minesProfit">0 GC</div>
-          </div>
-          <div class="mines-stat">
-            <div class="mines-stat-label">REVEALED</div>
-            <div class="mines-stat-value" id="minesRevealed">0 / 25</div>
-          </div>
-        </div>
-
-        <!-- Mines Grid (5x5) -->
-        <div class="mines-grid" id="minesGrid">
-          <!-- Grid tiles will be generated by JavaScript -->
-        </div>
-
-        <!-- Game Info -->
-        <div class="mines-info">
-          Click tiles to reveal. Avoid the mines! Cash out anytime to secure your winnings.
-        </div>
-      </div>
-
-      <!-- Disclaimer for Mines Game -->
-      <div class="game-disclaimer">
-        ⚠️ <strong>Campaign Only:</strong> Fake tokens for Warrior campaign • Not exchangeable • Play responsibly
-      </div>
-    </div>
-
-    <!-- Blackjack Game content (hidden initially) -->
-    <div class="game-container" id="blackjackContent" role="region" aria-label="Blackjack game">
-      <div class="game-header">
-        <div class="game-title">♠️ BLACKJACK</div>
-        <button class="back-btn" id="backFromBlackjackBtn" aria-label="Back to dashboard">BACK</button>
-      </div>
-
-      <!-- Breadcrumb -->
-      <div class="breadcrumb">
-        <span class="breadcrumb-item" onclick="showDashboard()">Dashboard</span>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item">Gambling</span>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item active">Blackjack</span>
-      </div>
-
-      <div class="blackjack-game-area">
-        <!-- Betting Section -->
-        <div class="blackjack-bet-section">
-          <div class="blackjack-bet-row">
-            <div class="blackjack-input-group">
-              <label class="blackjack-label">BET AMOUNT</label>
-              <input type="number" class="blackjack-input" id="blackjackBetAmount" placeholder="10" min="10" max="10000" value="100">
-            </div>
-            <button class="action-btn btn-invest" id="blackjackDealBtn" style="flex:1;">DEAL</button>
-          </div>
-        </div>
-
-        <!-- Stats Display -->
-        <div class="blackjack-stats-display">
-          <div class="blackjack-stat">
-            <div class="blackjack-stat-label">YOUR GC</div>
-            <div class="blackjack-stat-value" id="blackjackGCDisplay">0</div>
-          </div>
-          <div class="blackjack-stat">
-            <div class="blackjack-stat-label">YOUR HAND</div>
-            <div class="blackjack-stat-value" id="blackjackPlayerValue">0</div>
-          </div>
-          <div class="blackjack-stat">
-            <div class="blackjack-stat-label">DEALER HAND</div>
-            <div class="blackjack-stat-value" id="blackjackDealerValue">0</div>
-          </div>
-          <div class="blackjack-stat">
-            <div class="blackjack-stat-label">BET</div>
-            <div class="blackjack-stat-value" id="blackjackCurrentBet">0 GC</div>
-          </div>
-        </div>
-
-        <!-- Game Table -->
-        <div class="blackjack-table">
-          <!-- Dealer's Hand -->
-          <div class="blackjack-hand-section">
-            <div class="blackjack-hand-title">DEALER</div>
-            <div class="blackjack-cards" id="blackjackDealerCards">
-              <!-- Cards will be added here -->
-            </div>
-          </div>
-
-          <!-- Player's Hand -->
-          <div class="blackjack-hand-section player">
-            <div class="blackjack-hand-title">YOU</div>
-            <div class="blackjack-cards" id="blackjackPlayerCards">
-              <!-- Cards will be added here -->
-            </div>
-          </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="blackjack-actions" id="blackjackActions" style="display:none;">
-          <button class="action-btn btn-invest" id="blackjackHitBtn">HIT</button>
-          <button class="action-btn btn-gamble" id="blackjackStandBtn">STAND</button>
-        </div>
-
-        <!-- Game Info -->
-        <div class="blackjack-info" id="blackjackGameInfo">
-          Place your bet and click DEAL to start. Get closer to 21 than the dealer without going over!
-        </div>
-      </div>
-
-      <!-- Disclaimer for Blackjack Game -->
-      <div class="game-disclaimer">
-        ⚠️ <strong>Campaign Only:</strong> Fake tokens for Warrior campaign • Not exchangeable • Play responsibly
       </div>
     </div>
   </main>
