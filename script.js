@@ -862,11 +862,9 @@
 
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
-      console.log('[swapContent] Switching to:', newContent);
       // Find currently visible element
       const allContainers = [panelContent, dashboardContent, leaderboardContent, questContent, referralsContent, inventoryContent];
       const currentVisible = allContainers.find(el => el.style.display !== 'none' && el.style.display !== '');
-      console.log('[swapContent] Current visible:', currentVisible?.id || 'none');
 
       // Add fade-out to current visible element
       if (currentVisible) {
@@ -876,7 +874,6 @@
 
       // Wait for fade-out animation, then swap content
       setTimeout(() => {
-        console.log('[swapContent] Timeout fired, executing case:', newContent);
         if (newContent === 'login') {
           panelContent.style.display = 'block';
           dashboardContent.style.display = 'none';
@@ -1186,13 +1183,8 @@
         document.getElementById('connectWalletBtnHome').addEventListener('click', handleUnifiedWalletConnect);
 
       } else if (newContent === 'dashboard') {
-        console.log('[dashboard case] Starting dashboard case');
         hideAllContainers();
-        console.log('[dashboard case] hideAllContainers called');
         dashboardContent.style.display = 'block';
-        console.log('[dashboard case] dashboardContent.style.display set to block');
-        console.log('[dashboard case] dashboardContent element:', dashboardContent);
-        console.log('[dashboard case] dashboardContent computed display:', window.getComputedStyle(dashboardContent).display);
         if (campaignBanner) campaignBanner.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         // Force refresh GC cache and display when loading dashboard
@@ -1205,7 +1197,6 @@
           const gp = await getUserGC();
           const displayGP = gp >= 1000000 ? `${(gp/1000000).toFixed(1)}M` : gp >= 1000 ? `${(gp/1000).toFixed(1)}K` : gp;
           document.getElementById('dashboardGCBalance').textContent = displayGP;
-          console.log('[Dashboard] GC display updated:', gp);
           // Update campaign rank display
           updateCampaignRank();
         })();
@@ -1214,21 +1205,11 @@
 
 
 
-      } else if (newContent === 'mines') {
-        // DISABLED: Mines game temporarily unavailable
-        Toast.error('Mines game is temporarily unavailable', 'GAME DISABLED');
-        swapContent('dashboard');
-        return;
-
-
       } else if (newContent === 'leaderboard') {
-        console.log('Switching to leaderboard...');
         hideAllContainers();
         leaderboardContent.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
-        console.log('Leaderboard display set to block');
         loadLeaderboard('all');
-        console.log('loadLeaderboard called');
 
       } else if (newContent === 'quests') {
         hideAllContainers();
@@ -1252,14 +1233,10 @@
 
         // Add fade-in animation to newly visible element
         const newVisible = allContainers.find(el => el.style.display === 'block');
-        console.log('[swapContent] After all cases, newVisible:', newVisible?.id || 'NONE FOUND');
-        console.log('[swapContent] All container states:', allContainers.map(el => `${el.id}: ${el.style.display}`).join(', '));
         if (newVisible) {
           newVisible.classList.remove('fade-out', 'fade-in-delayed');
           void newVisible.offsetWidth; // Force reflow
           newVisible.classList.add('fade-in');
-        } else {
-          console.error('[swapContent] ERROR: No visible container found after swap!');
         }
 
         // Scroll to top AFTER content is fully laid out
@@ -5494,50 +5471,17 @@
     //   console.log('Play Mines clicked');
     //   swapContent('mines');
     // });
-    addListener('playBlackjackBtn', 'click', () => {
-      console.log('Play Blackjack clicked');
-      swapContent('blackjack');
-    });
-    // addListener('openOvenBtn', 'click', () => {
-    //   console.log('Open Oven clicked');
-    //   swapContent('oven');
-    // });
-    addListener('backFromOvenBtn', 'click', () => swapContent('dashboard'));
-    addListener('ovenDepositBtn', 'click', depositToOven);
-    addListener('ovenWithdrawBtn', 'click', withdrawFromOven);
-    // addListener('openFarmBtn', 'click', () => {
-    //   console.log('Open Farm clicked');
-    //   swapContent('farm');
-    // });
-    addListener('backFromFarmBtn', 'click', () => swapContent('dashboard'));
-    addListener('farmClickBtn', 'click', clickFarm);
     addListener('viewLeaderboardBtn', 'click', () => {
       console.log('View Leaderboard clicked');
       swapContent('leaderboard');
     });
-    addListener('backToDashBtn', 'click', () => swapContent('dashboard'));
-    addListener('backFromCrashBtn', 'click', () => swapContent('dashboard'));
-    addListener('backFromMinesBtn', 'click', () => swapContent('dashboard'));
-    addListener('minesStartBtn', 'click', startMinesGame);
-    addListener('minesCashoutBtn', 'click', cashoutMines);
-    addListener('backFromBlackjackBtn', 'click', () => swapContent('dashboard'));
-    addListener('blackjackDealBtn', 'click', dealBlackjack);
-    addListener('blackjackHitBtn', 'click', blackjackHit);
-    addListener('blackjackStandBtn', 'click', blackjackStand);
     addListener('backFromLeaderboardBtn', 'click', () => swapContent('dashboard'));
     addListener('backFromQuestsBtn', 'click', () => swapContent('dashboard'));
     addListener('backFromReferralsBtn', 'click', () => swapContent('dashboard'));
     addListener('backFromInventoryBtn', 'click', () => swapContent('dashboard'));
-    addListener('backFromShopBtn', 'click', () => swapContent('dashboard'));
     addListener('viewQuestsBtn', 'click', () => swapContent('quests'));
     addListener('viewReferralsBtn', 'click', () => swapContent('referrals'));
     addListener('viewInventoryBtn', 'click', () => swapContent('inventory'));
-    addListener('viewShopBtn', 'click', () => swapContent('shop'));
-    addListener('viewQuestsFromCampaignBtn', 'click', () => swapContent('quests'));
-    addListener('viewReferralsFromCampaignBtn', 'click', () => swapContent('referrals'));
-    addListener('startGameBtn', 'click', startGame);
-    addListener('sellButton', 'click', handleSell);
-    addListener('resetGameBtn', 'click', resetGame);
 
     // Invite code handlers
     addListener('copyInviteCodeBtn', 'click', async () => {
