@@ -820,6 +820,10 @@
     const questContent = document.getElementById('questContent');
     const referralsContent = document.getElementById('referralsContent');
     const inventoryContent = document.getElementById('inventoryContent');
+    const shopContent = document.getElementById('shopContent');
+    const ovenContent = document.getElementById('ovenContent');
+    const farmContent = document.getElementById('farmContent');
+    const gameContent = document.getElementById('gameContent');
 
     // Debug: Check if all elements exist
     console.log('Elements loaded:', {
@@ -857,6 +861,10 @@
       questContent.style.display = 'none';
       referralsContent.style.display = 'none';
       inventoryContent.style.display = 'none';
+      shopContent.style.display = 'none';
+      ovenContent.style.display = 'none';
+      farmContent.style.display = 'none';
+      gameContent.style.display = 'none';
     }
 
 
@@ -864,7 +872,7 @@
     function swapContent(newContent, data) {
       console.log('[swapContent] Switching to:', newContent);
       // Find currently visible element
-      const allContainers = [panelContent, dashboardContent, leaderboardContent, questContent, referralsContent, inventoryContent];
+      const allContainers = [panelContent, dashboardContent, leaderboardContent, questContent, referralsContent, inventoryContent, shopContent, ovenContent, farmContent, gameContent];
       const currentVisible = allContainers.find(el => el.style.display !== 'none' && el.style.display !== '');
       console.log('[swapContent] Current visible:', currentVisible?.id || 'none');
 
@@ -1241,7 +1249,6 @@
         console.log('[dashboard case] dashboardContent.style.display set to block');
         console.log('[dashboard case] dashboardContent element:', dashboardContent);
         console.log('[dashboard case] dashboardContent computed display:', window.getComputedStyle(dashboardContent).display);
-        if (campaignBanner) campaignBanner.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         // Force refresh GC cache and display when loading dashboard
         gcCache.lastFetch = 0;
@@ -1295,6 +1302,26 @@
         inventoryContent.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadInventory();
+
+      } else if (newContent === 'shop') {
+        hideAllContainers();
+        shopContent.style.display = 'block';
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+
+      } else if (newContent === 'game') {
+        hideAllContainers();
+        gameContent.style.display = 'block';
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+
+      } else if (newContent === 'oven') {
+        hideAllContainers();
+        ovenContent.style.display = 'block';
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
+
+      } else if (newContent === 'farm') {
+        hideAllContainers();
+        farmContent.style.display = 'block';
+        pageContainer.classList.remove('center-aligned', 'bottom-aligned');
 
       }
 
