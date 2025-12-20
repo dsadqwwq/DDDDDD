@@ -1,4 +1,4 @@
-    // ===== SUPABASE CLIENT =====
+    // ===== SUPABASE CLIENT ===== v2.0
     const SUPABASE_URL = 'https://smgqccnggmyreacjyyil.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNtZ3FjY25nZ215cmVhY2p5eWlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI5ODIwNDgsImV4cCI6MjA3ODU1ODA0OH0.y1AeyXkKCdVvE3JUIlCyDl6p12TFrgMkEiUocUB4YMI';
 
