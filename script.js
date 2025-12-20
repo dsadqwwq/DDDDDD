@@ -816,24 +816,16 @@
     const pageContainer = document.getElementById('pageContainer');
     const panelContent = document.getElementById('panelContent');
     const dashboardContent = document.getElementById('dashboardContent');
-    const gameContent = document.getElementById('gameContent');
-    const ovenContent = document.getElementById('ovenContent');
-    const farmContent = document.getElementById('farmContent');
-    const minesContent = document.getElementById('minesContent');
-    const blackjackContent = document.getElementById('blackjackContent');
     const leaderboardContent = document.getElementById('leaderboardContent');
     const questContent = document.getElementById('questContent');
     const referralsContent = document.getElementById('referralsContent');
     const inventoryContent = document.getElementById('inventoryContent');
-    const shopContent = document.getElementById('shopContent');
-    const crashContent = document.getElementById('crashContent');
 
     // Debug: Check if all elements exist
     console.log('Elements loaded:', {
       pageContainer: !!pageContainer,
       panelContent: !!panelContent,
       dashboardContent: !!dashboardContent,
-      gameContent: !!gameContent,
       leaderboardContent: !!leaderboardContent,
       questContent: !!questContent,
       inventoryContent: !!inventoryContent,
@@ -861,24 +853,17 @@
     function hideAllContainers() {
       panelContent.style.display = 'none';
       dashboardContent.style.display = 'none';
-      gameContent.style.display = 'none';
-      ovenContent.style.display = 'none';
-      farmContent.style.display = 'none';
-      minesContent.style.display = 'none';
-      blackjackContent.style.display = 'none';
       leaderboardContent.style.display = 'none';
       questContent.style.display = 'none';
       referralsContent.style.display = 'none';
       inventoryContent.style.display = 'none';
-      shopContent.style.display = 'none';
-      crashContent.style.display = 'none';
     }
 
 
     // Helper function to swap content with fade animation
     function swapContent(newContent, data) {
       // Find currently visible element
-      const allContainers = [panelContent, dashboardContent, gameContent, ovenContent, farmContent, minesContent, blackjackContent, leaderboardContent, questContent, referralsContent, inventoryContent, shopContent, crashContent];
+      const allContainers = [panelContent, dashboardContent, leaderboardContent, questContent, referralsContent, inventoryContent];
       const currentVisible = allContainers.find(el => el.style.display !== 'none' && el.style.display !== '');
 
       // Add fade-out to current visible element
@@ -892,7 +877,6 @@
         if (newContent === 'login') {
           panelContent.style.display = 'block';
           dashboardContent.style.display = 'none';
-          gameContent.style.display = 'none';
           leaderboardContent.style.display = 'none';
           questContent.style.display = 'none';
           inventoryContent.style.display = 'none';
@@ -954,7 +938,6 @@
       } else if (newContent === 'termsAcceptance') {
         panelContent.style.display = 'block';
         dashboardContent.style.display = 'none';
-        gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
@@ -1008,7 +991,6 @@
       } else if (newContent === 'nameWarrior') {
         panelContent.style.display = 'block';
         dashboardContent.style.display = 'none';
-        gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
@@ -1123,7 +1105,6 @@
       } else if (newContent === 'connectWalletForReg') {
         panelContent.style.display = 'block';
         dashboardContent.style.display = 'none';
-        gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
@@ -1180,7 +1161,6 @@
       } else if (newContent === 'home') {
         panelContent.style.display = 'block';
         dashboardContent.style.display = 'none';
-        gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
@@ -1225,34 +1205,27 @@
       } else if (newContent === 'game') {
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'none';
-        gameContent.style.display = 'block';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
-        shopContent.style.display = 'none';
-        crashContent.style.display = 'none';
-        ovenContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initChart();
 
       } else if (newContent === 'oven') {
         hideAllContainers();
         if (campaignBanner) campaignBanner.style.display = 'none';
-        ovenContent.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initOven();
 
       } else if (newContent === 'farm') {
         hideAllContainers();
         if (campaignBanner) campaignBanner.style.display = 'none';
-        farmContent.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initFarm();
 
       } else if (newContent === 'crash') {
         hideAllContainers();
         if (campaignBanner) campaignBanner.style.display = 'none';
-        crashContent.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initCrashGame();
 
@@ -1265,7 +1238,6 @@
       } else if (newContent === 'blackjack') {
         hideAllContainers();
         if (campaignBanner) campaignBanner.style.display = 'none';
-        blackjackContent.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         initBlackjack();
 
@@ -1273,16 +1245,9 @@
         console.log('Switching to leaderboard...');
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'none';
-        gameContent.style.display = 'none';
         leaderboardContent.style.display = 'block';
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
-        shopContent.style.display = 'none';
-        ovenContent.style.display = 'none';
-        farmContent.style.display = 'none';
-        crashContent.style.display = 'none';
-        minesContent.style.display = 'none';
-        blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         console.log('Leaderboard display set to block');
         loadLeaderboard('all');
@@ -1291,66 +1256,38 @@
       } else if (newContent === 'quests') {
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'none';
-        gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'block';
         referralsContent.style.display = 'none';
         inventoryContent.style.display = 'none';
-        shopContent.style.display = 'none';
-        ovenContent.style.display = 'none';
-        farmContent.style.display = 'none';
-        crashContent.style.display = 'none';
-        minesContent.style.display = 'none';
-        blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadQuests('daily');
 
       } else if (newContent === 'referrals') {
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'none';
-        gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
         referralsContent.style.display = 'block';
         inventoryContent.style.display = 'none';
-        shopContent.style.display = 'none';
-        ovenContent.style.display = 'none';
-        farmContent.style.display = 'none';
-        crashContent.style.display = 'none';
-        minesContent.style.display = 'none';
-        blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadReferralStats();
 
       } else if (newContent === 'inventory') {
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'none';
-        gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
         inventoryContent.style.display = 'block';
-        shopContent.style.display = 'none';
-        ovenContent.style.display = 'none';
-        farmContent.style.display = 'none';
-        crashContent.style.display = 'none';
-        minesContent.style.display = 'none';
-        blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadInventory();
 
       } else if (newContent === 'shop') {
         panelContent.style.display = 'none';
         dashboardContent.style.display = 'none';
-        gameContent.style.display = 'none';
         leaderboardContent.style.display = 'none';
         questContent.style.display = 'none';
         inventoryContent.style.display = 'none';
-        shopContent.style.display = 'block';
-        ovenContent.style.display = 'none';
-        farmContent.style.display = 'none';
-        crashContent.style.display = 'none';
-        minesContent.style.display = 'none';
-        blackjackContent.style.display = 'none';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
         loadInventory(); // Load shop items
       }
@@ -5679,15 +5616,11 @@
     document.addEventListener('keydown', (e) => {
       // ESC key to go back
       if (e.key === 'Escape') {
-        if (gameContent.style.display === 'block') {
-          swapContent('dashboard');
-        } else if (leaderboardContent.style.display === 'block') {
+        if (leaderboardContent.style.display === 'block') {
           swapContent('dashboard');
         } else if (questContent.style.display === 'block') {
           swapContent('dashboard');
         } else if (inventoryContent.style.display === 'block') {
-          swapContent('dashboard');
-        } else if (shopContent.style.display === 'block') {
           swapContent('dashboard');
         }
       }
