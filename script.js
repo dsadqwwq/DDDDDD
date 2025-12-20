@@ -807,6 +807,7 @@
 
     // Single page app logic
     const pageContainer = document.getElementById('pageContainer');
+    const aboutSection = document.getElementById('aboutSection');
     const panelContent = document.getElementById('panelContent');
     const dashboardContent = document.getElementById('dashboardContent');
     const gameContent = document.getElementById('gameContent');
@@ -1162,6 +1163,7 @@
         document.getElementById('backToHomeLink').addEventListener('click', () => swapContent('home'));
 
       } else if (newContent === 'home') {
+        if (aboutSection) aboutSection.style.display = 'block';
         panelContent.style.display = 'block';
         dashboardContent.style.display = 'none';
         gameContent.style.display = 'none';
@@ -1188,6 +1190,7 @@
 
       } else if (newContent === 'dashboard') {
         hideAllContainers();
+        if (aboutSection) aboutSection.style.display = 'none';
         dashboardContent.style.display = 'block';
         if (campaignBanner) campaignBanner.style.display = 'block';
         pageContainer.classList.remove('center-aligned', 'bottom-aligned');
