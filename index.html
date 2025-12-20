@@ -52,8 +52,10 @@
 
   <!-- Single page container that swaps content -->
   <main class="page-container bottom-aligned" id="pageContainer" role="main" aria-label="Main content">
-    <!-- Campaign Ended Banner (outside panel for full width) -->
-    <div style="background:linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(255,214,77,0.1) 100%);border:2px solid rgba(255,214,77,0.5);border-radius:12px;padding:28px 32px;margin-bottom:24px;text-align:center;box-shadow:0 4px 16px rgba(255,214,77,0.2);width:min(800px,92vw);margin-left:auto;margin-right:auto;">
+    <!-- Glass Card Wrapper -->
+    <div style="background:rgba(0,0,0,0.4);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:32px;width:min(800px,92vw);margin-left:auto;margin-right:auto;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
+      <!-- Campaign Ended Banner -->
+      <div style="background:linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(255,214,77,0.1) 100%);border:2px solid rgba(255,214,77,0.5);border-radius:12px;padding:28px 32px;margin-bottom:24px;text-align:center;box-shadow:0 4px 16px rgba(255,214,77,0.2);">
       <div style="font-size:32px;margin-bottom:12px;">⚔️</div>
       <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:#FFD700;margin-bottom:16px;line-height:1.6;text-shadow:0 2px 4px rgba(0,0,0,0.5);">PRE-SEASON COMPLETE</div>
       <div style="font-family:'Courier New',monospace;font-size:15px;color:#ffffff;line-height:1.8;margin-bottom:8px;">
@@ -64,8 +66,8 @@
       </div>
     </div>
 
-    <!-- About Section (outside panel for full width) -->
-    <div class="campaign-earn-section" style="width:min(800px,92vw);margin-left:auto;margin-right:auto;margin-bottom:24px;">
+      <!-- About Section -->
+      <div class="campaign-earn-section" style="margin-bottom:24px;">
         <div class="campaign-earn-title">ABOUT</div>
 
         <!-- Main Description -->
@@ -123,6 +125,7 @@
         <button class="btn-submit" id="connectWalletBtn" style="width:100%;">CONNECT WALLET</button>
       </div>
     </section>
+    </div><!-- End Glass Card Wrapper -->
 
     <!-- Dashboard content (hidden initially) -->
     <div class="dashboard-content" id="dashboardContent" role="region" aria-label="User dashboard">
@@ -144,8 +147,10 @@
         </div>
       </div>
 
-      <!-- Campaign Ended Banner -->
-      <div style="background:linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(255,214,77,0.1) 100%);border:2px solid rgba(255,214,77,0.5);border-radius:12px;padding:28px 32px;margin-bottom:24px;text-align:center;box-shadow:0 4px 16px rgba(255,214,77,0.2);">
+      <!-- Glass Card Wrapper for Dashboard -->
+      <div style="background:rgba(0,0,0,0.4);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:32px;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
+        <!-- Campaign Ended Banner -->
+        <div style="background:linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(255,214,77,0.1) 100%);border:2px solid rgba(255,214,77,0.5);border-radius:12px;padding:28px 32px;margin-bottom:24px;text-align:center;box-shadow:0 4px 16px rgba(255,214,77,0.2);">
         <div style="font-size:32px;margin-bottom:12px;">⚔️</div>
         <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:#FFD700;margin-bottom:16px;line-height:1.6;text-shadow:0 2px 4px rgba(0,0,0,0.5);">PRE-SEASON COMPLETE</div>
         <div style="font-family:'Courier New',monospace;font-size:15px;color:#ffffff;line-height:1.8;margin-bottom:8px;">
@@ -221,6 +226,7 @@
           <span style="color:#FFD700;font-size:13px;font-family:'Courier New',monospace;">Launch planned 2026 (subject to change)</span>
         </div>
       </div>
+      </div><!-- End Glass Card Wrapper for Dashboard -->
     </div>
 
     <!-- Leaderboard content (hidden initially) -->
