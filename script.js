@@ -1184,7 +1184,7 @@
         if (!glassWrapper) {
           glassWrapper = document.createElement('div');
           glassWrapper.className = 'glass-card-wrapper';
-          glassWrapper.style.cssText = 'background:rgba(0,0,0,0.4);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:32px;width:min(800px,92vw);margin-left:auto;margin-right:auto;box-shadow:0 8px 32px rgba(0,0,0,0.3);';
+          glassWrapper.style.cssText = 'background:rgba(0,0,0,0.75);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:2px solid rgba(255,214,77,0.3);border-radius:20px;padding:32px;width:min(800px,92vw);margin-left:auto;margin-right:auto;box-shadow:0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1) inset;';
 
           // Create banner inside wrapper
           const banner = document.createElement('div');
