@@ -106,8 +106,9 @@
   <script>
     const SALE_ADDRESS = '0xab02bf85a7a851b6a379ea3d5bd3b9b4f5dd8461';
     const API_KEY = 'JQ85MFQSS25595CMJXDQ274DRNRC2FXKE3';
-    const CURRENT_BLOCK = 21485000; // Approximate current block (update if needed)
-    const BLOCK_RANGE = 500000; // Fetch 500k blocks at a time
+    const START_BLOCK = 23669434; // First transaction block
+    const CURRENT_BLOCK = 24800000; // Current block
+    const BLOCK_RANGE = 100000; // Fetch 100k blocks at a time
 
     let senderData = [];
     let allTransactions = [];
@@ -124,7 +125,7 @@
       try {
         // Split into block ranges to bypass pagination limit
         const ranges = [];
-        for (let start = 0; start < CURRENT_BLOCK; start += BLOCK_RANGE) {
+        for (let start = START_BLOCK; start < CURRENT_BLOCK; start += BLOCK_RANGE) {
           ranges.push({
             startBlock: start,
             endBlock: Math.min(start + BLOCK_RANGE - 1, CURRENT_BLOCK)
@@ -136,7 +137,7 @@
         // Fetch each range
         for (let i = 0; i < ranges.length; i++) {
           const range = ranges[i];
-          statusEl.innerHTML = `<div class="loading">Fetching range ${i + 1}/${ranges.length}</div><div class="progress">Blocks ${range.startBlock} to ${range.endBlock}<br>Transactions so far: ${allTransactions.length.toLocaleString()}</div>`;
+          statusEl.innerHTML = `<div class="loading">Fetching range ${i + 1}/${ranges.length}</div><div class="progress">Blocks ${range.startBlock.toLocaleString()} to ${range.endBlock.toLocaleString()}<br>Transactions so far: ${allTransactions.length.toLocaleString()}</div>`;
 
           const url = `https://api.etherscan.io/v2/api?chainid=1&module=account&action=txlist&address=${SALE_ADDRESS}&startblock=${range.startBlock}&endblock=${range.endBlock}&page=1&offset=10000&sort=asc&apikey=${API_KEY}`;
 
