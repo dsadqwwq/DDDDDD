@@ -107,7 +107,7 @@
       fetchBtn.disabled = true;
 
       try {
-        const url = `https://api.etherscan.io/api?module=account&action=txlist&address=${SALE_ADDRESS}&startblock=0&endblock=99999999&sort=asc&apikey=${API_KEY}`;
+        const url = `https://api.etherscan.io/v2/api?chainid=1&module=account&action=txlist&address=${SALE_ADDRESS}&startblock=0&endblock=99999999&sort=asc&apikey=${API_KEY}`;
 
         const response = await fetch(url);
         const data = await response.json();

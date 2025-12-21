@@ -127,7 +127,7 @@
           statusEl.innerHTML = `<div class="loading">Fetching page ${page}...</div><div class="progress">Transactions fetched so far: ${allTransactions.length}</div>`;
 
           const offset = (page - 1) * PAGE_SIZE;
-          const url = `https://api.etherscan.io/api?module=account&action=txlist&address=${SALE_ADDRESS}&startblock=0&endblock=99999999&page=${page}&offset=${PAGE_SIZE}&sort=asc&apikey=${API_KEY}`;
+          const url = `https://api.etherscan.io/v2/api?chainid=1&module=account&action=txlist&address=${SALE_ADDRESS}&startblock=0&endblock=99999999&page=${page}&offset=${PAGE_SIZE}&sort=asc&apikey=${API_KEY}`;
 
           const response = await fetch(url);
           const data = await response.json();
