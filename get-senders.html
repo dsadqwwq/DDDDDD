@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Extract Sender Addresses</title>
+  <style>
+    body {
+      background: #0a0e12;
+      color: #fff;
+      font-family: 'Courier New', monospace;
+      padding: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    h1 {
+      color: #FFD700;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    #status {
+      background: rgba(255,214,77,0.1);
+      border: 2px solid rgba(255,214,77,0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    #results {
+      background: rgba(0,0,0,0.5);
+      border: 2px solid rgba(255,214,77,0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+      display: none;
+    }
+    .address-list {
+      background: #000;
+      padding: 15px;
+      border-radius: 8px;
+      max-height: 400px;
+      overflow-y: auto;
+      margin: 15px 0;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+    button {
+      background: linear-gradient(135deg, rgba(212,175,55,0.3) 0%, rgba(255,214,77,0.2) 100%);
+      border: 2px solid #FFD700;
+      color: #FFD700;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: 'Courier New', monospace;
+      margin: 5px;
+    }
+    button:hover {
+      background: rgba(255,214,77,0.3);
+      box-shadow: 0 0 20px rgba(255,214,77,0.3);
+    }
+    .stats {
+      color: #4CAF50;
+      font-size: 14px;
+      margin: 10px 0;
+    }
+    .loading {
+      color: #FFD700;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+  </style>
+</head>
+<body>
+  <h1>⚔️ Extract Sender Addresses from Sale Contract</h1>
+
+  <div id="status">
+    <div class="loading">Ready to fetch addresses...</div>
+  </div>
+
+  <button onclick="fetchAddresses()" id="fetchBtn">FETCH ADDRESSES</button>
+
+  <div id="results">
+    <h2 style="color: #FFD700; font-size: 18px;">Results</h2>
+    <div class="stats" id="stats"></div>
+
+    <h3 style="color: #FFD700; font-size: 14px; margin-top: 20px;">All Sender Addresses (Click to Copy)</h3>
+    <div class="address-list" id="addressList"></div>
+
+    <button onclick="copyAll()">COPY ALL ADDRESSES</button>
+    <button onclick="downloadTxt()">DOWNLOAD AS TXT</button>
+    <button onclick="downloadCsv()">DOWNLOAD AS CSV</button>
+  </div>
+
+  <script>
+    const SALE_ADDRESS = '0xab02bf85a7a851b6a379ea3d5bd3b9b4f5dd8461';
+    const API_KEY = 'G9VSK7JE2DVZX272E6T98PUNB3DPDWUYTG';
+
+    let senderData = [];
+
+    async function fetchAddresses() {
+      const statusEl = document.getElementById('status');
+      const resultsEl = document.getElementById('results');
+      const fetchBtn = document.getElementById('fetchBtn');
+
+      statusEl.innerHTML = '<div class="loading">Fetching transactions from Etherscan...</div>';
+      fetchBtn.disabled = true;
+
+      try {
+        const url = `https://api.etherscan.io/api?module=account&action=txlist&address=${SALE_ADDRESS}&startblock=0&endblock=99999999&sort=asc&apikey=${API_KEY}`;
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.status !== '1') {
+          throw new Error(data.message || 'API request failed');
+        }
+
+        // Filter for incoming transactions with value > 0
+        const incomingTxs = data.result.filter(tx =>
+          tx.to && tx.to.toLowerCase() === SALE_ADDRESS.toLowerCase() &&
+          tx.value !== '0'
+        );
+
+        // Group by sender
+        const senderMap = {};
+        incomingTxs.forEach(tx => {
+          const sender = tx.from;
+          if (!senderMap[sender]) {
+            senderMap[sender] = {
+              address: sender,
+              txCount: 0,
+              totalEth: 0
+            };
+          }
+          senderMap[sender].txCount++;
+          senderMap[sender].totalEth += parseFloat(tx.value) / 1e18;
+        });
+
+        senderData = Object.values(senderMap);
+        senderData.sort((a, b) => b.totalEth - a.totalEth); // Sort by total ETH sent
+
+        // Display results
+        displayResults(senderData, incomingTxs.length);
+
+        statusEl.innerHTML = '<div style="color: #4CAF50;">✓ Successfully fetched all transactions!</div>';
+        resultsEl.style.display = 'block';
+
+      } catch (error) {
+        statusEl.innerHTML = `<div style="color: #F44336;">Error: ${error.message}</div>`;
+        console.error('Error:', error);
+      } finally {
+        fetchBtn.disabled = false;
+      }
+    }
+
+    function displayResults(senders, totalTxs) {
+      const statsEl = document.getElementById('stats');
+      const listEl = document.getElementById('addressList');
+
+      statsEl.innerHTML = `
+        Total Transactions: ${totalTxs}<br>
+        Unique Senders: ${senders.length}<br>
+        Total ETH Received: ${senders.reduce((sum, s) => sum + s.totalEth, 0).toFixed(4)} ETH
+      `;
+
+      listEl.innerHTML = senders.map((s, i) =>
+        `<div>${i + 1}. ${s.address} (${s.txCount} tx, ${s.totalEth.toFixed(6)} ETH)</div>`
+      ).join('');
+    }
+
+    function copyAll() {
+      const addresses = senderData.map(s => s.address).join('\n');
+      navigator.clipboard.writeText(addresses).then(() => {
+        alert(`Copied ${senderData.length} addresses to clipboard!`);
+      }).catch(err => {
+        // Fallback for older browsers
+        const textarea = document.createElement('textarea');
+        textarea.value = addresses;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        alert(`Copied ${senderData.length} addresses to clipboard!`);
+      });
+    }
+
+    function downloadTxt() {
+      const addresses = senderData.map(s => s.address).join('\n');
+      download('sender_addresses.txt', addresses);
+    }
+
+    function downloadCsv() {
+      const csv = ['Address,Transaction Count,Total ETH Sent'];
+      senderData.forEach(s => {
+        csv.push(`${s.address},${s.txCount},${s.totalEth.toFixed(6)}`);
+      });
+      download('sender_addresses.csv', csv.join('\n'));
+    }
+
+    function download(filename, text) {
+      const element = document.createElement('a');
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+      element.setAttribute('download', filename);
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    }
+  </script>
+</body>
+</html>
