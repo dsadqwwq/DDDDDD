@@ -113,7 +113,7 @@
         const data = await response.json();
 
         if (data.status !== '1') {
-          throw new Error(data.message || 'API request failed');
+          throw new Error(`API Error: ${data.message || data.result || 'Unknown error'}`);
         }
 
         // Filter for incoming transactions with value > 0
