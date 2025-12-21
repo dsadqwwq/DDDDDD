@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Founders Sword - Pre-Reveal</title>
+  <style>
+    body {
+      background: #0a0e12;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    canvas {
+      border: 4px solid #FFD700;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+    button {
+      background: #FFD700;
+      border: none;
+      color: #000;
+      padding: 15px 30px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="512" height="512"></canvas>
+  <button onclick="download()">DOWNLOAD IMAGE</button>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const w = 512;
+    const h = 512;
+
+    // Background - dark inventory slot
+    ctx.fillStyle = '#1a1a2e';
+    ctx.fillRect(0, 0, w, h);
+
+    // Checkerboard pattern
+    for (let x = 0; x < 64; x++) {
+      for (let y = 0; y < 64; y++) {
+        if ((x + y) % 2 === 0) {
+          ctx.fillStyle = '#16162a';
+          ctx.fillRect(x * 8, y * 8, 8, 8);
+        }
+      }
+    }
+
+    // Golden border
+    ctx.fillStyle = '#8b7355';
+    ctx.fillRect(0, 0, w, 24);
+    ctx.fillRect(0, h - 24, w, 24);
+    ctx.fillRect(0, 0, 24, h);
+    ctx.fillRect(w - 24, 0, 24, h);
+
+    ctx.fillStyle = '#6b5d3f';
+    ctx.fillRect(8, 8, w - 16, 8);
+    ctx.fillRect(8, h - 16, w - 16, 8);
+    ctx.fillRect(8, 8, 8, h - 16);
+    ctx.fillRect(w - 16, 8, 8, h - 16);
+
+    // Draw mysterious sword silhouette (completely black/dark)
+    ctx.fillStyle = '#0a0a14';
+
+    // Sword blade (vertical, centered)
+    ctx.fillRect(240, 120, 32, 200);
+    ctx.fillRect(244, 100, 24, 20); // tip
+
+    // Guard (crossguard)
+    ctx.fillRect(200, 310, 112, 16);
+
+    // Handle
+    ctx.fillRect(240, 326, 32, 80);
+
+    // Pommel
+    ctx.fillRect(230, 406, 52, 24);
+
+    // Glow/shine effect around sword
+    const gradient = ctx.createRadialGradient(256, 256, 50, 256, 256, 200);
+    gradient.addColorStop(0, 'rgba(255, 214, 77, 0.3)');
+    gradient.addColorStop(1, 'rgba(255, 214, 77, 0)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, w, h);
+
+    // Question marks around sword
+    ctx.font = 'bold 48px monospace';
+    ctx.fillStyle = 'rgba(255, 214, 77, 0.4)';
+    ctx.fillText('?', 120, 180);
+    ctx.fillText('?', 360, 200);
+    ctx.fillText('?', 140, 380);
+    ctx.fillText('?', 340, 360);
+
+    // Lock icon on sword
+    ctx.fillStyle = '#FFD700';
+    ctx.fillRect(244, 240, 24, 32); // lock body
+    ctx.fillRect(248, 230, 16, 12); // lock shackle top
+    ctx.strokeStyle = '#FFD700';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.arc(256, 230, 10, Math.PI, 0);
+    ctx.stroke();
+
+    // Text at top: "UNREVEALED"
+    ctx.font = 'bold 32px monospace';
+    ctx.fillStyle = '#FFD700';
+    ctx.textAlign = 'center';
+    ctx.fillText('UNREVEALED', 256, 60);
+
+    // Text at bottom: "FOUNDERS SWORD"
+    ctx.font = 'bold 24px monospace';
+    ctx.fillStyle = '#888';
+    ctx.fillText('FOUNDERS SWORD', 256, 470);
+
+    function download() {
+      const link = document.createElement('a');
+      link.download = 'founders-sword-prerevealed.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+  </script>
+</body>
+</html>
