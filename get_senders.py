@@ -8,7 +8,7 @@ import requests
 import json
 
 SALE_ADDRESS = '0xab02bf85a7a851b6a379ea3d5bd3b9b4f5dd8461'
-ETHERSCAN_API_KEY = 'YOUR_API_KEY_HERE'  # Get free key from etherscan.io
+ETHERSCAN_API_KEY = 'G9VSK7JE2DVZX272E6T98PUNB3DPDWUYTG'  # Get free key from etherscan.io
 
 def get_sender_addresses():
     print('Fetching transactions...')
