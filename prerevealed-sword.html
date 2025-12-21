@@ -36,87 +36,115 @@
   <script>
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = false;
     const w = 512;
     const h = 512;
+    const pixelSize = 4;
 
-    // Background - dark inventory slot
-    ctx.fillStyle = '#1a1a2e';
+    function pixel(x, y, color) {
+      ctx.fillStyle = color;
+      ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
+    }
+
+    // Background gradient - dark to darker
+    const bg = ctx.createLinearGradient(0, 0, 0, h);
+    bg.addColorStop(0, '#0f0f1e');
+    bg.addColorStop(1, '#050508');
+    ctx.fillStyle = bg;
     ctx.fillRect(0, 0, w, h);
 
-    // Checkerboard pattern
-    for (let x = 0; x < 64; x++) {
-      for (let y = 0; y < 64; y++) {
-        if ((x + y) % 2 === 0) {
-          ctx.fillStyle = '#16162a';
-          ctx.fillRect(x * 8, y * 8, 8, 8);
-        }
+    // Draw pixel art sword in center (64x64 grid)
+    const cx = 64; // center x
+    const cy = 64; // center y
+
+    // Sword blade outline (legendary sword silhouette)
+    const blade = [
+      [cx, cy-30], [cx, cy-29], [cx, cy-28],
+      [cx-1, cy-27], [cx, cy-27], [cx+1, cy-27],
+      [cx-1, cy-26], [cx, cy-26], [cx+1, cy-26],
+      [cx-2, cy-25], [cx-1, cy-25], [cx, cy-25], [cx+1, cy-25], [cx+2, cy-25],
+    ];
+
+    for (let i = -24; i < 10; i++) {
+      pixel(cx-2, cy+i, '#1a1a2a');
+      pixel(cx-1, cy+i, '#1a1a2a');
+      pixel(cx, cy+i, '#1a1a2a');
+      pixel(cx+1, cy+i, '#1a1a2a');
+      pixel(cx+2, cy+i, '#1a1a2a');
+    }
+
+    blade.forEach(([x, y]) => pixel(x, y, '#1a1a2a'));
+
+    // Guard/crossguard
+    for (let i = -8; i <= 8; i++) {
+      pixel(cx+i, cy+10, '#2a2a3a');
+      pixel(cx+i, cy+11, '#2a2a3a');
+      pixel(cx+i, cy+12, '#1a1a2a');
+    }
+
+    // Handle
+    for (let i = 13; i < 24; i++) {
+      pixel(cx-1, cy+i, '#2a2a3a');
+      pixel(cx, cy+i, '#2a2a3a');
+      pixel(cx+1, cy+i, '#2a2a3a');
+    }
+
+    // Pommel
+    for (let i = -2; i <= 2; i++) {
+      pixel(cx+i, cy+24, '#3a3a4a');
+      pixel(cx+i, cy+25, '#3a3a4a');
+      pixel(cx+i, cy+26, '#2a2a3a');
+    }
+
+    // Golden glow particles around sword
+    const particles = [];
+    for (let i = 0; i < 50; i++) {
+      const angle = (i / 50) * Math.PI * 2;
+      const dist = 35 + Math.sin(i * 0.5) * 5;
+      const px = cx + Math.cos(angle) * dist;
+      const py = cy + Math.sin(angle) * dist;
+      const brightness = Math.random();
+      if (brightness > 0.4) {
+        ctx.fillStyle = `rgba(255, 214, 77, ${brightness * 0.3})`;
+        ctx.fillRect(px * pixelSize, py * pixelSize, pixelSize * 2, pixelSize * 2);
       }
     }
 
-    // Golden border
-    ctx.fillStyle = '#8b7355';
-    ctx.fillRect(0, 0, w, 24);
-    ctx.fillRect(0, h - 24, w, 24);
-    ctx.fillRect(0, 0, 24, h);
-    ctx.fillRect(w - 24, 0, 24, h);
+    // Centered golden lock
+    const lock = [
+      [cx-2, cy-3], [cx-1, cy-3], [cx, cy-3], [cx+1, cy-3], [cx+2, cy-3],
+      [cx-2, cy-2], [cx+2, cy-2],
+      [cx-2, cy-1], [cx+2, cy-1],
+      [cx-2, cy], [cx-1, cy], [cx, cy], [cx+1, cy], [cx+2, cy],
+      [cx-2, cy+1], [cx-1, cy+1], [cx, cy+1], [cx+1, cy+1], [cx+2, cy+1],
+      [cx-2, cy+2], [cx-1, cy+2], [cx, cy+2], [cx+1, cy+2], [cx+2, cy+2],
+      [cx-2, cy+3], [cx-1, cy+3], [cx, cy+3], [cx+1, cy+3], [cx+2, cy+3],
+      [cx, cy+4], [cx, cy+5],
+    ];
 
-    ctx.fillStyle = '#6b5d3f';
-    ctx.fillRect(8, 8, w - 16, 8);
-    ctx.fillRect(8, h - 16, w - 16, 8);
-    ctx.fillRect(8, 8, 8, h - 16);
-    ctx.fillRect(w - 16, 8, 8, h - 16);
+    lock.forEach(([x, y]) => pixel(x, y, '#FFD700'));
 
-    // Draw mysterious sword silhouette (completely black/dark)
-    ctx.fillStyle = '#0a0a14';
-
-    // Sword blade (vertical, centered)
-    ctx.fillRect(240, 120, 32, 200);
-    ctx.fillRect(244, 100, 24, 20); // tip
-
-    // Guard (crossguard)
-    ctx.fillRect(200, 310, 112, 16);
-
-    // Handle
-    ctx.fillRect(240, 326, 32, 80);
-
-    // Pommel
-    ctx.fillRect(230, 406, 52, 24);
-
-    // Glow/shine effect around sword
-    const gradient = ctx.createRadialGradient(256, 256, 50, 256, 256, 200);
-    gradient.addColorStop(0, 'rgba(255, 214, 77, 0.3)');
-    gradient.addColorStop(1, 'rgba(255, 214, 77, 0)');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, w, h);
-
-    // Question marks around sword
-    ctx.font = 'bold 48px monospace';
-    ctx.fillStyle = 'rgba(255, 214, 77, 0.4)';
-    ctx.fillText('?', 120, 180);
-    ctx.fillText('?', 360, 200);
-    ctx.fillText('?', 140, 380);
-    ctx.fillText('?', 340, 360);
-
-    // Lock icon on sword
-    ctx.fillStyle = '#FFD700';
-    ctx.fillRect(244, 240, 24, 32); // lock body
-    ctx.fillRect(248, 230, 16, 12); // lock shackle top
-    ctx.strokeStyle = '#FFD700';
-    ctx.lineWidth = 4;
-    ctx.beginPath();
-    ctx.arc(256, 230, 10, Math.PI, 0);
-    ctx.stroke();
-
-    // Text at top: "UNREVEALED"
-    ctx.font = 'bold 32px monospace';
+    // Pixel art text "UNREVEALED" at top
+    ctx.font = 'bold 28px monospace';
     ctx.fillStyle = '#FFD700';
     ctx.textAlign = 'center';
-    ctx.fillText('UNREVEALED', 256, 60);
+    ctx.shadowColor = 'rgba(255, 214, 77, 0.8)';
+    ctx.shadowBlur = 20;
+    ctx.fillText('UNREVEALED', w/2, 40);
+    ctx.shadowBlur = 0;
 
-    // Text at bottom: "FOUNDERS SWORD"
-    ctx.font = 'bold 24px monospace';
+    // Pixel art text at bottom
+    ctx.font = 'bold 20px monospace';
     ctx.fillStyle = '#888';
-    ctx.fillText('FOUNDERS SWORD', 256, 470);
+    ctx.fillText('FOUNDERS SWORD', w/2, h - 25);
+
+    // Question marks
+    ctx.font = 'bold 40px monospace';
+    ctx.fillStyle = 'rgba(255, 214, 77, 0.25)';
+    ctx.fillText('?', 80, 140);
+    ctx.fillText('?', w - 80, 160);
+    ctx.fillText('?', 100, h - 100);
+    ctx.fillText('?', w - 100, h - 120);
 
     function download() {
       const link = document.createElement('a');
