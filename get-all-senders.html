@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Extract ALL Sender Addresses</title>
+  <style>
+    body {
+      background: #0a0e12;
+      color: #fff;
+      font-family: 'Courier New', monospace;
+      padding: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    h1 {
+      color: #FFD700;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    #status {
+      background: rgba(255,214,77,0.1);
+      border: 2px solid rgba(255,214,77,0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      min-height: 60px;
+    }
+    #results {
+      background: rgba(0,0,0,0.5);
+      border: 2px solid rgba(255,214,77,0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+      display: none;
+    }
+    .address-list {
+      background: #000;
+      padding: 15px;
+      border-radius: 8px;
+      max-height: 400px;
+      overflow-y: auto;
+      margin: 15px 0;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    button {
+      background: linear-gradient(135deg, rgba(212,175,55,0.3) 0%, rgba(255,214,77,0.2) 100%);
+      border: 2px solid #FFD700;
+      color: #FFD700;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: 'Courier New', monospace;
+      margin: 5px;
+    }
+    button:hover {
+      background: rgba(255,214,77,0.3);
+      box-shadow: 0 0 20px rgba(255,214,77,0.3);
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .stats {
+      color: #4CAF50;
+      font-size: 14px;
+      margin: 10px 0;
+    }
+    .loading {
+      color: #FFD700;
+      animation: pulse 1.5s infinite;
+    }
+    .progress {
+      color: #4CAF50;
+      font-size: 13px;
+      margin: 10px 0;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+  </style>
+</head>
+<body>
+  <h1>⚔️ Extract ALL Sender Addresses (With Pagination)</h1>
+
+  <div id="status">
+    <div class="loading">Ready to fetch ALL addresses...</div>
+  </div>
+
+  <button onclick="fetchAllAddresses()" id="fetchBtn">FETCH ALL ADDRESSES</button>
+
+  <div id="results">
+    <h2 style="color: #FFD700; font-size: 18px;">Results</h2>
+    <div class="stats" id="stats"></div>
+
+    <h3 style="color: #FFD700; font-size: 14px; margin-top: 20px;">All Sender Addresses</h3>
+    <div class="address-list" id="addressList"></div>
+
+    <button onclick="copyAll()">COPY ALL ADDRESSES</button>
+    <button onclick="downloadTxt()">DOWNLOAD AS TXT</button>
+    <button onclick="downloadCsv()">DOWNLOAD AS CSV</button>
+  </div>
+
+  <script>
+    const SALE_ADDRESS = '0xab02bf85a7a851b6a379ea3d5bd3b9b4f5dd8461';
+    const API_KEY = 'JQ85MFQSS25595CMJXDQ274DRNRC2FXKE3';
+    const PAGE_SIZE = 10000; // Max per Etherscan request
+
+    let senderData = [];
+    let allTransactions = [];
+
+    async function fetchAllAddresses() {
+      const statusEl = document.getElementById('status');
+      const resultsEl = document.getElementById('results');
+      const fetchBtn = document.getElementById('fetchBtn');
+
+      statusEl.innerHTML = '<div class="loading">Fetching transactions from Etherscan...</div><div class="progress">This may take a minute for addresses with many transactions...</div>';
+      fetchBtn.disabled = true;
+      allTransactions = [];
+
+      try {
+        let page = 1;
+        let hasMore = true;
+
+        while (hasMore) {
+          statusEl.innerHTML = `<div class="loading">Fetching page ${page}...</div><div class="progress">Transactions fetched so far: ${allTransactions.length}</div>`;
+
+          const offset = (page - 1) * PAGE_SIZE;
+          const url = `https://api.etherscan.io/api?module=account&action=txlist&address=${SALE_ADDRESS}&startblock=0&endblock=99999999&page=${page}&offset=${PAGE_SIZE}&sort=asc&apikey=${API_KEY}`;
+
+          const response = await fetch(url);
+          const data = await response.json();
+
+          if (data.status !== '1') {
+            if (data.message === 'No transactions found') {
+              hasMore = false;
+              break;
+            }
+            throw new Error(`API Error: ${data.message || data.result || 'Unknown error'}`);
+          }
+
+          const transactions = data.result;
+          allTransactions = allTransactions.concat(transactions);
+
+          // Check if we got less than PAGE_SIZE, meaning we're done
+          if (transactions.length < PAGE_SIZE) {
+            hasMore = false;
+          }
+
+          page++;
+
+          // Small delay to avoid rate limiting
+          await new Promise(resolve => setTimeout(resolve, 200));
+        }
+
+        statusEl.innerHTML = `<div class="loading">Processing ${allTransactions.length} transactions...</div>`;
+
+        // Filter for incoming transactions with value > 0
+        const incomingTxs = allTransactions.filter(tx =>
+          tx.to && tx.to.toLowerCase() === SALE_ADDRESS.toLowerCase() &&
+          tx.value !== '0'
+        );
+
+        // Group by sender
+        const senderMap = {};
+        incomingTxs.forEach(tx => {
+          const sender = tx.from;
+          if (!senderMap[sender]) {
+            senderMap[sender] = {
+              address: sender,
+              txCount: 0,
+              totalEth: 0
+            };
+          }
+          senderMap[sender].txCount++;
+          senderMap[sender].totalEth += parseFloat(tx.value) / 1e18;
+        });
+
+        senderData = Object.values(senderMap);
+        senderData.sort((a, b) => b.totalEth - a.totalEth);
+
+        displayResults(senderData, incomingTxs.length, allTransactions.length);
+
+        statusEl.innerHTML = '<div style="color: #4CAF50;">✓ Successfully fetched ALL transactions!</div>';
+        resultsEl.style.display = 'block';
+
+      } catch (error) {
+        statusEl.innerHTML = `<div style="color: #F44336;">Error: ${error.message}<br><br>Try refreshing and clicking again, or use a different API key.</div>`;
+        console.error('Error:', error);
+      } finally {
+        fetchBtn.disabled = false;
+      }
+    }
+
+    function displayResults(senders, incomingTxs, totalTxs) {
+      const statsEl = document.getElementById('stats');
+      const listEl = document.getElementById('addressList');
+
+      statsEl.innerHTML = `
+        Total Transactions Scanned: ${totalTxs.toLocaleString()}<br>
+        Incoming ETH Transactions: ${incomingTxs.toLocaleString()}<br>
+        Unique Senders: ${senders.length}<br>
+        Total ETH Received: ${senders.reduce((sum, s) => sum + s.totalEth, 0).toFixed(4)} ETH
+      `;
+
+      listEl.innerHTML = senders.map((s, i) =>
+        `<div>${i + 1}. ${s.address} (${s.txCount} tx, ${s.totalEth.toFixed(6)} ETH)</div>`
+      ).join('');
+    }
+
+    function copyAll() {
+      const addresses = senderData.map(s => s.address).join('\n');
+      navigator.clipboard.writeText(addresses).then(() => {
+        alert(`Copied ${senderData.length} addresses to clipboard!`);
+      }).catch(err => {
+        const textarea = document.createElement('textarea');
+        textarea.value = addresses;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        alert(`Copied ${senderData.length} addresses to clipboard!`);
+      });
+    }
+
+    function downloadTxt() {
+      const addresses = senderData.map(s => s.address).join('\n');
+      download('all_sender_addresses.txt', addresses);
+    }
+
+    function downloadCsv() {
+      const csv = ['Address,Transaction Count,Total ETH Sent'];
+      senderData.forEach(s => {
+        csv.push(`${s.address},${s.txCount},${s.totalEth.toFixed(6)}`);
+      });
+      download('all_sender_addresses.csv', csv.join('\n'));
+    }
+
+    function download(filename, text) {
+      const element = document.createElement('a');
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+      element.setAttribute('download', filename);
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    }
+  </script>
+</body>
+</html>
