@@ -154,10 +154,9 @@
 
         statusEl.innerHTML = `<div class="loading">Processing ${allTransactions.length.toLocaleString()} transactions...</div>`;
 
-        // Filter for incoming transactions with value > 0
+        // Filter for incoming transactions (don't filter by value - get ALL interactions)
         const incomingTxs = allTransactions.filter(tx =>
-          tx.to && tx.to.toLowerCase() === SALE_ADDRESS.toLowerCase() &&
-          tx.value !== '0'
+          tx.to && tx.to.toLowerCase() === SALE_ADDRESS.toLowerCase()
         );
 
         // Group by sender
