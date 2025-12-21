@@ -52,10 +52,22 @@
 
   <!-- Single page container that swaps content -->
   <main class="page-container bottom-aligned" id="pageContainer" role="main" aria-label="Main content">
-    <!-- Initial page content -->
-    <section class="panel panel-transparent fade-in-delayed" id="panelContent">
+    <!-- Glass Card Wrapper -->
+    <div style="background:rgba(0,0,0,0.75);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:2px solid rgba(255,214,77,0.3);border-radius:20px;padding:32px;width:min(800px,92vw);margin-left:auto;margin-right:auto;box-shadow:0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1) inset;">
+      <!-- Campaign Ended Banner -->
+      <div style="background:linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(255,214,77,0.1) 100%);border:2px solid rgba(255,214,77,0.5);border-radius:12px;padding:28px 32px;margin-bottom:24px;text-align:center;box-shadow:0 4px 16px rgba(255,214,77,0.2);">
+      <div style="font-size:32px;margin-bottom:12px;">⚔️</div>
+      <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:#FFD700;margin-bottom:16px;line-height:1.6;text-shadow:0 2px 4px rgba(0,0,0,0.5);">PRE-SEASON COMPLETE</div>
+      <div style="font-family:'Courier New',monospace;font-size:15px;color:#ffffff;line-height:1.8;margin-bottom:8px;">
+        Thank you for participating in the campaign!
+      </div>
+      <div style="font-family:'Courier New',monospace;font-size:14px;color:#4CAF50;line-height:1.8;">
+        Founder's Swords minting Monday, December 22 • Season 1 coming soon
+      </div>
+    </div>
+
       <!-- About Section -->
-      <div class="campaign-earn-section">
+      <div class="campaign-earn-section" style="margin-bottom:24px;">
         <div class="campaign-earn-title">ABOUT</div>
 
         <!-- Main Description -->
@@ -100,17 +112,20 @@
         <div style="text-align:center;margin-top:20px;">
           <span style="color:#FFD700;font-size:13px;font-family:'Courier New',monospace;">Launch planned 2026 (subject to change)</span>
         </div>
+    </div>
+
+    <!-- Initial page content -->
+    <section class="panel panel-transparent fade-in-delayed" id="panelContent">
+      <div class="panel-header" style="margin-top:0px;text-align:center;">
+        <div class="sys" style="font-size:12px;color:#888;">Campaign has ended<span class="blink">.</span></div>
+        <div class="sub-text" style="font-size:11px;color:#666;">Login temporarily disabled</div>
       </div>
 
-      <div class="panel-header">
-        <div class="sys">Welcome to the arena<span class="blink">.</span></div>
-        <div class="sub-text">Connect your wallet to begin</div>
-      </div>
-
-      <div class="input-group">
+      <div class="input-group" style="display:none;">
         <button class="btn-submit" id="connectWalletBtn" style="width:100%;">CONNECT WALLET</button>
       </div>
     </section>
+    </div><!-- End Glass Card Wrapper -->
 
     <!-- Dashboard content (hidden initially) -->
     <div class="dashboard-content" id="dashboardContent" role="region" aria-label="User dashboard">
@@ -132,18 +147,31 @@
         </div>
       </div>
 
+      <!-- Glass Card Wrapper for Dashboard -->
+      <div style="background:rgba(0,0,0,0.75);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:2px solid rgba(255,214,77,0.3);border-radius:20px;padding:32px;box-shadow:0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1) inset;">
+        <!-- Campaign Ended Banner -->
+        <div style="background:linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(255,214,77,0.1) 100%);border:2px solid rgba(255,214,77,0.5);border-radius:12px;padding:28px 32px;margin-bottom:24px;text-align:center;box-shadow:0 4px 16px rgba(255,214,77,0.2);">
+        <div style="font-size:32px;margin-bottom:12px;">⚔️</div>
+        <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:#FFD700;margin-bottom:16px;line-height:1.6;text-shadow:0 2px 4px rgba(0,0,0,0.5);">PRE-SEASON COMPLETE</div>
+        <div style="font-family:'Courier New',monospace;font-size:15px;color:#ffffff;line-height:1.8;margin-bottom:8px;">
+          Thank you for participating in the campaign!
+        </div>
+        <div style="font-family:'Courier New',monospace;font-size:14px;color:#4CAF50;line-height:1.8;">
+          Founder's Swords minting Monday, December 22 • Season 1 coming soon
+        </div>
+      </div>
+
       <div class="stats-grid" style="grid-template-columns:repeat(2,1fr);">
-        <div class="stat-card" style="cursor:pointer;display:flex;align-items:center;justify-content:center;" id="viewLeaderboardBtn">
+        <div class="stat-card" style="cursor:not-allowed;display:flex;align-items:center;justify-content:center;opacity:0.3;filter:grayscale(1);pointer-events:none;" id="viewLeaderboardBtn">
           <div class="stat-label" style="margin:0;">LEADERBOARD</div>
         </div>
-        <div class="stat-card" style="cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;" id="viewQuestsBtn">
+        <div class="stat-card" style="cursor:not-allowed;display:flex;align-items:center;justify-content:center;position:relative;opacity:0.3;filter:grayscale(1);pointer-events:none;" id="viewQuestsBtn">
           <div class="stat-label" style="margin:0;">QUESTS</div>
-          <span style="position:absolute;top:-5px;right:-5px;background:#ff4444;color:white;font-size:12px;font-weight:bold;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 4px rgba(0,0,0,0.3);">!</span>
         </div>
-        <div class="stat-card" style="cursor:pointer;display:flex;align-items:center;justify-content:center;" id="viewReferralsBtn">
+        <div class="stat-card" style="cursor:not-allowed;display:flex;align-items:center;justify-content:center;opacity:0.3;filter:grayscale(1);pointer-events:none;" id="viewReferralsBtn">
           <div class="stat-label" style="margin:0;">REFERRALS</div>
         </div>
-        <div class="stat-card" style="cursor:pointer;display:flex;align-items:center;justify-content:center;" id="viewInventoryBtn">
+        <div class="stat-card" style="cursor:not-allowed;display:flex;align-items:center;justify-content:center;opacity:0.3;filter:grayscale(1);pointer-events:none;" id="viewInventoryBtn">
           <div class="stat-label" style="margin:0;">INVENTORY</div>
         </div>
       </div>
@@ -198,6 +226,7 @@
           <span style="color:#FFD700;font-size:13px;font-family:'Courier New',monospace;">Launch planned 2026 (subject to change)</span>
         </div>
       </div>
+      </div><!-- End Glass Card Wrapper for Dashboard -->
     </div>
 
     <!-- Leaderboard content (hidden initially) -->

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Founders Sword - Pre-Reveal Image Generator</title>
+  <style>
+    body {
+      background: #0a0e12;
+      color: #fff;
+      font-family: 'Press Start 2P', monospace;
+      padding: 40px;
+      text-align: center;
+    }
+    h1 {
+      color: #FFD700;
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
+    canvas {
+      border: 4px solid #FFD700;
+      margin: 20px auto;
+      display: block;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      background: #1a1a2e;
+    }
+    button {
+      background: linear-gradient(135deg, rgba(212,175,55,0.3) 0%, rgba(255,214,77,0.2) 100%);
+      border: 2px solid #FFD700;
+      color: #FFD700;
+      padding: 15px 30px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 12px;
+      font-family: 'Press Start 2P', monospace;
+      margin: 10px;
+    }
+    button:hover {
+      background: rgba(255,214,77,0.3);
+      box-shadow: 0 0 20px rgba(255,214,77,0.3);
+    }
+    .info {
+      color: #888;
+      font-size: 10px;
+      margin-top: 20px;
+      font-family: 'Courier New', monospace;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+  <h1>⚔️ FOUNDERS SWORD<br>PRE-REVEAL</h1>
+
+  <canvas id="canvas" width="512" height="512"></canvas>
+
+  <div>
+    <button onclick="regenerate()">REGENERATE</button>
+    <button onclick="downloadImage()">DOWNLOAD PNG</button>
+  </div>
+
+  <div class="info">
+    Right-click canvas to save image<br>
+    Recommended size: 512x512 or 1024x1024
+  </div>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const size = 512;
+    const pixelSize = 8; // 64x64 pixel grid
+
+    function drawPixel(x, y, color) {
+      ctx.fillStyle = color;
+      ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
+    }
+
+    function drawPreRevealSword() {
+      // Clear canvas
+      ctx.fillStyle = '#0f0f1e';
+      ctx.fillRect(0, 0, size, size);
+
+      // Draw inventory slot background
+      const gridSize = 64;
+      ctx.fillStyle = '#1a1a2e';
+      for (let x = 4; x < 60; x++) {
+        for (let y = 4; y < 60; y++) {
+          if ((x + y) % 2 === 0) {
+            drawPixel(x, y, '#16162a');
+          }
+        }
+      }
+
+      // Draw border/frame (golden)
+      for (let i = 0; i < 64; i++) {
+        // Top
+        drawPixel(i, 0, '#4a3f2a');
+        drawPixel(i, 1, '#6b5d3f');
+        drawPixel(i, 2, '#8b7355');
+        drawPixel(i, 3, '#6b5d3f');
+
+        // Bottom
+        drawPixel(i, 63, '#4a3f2a');
+        drawPixel(i, 62, '#6b5d3f');
+        drawPixel(i, 61, '#8b7355');
+        drawPixel(i, 60, '#6b5d3f');
+
+        // Left
+        drawPixel(0, i, '#4a3f2a');
+        drawPixel(1, i, '#6b5d3f');
+        drawPixel(2, i, '#8b7355');
+        drawPixel(3, i, '#6b5d3f');
+
+        // Right
+        drawPixel(63, i, '#4a3f2a');
+        drawPixel(62, i, '#6b5d3f');
+        drawPixel(61, i, '#8b7355');
+        drawPixel(60, i, '#6b5d3f');
+      }
+
+      // Draw mysterious locked chest/container silhouette
+      const chestColor = '#2a2a3a';
+      const lockColor = '#FFD700';
+
+      // Chest body
+      for (let x = 20; x < 44; x++) {
+        for (let y = 28; y < 48; y++) {
+          drawPixel(x, y, chestColor);
+        }
+      }
+
+      // Chest lid
+      for (let x = 19; x < 45; x++) {
+        for (let y = 22; y < 28; y++) {
+          drawPixel(x, y, '#1a1a2a');
+        }
+      }
+
+      // Lock shape (keyhole style)
+      drawPixel(31, 34, lockColor);
+      drawPixel(32, 34, lockColor);
+      drawPixel(30, 35, lockColor);
+      drawPixel(31, 35, lockColor);
+      drawPixel(32, 35, lockColor);
+      drawPixel(33, 35, lockColor);
+      drawPixel(30, 36, lockColor);
+      drawPixel(33, 36, lockColor);
+      drawPixel(31, 37, lockColor);
+      drawPixel(32, 37, lockColor);
+      drawPixel(31, 38, lockColor);
+      drawPixel(32, 38, lockColor);
+      drawPixel(31, 39, lockColor);
+      drawPixel(32, 39, lockColor);
+
+      // Add subtle glow particles around chest
+      const glowPositions = [
+        [16, 30], [17, 25], [15, 35],
+        [46, 28], [48, 33], [47, 38],
+        [25, 20], [38, 21], [32, 50]
+      ];
+
+      glowPositions.forEach(([x, y]) => {
+        const brightness = Math.random();
+        if (brightness > 0.3) {
+          drawPixel(x, y, `rgba(255, 214, 77, ${brightness * 0.6})`);
+        }
+      });
+
+      // Draw question marks floating around
+      drawQuestionMark(12, 15, '#FFD700');
+      drawQuestionMark(50, 18, '#FFD700');
+      drawQuestionMark(14, 52, '#FFD700');
+      drawQuestionMark(48, 50, '#FFD700');
+
+      // Draw "LEGENDARY?" text at top
+      drawText('LEGENDARY?', 8, 10, '#FFD700', 0.7);
+
+      // Draw "REVEAL TO CLAIM" at bottom
+      drawText('REVEAL', 18, 54, '#4CAF50', 0.8);
+      drawText('TO CLAIM', 15, 57, '#4CAF50', 0.6);
+    }
+
+    function drawQuestionMark(x, y, color) {
+      const qm = [
+        [0,1,1,0],
+        [1,0,0,1],
+        [0,0,1,0],
+        [0,1,0,0],
+        [0,0,0,0],
+        [0,1,0,0]
+      ];
+
+      for (let dy = 0; dy < qm.length; dy++) {
+        for (let dx = 0; dx < qm[dy].length; dx++) {
+          if (qm[dy][dx]) {
+            ctx.globalAlpha = 0.7;
+            drawPixel(x + dx, y + dy, color);
+            ctx.globalAlpha = 1.0;
+          }
+        }
+      }
+    }
+
+    function drawText(text, startX, y, color, alpha = 1.0) {
+      ctx.globalAlpha = alpha;
+      const letterSpacing = 5;
+      let x = startX;
+
+      for (let char of text) {
+        if (char === ' ') {
+          x += 3;
+          continue;
+        }
+        drawLetter(char, x, y, color);
+        x += letterSpacing;
+      }
+      ctx.globalAlpha = 1.0;
+    }
+
+    function drawLetter(char, x, y, color) {
+      const letters = {
+        'L': [[1],[1],[1],[1],[1,1,1]],
+        'E': [[1,1,1],[1],[1,1],[1],[1,1,1]],
+        'G': [[1,1,1],[1],[1,1,1],[1,0,1],[1,1,1]],
+        'N': [[1,0,1],[1,1,1],[1,0,1],[1,0,1],[1,0,1]],
+        'D': [[1,1],[1,0,1],[1,0,1],[1,0,1],[1,1]],
+        'A': [[0,1],[1,0,1],[1,1,1],[1,0,1],[1,0,1]],
+        'R': [[1,1],[1,0,1],[1,1],[1,0,1],[1,0,1]],
+        'Y': [[1,0,1],[1,0,1],[0,1],[0,1],[0,1]],
+        '?': [[1,1],[0,1],[1,1],[0],[1]],
+        'V': [[1,0,1],[1,0,1],[1,0,1],[1,0,1],[0,1]],
+        'T': [[1,1,1],[0,1],[0,1],[0,1],[0,1]],
+        'O': [[1,1,1],[1,0,1],[1,0,1],[1,0,1],[1,1,1]],
+        'C': [[1,1,1],[1],[1],[1],[1,1,1]],
+        'I': [[1],[1],[1],[1],[1]],
+        'M': [[1,0,0,1],[1,1,1,1],[1,0,0,1],[1,0,0,1],[1,0,0,1]],
+      };
+
+      const pattern = letters[char];
+      if (!pattern) return;
+
+      for (let dy = 0; dy < pattern.length; dy++) {
+        for (let dx = 0; dx < pattern[dy].length; dx++) {
+          if (pattern[dy][dx]) {
+            drawPixel(x + dx, y + dy, color);
+          }
+        }
+      }
+    }
+
+    function regenerate() {
+      drawPreRevealSword();
+    }
+
+    function downloadImage() {
+      // Create a larger version for download
+      const downloadCanvas = document.createElement('canvas');
+      downloadCanvas.width = 1024;
+      downloadCanvas.height = 1024;
+      const downloadCtx = downloadCanvas.getContext('2d');
+
+      // Scale up the current canvas
+      downloadCtx.imageSmoothingEnabled = false;
+      downloadCtx.drawImage(canvas, 0, 0, 1024, 1024);
+
+      // Download
+      const link = document.createElement('a');
+      link.download = 'founders-sword-prerevealed.png';
+      link.href = downloadCanvas.toDataURL('image/png');
+      link.click();
+    }
+
+    // Initial draw
+    drawPreRevealSword();
+  </script>
+</body>
+</html>

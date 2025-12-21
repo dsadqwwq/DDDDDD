@@ -1179,9 +1179,34 @@
         pageContainer.classList.remove('center-aligned');
         panelContent.classList.add('panel-transparent');
 
-        panelContent.innerHTML = `
-          <!-- About Section -->
-          <div class="campaign-earn-section">
+        // Create glass card wrapper if it doesn't exist
+        let glassWrapper = pageContainer.querySelector('.glass-card-wrapper');
+        if (!glassWrapper) {
+          glassWrapper = document.createElement('div');
+          glassWrapper.className = 'glass-card-wrapper';
+          glassWrapper.style.cssText = 'background:rgba(0,0,0,0.75);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:2px solid rgba(255,214,77,0.3);border-radius:20px;padding:32px;width:min(800px,92vw);margin-left:auto;margin-right:auto;box-shadow:0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1) inset;';
+
+          // Create banner inside wrapper
+          const banner = document.createElement('div');
+          banner.className = 'campaign-end-banner';
+          banner.style.cssText = 'background:linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(255,214,77,0.1) 100%);border:2px solid rgba(255,214,77,0.5);border-radius:12px;padding:28px 32px;margin-bottom:24px;text-align:center;box-shadow:0 4px 16px rgba(255,214,77,0.2);';
+          banner.innerHTML = `
+            <div style="font-size:32px;margin-bottom:12px;">⚔️</div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:#FFD700;margin-bottom:16px;line-height:1.6;text-shadow:0 2px 4px rgba(0,0,0,0.5);">PRE-SEASON COMPLETE</div>
+            <div style="font-family:'Courier New',monospace;font-size:15px;color:#ffffff;line-height:1.8;margin-bottom:8px;">
+              Thank you for participating in the campaign!
+            </div>
+            <div style="font-family:'Courier New',monospace;font-size:14px;color:#4CAF50;line-height:1.8;">
+              Founder's Swords minting Monday, December 22 • Season 1 coming soon
+            </div>
+          `;
+          glassWrapper.appendChild(banner);
+
+          // Create About section inside wrapper
+          const aboutSection = document.createElement('div');
+          aboutSection.className = 'campaign-earn-section';
+          aboutSection.style.cssText = 'margin-bottom:24px;';
+          aboutSection.innerHTML = `
             <div class="campaign-earn-title">ABOUT</div>
 
             <!-- Main Description -->
@@ -1226,20 +1251,37 @@
             <div style="text-align:center;margin-top:20px;">
               <span style="color:#FFD700;font-size:13px;font-family:'Courier New',monospace;">Launch planned 2026 (subject to change)</span>
             </div>
-          </div>
+          `;
+          glassWrapper.appendChild(aboutSection);
 
-          <div class="panel-header">
-            <div class="sys">Welcome to the arena<span class="blink">.</span></div>
-            <div class="sub-text">Connect your wallet to begin</div>
-          </div>
+          // Update panel content
+          panelContent.innerHTML = `
+            <div class="panel-header" style="margin-top:0px;text-align:center;">
+              <div class="sys" style="font-size:12px;color:#888;">Campaign has ended<span class="blink">.</span></div>
+              <div class="sub-text" style="font-size:11px;color:#666;">Login temporarily disabled</div>
+            </div>
 
-          <div class="input-group">
-            <button class="btn-submit" id="connectWalletBtnHome" style="width:100%;">CONNECT WALLET</button>
-          </div>
-        `;
+            <div class="input-group" style="display:none;">
+              <button class="btn-submit" id="connectWalletBtnHome" style="width:100%;">CONNECT WALLET</button>
+            </div>
+          `;
 
-        // Re-attach event listener
-        document.getElementById('connectWalletBtnHome').addEventListener('click', handleUnifiedWalletConnect);
+          // Move panel into wrapper and insert wrapper into page
+          glassWrapper.appendChild(panelContent);
+          pageContainer.insertBefore(glassWrapper, pageContainer.firstChild);
+        } else {
+          // Glass wrapper exists, just update panel content
+          panelContent.innerHTML = `
+            <div class="panel-header" style="margin-top:0px;text-align:center;">
+              <div class="sys" style="font-size:12px;color:#888;">Campaign has ended<span class="blink">.</span></div>
+              <div class="sub-text" style="font-size:11px;color:#666;">Login temporarily disabled</div>
+            </div>
+
+            <div class="input-group" style="display:none;">
+              <button class="btn-submit" id="connectWalletBtnHome" style="width:100%;">CONNECT WALLET</button>
+            </div>
+          `;
+        }
 
       } else if (newContent === 'dashboard') {
         console.log('[dashboard case] Starting dashboard case');
