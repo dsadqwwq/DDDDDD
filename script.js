@@ -1256,7 +1256,7 @@
 
           // Update panel content
           panelContent.innerHTML = `
-            <div class="panel-header" style="margin-top:0px;">
+            <div class="panel-header" style="margin-top:0px;text-align:center;">
               <div class="sys" style="font-size:12px;color:#888;">Campaign has ended<span class="blink">.</span></div>
               <div class="sub-text" style="font-size:11px;color:#666;">Login temporarily disabled</div>
             </div>
@@ -1272,7 +1272,7 @@
         } else {
           // Glass wrapper exists, just update panel content
           panelContent.innerHTML = `
-            <div class="panel-header" style="margin-top:0px;">
+            <div class="panel-header" style="margin-top:0px;text-align:center;">
               <div class="sys" style="font-size:12px;color:#888;">Campaign has ended<span class="blink">.</span></div>
               <div class="sub-text" style="font-size:11px;color:#666;">Login temporarily disabled</div>
             </div>
