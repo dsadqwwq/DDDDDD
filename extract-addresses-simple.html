@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Paste JSON - Get Addresses</title>
+  <style>
+    body {
+      background: #0a0e12;
+      color: #fff;
+      font-family: 'Courier New', monospace;
+      padding: 40px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    h1 {
+      color: #FFD700;
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    textarea {
+      width: 100%;
+      min-height: 200px;
+      background: #000;
+      color: #fff;
+      border: 2px solid rgba(255,214,77,0.3);
+      border-radius: 8px;
+      padding: 15px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      margin: 10px 0;
+    }
+    button {
+      background: linear-gradient(135deg, rgba(212,175,55,0.3) 0%, rgba(255,214,77,0.2) 100%);
+      border: 2px solid #FFD700;
+      color: #FFD700;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: 'Courier New', monospace;
+      margin: 5px;
+    }
+    button:hover {
+      background: rgba(255,214,77,0.3);
+    }
+    .instructions {
+      background: rgba(255,214,77,0.1);
+      border: 2px solid rgba(255,214,77,0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      line-height: 1.8;
+    }
+    .result {
+      background: rgba(0,255,0,0.1);
+      border: 2px solid rgba(0,255,0,0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>⚔️ Extract Wallet Addresses from Etherscan JSON</h1>
+
+  <div class="instructions">
+    <strong style="color: #FFD700;">Instructions:</strong><br>
+    1. Open each URL I gave you in a new tab<br>
+    2. Copy ALL the text from the page (Ctrl+A, Ctrl+C)<br>
+    3. Paste it into the box below<br>
+    4. Click "EXTRACT ADDRESSES"<br>
+    5. Repeat for all 12 URLs to get all addresses
+  </div>
+
+  <label style="color: #FFD700; font-size: 14px;">Paste JSON here:</label>
+  <textarea id="jsonInput" placeholder="Paste the entire JSON response from Etherscan here..."></textarea>
+
+  <button onclick="extractAddresses()">EXTRACT ADDRESSES</button>
+  <button onclick="clearAll()">CLEAR</button>
+
+  <div class="result" id="result">
+    <h3 style="color: #4CAF50;">✓ Extracted Addresses:</h3>
+    <div id="stats" style="margin-bottom: 15px; color: #4CAF50;"></div>
+    <textarea id="addressOutput" readonly style="min-height: 300px;"></textarea>
+    <button onclick="copyAddresses()">COPY ALL ADDRESSES</button>
+    <button onclick="downloadAddresses()">DOWNLOAD AS TXT</button>
+  </div>
+
+  <script>
+    const SALE_ADDRESS = '0xab02bf85a7a851b6a379ea3d5bd3b9b4f5dd8461';
+    let allAddresses = new Set(); // Use Set to avoid duplicates
+
+    function extractAddresses() {
+      const input = document.getElementById('jsonInput').value.trim();
+
+      if (!input) {
+        alert('Please paste JSON data first!');
+        return;
+      }
+
+      try {
+        const data = JSON.parse(input);
+
+        if (data.status !== '1' || !data.result) {
+          alert('Invalid response or no transactions found in this range.');
+          return;
+        }
+
+        // Filter for incoming transactions with value > 0
+        const incomingTxs = data.result.filter(tx =>
+          tx.to && tx.to.toLowerCase() === SALE_ADDRESS.toLowerCase() &&
+          tx.value !== '0'
+        );
+
+        // Extract unique sender addresses
+        incomingTxs.forEach(tx => {
+          allAddresses.add(tx.from);
+        });
+
+        // Display results
+        const addressArray = Array.from(allAddresses).sort();
+        document.getElementById('addressOutput').value = addressArray.join('\n');
+        document.getElementById('stats').innerHTML = `
+          Found ${incomingTxs.length} incoming transactions from this batch<br>
+          Total unique addresses so far: ${allAddresses.size}
+        `;
+        document.getElementById('result').style.display = 'block';
+
+      } catch (error) {
+        alert('Error parsing JSON: ' + error.message + '\n\nMake sure you copied the entire JSON response.');
+      }
+    }
+
+    function copyAddresses() {
+      const output = document.getElementById('addressOutput');
+      output.select();
+      document.execCommand('copy');
+      alert(`Copied ${allAddresses.size} addresses to clipboard!`);
+    }
+
+    function downloadAddresses() {
+      const addresses = document.getElementById('addressOutput').value;
+      const blob = new Blob([addresses], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'sender_addresses.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function clearAll() {
+      document.getElementById('jsonInput').value = '';
+      document.getElementById('addressOutput').value = '';
+      document.getElementById('result').style.display = 'none';
+      allAddresses.clear();
+    }
+  </script>
+</body>
+</html>
