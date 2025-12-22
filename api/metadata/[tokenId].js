@@ -22,7 +22,7 @@ export default function handler(req, res) {
   // PRE-REVEAL METADATA
   // All tokens return the same metadata until reveal
   const metadata = {
-    name: `Founder's Sword #${id}`,
+    name: `Unrevealed Founder's Sword #${id}`,
     description: "A legendary sword forged for the earliest supporters of Duel PVP. This mystical weapon awaits its reveal to unveil its true power and unique characteristics.",
     image: "https://duelpvp.com/assets/Capture.JPG",
     attributes: [
