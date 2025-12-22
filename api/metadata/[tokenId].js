@@ -24,7 +24,7 @@ export default function handler(req, res) {
   const metadata = {
     name: `Founder's Sword #${id}`,
     description: "A legendary sword forged for the earliest supporters of Duel PVP. This mystical weapon awaits its reveal to unveil its true power and unique characteristics.",
-    image: `${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://duelpvp.com'}/assets/prerevealed-sword.png`,
+    image: `${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://duelpvp.com'}/assets/capture.jpg`,
     attributes: [
       {
         trait_type: "Status",
