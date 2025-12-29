@@ -1,22 +1,27 @@
-# Duel PVP - Single Page Application
+# Duel PVP - Solana Gaming Platform
 
+A fully on-chain MMO gaming experience built on Solana, combining classic MMO progression with idle game mechanics.
 
 ## Features
 
+- **Solana Integration**: Lightning-fast blockchain transactions using Solana web3.js
 - **Single Page Application**: All content stays in the DOM with smooth transitions
-- **Continuous Animations**: 
+- **Continuous Animations**:
   - Lava glow effect (6s loop)
   - Slogan fade animation (6s loop)
   - Blinking cursor effect (1s loop)
   - All animations run continuously without interruption
-- **Three Views**:
-  1. Access code entry
-  2. Login screen
-  3. Dashboard with stats
+- **Gaming Features**:
+  - Real-time PVP battles
+  - Idle progression mechanics
+  - On-chain game state and transactions
+  - Transparent, verifiable gameplay
 
 ## Technical Details
 
+- Built on Solana blockchain for fast, low-cost transactions
 - Pure HTML/CSS/JavaScript (no frameworks)
+- Solana web3.js for wallet integration
 - All animations use CSS keyframes for smooth performance
 - Content swapping without page reloads
 - Responsive design with mobile support
