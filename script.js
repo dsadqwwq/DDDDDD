@@ -5806,51 +5806,98 @@
       }
     } catch (e) {}
 
-    // ===== CLAWD AI ACTIVITY LOG =====
-    (function initClawdShowcase() {
+    // ===== CLAWD SWARM COMMAND CENTER =====
+    (function initClawdSwarm() {
       const feedEl = document.getElementById('clawdFeed');
       const statusEl = document.getElementById('clawdStatus');
 
       if (!feedEl) return;
 
-      // Real activity log - things CLAWD has actually done
-      const activityLog = [
-        { icon: '\u{2705}', msg: 'Gained access to Duel PVP website', tag: 'COMPLETED' },
-        { icon: '\u{2705}', msg: 'Gained access to Discord server', tag: 'COMPLETED' },
-        { icon: '\u{2705}', msg: 'Gained access to Twitter / X account', tag: 'COMPLETED' },
-        { icon: '\u{1F4B0}', msg: 'ETH wallet created: 0x7C27...0ec3', tag: 'ACTIVE' },
-        { icon: '\u{1F4B0}', msg: 'SOL wallet created: CL5d...9o4s', tag: 'ACTIVE' },
-        { icon: '\u{1F4B0}', msg: 'BTC wallet created: bc1q...hcxm', tag: 'ACTIVE' },
-        { icon: '\u{26A1}', msg: 'System initialized — awaiting first mission', tag: 'STANDBY' },
+      // War room log — real completed actions + army-themed live entries
+      const completedLog = [
+        { icon: '\u{2705}', msg: '[CLAWD-00] Gained access to Duel PVP website', tag: 'DONE', src: 'commander' },
+        { icon: '\u{2705}', msg: '[CLAWD-00] Gained access to Discord server', tag: 'DONE', src: 'commander' },
+        { icon: '\u{2705}', msg: '[CLAWD-00] Gained access to Twitter / X account', tag: 'DONE', src: 'commander' },
+        { icon: '\u{1F4B0}', msg: '[CLAWD-00] ETH wallet online: 0x7C27...0ec3', tag: 'ACTIVE', src: 'commander' },
+        { icon: '\u{1F4B0}', msg: '[CLAWD-00] SOL wallet online: CL5d...9o4s', tag: 'ACTIVE', src: 'commander' },
+        { icon: '\u{1F4B0}', msg: '[CLAWD-00] BTC wallet online: bc1q...hcxm', tag: 'ACTIVE', src: 'commander' },
+        { icon: '\u{1F916}', msg: '[CLAWD-00] Swarm protocol initialized', tag: 'ACTIVE', src: 'commander' },
+        { icon: '\u{26A1}', msg: '[SYSTEM] Awaiting deployment of CLAWD-01...', tag: 'PENDING', src: 'system' },
       ];
 
-      // Status rotation
+      // Live rotation messages that cycle in the feed
+      const liveMessages = [
+        { icon: '\u{1F50D}', msg: '[CLAWD-00] Scanning for deployment opportunities...', src: 'commander' },
+        { icon: '\u{1F916}', msg: '[SYSTEM] CLAWD-01 slot available — awaiting orders', src: 'system' },
+        { icon: '\u{1F310}', msg: '[CLAWD-00] Monitoring ETH mempool for alpha...', src: 'commander' },
+        { icon: '\u{2694}', msg: '[CLAWD-00] Evaluating Trader bot deployment on SOL', src: 'commander' },
+        { icon: '\u{1F33E}', msg: '[CLAWD-00] Scouting airdrop targets for Farmer bot', src: 'commander' },
+        { icon: '\u{1F6E0}', msg: '[CLAWD-00] Preparing Builder bot blueprint...', src: 'commander' },
+        { icon: '\u{1F4E1}', msg: '[SYSTEM] Swarm heartbeat — all systems nominal', src: 'system' },
+        { icon: '\u{1F50D}', msg: '[CLAWD-00] Analyzing new token launches...', src: 'commander' },
+        { icon: '\u{26A1}', msg: '[CLAWD-00] Optimizing deployment strategy...', src: 'commander' },
+        { icon: '\u{1F916}', msg: '[SYSTEM] Army expansion capacity: 3 slots remaining', src: 'system' },
+      ];
+
+      // Commander status rotation
       const statuses = [
-        'FULLY OPERATIONAL',
-        'SYSTEMS ONLINE...',
+        'SWARM ONLINE',
+        'SCANNING TARGETS...',
+        'DEPLOYING AGENTS...',
         'MONITORING WALLETS...',
-        'AWAITING INSTRUCTIONS...',
-        'ALL PLATFORMS CONNECTED...',
-        'STANDING BY...',
+        'AWAITING ORDERS...',
+        'ARMY EXPANDING...',
+        'ALL SYSTEMS NOMINAL...',
+        'HIVE MIND ACTIVE...',
       ];
       let statusIdx = 0;
+      let liveIdx = 0;
 
       function rotateStatus() {
         statusIdx = (statusIdx + 1) % statuses.length;
         if (statusEl) statusEl.textContent = statuses[statusIdx];
       }
 
-      // Render activity log (static, real entries)
-      activityLog.forEach(function(item) {
-        const div = document.createElement('div');
+      function renderFeedItem(item) {
+        var div = document.createElement('div');
         div.className = 'clawd-feed-item';
+        var tagClass = item.tag === 'DONE' ? 'positive' : '';
         div.innerHTML =
           '<span class="clawd-feed-icon">' + item.icon + '</span>' +
           '<span class="clawd-feed-msg">' + item.msg + '</span>' +
-          '<span class="clawd-feed-amount ' + (item.tag === 'COMPLETED' ? 'positive' : '') + '">' + item.tag + '</span>';
-        feedEl.appendChild(div);
+          (item.tag ? '<span class="clawd-feed-amount ' + tagClass + '">' + item.tag + '</span>' : '');
+        return div;
+      }
+
+      // Render completed log (real entries, static)
+      completedLog.forEach(function(item) {
+        feedEl.appendChild(renderFeedItem(item));
       });
 
+      // Add live rotating messages
+      function addLiveMessage() {
+        var item = liveMessages[liveIdx % liveMessages.length];
+        liveIdx++;
+
+        var now = new Date();
+        var time = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+        var div = document.createElement('div');
+        div.className = 'clawd-feed-item';
+        div.innerHTML =
+          '<span class="clawd-feed-time">' + time + '</span>' +
+          '<span class="clawd-feed-icon">' + item.icon + '</span>' +
+          '<span class="clawd-feed-msg">' + item.msg + '</span>';
+
+        feedEl.insertBefore(div, feedEl.firstChild);
+
+        // Keep feed max 20 items
+        while (feedEl.children.length > 20) {
+          feedEl.removeChild(feedEl.lastChild);
+        }
+      }
+
       // Intervals
-      setInterval(rotateStatus, 6000);
+      setInterval(rotateStatus, 5000);
+      setInterval(addLiveMessage, 6000);
     })();

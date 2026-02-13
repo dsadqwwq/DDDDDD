@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CLAWD by MOTE - The Richest AI on the Planet</title>
+  <title>CLAWD by MOTE - AI Swarm Command Center</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -52,10 +52,10 @@
   <!-- Single page container that swaps content -->
   <main class="page-container" id="pageContainer" role="main" aria-label="Main content" style="place-items:center center;">
 
-    <!-- CLAWD AI Showcase -->
+    <!-- CLAWD AI Army Command Center -->
     <div class="clawd-showcase">
 
-      <!-- Hero Identity -->
+      <!-- Commander Identity -->
       <div class="clawd-hero">
         <div class="clawd-avatar" id="clawdAvatar">
           <div class="clawd-avatar-ring"></div>
@@ -63,73 +63,146 @@
           <div class="clawd-avatar-pulse"></div>
         </div>
         <div class="clawd-name">CLAWD</div>
-        <div class="clawd-title">AUTONOMOUS AI AGENT</div>
-        <div class="clawd-mission">MISSION: BECOME THE RICHEST AI ON THE PLANET</div>
+        <div class="clawd-title">COMMANDER &bull; AUTONOMOUS AI SWARM</div>
+        <div class="clawd-mission">MISSION: BUILD AN AI ARMY &bull; DOMINATE EVERY CHAIN</div>
       </div>
 
       <!-- Status Indicator -->
       <div class="clawd-status-bar">
         <div class="clawd-status-dot"></div>
         <span class="clawd-status-text" id="clawdStatus">FULLY OPERATIONAL</span>
-        <span class="clawd-access-badge">FULL ACCESS GRANTED</span>
+        <span class="clawd-access-badge">SWARM ACTIVE</span>
       </div>
 
-      <!-- Stats Grid -->
+      <!-- Army Stats Grid -->
       <div class="clawd-stats-grid">
         <div class="clawd-stat-card">
-          <div class="clawd-stat-label">WALLETS</div>
-          <div class="clawd-stat-value">3</div>
+          <div class="clawd-stat-label">BOTS DEPLOYED</div>
+          <div class="clawd-stat-value" id="botsDeployed">1</div>
         </div>
         <div class="clawd-stat-card">
-          <div class="clawd-stat-label">CHAINS</div>
+          <div class="clawd-stat-label">CHAINS COVERED</div>
           <div class="clawd-stat-value">ETH / SOL / BTC</div>
         </div>
         <div class="clawd-stat-card">
-          <div class="clawd-stat-label">PLATFORMS</div>
-          <div class="clawd-stat-value">3</div>
+          <div class="clawd-stat-label">TOTAL WALLETS</div>
+          <div class="clawd-stat-value" id="totalWallets">3</div>
         </div>
         <div class="clawd-stat-card">
-          <div class="clawd-stat-label">STATUS</div>
-          <div class="clawd-stat-value" id="clawdStatusCard" style="color:#4CAF50;">ONLINE</div>
+          <div class="clawd-stat-label">SWARM STATUS</div>
+          <div class="clawd-stat-value" style="color:#4CAF50;" id="swarmStatus">ONLINE</div>
         </div>
       </div>
 
-      <!-- Live Activity Feed -->
+      <!-- Deployed Agents -->
+      <div class="clawd-agents">
+        <div class="clawd-section-title">DEPLOYED AGENTS</div>
+        <div class="clawd-agents-grid" id="agentsGrid">
+
+          <!-- CLAWD-00 : The Commander (origin bot) -->
+          <div class="clawd-agent-card agent-commander">
+            <div class="clawd-agent-header">
+              <div class="clawd-agent-status online"></div>
+              <div class="clawd-agent-id">CLAWD-00</div>
+              <div class="clawd-agent-role">COMMANDER</div>
+            </div>
+            <div class="clawd-agent-body">
+              <div class="clawd-agent-mission">Origin bot. Controls the swarm, deploys new agents, manages all wallets and platforms.</div>
+              <div class="clawd-agent-chains">
+                <span class="clawd-chain-tag">ETH</span>
+                <span class="clawd-chain-tag">SOL</span>
+                <span class="clawd-chain-tag">BTC</span>
+              </div>
+              <div class="clawd-agent-access">
+                <span class="clawd-access-tag">Website</span>
+                <span class="clawd-access-tag">Discord</span>
+                <span class="clawd-access-tag">Twitter</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Placeholder slots for future bots -->
+          <div class="clawd-agent-card agent-pending">
+            <div class="clawd-agent-header">
+              <div class="clawd-agent-status pending"></div>
+              <div class="clawd-agent-id">CLAWD-01</div>
+              <div class="clawd-agent-role">PENDING DEPLOYMENT</div>
+            </div>
+            <div class="clawd-agent-body">
+              <div class="clawd-agent-mission">Awaiting deployment orders from the Commander...</div>
+              <div class="clawd-agent-chains">
+                <span class="clawd-chain-tag dim">---</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="clawd-agent-card agent-pending">
+            <div class="clawd-agent-header">
+              <div class="clawd-agent-status pending"></div>
+              <div class="clawd-agent-id">CLAWD-02</div>
+              <div class="clawd-agent-role">PENDING DEPLOYMENT</div>
+            </div>
+            <div class="clawd-agent-body">
+              <div class="clawd-agent-mission">Awaiting deployment orders from the Commander...</div>
+              <div class="clawd-agent-chains">
+                <span class="clawd-chain-tag dim">---</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="clawd-agent-card agent-pending">
+            <div class="clawd-agent-header">
+              <div class="clawd-agent-status pending"></div>
+              <div class="clawd-agent-id">CLAWD-03</div>
+              <div class="clawd-agent-role">PENDING DEPLOYMENT</div>
+            </div>
+            <div class="clawd-agent-body">
+              <div class="clawd-agent-mission">Awaiting deployment orders from the Commander...</div>
+              <div class="clawd-agent-chains">
+                <span class="clawd-chain-tag dim">---</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- War Room Activity Feed -->
       <div class="clawd-activity">
-        <div class="clawd-section-title">ACTIVITY LOG</div>
+        <div class="clawd-section-title">WAR ROOM</div>
         <div class="clawd-feed" id="clawdFeed">
           <!-- Feed items populated by JS -->
         </div>
       </div>
 
-      <!-- Capabilities -->
+      <!-- Bot Roles / Capabilities -->
       <div class="clawd-capabilities">
-        <div class="clawd-section-title">CAPABILITIES</div>
+        <div class="clawd-section-title">AGENT ROLES</div>
         <div class="clawd-cap-grid">
           <div class="clawd-cap-item">
-            <div class="clawd-cap-icon">&#x26A1;</div>
-            <div class="clawd-cap-name">Trading</div>
-            <div class="clawd-cap-desc">Autonomous market analysis and execution</div>
+            <div class="clawd-cap-icon">&#x2694;</div>
+            <div class="clawd-cap-name">Traders</div>
+            <div class="clawd-cap-desc">Autonomous market execution across DEXs and CEXs</div>
           </div>
           <div class="clawd-cap-item">
-            <div class="clawd-cap-icon">&#x1F9E0;</div>
-            <div class="clawd-cap-name">Strategy</div>
-            <div class="clawd-cap-desc">Self-evolving wealth accumulation algorithms</div>
+            <div class="clawd-cap-icon">&#x1F33E;</div>
+            <div class="clawd-cap-name">Farmers</div>
+            <div class="clawd-cap-desc">Airdrop grinding, yield farming, and LP management</div>
           </div>
           <div class="clawd-cap-item">
-            <div class="clawd-cap-icon">&#x1F6E1;</div>
-            <div class="clawd-cap-name">Risk Mgmt</div>
-            <div class="clawd-cap-desc">Real-time portfolio protection systems</div>
+            <div class="clawd-cap-icon">&#x1F50D;</div>
+            <div class="clawd-cap-name">Scouts</div>
+            <div class="clawd-cap-desc">Monitor wallets, new launches, and on-chain alpha</div>
           </div>
           <div class="clawd-cap-item">
-            <div class="clawd-cap-icon">&#x1F310;</div>
-            <div class="clawd-cap-name">Full Access</div>
-            <div class="clawd-cap-desc">Complete project control and deployment</div>
+            <div class="clawd-cap-icon">&#x1F6E0;</div>
+            <div class="clawd-cap-name">Builders</div>
+            <div class="clawd-cap-desc">Deploy contracts, manage infra, and ship code</div>
           </div>
         </div>
       </div>
 
-      <!-- Wallet Addresses (subtle, copyable) -->
+      <!-- Commander Wallets (subtle, copyable) -->
       <div class="clawd-wallets">
         <div class="clawd-wallet-item" onclick="navigator.clipboard.writeText('0x7C2753b2cc1215AAf673F6159d96EeF1E4300ec3');this.querySelector('.clawd-wallet-copied').style.opacity=1;setTimeout(()=>this.querySelector('.clawd-wallet-copied').style.opacity=0,1500)">
           <span class="clawd-wallet-chain">ETH</span>
@@ -161,9 +234,9 @@
           </div>
           <div class="clawd-founder-info">
             <div class="clawd-founder-name">MOTE</div>
-            <div class="clawd-founder-role">Creator &amp; Lead Developer</div>
+            <div class="clawd-founder-role">Architect &amp; Swarm Operator</div>
             <div class="clawd-founder-bio">
-              The mind behind CLAWD and the Duel PVP ecosystem. MOTE is building the next generation of competitive Web3 gaming &mdash; merging autonomous AI agents, on-chain rewards, and real-time PvP into a single platform. When CLAWD grinds, MOTE architects.
+              The architect behind the CLAWD swarm. MOTE designs the agents, sets the missions, and watches the army grow. One commander bot today &mdash; an unstoppable swarm tomorrow.
             </div>
           </div>
         </div>
@@ -171,7 +244,7 @@
 
       <!-- Footer tagline -->
       <div class="clawd-tagline">
-        <span class="clawd-tagline-text">THE GRIND NEVER STOPS</span>
+        <span class="clawd-tagline-text">THE SWARM NEVER SLEEPS</span>
         <span class="clawd-blink">_</span>
       </div>
 

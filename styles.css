@@ -4771,6 +4771,139 @@
     color:#fff;
   }
 
+  /* Deployed Agents Grid */
+  .clawd-agents{
+    background:rgba(0,0,0,0.6);
+    backdrop-filter:blur(12px);
+    border:1px solid rgba(255,214,77,0.2);
+    border-radius:12px;
+    padding:24px;
+  }
+
+  .clawd-agents-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:12px;
+  }
+
+  .clawd-agent-card{
+    background:rgba(16,20,24,0.7);
+    border:1px solid rgba(255,214,77,0.15);
+    border-radius:10px;
+    padding:16px;
+    transition:all 0.3s;
+  }
+
+  .clawd-agent-card:hover{
+    border-color:rgba(255,214,77,0.4);
+    box-shadow:0 0 20px rgba(255,214,77,0.08);
+  }
+
+  .clawd-agent-card.agent-commander{
+    border-color:rgba(76,175,80,0.4);
+    box-shadow:0 0 15px rgba(76,175,80,0.1);
+  }
+
+  .clawd-agent-card.agent-pending{
+    opacity:0.45;
+  }
+
+  .clawd-agent-header{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:10px;
+  }
+
+  .clawd-agent-status{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    flex-shrink:0;
+  }
+
+  .clawd-agent-status.online{
+    background:#4CAF50;
+    box-shadow:0 0 8px #4CAF50;
+    animation:clawdDotBlink 2s ease-in-out infinite;
+  }
+
+  .clawd-agent-status.pending{
+    background:#555;
+    box-shadow:0 0 4px #333;
+  }
+
+  .clawd-agent-id{
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    color:var(--gold);
+  }
+
+  .clawd-agent-role{
+    font-family:'Courier New', monospace;
+    font-size:9px;
+    color:#a0a8b0;
+    letter-spacing:0.15em;
+    margin-left:auto;
+  }
+
+  .clawd-agent-body{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+
+  .clawd-agent-mission{
+    font-family:'Courier New', monospace;
+    font-size:11px;
+    color:#808890;
+    line-height:1.5;
+  }
+
+  .clawd-agent-chains{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+  }
+
+  .clawd-chain-tag{
+    font-family:'Press Start 2P', monospace;
+    font-size:7px;
+    padding:3px 8px;
+    background:rgba(255,214,77,0.1);
+    border:1px solid rgba(255,214,77,0.25);
+    border-radius:4px;
+    color:var(--gold);
+  }
+
+  .clawd-chain-tag.dim{
+    background:rgba(60,60,60,0.3);
+    border-color:rgba(60,60,60,0.4);
+    color:#555;
+  }
+
+  .clawd-agent-access{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+  }
+
+  .clawd-access-tag{
+    font-family:'Courier New', monospace;
+    font-size:9px;
+    padding:2px 6px;
+    background:rgba(76,175,80,0.1);
+    border:1px solid rgba(76,175,80,0.25);
+    border-radius:3px;
+    color:#4CAF50;
+  }
+
+  @media(max-width:600px){
+    .clawd-agents-grid{
+      grid-template-columns:1fr;
+    }
+  }
+
   /* Activity Feed */
   .clawd-activity{
     background:rgba(0,0,0,0.6);
