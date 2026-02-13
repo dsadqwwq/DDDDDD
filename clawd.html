@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CLAWD - AI Swarm Command Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="clawd-styles.css">
+</head>
+<body>
+
+  <!-- Full-screen background -->
+  <div class="cw-bg">
+    <img src="assets/clawd-bg.png" alt="" class="cw-bg-img">
+    <div class="cw-bg-overlay"></div>
+  </div>
+
+  <!-- Scanline overlay -->
+  <div class="cw-scanlines"></div>
+
+  <!-- Connection lines canvas (drawn between bot nodes) -->
+  <canvas id="cwLinesCanvas" class="cw-lines-canvas"></canvas>
+
+  <!-- Main wrapper -->
+  <div class="cw-app">
+
+    <!-- Top bar -->
+    <header class="cw-header">
+      <div class="cw-header-left">
+        <span class="cw-logo-text">CLAWD</span>
+        <span class="cw-logo-sub">SWARM COMMAND</span>
+      </div>
+      <div class="cw-header-right">
+        <div class="cw-status-dot"></div>
+        <span class="cw-status-text" id="cwStatus">SWARM ONLINE</span>
+      </div>
+    </header>
+
+    <!-- Commander section -->
+    <section class="cw-commander">
+      <div class="cw-commander-avatar">
+        <div class="cw-commander-ring"></div>
+        <div class="cw-commander-core" id="cwCommanderCore">00</div>
+        <div class="cw-commander-pulse"></div>
+      </div>
+      <div class="cw-commander-info">
+        <div class="cw-commander-name">CLAWD-00</div>
+        <div class="cw-commander-role">ORIGIN BOT &bull; COMMANDER</div>
+        <div class="cw-commander-mission">Deploys agents. Controls the swarm. Dominates every chain.</div>
+      </div>
+    </section>
+
+    <!-- Army counters -->
+    <section class="cw-counters">
+      <div class="cw-counter">
+        <div class="cw-counter-value" id="cwBotCount">1</div>
+        <div class="cw-counter-label">BOTS ACTIVE</div>
+      </div>
+      <div class="cw-counter">
+        <div class="cw-counter-value" id="cwGeneration">GEN 0</div>
+        <div class="cw-counter-label">LATEST GEN</div>
+      </div>
+      <div class="cw-counter">
+        <div class="cw-counter-value" id="cwChains">3</div>
+        <div class="cw-counter-label">CHAINS</div>
+      </div>
+      <div class="cw-counter">
+        <div class="cw-counter-value" id="cwWallets">3</div>
+        <div class="cw-counter-label">WALLETS</div>
+      </div>
+    </section>
+
+    <!-- The infinite swarm grid -->
+    <section class="cw-swarm-section">
+      <div class="cw-section-title">THE SWARM</div>
+      <div class="cw-swarm-grid" id="cwSwarmGrid">
+        <!-- Bot nodes spawn here via JS -->
+      </div>
+    </section>
+
+    <!-- War Room feed -->
+    <section class="cw-warroom">
+      <div class="cw-section-title">WAR ROOM</div>
+      <div class="cw-feed" id="cwFeed"></div>
+    </section>
+
+    <!-- Agent Roles -->
+    <section class="cw-roles">
+      <div class="cw-section-title">AGENT ROLES</div>
+      <div class="cw-roles-grid">
+        <div class="cw-role-card">
+          <div class="cw-role-icon">&#x2694;</div>
+          <div class="cw-role-name">TRADERS</div>
+          <div class="cw-role-desc">DEX/CEX execution, arbitrage, sniping</div>
+        </div>
+        <div class="cw-role-card">
+          <div class="cw-role-icon">&#x1F33E;</div>
+          <div class="cw-role-name">FARMERS</div>
+          <div class="cw-role-desc">Airdrops, yield, LP management</div>
+        </div>
+        <div class="cw-role-card">
+          <div class="cw-role-icon">&#x1F50D;</div>
+          <div class="cw-role-name">SCOUTS</div>
+          <div class="cw-role-desc">Alpha hunting, whale tracking, launches</div>
+        </div>
+        <div class="cw-role-card">
+          <div class="cw-role-icon">&#x1F6E0;</div>
+          <div class="cw-role-name">BUILDERS</div>
+          <div class="cw-role-desc">Contracts, infra, code deployment</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Wallets -->
+    <section class="cw-wallets-section">
+      <div class="cw-section-title">COMMANDER WALLETS</div>
+      <div class="cw-wallets">
+        <div class="cw-wallet" onclick="navigator.clipboard.writeText('0x7C2753b2cc1215AAf673F6159d96EeF1E4300ec3');this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),1500)">
+          <span class="cw-wallet-chain">ETH</span>
+          <span class="cw-wallet-addr">0x7C2753b2cc1215AAf673F6159d96EeF1E4300ec3</span>
+          <span class="cw-wallet-action">COPY</span>
+        </div>
+        <div class="cw-wallet" onclick="navigator.clipboard.writeText('CL5ds6uYS3XPMxLKSy951ZAQzCtMmQXwvGbLut6r9o4s');this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),1500)">
+          <span class="cw-wallet-chain">SOL</span>
+          <span class="cw-wallet-addr">CL5ds6uYS3XPMxLKSy951ZAQzCtMmQXwvGbLut6r9o4s</span>
+          <span class="cw-wallet-action">COPY</span>
+        </div>
+        <div class="cw-wallet" onclick="navigator.clipboard.writeText('bc1qf6jwkktvnpxrx9mrz9gpzmqn80an7xzs5rhcxm');this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),1500)">
+          <span class="cw-wallet-chain">BTC</span>
+          <span class="cw-wallet-addr">bc1qf6jwkktvnpxrx9mrz9gpzmqn80an7xzs5rhcxm</span>
+          <span class="cw-wallet-action">COPY</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Founder -->
+    <section class="cw-founder">
+      <div class="cw-section-title">ARCHITECT</div>
+      <div class="cw-founder-card">
+        <div class="cw-founder-avatar">
+          <img src="assets/mote-pfp.png" alt="MOTE" class="cw-founder-img">
+        </div>
+        <div class="cw-founder-info">
+          <div class="cw-founder-name">MOTE</div>
+          <div class="cw-founder-role">Swarm Architect &bull; Operator</div>
+          <div class="cw-founder-bio">Designs the agents. Sets the missions. Watches the army grow. One commander today &mdash; an unstoppable swarm tomorrow.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="cw-footer">
+      <span class="cw-tagline">THE SWARM NEVER SLEEPS<span class="cw-blink">_</span></span>
+      <div class="cw-footer-links">
+        <a href="https://x.com/Duelpvp" target="_blank" rel="noopener noreferrer">X</a>
+        <a href="https://discord.gg/TsJXW8rQ" target="_blank" rel="noopener noreferrer">Discord</a>
+      </div>
+      <span class="cw-copyright">&copy; 2025 MOTE</span>
+    </footer>
+
+  </div>
+
+  <script src="clawd-app.js"></script>
+</body>
+</html>

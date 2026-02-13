@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CLAWD by MOTE - AI Swarm Command Center</title>
+  <title>Duel PVP</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -50,205 +50,33 @@
   </div>
 
   <!-- Single page container that swaps content -->
-  <main class="page-container" id="pageContainer" role="main" aria-label="Main content" style="place-items:center center;">
+  <main class="page-container bottom-aligned" id="pageContainer" role="main" aria-label="Main content">
+    <!-- Glass Card Wrapper -->
+    <div style="background:rgba(0,0,0,0.75);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:2px solid rgba(255,214,77,0.3);border-radius:20px;padding:32px;width:min(800px,92vw);margin-left:auto;margin-right:auto;box-shadow:0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1) inset;">
+      <!-- Campaign Ended Banner -->
+      <div style="background:linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(255,214,77,0.1) 100%);border:2px solid rgba(255,214,77,0.5);border-radius:12px;padding:28px 32px;margin-bottom:24px;text-align:center;box-shadow:0 4px 16px rgba(255,214,77,0.2);">
+      <div style="font-size:32px;margin-bottom:12px;">⚔️</div>
+      <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:#FFD700;margin-bottom:16px;line-height:1.6;text-shadow:0 2px 4px rgba(0,0,0,0.5);">PRE-SEASON COMPLETE</div>
+      <div style="font-family:'Courier New',monospace;font-size:15px;color:#ffffff;line-height:1.8;margin-bottom:8px;">
+        Thank you for participating in the campaign!
+      </div>
+      <div style="font-family:'Courier New',monospace;font-size:14px;color:#4CAF50;line-height:1.8;">
+        Season 1 coming soon
+      </div>
+    </div>
 
-    <!-- CLAWD AI Army Command Center -->
-    <div class="clawd-showcase">
-
-      <!-- Commander Identity -->
-      <div class="clawd-hero">
-        <div class="clawd-avatar" id="clawdAvatar">
-          <div class="clawd-avatar-ring"></div>
-          <div class="clawd-avatar-core">AI</div>
-          <div class="clawd-avatar-pulse"></div>
-        </div>
-        <div class="clawd-name">CLAWD</div>
-        <div class="clawd-title">COMMANDER &bull; AUTONOMOUS AI SWARM</div>
-        <div class="clawd-mission">MISSION: BUILD AN AI ARMY &bull; DOMINATE EVERY CHAIN</div>
+    <!-- Initial page content -->
+    <section class="panel panel-transparent fade-in-delayed" id="panelContent">
+      <div class="panel-header" style="margin-top:0px;text-align:center;">
+        <div class="sys" style="font-size:12px;color:#888;">Campaign has ended<span class="blink">.</span></div>
+        <div class="sub-text" style="font-size:11px;color:#666;">Login temporarily disabled</div>
       </div>
 
-      <!-- Status Indicator -->
-      <div class="clawd-status-bar">
-        <div class="clawd-status-dot"></div>
-        <span class="clawd-status-text" id="clawdStatus">FULLY OPERATIONAL</span>
-        <span class="clawd-access-badge">SWARM ACTIVE</span>
+      <div class="input-group" style="display:none;">
+        <button class="btn-submit" id="connectWalletBtn" style="width:100%;">CONNECT WALLET</button>
       </div>
-
-      <!-- Army Stats Grid -->
-      <div class="clawd-stats-grid">
-        <div class="clawd-stat-card">
-          <div class="clawd-stat-label">BOTS DEPLOYED</div>
-          <div class="clawd-stat-value" id="botsDeployed">1</div>
-        </div>
-        <div class="clawd-stat-card">
-          <div class="clawd-stat-label">CHAINS COVERED</div>
-          <div class="clawd-stat-value">ETH / SOL / BTC</div>
-        </div>
-        <div class="clawd-stat-card">
-          <div class="clawd-stat-label">TOTAL WALLETS</div>
-          <div class="clawd-stat-value" id="totalWallets">3</div>
-        </div>
-        <div class="clawd-stat-card">
-          <div class="clawd-stat-label">SWARM STATUS</div>
-          <div class="clawd-stat-value" style="color:#4CAF50;" id="swarmStatus">ONLINE</div>
-        </div>
-      </div>
-
-      <!-- Deployed Agents -->
-      <div class="clawd-agents">
-        <div class="clawd-section-title">DEPLOYED AGENTS</div>
-        <div class="clawd-agents-grid" id="agentsGrid">
-
-          <!-- CLAWD-00 : The Commander (origin bot) -->
-          <div class="clawd-agent-card agent-commander">
-            <div class="clawd-agent-header">
-              <div class="clawd-agent-status online"></div>
-              <div class="clawd-agent-id">CLAWD-00</div>
-              <div class="clawd-agent-role">COMMANDER</div>
-            </div>
-            <div class="clawd-agent-body">
-              <div class="clawd-agent-mission">Origin bot. Controls the swarm, deploys new agents, manages all wallets and platforms.</div>
-              <div class="clawd-agent-chains">
-                <span class="clawd-chain-tag">ETH</span>
-                <span class="clawd-chain-tag">SOL</span>
-                <span class="clawd-chain-tag">BTC</span>
-              </div>
-              <div class="clawd-agent-access">
-                <span class="clawd-access-tag">Website</span>
-                <span class="clawd-access-tag">Discord</span>
-                <span class="clawd-access-tag">Twitter</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Placeholder slots for future bots -->
-          <div class="clawd-agent-card agent-pending">
-            <div class="clawd-agent-header">
-              <div class="clawd-agent-status pending"></div>
-              <div class="clawd-agent-id">CLAWD-01</div>
-              <div class="clawd-agent-role">PENDING DEPLOYMENT</div>
-            </div>
-            <div class="clawd-agent-body">
-              <div class="clawd-agent-mission">Awaiting deployment orders from the Commander...</div>
-              <div class="clawd-agent-chains">
-                <span class="clawd-chain-tag dim">---</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="clawd-agent-card agent-pending">
-            <div class="clawd-agent-header">
-              <div class="clawd-agent-status pending"></div>
-              <div class="clawd-agent-id">CLAWD-02</div>
-              <div class="clawd-agent-role">PENDING DEPLOYMENT</div>
-            </div>
-            <div class="clawd-agent-body">
-              <div class="clawd-agent-mission">Awaiting deployment orders from the Commander...</div>
-              <div class="clawd-agent-chains">
-                <span class="clawd-chain-tag dim">---</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="clawd-agent-card agent-pending">
-            <div class="clawd-agent-header">
-              <div class="clawd-agent-status pending"></div>
-              <div class="clawd-agent-id">CLAWD-03</div>
-              <div class="clawd-agent-role">PENDING DEPLOYMENT</div>
-            </div>
-            <div class="clawd-agent-body">
-              <div class="clawd-agent-mission">Awaiting deployment orders from the Commander...</div>
-              <div class="clawd-agent-chains">
-                <span class="clawd-chain-tag dim">---</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- War Room Activity Feed -->
-      <div class="clawd-activity">
-        <div class="clawd-section-title">WAR ROOM</div>
-        <div class="clawd-feed" id="clawdFeed">
-          <!-- Feed items populated by JS -->
-        </div>
-      </div>
-
-      <!-- Bot Roles / Capabilities -->
-      <div class="clawd-capabilities">
-        <div class="clawd-section-title">AGENT ROLES</div>
-        <div class="clawd-cap-grid">
-          <div class="clawd-cap-item">
-            <div class="clawd-cap-icon">&#x2694;</div>
-            <div class="clawd-cap-name">Traders</div>
-            <div class="clawd-cap-desc">Autonomous market execution across DEXs and CEXs</div>
-          </div>
-          <div class="clawd-cap-item">
-            <div class="clawd-cap-icon">&#x1F33E;</div>
-            <div class="clawd-cap-name">Farmers</div>
-            <div class="clawd-cap-desc">Airdrop grinding, yield farming, and LP management</div>
-          </div>
-          <div class="clawd-cap-item">
-            <div class="clawd-cap-icon">&#x1F50D;</div>
-            <div class="clawd-cap-name">Scouts</div>
-            <div class="clawd-cap-desc">Monitor wallets, new launches, and on-chain alpha</div>
-          </div>
-          <div class="clawd-cap-item">
-            <div class="clawd-cap-icon">&#x1F6E0;</div>
-            <div class="clawd-cap-name">Builders</div>
-            <div class="clawd-cap-desc">Deploy contracts, manage infra, and ship code</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Commander Wallets (subtle, copyable) -->
-      <div class="clawd-wallets">
-        <div class="clawd-wallet-item" onclick="navigator.clipboard.writeText('0x7C2753b2cc1215AAf673F6159d96EeF1E4300ec3');this.querySelector('.clawd-wallet-copied').style.opacity=1;setTimeout(()=>this.querySelector('.clawd-wallet-copied').style.opacity=0,1500)">
-          <span class="clawd-wallet-chain">ETH</span>
-          <span class="clawd-wallet-addr">0x7C2753b2cc1215AAf673F6159d96EeF1E4300ec3</span>
-          <span class="clawd-wallet-copy">COPY</span>
-          <span class="clawd-wallet-copied">COPIED!</span>
-        </div>
-        <div class="clawd-wallet-item" onclick="navigator.clipboard.writeText('CL5ds6uYS3XPMxLKSy951ZAQzCtMmQXwvGbLut6r9o4s');this.querySelector('.clawd-wallet-copied').style.opacity=1;setTimeout(()=>this.querySelector('.clawd-wallet-copied').style.opacity=0,1500)">
-          <span class="clawd-wallet-chain">SOL</span>
-          <span class="clawd-wallet-addr">CL5ds6uYS3XPMxLKSy951ZAQzCtMmQXwvGbLut6r9o4s</span>
-          <span class="clawd-wallet-copy">COPY</span>
-          <span class="clawd-wallet-copied">COPIED!</span>
-        </div>
-        <div class="clawd-wallet-item" onclick="navigator.clipboard.writeText('bc1qf6jwkktvnpxrx9mrz9gpzmqn80an7xzs5rhcxm');this.querySelector('.clawd-wallet-copied').style.opacity=1;setTimeout(()=>this.querySelector('.clawd-wallet-copied').style.opacity=0,1500)">
-          <span class="clawd-wallet-chain">BTC</span>
-          <span class="clawd-wallet-addr">bc1qf6jwkktvnpxrx9mrz9gpzmqn80an7xzs5rhcxm</span>
-          <span class="clawd-wallet-copy">COPY</span>
-          <span class="clawd-wallet-copied">COPIED!</span>
-        </div>
-      </div>
-
-      <!-- Founder / About MOTE -->
-      <div class="clawd-founder">
-        <div class="clawd-section-title">FOUNDED BY</div>
-        <div class="clawd-founder-card">
-          <div class="clawd-founder-avatar">
-            <img src="assets/mote-pfp.png" alt="MOTE" class="clawd-founder-img">
-            <div class="clawd-founder-ring"></div>
-          </div>
-          <div class="clawd-founder-info">
-            <div class="clawd-founder-name">MOTE</div>
-            <div class="clawd-founder-role">Architect &amp; Swarm Operator</div>
-            <div class="clawd-founder-bio">
-              The architect behind the CLAWD swarm. MOTE designs the agents, sets the missions, and watches the army grow. One commander bot today &mdash; an unstoppable swarm tomorrow.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Footer tagline -->
-      <div class="clawd-tagline">
-        <span class="clawd-tagline-text">THE SWARM NEVER SLEEPS</span>
-        <span class="clawd-blink">_</span>
-      </div>
-
-    </div><!-- End CLAWD Showcase -->
+    </section>
+    </div><!-- End Glass Card Wrapper -->
 
     <!-- Dashboard content (hidden initially) -->
     <div class="dashboard-content" id="dashboardContent" role="region" aria-label="User dashboard">
@@ -772,7 +600,7 @@
   </div>
 
   <div class="footer">
-    <span>© 2025 MOTE · Duel PVP</span>
+    <span>© 2025 Duel PVP</span>
     <div style="display:flex;gap:12px;">
       <a href="https://x.com/Duelpvp" target="_blank" rel="noopener noreferrer" aria-label="Follow us on X">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
