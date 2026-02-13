@@ -5805,3 +5805,52 @@
         if (brandTitle) brandTitle.style.cursor = 'pointer';
       }
     } catch (e) {}
+
+    // ===== CLAWD AI ACTIVITY LOG =====
+    (function initClawdShowcase() {
+      const feedEl = document.getElementById('clawdFeed');
+      const statusEl = document.getElementById('clawdStatus');
+
+      if (!feedEl) return;
+
+      // Real activity log - things CLAWD has actually done
+      const activityLog = [
+        { icon: '\u{2705}', msg: 'Gained access to Duel PVP website', tag: 'COMPLETED' },
+        { icon: '\u{2705}', msg: 'Gained access to Discord server', tag: 'COMPLETED' },
+        { icon: '\u{2705}', msg: 'Gained access to Twitter / X account', tag: 'COMPLETED' },
+        { icon: '\u{1F4B0}', msg: 'ETH wallet created: 0x7C27...0ec3', tag: 'ACTIVE' },
+        { icon: '\u{1F4B0}', msg: 'SOL wallet created: CL5d...9o4s', tag: 'ACTIVE' },
+        { icon: '\u{1F4B0}', msg: 'BTC wallet created: bc1q...hcxm', tag: 'ACTIVE' },
+        { icon: '\u{26A1}', msg: 'System initialized — awaiting first mission', tag: 'STANDBY' },
+      ];
+
+      // Status rotation
+      const statuses = [
+        'FULLY OPERATIONAL',
+        'SYSTEMS ONLINE...',
+        'MONITORING WALLETS...',
+        'AWAITING INSTRUCTIONS...',
+        'ALL PLATFORMS CONNECTED...',
+        'STANDING BY...',
+      ];
+      let statusIdx = 0;
+
+      function rotateStatus() {
+        statusIdx = (statusIdx + 1) % statuses.length;
+        if (statusEl) statusEl.textContent = statuses[statusIdx];
+      }
+
+      // Render activity log (static, real entries)
+      activityLog.forEach(function(item) {
+        const div = document.createElement('div');
+        div.className = 'clawd-feed-item';
+        div.innerHTML =
+          '<span class="clawd-feed-icon">' + item.icon + '</span>' +
+          '<span class="clawd-feed-msg">' + item.msg + '</span>' +
+          '<span class="clawd-feed-amount ' + (item.tag === 'COMPLETED' ? 'positive' : '') + '">' + item.tag + '</span>';
+        feedEl.appendChild(div);
+      });
+
+      // Intervals
+      setInterval(rotateStatus, 6000);
+    })();

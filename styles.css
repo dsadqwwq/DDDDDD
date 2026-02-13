@@ -4436,3 +4436,584 @@
       height:120px;
     }
   }
+
+  /* ================================================
+     CLAWD AI WEALTH SHOWCASE
+     ================================================ */
+
+  .clawd-showcase{
+    width:min(900px, 94vw);
+    margin:0 auto;
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+  }
+
+  /* Hero Identity */
+  .clawd-hero{
+    text-align:center;
+    padding:40px 20px 24px;
+  }
+
+  .clawd-avatar{
+    position:relative;
+    width:120px;
+    height:120px;
+    margin:0 auto 24px;
+  }
+
+  .clawd-avatar-ring{
+    position:absolute;
+    inset:-4px;
+    border-radius:50%;
+    border:3px solid var(--gold);
+    animation:clawdRingSpin 8s linear infinite;
+    box-shadow:0 0 30px rgba(255,214,77,0.3), inset 0 0 30px rgba(255,214,77,0.1);
+  }
+
+  .clawd-avatar-core{
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    background:linear-gradient(135deg, #1a1a2e 0%, #0b0f12 50%, #16213e 100%);
+    border:2px solid rgba(255,214,77,0.4);
+    display:grid;
+    place-items:center;
+    font-family:'Press Start 2P', monospace;
+    font-size:28px;
+    color:var(--gold);
+    text-shadow:0 0 20px rgba(255,214,77,0.6);
+  }
+
+  .clawd-avatar-pulse{
+    position:absolute;
+    inset:-12px;
+    border-radius:50%;
+    border:1px solid rgba(255,214,77,0.15);
+    animation:clawdPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes clawdRingSpin{
+    0%{transform:rotate(0deg)}
+    100%{transform:rotate(360deg)}
+  }
+
+  @keyframes clawdPulse{
+    0%,100%{transform:scale(1);opacity:0.4}
+    50%{transform:scale(1.15);opacity:0}
+  }
+
+  .clawd-name{
+    font-family:'Press Start 2P', monospace;
+    font-size:42px;
+    background:linear-gradient(180deg, var(--gold-hi) 0%, var(--gold) 40%, #D4A033 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 0 30px rgba(255,214,77,0.4));
+    margin-bottom:12px;
+    letter-spacing:0.15em;
+  }
+
+  .clawd-title{
+    font-family:'Courier New', monospace;
+    font-size:14px;
+    color:#a0a8b0;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    margin-bottom:8px;
+  }
+
+  .clawd-mission{
+    font-family:'Press Start 2P', monospace;
+    font-size:10px;
+    color:var(--success);
+    letter-spacing:0.05em;
+    line-height:1.8;
+    text-shadow:0 0 10px rgba(76,175,80,0.4);
+    animation:clawdMissionPulse 4s ease-in-out infinite;
+  }
+
+  @keyframes clawdMissionPulse{
+    0%,100%{opacity:0.7}
+    50%{opacity:1;text-shadow:0 0 20px rgba(76,175,80,0.6)}
+  }
+
+  /* Wallet Addresses (subtle) */
+  .clawd-wallets{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    opacity:0.7;
+  }
+
+  .clawd-wallets:hover{
+    opacity:1;
+  }
+
+  .clawd-wallet-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:8px 14px;
+    background:rgba(16,20,24,0.5);
+    border:1px solid rgba(255,214,77,0.1);
+    border-radius:8px;
+    cursor:pointer;
+    transition:all 0.2s;
+    position:relative;
+  }
+
+  .clawd-wallet-item:hover{
+    border-color:rgba(255,214,77,0.3);
+    background:rgba(16,20,24,0.7);
+  }
+
+  .clawd-wallet-chain{
+    font-family:'Press Start 2P', monospace;
+    font-size:9px;
+    color:var(--gold);
+    min-width:30px;
+  }
+
+  .clawd-wallet-addr{
+    font-family:'Courier New', monospace;
+    font-size:11px;
+    color:#707880;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    flex:1;
+  }
+
+  .clawd-wallet-copy{
+    font-family:'Courier New', monospace;
+    font-size:9px;
+    color:#555;
+    letter-spacing:0.1em;
+  }
+
+  .clawd-wallet-item:hover .clawd-wallet-copy{
+    color:var(--gold);
+  }
+
+  .clawd-wallet-copied{
+    position:absolute;
+    right:14px;
+    font-family:'Courier New', monospace;
+    font-size:9px;
+    color:#4CAF50;
+    opacity:0;
+    transition:opacity 0.3s;
+  }
+
+  /* Status Bar */
+  .clawd-status-bar{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:rgba(0,0,0,0.6);
+    backdrop-filter:blur(12px);
+    border:1px solid rgba(76,175,80,0.3);
+    border-radius:8px;
+    padding:12px 20px;
+    font-family:'Courier New', monospace;
+    font-size:12px;
+  }
+
+  .clawd-status-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--success);
+    box-shadow:0 0 8px var(--success);
+    animation:clawdDotBlink 2s ease-in-out infinite;
+  }
+
+  @keyframes clawdDotBlink{
+    0%,100%{opacity:1}
+    50%{opacity:0.4}
+  }
+
+  .clawd-status-text{
+    color:var(--success);
+    flex:1;
+  }
+
+  .clawd-access-badge{
+    background:rgba(255,214,77,0.15);
+    border:1px solid rgba(255,214,77,0.4);
+    color:var(--gold);
+    padding:4px 12px;
+    border-radius:4px;
+    font-size:10px;
+    letter-spacing:0.1em;
+  }
+
+  /* Stats Grid */
+  .clawd-stats-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:12px;
+  }
+
+  .clawd-stat-card{
+    background:rgba(0,0,0,0.7);
+    backdrop-filter:blur(12px);
+    border:1px solid rgba(255,214,77,0.2);
+    border-radius:12px;
+    padding:20px 16px;
+    text-align:center;
+    transition:border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .clawd-stat-card:hover{
+    border-color:rgba(255,214,77,0.5);
+    box-shadow:0 0 20px rgba(255,214,77,0.1);
+  }
+
+  .clawd-stat-label{
+    font-family:'Courier New', monospace;
+    font-size:10px;
+    color:#a0a8b0;
+    letter-spacing:0.1em;
+    margin-bottom:8px;
+  }
+
+  .clawd-stat-value{
+    font-family:'Press Start 2P', monospace;
+    font-size:18px;
+    color:var(--gold);
+  }
+
+  /* Milestones */
+  .clawd-milestones{
+    background:rgba(0,0,0,0.6);
+    backdrop-filter:blur(12px);
+    border:1px solid rgba(255,214,77,0.2);
+    border-radius:12px;
+    padding:24px;
+  }
+
+  .clawd-section-title{
+    font-family:'Press Start 2P', monospace;
+    font-size:11px;
+    color:var(--gold);
+    letter-spacing:0.1em;
+    margin-bottom:20px;
+  }
+
+  .clawd-milestone-track{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:relative;
+    padding:0 8px;
+  }
+
+  .clawd-milestone-track::before{
+    content:'';
+    position:absolute;
+    top:50%;
+    left:0;
+    right:0;
+    height:2px;
+    background:rgba(255,214,77,0.15);
+    transform:translateY(-8px);
+  }
+
+  .clawd-milestone{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    position:relative;
+    z-index:1;
+  }
+
+  .clawd-milestone-marker{
+    width:16px;
+    height:16px;
+    border-radius:50%;
+    border:2px solid rgba(255,214,77,0.3);
+    background:rgba(0,0,0,0.8);
+    transition:all 0.3s;
+  }
+
+  .clawd-milestone.completed .clawd-milestone-marker{
+    background:var(--gold);
+    border-color:var(--gold);
+    box-shadow:0 0 12px rgba(255,214,77,0.5);
+  }
+
+  .clawd-milestone.active .clawd-milestone-marker{
+    border-color:var(--gold);
+    box-shadow:0 0 16px rgba(255,214,77,0.4);
+    animation:clawdMilestoneActive 2s ease-in-out infinite;
+  }
+
+  @keyframes clawdMilestoneActive{
+    0%,100%{box-shadow:0 0 8px rgba(255,214,77,0.3)}
+    50%{box-shadow:0 0 24px rgba(255,214,77,0.6)}
+  }
+
+  .clawd-milestone-label{
+    font-family:'Courier New', monospace;
+    font-size:11px;
+    color:#666;
+  }
+
+  .clawd-milestone.completed .clawd-milestone-label{
+    color:var(--gold);
+  }
+
+  .clawd-milestone.active .clawd-milestone-label{
+    color:#fff;
+  }
+
+  /* Activity Feed */
+  .clawd-activity{
+    background:rgba(0,0,0,0.6);
+    backdrop-filter:blur(12px);
+    border:1px solid rgba(255,214,77,0.2);
+    border-radius:12px;
+    padding:24px;
+  }
+
+  .clawd-feed{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+    max-height:240px;
+    overflow-y:auto;
+    font-family:'Courier New', monospace;
+    font-size:13px;
+  }
+
+  .clawd-feed-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:8px 12px;
+    border-radius:6px;
+    animation:clawdFeedIn 0.4s ease-out;
+    background:rgba(255,255,255,0.02);
+  }
+
+  .clawd-feed-item:first-child{
+    background:rgba(255,214,77,0.05);
+  }
+
+  @keyframes clawdFeedIn{
+    from{opacity:0;transform:translateY(-8px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+
+  .clawd-feed-time{
+    color:#555;
+    font-size:11px;
+    white-space:nowrap;
+  }
+
+  .clawd-feed-icon{
+    font-size:14px;
+  }
+
+  .clawd-feed-msg{
+    color:#c0c8d0;
+    flex:1;
+  }
+
+  .clawd-feed-amount{
+    font-size:12px;
+    font-weight:bold;
+    white-space:nowrap;
+  }
+
+  .clawd-feed-amount.positive{color:var(--success)}
+  .clawd-feed-amount.negative{color:var(--danger)}
+
+  /* Capabilities */
+  .clawd-capabilities{
+    background:rgba(0,0,0,0.6);
+    backdrop-filter:blur(12px);
+    border:1px solid rgba(255,214,77,0.2);
+    border-radius:12px;
+    padding:24px;
+  }
+
+  .clawd-cap-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:16px;
+  }
+
+  .clawd-cap-item{
+    text-align:center;
+    padding:16px 8px;
+    border-radius:8px;
+    background:rgba(255,214,77,0.03);
+    border:1px solid rgba(255,214,77,0.1);
+    transition:border-color 0.3s, background 0.3s;
+  }
+
+  .clawd-cap-item:hover{
+    border-color:rgba(255,214,77,0.3);
+    background:rgba(255,214,77,0.06);
+  }
+
+  .clawd-cap-icon{
+    font-size:28px;
+    margin-bottom:8px;
+  }
+
+  .clawd-cap-name{
+    font-family:'Press Start 2P', monospace;
+    font-size:9px;
+    color:var(--gold);
+    margin-bottom:6px;
+  }
+
+  .clawd-cap-desc{
+    font-family:'Courier New', monospace;
+    font-size:11px;
+    color:#888;
+    line-height:1.4;
+  }
+
+  /* Founder Section */
+  .clawd-founder{
+    background:rgba(16,20,24,0.6);
+    border:2px solid rgba(255,214,77,0.25);
+    border-radius:16px;
+    padding:28px 24px;
+  }
+
+  .clawd-founder-card{
+    display:flex;
+    align-items:center;
+    gap:24px;
+    margin-top:16px;
+  }
+
+  .clawd-founder-avatar{
+    position:relative;
+    flex-shrink:0;
+    width:100px;
+    height:100px;
+  }
+
+  .clawd-founder-img{
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid rgba(255,214,77,0.4);
+    position:relative;
+    z-index:1;
+  }
+
+  .clawd-founder-ring{
+    position:absolute;
+    inset:-5px;
+    border-radius:50%;
+    border:2px solid var(--gold);
+    animation:clawdRingSpin 10s linear infinite;
+    box-shadow:0 0 20px rgba(255,214,77,0.2);
+  }
+
+  .clawd-founder-info{
+    flex:1;
+    text-align:left;
+  }
+
+  .clawd-founder-name{
+    font-family:'Press Start 2P', monospace;
+    font-size:20px;
+    background:linear-gradient(180deg, var(--gold-hi) 0%, var(--gold) 40%, #D4A033 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    margin-bottom:6px;
+  }
+
+  .clawd-founder-role{
+    font-family:'Courier New', monospace;
+    font-size:12px;
+    color:#a0a8b0;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    margin-bottom:12px;
+  }
+
+  .clawd-founder-bio{
+    font-family:'Courier New', monospace;
+    font-size:13px;
+    color:#c0c8d0;
+    line-height:1.7;
+  }
+
+  @media(max-width:600px){
+    .clawd-founder-card{
+      flex-direction:column;
+      text-align:center;
+    }
+    .clawd-founder-info{
+      text-align:center;
+    }
+    .clawd-founder-avatar{
+      width:80px;
+      height:80px;
+    }
+  }
+
+  /* Tagline */
+  .clawd-tagline{
+    text-align:center;
+    padding:20px;
+    font-family:'Press Start 2P', monospace;
+    font-size:12px;
+    color:#555;
+    letter-spacing:0.15em;
+  }
+
+  .clawd-tagline-text{
+    background:linear-gradient(90deg, #555, var(--gold), #555);
+    background-size:200% auto;
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation:clawdShimmer 4s linear infinite;
+  }
+
+  @keyframes clawdShimmer{
+    0%{background-position:0% center}
+    100%{background-position:200% center}
+  }
+
+  .clawd-blink{
+    color:var(--gold);
+    animation:clawdCursorBlink 1s step-end infinite;
+  }
+
+  @keyframes clawdCursorBlink{
+    0%,100%{opacity:1}
+    50%{opacity:0}
+  }
+
+  /* Responsive */
+  @media(max-width:768px){
+    .clawd-name{font-size:28px}
+    .clawd-wealth-value{font-size:28px}
+    .clawd-stats-grid{grid-template-columns:repeat(2, 1fr)}
+    .clawd-cap-grid{grid-template-columns:repeat(2, 1fr)}
+    .clawd-milestone-label{font-size:9px}
+    .clawd-access-badge{display:none}
+  }
+
+  @media(max-width:480px){
+    .clawd-name{font-size:22px}
+    .clawd-wealth-value{font-size:20px}
+    .clawd-stats-grid{grid-template-columns:1fr 1fr}
+    .clawd-cap-grid{grid-template-columns:1fr 1fr}
+  }
