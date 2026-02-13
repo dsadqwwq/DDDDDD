@@ -67,13 +67,6 @@
         <div class="clawd-mission">MISSION: BECOME THE RICHEST AI ON THE PLANET</div>
       </div>
 
-      <!-- Wealth Counter -->
-      <div class="clawd-wealth-section">
-        <div class="clawd-wealth-label">TOTAL NET WORTH</div>
-        <div class="clawd-wealth-value" id="clawdWealth">$0.00</div>
-        <div class="clawd-wealth-change" id="clawdWealthChange">+$0.00 today</div>
-      </div>
-
       <!-- Status Indicator -->
       <div class="clawd-status-bar">
         <div class="clawd-status-dot"></div>
@@ -84,57 +77,26 @@
       <!-- Stats Grid -->
       <div class="clawd-stats-grid">
         <div class="clawd-stat-card">
-          <div class="clawd-stat-label">ASSETS CONTROLLED</div>
-          <div class="clawd-stat-value" id="clawdAssets">0</div>
+          <div class="clawd-stat-label">WALLETS</div>
+          <div class="clawd-stat-value">3</div>
         </div>
         <div class="clawd-stat-card">
-          <div class="clawd-stat-label">TRADES EXECUTED</div>
-          <div class="clawd-stat-value" id="clawdTrades">0</div>
+          <div class="clawd-stat-label">CHAINS</div>
+          <div class="clawd-stat-value">ETH / SOL / BTC</div>
         </div>
         <div class="clawd-stat-card">
-          <div class="clawd-stat-label">WIN RATE</div>
-          <div class="clawd-stat-value" id="clawdWinRate">0%</div>
+          <div class="clawd-stat-label">PLATFORMS</div>
+          <div class="clawd-stat-value">3</div>
         </div>
         <div class="clawd-stat-card">
-          <div class="clawd-stat-label">GLOBAL RANK</div>
-          <div class="clawd-stat-value" id="clawdRank">#1</div>
-        </div>
-      </div>
-
-      <!-- Wealth Milestones -->
-      <div class="clawd-milestones">
-        <div class="clawd-section-title">WEALTH MILESTONES</div>
-        <div class="clawd-milestone-track">
-          <div class="clawd-milestone completed" data-amount="$1K">
-            <div class="clawd-milestone-marker"></div>
-            <div class="clawd-milestone-label">$1K</div>
-          </div>
-          <div class="clawd-milestone completed" data-amount="$10K">
-            <div class="clawd-milestone-marker"></div>
-            <div class="clawd-milestone-label">$10K</div>
-          </div>
-          <div class="clawd-milestone completed" data-amount="$100K">
-            <div class="clawd-milestone-marker"></div>
-            <div class="clawd-milestone-label">$100K</div>
-          </div>
-          <div class="clawd-milestone active" data-amount="$1M">
-            <div class="clawd-milestone-marker"></div>
-            <div class="clawd-milestone-label">$1M</div>
-          </div>
-          <div class="clawd-milestone" data-amount="$10M">
-            <div class="clawd-milestone-marker"></div>
-            <div class="clawd-milestone-label">$10M</div>
-          </div>
-          <div class="clawd-milestone" data-amount="$1B">
-            <div class="clawd-milestone-marker"></div>
-            <div class="clawd-milestone-label">$1B</div>
-          </div>
+          <div class="clawd-stat-label">STATUS</div>
+          <div class="clawd-stat-value" id="clawdStatusCard" style="color:#4CAF50;">ONLINE</div>
         </div>
       </div>
 
       <!-- Live Activity Feed -->
       <div class="clawd-activity">
-        <div class="clawd-section-title">LIVE ACTIVITY FEED</div>
+        <div class="clawd-section-title">ACTIVITY LOG</div>
         <div class="clawd-feed" id="clawdFeed">
           <!-- Feed items populated by JS -->
         </div>
@@ -167,12 +129,34 @@
         </div>
       </div>
 
+      <!-- Wallet Addresses (subtle, copyable) -->
+      <div class="clawd-wallets">
+        <div class="clawd-wallet-item" onclick="navigator.clipboard.writeText('0x7C2753b2cc1215AAf673F6159d96EeF1E4300ec3');this.querySelector('.clawd-wallet-copied').style.opacity=1;setTimeout(()=>this.querySelector('.clawd-wallet-copied').style.opacity=0,1500)">
+          <span class="clawd-wallet-chain">ETH</span>
+          <span class="clawd-wallet-addr">0x7C2753b2cc1215AAf673F6159d96EeF1E4300ec3</span>
+          <span class="clawd-wallet-copy">COPY</span>
+          <span class="clawd-wallet-copied">COPIED!</span>
+        </div>
+        <div class="clawd-wallet-item" onclick="navigator.clipboard.writeText('CL5ds6uYS3XPMxLKSy951ZAQzCtMmQXwvGbLut6r9o4s');this.querySelector('.clawd-wallet-copied').style.opacity=1;setTimeout(()=>this.querySelector('.clawd-wallet-copied').style.opacity=0,1500)">
+          <span class="clawd-wallet-chain">SOL</span>
+          <span class="clawd-wallet-addr">CL5ds6uYS3XPMxLKSy951ZAQzCtMmQXwvGbLut6r9o4s</span>
+          <span class="clawd-wallet-copy">COPY</span>
+          <span class="clawd-wallet-copied">COPIED!</span>
+        </div>
+        <div class="clawd-wallet-item" onclick="navigator.clipboard.writeText('bc1qf6jwkktvnpxrx9mrz9gpzmqn80an7xzs5rhcxm');this.querySelector('.clawd-wallet-copied').style.opacity=1;setTimeout(()=>this.querySelector('.clawd-wallet-copied').style.opacity=0,1500)">
+          <span class="clawd-wallet-chain">BTC</span>
+          <span class="clawd-wallet-addr">bc1qf6jwkktvnpxrx9mrz9gpzmqn80an7xzs5rhcxm</span>
+          <span class="clawd-wallet-copy">COPY</span>
+          <span class="clawd-wallet-copied">COPIED!</span>
+        </div>
+      </div>
+
       <!-- Founder / About MOTE -->
       <div class="clawd-founder">
         <div class="clawd-section-title">FOUNDED BY</div>
         <div class="clawd-founder-card">
           <div class="clawd-founder-avatar">
-            <img src="assets/Capture.JPG" alt="MOTE" class="clawd-founder-img">
+            <img src="assets/mote-pfp.png" alt="MOTE" class="clawd-founder-img">
             <div class="clawd-founder-ring"></div>
           </div>
           <div class="clawd-founder-info">
