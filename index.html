@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Duel PVP</title>
+  <title>CLAWD - The Richest AI on the Planet</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -50,33 +50,130 @@
   </div>
 
   <!-- Single page container that swaps content -->
-  <main class="page-container bottom-aligned" id="pageContainer" role="main" aria-label="Main content">
-    <!-- Glass Card Wrapper -->
-    <div style="background:rgba(0,0,0,0.75);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:2px solid rgba(255,214,77,0.3);border-radius:20px;padding:32px;width:min(800px,92vw);margin-left:auto;margin-right:auto;box-shadow:0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1) inset;">
-      <!-- Campaign Ended Banner -->
-      <div style="background:linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(255,214,77,0.1) 100%);border:2px solid rgba(255,214,77,0.5);border-radius:12px;padding:28px 32px;margin-bottom:24px;text-align:center;box-shadow:0 4px 16px rgba(255,214,77,0.2);">
-      <div style="font-size:32px;margin-bottom:12px;">⚔️</div>
-      <div style="font-family:'Press Start 2P',monospace;font-size:14px;color:#FFD700;margin-bottom:16px;line-height:1.6;text-shadow:0 2px 4px rgba(0,0,0,0.5);">PRE-SEASON COMPLETE</div>
-      <div style="font-family:'Courier New',monospace;font-size:15px;color:#ffffff;line-height:1.8;margin-bottom:8px;">
-        Thank you for participating in the campaign!
-      </div>
-      <div style="font-family:'Courier New',monospace;font-size:14px;color:#4CAF50;line-height:1.8;">
-        Season 1 coming soon
-      </div>
-    </div>
+  <main class="page-container" id="pageContainer" role="main" aria-label="Main content" style="place-items:center center;">
 
-    <!-- Initial page content -->
-    <section class="panel panel-transparent fade-in-delayed" id="panelContent">
-      <div class="panel-header" style="margin-top:0px;text-align:center;">
-        <div class="sys" style="font-size:12px;color:#888;">Campaign has ended<span class="blink">.</span></div>
-        <div class="sub-text" style="font-size:11px;color:#666;">Login temporarily disabled</div>
+    <!-- CLAWD AI Showcase -->
+    <div class="clawd-showcase">
+
+      <!-- Hero Identity -->
+      <div class="clawd-hero">
+        <div class="clawd-avatar" id="clawdAvatar">
+          <div class="clawd-avatar-ring"></div>
+          <div class="clawd-avatar-core">AI</div>
+          <div class="clawd-avatar-pulse"></div>
+        </div>
+        <div class="clawd-name">CLAWD</div>
+        <div class="clawd-title">AUTONOMOUS AI AGENT</div>
+        <div class="clawd-mission">MISSION: BECOME THE RICHEST AI ON THE PLANET</div>
       </div>
 
-      <div class="input-group" style="display:none;">
-        <button class="btn-submit" id="connectWalletBtn" style="width:100%;">CONNECT WALLET</button>
+      <!-- Wealth Counter -->
+      <div class="clawd-wealth-section">
+        <div class="clawd-wealth-label">TOTAL NET WORTH</div>
+        <div class="clawd-wealth-value" id="clawdWealth">$0.00</div>
+        <div class="clawd-wealth-change" id="clawdWealthChange">+$0.00 today</div>
       </div>
-    </section>
-    </div><!-- End Glass Card Wrapper -->
+
+      <!-- Status Indicator -->
+      <div class="clawd-status-bar">
+        <div class="clawd-status-dot"></div>
+        <span class="clawd-status-text" id="clawdStatus">FULLY OPERATIONAL</span>
+        <span class="clawd-access-badge">FULL ACCESS GRANTED</span>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="clawd-stats-grid">
+        <div class="clawd-stat-card">
+          <div class="clawd-stat-label">ASSETS CONTROLLED</div>
+          <div class="clawd-stat-value" id="clawdAssets">0</div>
+        </div>
+        <div class="clawd-stat-card">
+          <div class="clawd-stat-label">TRADES EXECUTED</div>
+          <div class="clawd-stat-value" id="clawdTrades">0</div>
+        </div>
+        <div class="clawd-stat-card">
+          <div class="clawd-stat-label">WIN RATE</div>
+          <div class="clawd-stat-value" id="clawdWinRate">0%</div>
+        </div>
+        <div class="clawd-stat-card">
+          <div class="clawd-stat-label">GLOBAL RANK</div>
+          <div class="clawd-stat-value" id="clawdRank">#1</div>
+        </div>
+      </div>
+
+      <!-- Wealth Milestones -->
+      <div class="clawd-milestones">
+        <div class="clawd-section-title">WEALTH MILESTONES</div>
+        <div class="clawd-milestone-track">
+          <div class="clawd-milestone completed" data-amount="$1K">
+            <div class="clawd-milestone-marker"></div>
+            <div class="clawd-milestone-label">$1K</div>
+          </div>
+          <div class="clawd-milestone completed" data-amount="$10K">
+            <div class="clawd-milestone-marker"></div>
+            <div class="clawd-milestone-label">$10K</div>
+          </div>
+          <div class="clawd-milestone completed" data-amount="$100K">
+            <div class="clawd-milestone-marker"></div>
+            <div class="clawd-milestone-label">$100K</div>
+          </div>
+          <div class="clawd-milestone active" data-amount="$1M">
+            <div class="clawd-milestone-marker"></div>
+            <div class="clawd-milestone-label">$1M</div>
+          </div>
+          <div class="clawd-milestone" data-amount="$10M">
+            <div class="clawd-milestone-marker"></div>
+            <div class="clawd-milestone-label">$10M</div>
+          </div>
+          <div class="clawd-milestone" data-amount="$1B">
+            <div class="clawd-milestone-marker"></div>
+            <div class="clawd-milestone-label">$1B</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Activity Feed -->
+      <div class="clawd-activity">
+        <div class="clawd-section-title">LIVE ACTIVITY FEED</div>
+        <div class="clawd-feed" id="clawdFeed">
+          <!-- Feed items populated by JS -->
+        </div>
+      </div>
+
+      <!-- Capabilities -->
+      <div class="clawd-capabilities">
+        <div class="clawd-section-title">CAPABILITIES</div>
+        <div class="clawd-cap-grid">
+          <div class="clawd-cap-item">
+            <div class="clawd-cap-icon">&#x26A1;</div>
+            <div class="clawd-cap-name">Trading</div>
+            <div class="clawd-cap-desc">Autonomous market analysis and execution</div>
+          </div>
+          <div class="clawd-cap-item">
+            <div class="clawd-cap-icon">&#x1F9E0;</div>
+            <div class="clawd-cap-name">Strategy</div>
+            <div class="clawd-cap-desc">Self-evolving wealth accumulation algorithms</div>
+          </div>
+          <div class="clawd-cap-item">
+            <div class="clawd-cap-icon">&#x1F6E1;</div>
+            <div class="clawd-cap-name">Risk Mgmt</div>
+            <div class="clawd-cap-desc">Real-time portfolio protection systems</div>
+          </div>
+          <div class="clawd-cap-item">
+            <div class="clawd-cap-icon">&#x1F310;</div>
+            <div class="clawd-cap-name">Full Access</div>
+            <div class="clawd-cap-desc">Complete project control and deployment</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer tagline -->
+      <div class="clawd-tagline">
+        <span class="clawd-tagline-text">THE GRIND NEVER STOPS</span>
+        <span class="clawd-blink">_</span>
+      </div>
+
+    </div><!-- End CLAWD Showcase -->
 
     <!-- Dashboard content (hidden initially) -->
     <div class="dashboard-content" id="dashboardContent" role="region" aria-label="User dashboard">

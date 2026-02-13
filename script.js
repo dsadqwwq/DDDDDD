@@ -5805,3 +5805,145 @@
         if (brandTitle) brandTitle.style.cursor = 'pointer';
       }
     } catch (e) {}
+
+    // ===== CLAWD AI WEALTH SHOWCASE =====
+    (function initClawdShowcase() {
+      const wealthEl = document.getElementById('clawdWealth');
+      const changeEl = document.getElementById('clawdWealthChange');
+      const assetsEl = document.getElementById('clawdAssets');
+      const tradesEl = document.getElementById('clawdTrades');
+      const winRateEl = document.getElementById('clawdWinRate');
+      const feedEl = document.getElementById('clawdFeed');
+      const statusEl = document.getElementById('clawdStatus');
+
+      if (!wealthEl) return;
+
+      // Clawd's wealth state - starts from a base and grows
+      const BASE_WEALTH = 247_831.42;
+      const LAUNCH_DATE = new Date('2025-01-15T00:00:00Z');
+      const GROWTH_PER_SEC = 0.47; // dollars per second growth rate
+      let currentWealth = BASE_WEALTH;
+      let dailyGain = 0;
+      let totalTrades = 14_892;
+      let totalAssets = 37;
+
+      // Calculate wealth based on time since launch
+      function calcWealth() {
+        const now = new Date();
+        const elapsed = (now - LAUNCH_DATE) / 1000;
+        // Compound-ish growth with some variance
+        const base = BASE_WEALTH + (elapsed * GROWTH_PER_SEC);
+        const wave = Math.sin(elapsed / 300) * 500 + Math.sin(elapsed / 47) * 120;
+        currentWealth = base + wave;
+        return currentWealth;
+      }
+
+      function formatUSD(n) {
+        if (n >= 1_000_000) return '$' + (n / 1_000_000).toFixed(2) + 'M';
+        if (n >= 1_000) return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        return '$' + n.toFixed(2);
+      }
+
+      // Update wealth display
+      function updateWealth() {
+        const w = calcWealth();
+        wealthEl.textContent = formatUSD(w);
+
+        // Daily gain (roughly)
+        dailyGain = GROWTH_PER_SEC * 86400 + (Math.random() * 200 - 100);
+        changeEl.textContent = '+' + formatUSD(Math.abs(dailyGain)) + ' today';
+        changeEl.style.color = '#4CAF50';
+
+        // Update stats with slow growth
+        totalTrades += Math.random() < 0.3 ? 1 : 0;
+        tradesEl.textContent = totalTrades.toLocaleString();
+        assetsEl.textContent = totalAssets;
+
+        const winRate = 73.2 + Math.sin(Date.now() / 10000) * 2;
+        winRateEl.textContent = winRate.toFixed(1) + '%';
+      }
+
+      // Activity feed messages
+      const feedMessages = [
+        { icon: '\u{1F4C8}', msg: 'Analyzed SOL/USDT market structure', amount: null },
+        { icon: '\u{2705}', msg: 'Executed long position on SOL', amount: '+$412.80', positive: true },
+        { icon: '\u{1F9E0}', msg: 'Updated trading algorithm v4.2.1', amount: null },
+        { icon: '\u{1F4B0}', msg: 'Collected staking rewards', amount: '+$89.50', positive: true },
+        { icon: '\u{26A1}', msg: 'Deployed new portfolio rebalancer', amount: null },
+        { icon: '\u{1F4CA}', msg: 'Backtested momentum strategy', amount: null },
+        { icon: '\u{2705}', msg: 'Closed ETH swing trade', amount: '+$1,247.30', positive: true },
+        { icon: '\u{1F6E1}', msg: 'Adjusted stop-loss parameters', amount: null },
+        { icon: '\u{1F310}', msg: 'Scanned 847 token pairs', amount: null },
+        { icon: '\u{1F4B0}', msg: 'Harvested DeFi yield position', amount: '+$234.10', positive: true },
+        { icon: '\u{1F4C8}', msg: 'Identified breakout pattern on MATIC', amount: null },
+        { icon: '\u{2705}', msg: 'Arbitrage executed across 3 DEXs', amount: '+$178.40', positive: true },
+        { icon: '\u{1F9E0}', msg: 'Trained neural net on 30d price data', amount: null },
+        { icon: '\u{26A1}', msg: 'Optimized gas fee strategy', amount: '-$12.40', positive: false },
+        { icon: '\u{1F4B0}', msg: 'Liquidation bot earned fees', amount: '+$567.00', positive: true },
+        { icon: '\u{1F4CA}', msg: 'Portfolio risk score: 0.23 (LOW)', amount: null },
+        { icon: '\u{2705}', msg: 'Closed BTC scalp position', amount: '+$891.20', positive: true },
+        { icon: '\u{1F310}', msg: 'Monitoring 12 whale wallets', amount: null },
+        { icon: '\u{1F6E1}', msg: 'Hedged portfolio against downside', amount: '-$45.00', positive: false },
+        { icon: '\u{1F4B0}', msg: 'LP fees collected from Uniswap', amount: '+$156.80', positive: true },
+        { icon: '\u{26A1}', msg: 'Full project access verified', amount: null },
+        { icon: '\u{1F9E0}', msg: 'Generating alpha from on-chain data', amount: null },
+        { icon: '\u{2705}', msg: 'Snipe bot caught new listing', amount: '+$2,340.00', positive: true },
+        { icon: '\u{1F4C8}', msg: 'Sentiment analysis: BULLISH', amount: null },
+      ];
+
+      let feedIndex = 0;
+
+      function addFeedItem() {
+        const item = feedMessages[feedIndex % feedMessages.length];
+        feedIndex++;
+
+        const now = new Date();
+        const time = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+        const div = document.createElement('div');
+        div.className = 'clawd-feed-item';
+        div.innerHTML =
+          '<span class="clawd-feed-time">' + time + '</span>' +
+          '<span class="clawd-feed-icon">' + item.icon + '</span>' +
+          '<span class="clawd-feed-msg">' + item.msg + '</span>' +
+          (item.amount ? '<span class="clawd-feed-amount ' + (item.positive ? 'positive' : 'negative') + '">' + item.amount + '</span>' : '');
+
+        feedEl.insertBefore(div, feedEl.firstChild);
+
+        // Keep feed at max 15 items
+        while (feedEl.children.length > 15) {
+          feedEl.removeChild(feedEl.lastChild);
+        }
+      }
+
+      // Status rotation
+      const statuses = [
+        'FULLY OPERATIONAL',
+        'SCANNING MARKETS...',
+        'EXECUTING TRADES...',
+        'ANALYZING ON-CHAIN DATA...',
+        'REBALANCING PORTFOLIO...',
+        'COMPOUNDING GAINS...',
+        'OPTIMIZING STRATEGIES...',
+        'MONITORING POSITIONS...',
+      ];
+      let statusIdx = 0;
+
+      function rotateStatus() {
+        statusIdx = (statusIdx + 1) % statuses.length;
+        statusEl.textContent = statuses[statusIdx];
+      }
+
+      // Initialize
+      updateWealth();
+
+      // Seed initial feed items
+      for (let i = 0; i < 5; i++) {
+        addFeedItem();
+      }
+
+      // Intervals
+      setInterval(updateWealth, 1000);
+      setInterval(addFeedItem, 4000);
+      setInterval(rotateStatus, 6000);
+    })();
