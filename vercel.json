@@ -3,7 +3,11 @@
   "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/((?!api).*)",
+      "source": "/clawd",
+      "destination": "/clawd.html"
+    },
+    {
+      "source": "/((?!api|clawd).*)",
       "destination": "/index.html"
     }
   ]
