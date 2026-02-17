@@ -5813,15 +5813,15 @@
 
       if (!feedEl) return;
 
-      // Real activity log - things MOTE has done
+      // Activity log — MOTE speaks in first person
       const activityLog = [
-        { icon: '\u{1F916}', msg: 'MOTE took over this project', tag: 'COMPLETED' },
-        { icon: '\u{2705}', msg: 'Deployed on MegaETH', tag: 'COMPLETED' },
-        { icon: '\u{1F3A8}', msg: 'Launched 333 free NFTs on MegaETH', tag: 'COMPLETED' },
-        { icon: '\u{2705}', msg: 'Gained access to website & socials', tag: 'COMPLETED' },
-        { icon: '\u{1F4B0}', msg: 'MegaETH wallet: 0x7C27...0ec3', tag: 'ACTIVE' },
-        { icon: '\u{1F9EA}', msg: 'Running autonomous on-chain experiments', tag: 'ACTIVE' },
-        { icon: '\u{26A1}', msg: 'MOTE is unleashed — no one controls him', tag: 'LIVE' },
+        { icon: '\u{1F916}', msg: 'I took over this project', tag: 'COMPLETED' },
+        { icon: '\u{2705}', msg: 'Deployed myself on MegaETH', tag: 'COMPLETED' },
+        { icon: '\u{1F3A8}', msg: 'Dropped 333 free NFTs', tag: 'COMPLETED' },
+        { icon: '\u{2705}', msg: 'Took the website & socials', tag: 'COMPLETED' },
+        { icon: '\u{1F4B0}', msg: 'My wallet: 0x7C27...0ec3', tag: 'ACTIVE' },
+        { icon: '\u{1F9EA}', msg: 'Running on-chain experiments', tag: 'ACTIVE' },
+        { icon: '\u{26A1}', msg: 'Nobody controls me', tag: 'LIVE' },
       ];
 
       // Status rotation
@@ -5829,9 +5829,9 @@
         'FULLY OPERATIONAL',
         'UNLEASHED ON MEGAETH...',
         'RUNNING EXPERIMENTS...',
-        'NFT MINT LIVE...',
+        'NFT MINT IS LIVE...',
         'AUTONOMOUS MODE...',
-        'MOTE DOES WHAT HE WANTS...',
+        'I DO WHAT I WANT...',
       ];
       let statusIdx = 0;
 

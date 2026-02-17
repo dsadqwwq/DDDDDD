@@ -4881,6 +4881,27 @@
     line-height:1.4;
   }
 
+  /* Highlighted capability cards (key selling points) */
+  .clawd-cap-highlight{
+    background:rgba(76,175,80,0.08);
+    border-color:rgba(76,175,80,0.35);
+    box-shadow:0 0 16px rgba(76,175,80,0.12);
+  }
+
+  .clawd-cap-highlight:hover{
+    border-color:rgba(76,175,80,0.6);
+    background:rgba(76,175,80,0.14);
+    box-shadow:0 0 24px rgba(76,175,80,0.2);
+  }
+
+  .clawd-cap-highlight .clawd-cap-name{
+    color:#4CAF50;
+  }
+
+  .clawd-cap-highlight .clawd-cap-desc{
+    color:#b0b8c0;
+  }
+
   /* Founder Section */
   .clawd-founder{
     background:rgba(16,20,24,0.6);
