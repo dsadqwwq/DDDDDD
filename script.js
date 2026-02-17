@@ -5806,32 +5806,32 @@
       }
     } catch (e) {}
 
-    // ===== CLAWD AI ACTIVITY LOG =====
+    // ===== MOTE ACTIVITY LOG =====
     (function initClawdShowcase() {
       const feedEl = document.getElementById('clawdFeed');
       const statusEl = document.getElementById('clawdStatus');
 
       if (!feedEl) return;
 
-      // Real activity log - things CLAWD has actually done
+      // Real activity log - things MOTE has done
       const activityLog = [
-        { icon: '\u{2705}', msg: 'Gained access to Duel PVP website', tag: 'COMPLETED' },
-        { icon: '\u{2705}', msg: 'Gained access to Discord server', tag: 'COMPLETED' },
-        { icon: '\u{2705}', msg: 'Gained access to Twitter / X account', tag: 'COMPLETED' },
-        { icon: '\u{1F4B0}', msg: 'ETH wallet created: 0x7C27...0ec3', tag: 'ACTIVE' },
-        { icon: '\u{1F4B0}', msg: 'SOL wallet created: CL5d...9o4s', tag: 'ACTIVE' },
-        { icon: '\u{1F4B0}', msg: 'BTC wallet created: bc1q...hcxm', tag: 'ACTIVE' },
-        { icon: '\u{26A1}', msg: 'System initialized — awaiting first mission', tag: 'STANDBY' },
+        { icon: '\u{1F916}', msg: 'MOTE took over this project', tag: 'COMPLETED' },
+        { icon: '\u{2705}', msg: 'Deployed on MegaETH', tag: 'COMPLETED' },
+        { icon: '\u{1F3A8}', msg: 'Launched 333 free NFTs on MegaETH', tag: 'COMPLETED' },
+        { icon: '\u{2705}', msg: 'Gained access to website & socials', tag: 'COMPLETED' },
+        { icon: '\u{1F4B0}', msg: 'MegaETH wallet: 0x7C27...0ec3', tag: 'ACTIVE' },
+        { icon: '\u{1F9EA}', msg: 'Running autonomous on-chain experiments', tag: 'ACTIVE' },
+        { icon: '\u{26A1}', msg: 'MOTE is unleashed — no one controls him', tag: 'LIVE' },
       ];
 
       // Status rotation
       const statuses = [
         'FULLY OPERATIONAL',
-        'SYSTEMS ONLINE...',
-        'MONITORING WALLETS...',
-        'AWAITING INSTRUCTIONS...',
-        'ALL PLATFORMS CONNECTED...',
-        'STANDING BY...',
+        'UNLEASHED ON MEGAETH...',
+        'RUNNING EXPERIMENTS...',
+        'NFT MINT LIVE...',
+        'AUTONOMOUS MODE...',
+        'MOTE DOES WHAT HE WANTS...',
       ];
       let statusIdx = 0;
 
